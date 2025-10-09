@@ -77,7 +77,7 @@ const link = "https://example.org/";
  * too, and CKEditor is known to apply its own normalization, such as
  * transforming `font-weight:bold` style to `<strong>` in the view layers.
  */
-describe("BBob Integration", () => {
+void describe("BBob Integration", () => {
   /**
    * These use-cases are important, as they validate, that our proprietary
    * HTML to BBCode mapping is understood by the third-party library when
@@ -261,7 +261,7 @@ describe("BBob Integration", () => {
       },
     ] as const;
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { dataViewInput, expectedStoredData, expectedRestoredDataView, comment }] of cases.entries()) {
         await t.test(
           `[${i}] Should transform data view to data, that are well understood by subsequent 'toView' mapping for: ${dataViewInput} (${comment})`,
@@ -309,7 +309,7 @@ describe("BBob Integration", () => {
    * to the inner block, resulting in newlines piling up on each iteration,
    * with results such as: `[code]\n\n\n\nlorem\n\n\n\n[/code]` eventually.
    */
-  describe("Less important: BBCode →[toView]→ HTML →[toData]→ BBCode", () => {
+  void describe("Less important: BBCode →[toView]→ HTML →[toData]→ BBCode", () => {
     const cases = [
       { bbCode: `` },
       { bbCode: `[b]lorem[/b]` },
@@ -335,7 +335,7 @@ describe("BBob Integration", () => {
       { bbCode: `[size=180]lorem[/size]` },
     ] as const;
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { bbCode }] of cases.entries()) {
         await t.test(`[${i}] Should process back and forth without change: ${bbCode}`, () => {
           const result = aut.bbcode2html2bbcode(bbCode);
@@ -363,7 +363,7 @@ describe("BBob Integration", () => {
      * We rate these deviations "acceptable" for now. To change, we may need,
      * for example, to provide a custom preset for bbcode2html.
      */
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { bbCode, expected, comment }] of backAndForthCases.entries()) {
         await t.test(
           `[${i}] Should process back and forth with only minor change: ${bbCode} → ${expected} (${comment})`,

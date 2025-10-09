@@ -1,5 +1,5 @@
 /* eslint @typescript-eslint/naming-convention: off */
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 
 import "global-jsdom/register";
 import { describe } from "node:test";
@@ -106,7 +106,7 @@ const show = {
  *   xlink:role     CDATA                          #IMPLIED >
  * ```
  */
-describe("CoreMediaRichTextConfig: Anchors", () => {
+void describe("CoreMediaRichTextConfig: Anchors", () => {
   // noinspection NonAsciiCharacters
   const specialCharacterTargets: ExpectedTargetToXlinkShowAndRole = {
     "äöü": {

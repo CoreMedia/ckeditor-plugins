@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 
 import "global-jsdom/register";
 import { describe } from "node:test";
@@ -11,7 +11,7 @@ const text = "TEXT";
 
 const wrapContent = (content: string): string => `<div xmlns="${ns_richtext}">${content}</div>`;
 
-describe("CoreMediaRichTextConfig: Headings", () => {
+void describe("CoreMediaRichTextConfig: Headings", () => {
   const headingFixtures: DataProcessingTestCase[] = flatten(
     [1, 2, 3, 4, 5, 6].map((level): DataProcessingTestCase[] => {
       const el = `h${level}`;

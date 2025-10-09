@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 
 import "global-jsdom/register";
 import test, { describe } from "node:test";
@@ -6,7 +6,7 @@ import expect from "expect";
 import { ActiveStrictnessKey, Strictness } from "../../src/Strictness";
 import * as aut from "../../src/sanitation/AttributeContent";
 
-describe("AttributeContent", () => {
+void describe("AttributeContent", () => {
   const strictnessLevels: ActiveStrictnessKey[] = ["STRICT", "LOOSE", "LEGACY"];
 
   for (const [index, strictnessKey] of strictnessLevels.entries()) {
@@ -15,7 +15,7 @@ describe("AttributeContent", () => {
       const validAlways = true;
       const validOnlyForLegacy = strictness === Strictness.LEGACY;
 
-      describe("acAny", () => {
+      void describe("acAny", () => {
         const acUnderTest = aut.acAny;
 
         const testCases: { value: string; expected: boolean }[] = [
@@ -24,13 +24,13 @@ describe("AttributeContent", () => {
         ];
 
         for (const [index, { value, expected }] of testCases.entries()) {
-          test(`[${index}] is '${value}' valid? ${expected}`, () => {
+          void test(`[${index}] is '${value}' valid? ${expected}`, () => {
             expect(acUnderTest.validateValue(value, strictness)).toStrictEqual(expected);
           });
         }
       });
 
-      describe("acCData", () => {
+      void describe("acCData", () => {
         const acUnderTest = aut.acCData;
 
         const cases = [
@@ -39,13 +39,13 @@ describe("AttributeContent", () => {
         ];
 
         for (const [index, { value, expected }] of cases.entries()) {
-          test(`[${index}] is '${value}' valid? ${expected}`, () => {
+          void test(`[${index}] is '${value}' valid? ${expected}`, () => {
             expect(acUnderTest.validateValue(value, strictness)).toStrictEqual(expected);
           });
         }
       });
 
-      describe("acEnum", () => {
+      void describe("acEnum", () => {
         const acUnderTest = aut.acEnum("valid1", "valid2");
 
         const cases = [
@@ -56,13 +56,13 @@ describe("AttributeContent", () => {
         ];
 
         for (const [index, { value, expected }] of cases.entries()) {
-          test(`[${index}] is '${value}' valid? ${expected}`, () => {
+          void test(`[${index}] is '${value}' valid? ${expected}`, () => {
             expect(acUnderTest.validateValue(value, strictness)).toStrictEqual(expected);
           });
         }
       });
 
-      describe("acNmToken", () => {
+      void describe("acNmToken", () => {
         const acUnderTest = aut.acNmToken;
 
         const cases = [
@@ -72,7 +72,7 @@ describe("AttributeContent", () => {
         ];
 
         for (const [index, { value, expected }] of cases.entries()) {
-          test(`[${index}] is '${value}' valid? ${expected}`, () => {
+          void test(`[${index}] is '${value}' valid? ${expected}`, () => {
             expect(acUnderTest.validateValue(value, strictness)).toStrictEqual(expected);
           });
         }

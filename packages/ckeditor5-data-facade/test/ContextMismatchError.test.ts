@@ -1,22 +1,22 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
 import { ContextMismatchError, isContextMismatchError } from "../src/ContextMismatchError";
 
-describe("ContextMismatchError", () => {
-  test("should be possible to instantiate the error without a message", () => {
+void describe("ContextMismatchError", () => {
+  void test("should be possible to instantiate the error without a message", () => {
     const error = new ContextMismatchError();
     expect(error).toHaveProperty("message", "");
   });
 
-  test("should be possible to instantiate the error with a message", () => {
+  void test("should be possible to instantiate the error with a message", () => {
     const msg = "Lorem Ipsum";
     const error = new ContextMismatchError(msg);
     expect(error).toHaveProperty("message", msg);
   });
 
-  test("should be possible to instantiate the error with a actual context", () => {
+  void test("should be possible to instantiate the error with a actual context", () => {
     const msg = "Lorem Ipsum";
     const actual = "actual";
     const contextInformation = {
@@ -27,7 +27,7 @@ describe("ContextMismatchError", () => {
     expect(error).toHaveProperty("actual", actual);
   });
 
-  test("should be possible to instantiate the error with a expected context", () => {
+  void test("should be possible to instantiate the error with a expected context", () => {
     const msg = "Lorem Ipsum";
     const expected = "expected";
     const contextInformation = {
@@ -38,7 +38,7 @@ describe("ContextMismatchError", () => {
     expect(error).toHaveProperty("expected", expected);
   });
 
-  test("should be possible to instantiate the error with both actual and expected context", () => {
+  void test("should be possible to instantiate the error with both actual and expected context", () => {
     const msg = "Lorem Ipsum";
     const actual = "actual";
     const expected = "expected";
@@ -53,7 +53,7 @@ describe("ContextMismatchError", () => {
     expect(error).toHaveProperty("expected", expected);
   });
 
-  test("should be possible to check if an error is a ContextMismatchError", () => {
+  void test("should be possible to check if an error is a ContextMismatchError", () => {
     const error = new ContextMismatchError();
     expect(isContextMismatchError(error)).toBe(true);
 

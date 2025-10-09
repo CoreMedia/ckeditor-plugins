@@ -4,8 +4,8 @@ import expect from "expect";
 import { asHTMLElement, requireHTMLElement } from "./DOMUtils";
 import { bbCodeListItem } from "../src/rules/BBCodeListItem";
 
-describe("BBCodeListItem", () => {
-  test("Default Configuration", async (t: TestContext) => {
+void describe("BBCodeListItem", () => {
+  void test("Default Configuration", async (t: TestContext) => {
     const rule = bbCodeListItem;
 
     const cases: { dataView: string; expected: string }[] = [{ dataView: `<li>TEXT</li>`, expected: `[*] TEXT\n` }];

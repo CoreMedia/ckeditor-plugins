@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 
 import "global-jsdom/register";
 import { describe } from "node:test";
@@ -18,7 +18,7 @@ const wrapContent = (content: string): string => `<div xmlns="${ns_richtext}">${
  *
  * Later, it may become a configuration option to keep this legacy behavior.
  */
-describe("CoreMediaRichTextConfig: Cleanup", () => {
+void describe("CoreMediaRichTextConfig: Cleanup", () => {
   const data: DataProcessingTestCase[] = [
     {
       name: "CLEANUP#1: Remove top-level <br> tag.",

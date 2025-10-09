@@ -10,8 +10,8 @@ const mockListItemsContent = (el: HTMLElement): string =>
     .map((e) => `[*] ${e.textContent ?? ""}`)
     .join("\n");
 
-describe("BBCodeList", () => {
-  describe("Default Configuration", () => {
+void describe("BBCodeList", () => {
+  void describe("Default Configuration", () => {
     const rule = bbCodeList;
 
     const cases = [
@@ -62,7 +62,7 @@ describe("BBCodeList", () => {
       },
     ] as const;
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { dataView, expected, comment }] of cases.entries()) {
         await t.test(`[${i}] Should process '${dataView}' to '${expected}' (${comment})`, () => {
           const element = requireHTMLElement(dataView);

@@ -5,8 +5,8 @@ import { USE_CASE_NAME } from "./Constants";
 import { fragmentFromNodeContents, isDocumentFragment } from "../src/DocumentFragments";
 import { documentFromHtml } from "../src/Documents";
 
-describe("DocumentFragments", () => {
-  describe("fragmentFromNodeContents", () => {
+void describe("DocumentFragments", () => {
+  void describe("fragmentFromNodeContents", () => {
     test(USE_CASE_NAME, () => {
       const htmlDocument = documentFromHtml("<body><p>1</p><p>2</p></body>");
       const fragment = fragmentFromNodeContents(htmlDocument.body);
@@ -14,7 +14,7 @@ describe("DocumentFragments", () => {
     });
   });
 
-  describe("isDocumentFragment", () => {
+  void describe("isDocumentFragment", () => {
     test(USE_CASE_NAME, () => {
       const node: Node = new DocumentFragment();
       if (isDocumentFragment(node)) {
@@ -29,7 +29,7 @@ describe("DocumentFragments", () => {
     ];
 
     for (const [i, { matched }] of cases.entries()) {
-      test(`[${i}] should match DocumentFragment`, () => {
+      void test(`[${i}] should match DocumentFragment`, () => {
         expect(isDocumentFragment(matched)).toBeTruthy();
       });
     }
@@ -41,7 +41,7 @@ describe("DocumentFragments", () => {
     ];
 
     for (const [i, { unmatched }] of cases2.entries()) {
-      test(`[${i}] should not match any other objects than DocumentFragments`, () => {
+      void test(`[${i}] should not match any other objects than DocumentFragments`, () => {
         expect(isDocumentFragment(unmatched)).toBeFalsy();
       });
     }

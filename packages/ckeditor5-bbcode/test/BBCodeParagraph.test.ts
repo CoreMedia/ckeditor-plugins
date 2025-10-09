@@ -6,8 +6,8 @@ import { bbCodeParagraph } from "../src/rules/BBCodeParagraph";
 
 const prettyPrintNewlines = "\n\n";
 
-describe("BBCodeParagraph", () => {
-  test("Default Configuration", async (t: TestContext) => {
+void describe("BBCodeParagraph", () => {
+  void test("Default Configuration", async (t: TestContext) => {
     const rule = bbCodeParagraph;
 
     const cases: { dataView: string; expected: string }[] = [

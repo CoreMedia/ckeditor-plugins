@@ -1,5 +1,5 @@
 /* eslint no-null/no-null: off */
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 
 import "global-jsdom/register";
 import test, { describe } from "node:test";
@@ -61,7 +61,7 @@ const serializer = new XMLSerializer();
  * =============================================================================
  */
 
-describe("RichTextSchema.adjustAttributes", () => {
+void describe("RichTextSchema.adjustAttributes", () => {
   type TransformAttributesTestData = CommentableTestData &
     DisableableTestCase &
     XmlInputTestData &
@@ -805,7 +805,7 @@ describe("RichTextSchema.adjustAttributes", () => {
       for (const strictness of testData.strictness) {
         const schema = new RichTextSchema(strictness);
 
-        test(`${name} (mode: ${strictnessKeys[strictness]})`, () => {
+        void test(`${name} (mode: ${strictnessKeys[strictness]})`, () => {
           const xmlDocument: Document = parser.parseFromString(testData.input.trim(), "text/xml");
           const xPathResult = xmlDocument.evaluate(
             testData.xpath,
@@ -846,7 +846,7 @@ describe("RichTextSchema.adjustAttributes", () => {
  * =============================================================================
  */
 
-describe("RichTextSchema.isAllowedAtParent", () => {
+void describe("RichTextSchema.isAllowedAtParent", () => {
   type ValidateParentData = CommentableTestData & DisableableTestCase & XmlInputTestData & ExpectValidationTestData;
 
   /**
@@ -1533,7 +1533,7 @@ describe("RichTextSchema.isAllowedAtParent", () => {
         const parentTag = element?.parentElement?.tagName ?? "#document";
         const tag = element?.tagName ?? "unknown";
 
-        test(`<${parentTag}>, ${testData.expected ? "allowed" : "forbidden"}: Validating <${tag}> if allowed as child of <${parentTag}>, expected response: ${testData.expected}.`, () => {
+        void test(`<${parentTag}>, ${testData.expected ? "allowed" : "forbidden"}: Validating <${tag}> if allowed as child of <${parentTag}>, expected response: ${testData.expected}.`, () => {
           expect(schema.isElementAllowedAtParent(mutableElement)).toStrictEqual(testData.expected);
         });
       }

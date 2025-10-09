@@ -1,5 +1,5 @@
 // noinspection HtmlUnknownAttribute
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 
 import "global-jsdom/register";
 import test, { describe } from "node:test";
@@ -8,7 +8,7 @@ import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { bijective, TestDirection, toData, toView } from "./TestDirection";
 import { RulesTester } from "./RulesTester";
 
-describe("TableElements", () => {
+void describe("TableElements", () => {
   const ruleConfigurations = aut.tableElements;
   const text = "T";
   const text1 = "T1";
@@ -107,7 +107,7 @@ describe("TableElements", () => {
   ];
 
   for (const [index, { data, direction, view }] of tableTests.entries()) {
-    test(`[${index}] Should provide mapping from data ${direction} view`, () => {
+    void test(`[${index}] Should provide mapping from data ${direction} view`, () => {
       const dataString = richtext(data);
       const htmlString = `<body>${view}</body>`;
       const tester = new RulesTester(ruleConfigurations, "*", "body > *");

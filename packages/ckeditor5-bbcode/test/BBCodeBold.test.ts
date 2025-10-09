@@ -4,8 +4,8 @@ import expect from "expect";
 import { requireHTMLElement } from "./DOMUtils";
 import { BBCodeBold, bbCodeBold, IsBoldFontWeight } from "../src/rules/BBCodeBold";
 
-describe("BBCodeBold", () => {
-  describe("Default Configuration", () => {
+void describe("BBCodeBold", () => {
+  void describe("Default Configuration", () => {
     const rule = bbCodeBold;
 
     const cases = [
@@ -71,7 +71,7 @@ describe("BBCodeBold", () => {
       },
     ] as const;
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { dataView, expected, comment }] of cases.entries()) {
         await t.test(`[${i}] Should process '${dataView}' to '${expected}' (${comment})`, () => {
           const element = requireHTMLElement(dataView);
@@ -82,7 +82,7 @@ describe("BBCodeBold", () => {
     });
   });
 
-  describe("Custom Configuration", () => {
+  void describe("Custom Configuration", () => {
     /**
      * For demonstration only: Don't judge on font-weight, just on tag name.
      */
@@ -129,7 +129,7 @@ describe("BBCodeBold", () => {
       },
     ] as const;
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { dataView, expected, comment }] of cases.entries()) {
         await t.test(`[${i}] Should process '${dataView}' to '${expected}' (${comment})`, () => {
           const element = requireHTMLElement(dataView);

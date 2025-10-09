@@ -4,15 +4,15 @@ import { observeMutableProperty } from "../../src/content/ObservableMutablePrope
 import Delayed from "../../src/content/Delayed";
 import { testShouldRetrieveValues } from "./ObservableTestUtil";
 
-describe("ObservableMutableProperty", () => {
+void describe("ObservableMutableProperty", () => {
   const testCases = [
     { initialDelayMs: 0, changeDelayMs: 1 },
     { initialDelayMs: 1, changeDelayMs: 42 },
   ];
 
-  describe("observeMutableProperty() with no values", () => {
+  void describe("observeMutableProperty() with no values", () => {
     for (const [i, { initialDelayMs, changeDelayMs }] of testCases.entries()) {
-      test(`[${i}] Should just complete on no value, no matter of scheduling: initialDelayMs=${initialDelayMs}, changeDelayMs=${changeDelayMs}`, () => {
+      void test(`[${i}] Should just complete on no value, no matter of scheduling: initialDelayMs=${initialDelayMs}, changeDelayMs=${changeDelayMs}`, () => {
         const delays: Delayed = { initialDelayMs, changeDelayMs };
         const values: string[] = [];
 
@@ -28,9 +28,9 @@ describe("ObservableMutableProperty", () => {
     { initialDelayMs: 1, changeDelayMs: 42 },
   ];
 
-  describe("observeMutableProperty() with single value", () => {
+  void describe("observeMutableProperty() with single value", () => {
     for (const [i, { initialDelayMs, changeDelayMs }] of testCases2.entries()) {
-      test(`[${i}] Should provide single value and complete, no matter of scheduling: initialDelayMs=${initialDelayMs}, changeDelayMs=${changeDelayMs}`, () => {
+      void test(`[${i}] Should provide single value and complete, no matter of scheduling: initialDelayMs=${initialDelayMs}, changeDelayMs=${changeDelayMs}`, () => {
         const delays: Delayed = { initialDelayMs, changeDelayMs };
         const values: string[] = ["Lorem"];
 
@@ -48,9 +48,9 @@ describe("ObservableMutableProperty", () => {
     { values: ["Lorem", "ipsum", "dolor"] },
   ];
 
-  describe("observeMutableProperty() with multiple values", () => {
+  void describe("observeMutableProperty() with multiple values", () => {
     for (const [i, { values }] of testCases3.entries()) {
-      test(`[${i}] Should provide all values: ${JSON.stringify(values)}`, () => {
+      void test(`[${i}] Should provide all values: ${JSON.stringify(values)}`, () => {
         // changeDelayMs: Trigger to iterate only once.
         const delays: Delayed = { initialDelayMs: 0, changeDelayMs: 0 };
 
@@ -63,9 +63,9 @@ describe("ObservableMutableProperty", () => {
 
   const testCases4 = [{ values: ["Lorem", "ipsum"] }, { values: ["Lorem", "ipsum", "dolor"] }];
 
-  describe("observeMutableProperty() looping", () => {
+  void describe("observeMutableProperty() looping", () => {
     for (const [i, { values }] of testCases4.entries()) {
-      test(`[${i}] Should loop values: ${JSON.stringify(values)}`, () => {
+      void test(`[${i}] Should loop values: ${JSON.stringify(values)}`, () => {
         const delays: Delayed = { initialDelayMs: 0, changeDelayMs: 1 };
         // Add one more element from top, to see it looping.
         const expectedValues: string[] = [...values, ...values.slice(0, 1)];

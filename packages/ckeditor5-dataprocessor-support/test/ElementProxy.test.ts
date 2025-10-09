@@ -1,5 +1,5 @@
 /* eslint no-null/no-null: off */
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 
 import "global-jsdom/register";
 import test, { describe } from "node:test";
@@ -55,41 +55,41 @@ test("should wrap DOM element", () => {
  *
  * =============================================================================
  */
-describe("Should Respecting (Im-)Mutable State", () => {
+void describe("Should Respecting (Im-)Mutable State", () => {
   const htmlDivElement = window.document.createElement("div");
   htmlDivElement.setAttribute("class", "testClass");
   const immutableElement = new ElementProxy(htmlDivElement, MOCK_EDITOR, {}, false);
-  test("should not be able to delete element", () => {
+  void test("should not be able to delete element", () => {
     expect(() => (immutableElement.remove = true)).toThrow(Error);
   });
-  test("should not be able to replace element by children", () => {
+  void test("should not be able to replace element by children", () => {
     expect(() => (immutableElement.replaceByChildren = true)).toThrow(Error);
   });
-  test("should not be able to change name", () => {
+  void test("should not be able to change name", () => {
     const getValue = () => immutableElement.name;
     const previousValue = getValue();
     expect(() => (immutableElement.name = "test")).toThrow(Error);
     expect(getValue()).toStrictEqual(previousValue);
   });
-  test("should not be able to change attribute value", () => {
+  void test("should not be able to change attribute value", () => {
     const getValue = () => immutableElement.attributes.class;
     const previousValue = getValue();
     expect(() => (immutableElement.attributes.class = "test")).toThrow(Error);
     expect(getValue()).toStrictEqual(previousValue);
   });
-  test("should not be able to add additional class", () => {
+  void test("should not be able to add additional class", () => {
     const getValue = () => immutableElement.classList;
     const previousValue = getValue();
     expect(() => immutableElement.classList.add("test")).toThrow(Error);
     expect(getValue()).toStrictEqual(previousValue);
   });
-  test("should not be able to add attribute", () => {
+  void test("should not be able to add attribute", () => {
     const getValue = () => immutableElement.attributes.id;
     const previousValue = getValue();
     expect(() => (immutableElement.attributes.id = "test")).toThrow(Error);
     expect(getValue()).toStrictEqual(previousValue);
   });
-  test("should not be able to delete attribute", () => {
+  void test("should not be able to delete attribute", () => {
     const getValue = () => immutableElement.attributes.id;
     const previousValue = getValue();
     expect(() => delete immutableElement.attributes.class).toThrow(Error);
@@ -105,7 +105,7 @@ describe("Should Respecting (Im-)Mutable State", () => {
  * =============================================================================
  */
 
-describe("ElementProxy.classList", () => {
+void describe("ElementProxy.classList", () => {
   let domElement = window.document.createElement("div");
   // DOM Element to compare handling with.
   const cmpElement = window.document.createElement("div");
@@ -154,7 +154,7 @@ describe("ElementProxy.classList", () => {
     domElement = window.document.createElement("div");
     proxy = new ElementProxy(domElement, MOCK_EDITOR);
   });
-  describe("classList.value", () => {
+  void describe("classList.value", () => {
     const classCases = [
       ["", "Empty class should stay as is."],
       ["some--class", "Plain class should stay as is."],
@@ -165,12 +165,12 @@ describe("ElementProxy.classList", () => {
 
     for (const [domClass, comment] of classCases) {
       describe(`[${comment}] classList.value for unmodified state`, () => {
-        test("Should not normalize on plain get", () => {
+        void test("Should not normalize on plain get", () => {
           setClass(domClass);
           expect(proxy.classList.value).toStrictEqual(domClass);
         });
 
-        test("Should not normalize on plain set", () => {
+        void test("Should not normalize on plain set", () => {
           proxy.classList.value = domClass;
           cmpElement.classList.value = domClass;
           expect(proxy.classList.value).toStrictEqual(domClass);
@@ -179,7 +179,7 @@ describe("ElementProxy.classList", () => {
       });
     }
   });
-  describe("classList.add", () => {
+  void describe("classList.add", () => {
     const addCases: [string | null, string | string[], string, number, string][] = [
       [null, "new", "new", 1, "Should add class if not existing"],
       ["old", "new", "old new", 2, "Should add new class after previous"],
@@ -188,7 +188,7 @@ describe("ElementProxy.classList", () => {
     ];
 
     for (const [before, add, after, count, comment] of addCases) {
-      test(`[${comment}] classList.add: [${before}] + [${add}] = [${after}] (${count})`, () => {
+      void test(`[${comment}] classList.add: [${before}] + [${add}] = [${after}] (${count})`, () => {
         setClass(before);
 
         if (typeof add === "string") {
@@ -216,7 +216,7 @@ describe("ElementProxy.classList", () => {
     ];
 
     for (const add of invalidAddCases) {
-      test(`[classList.add] Should fail adding invalid token '${add}'.`, () => {
+      void test(`[classList.add] Should fail adding invalid token '${add}'.`, () => {
         setClass("some");
 
         let proxyFunc: () => void;
@@ -235,7 +235,7 @@ describe("ElementProxy.classList", () => {
       });
     }
   });
-  describe("classList.remove", () => {
+  void describe("classList.remove", () => {
     const removeCases = [
       { before: null, remove: "any", after: "", count: 0, comment: "Should not fail on remove from unset" },
       { before: "", remove: "any", after: "", count: 0, comment: "Should not fail on remove from empty" },
@@ -271,7 +271,7 @@ describe("ElementProxy.classList", () => {
     ];
 
     for (const { before, remove, after, count, comment } of removeCases) {
-      test(`[classList.remove] ${comment}: [${before}] - [${remove}] = [${after}] (${count})`, () => {
+      void test(`[classList.remove] ${comment}: [${before}] - [${remove}] = [${after}] (${count})`, () => {
         setClass(before);
         if (typeof remove === "string") {
           proxy.classList.remove(remove);
@@ -297,7 +297,7 @@ describe("ElementProxy.classList", () => {
     ];
 
     for (const remove of invalidRemoveCases) {
-      test(`[classList.remove] Should fail removing invalid token '${remove}'`, () => {
+      void test(`[classList.remove] Should fail removing invalid token '${remove}'`, () => {
         setClass("some");
 
         let proxyFunc: () => void;
@@ -316,7 +316,7 @@ describe("ElementProxy.classList", () => {
       });
     }
   });
-  describe("classList.replace", () => {
+  void describe("classList.replace", () => {
     const replaceCases = [
       {
         before: null,
@@ -393,7 +393,7 @@ describe("ElementProxy.classList", () => {
     ];
 
     for (const { before, replace, replaceBy, after, count, comment } of replaceCases) {
-      test(`[classList.replace] ${comment}: [${before}]/s/[${replace}]/[${replaceBy}]/g = [${after}] (${count})`, () => {
+      void test(`[classList.replace] ${comment}: [${before}]/s/[${replace}]/[${replaceBy}]/g = [${after}] (${count})`, () => {
         setClass(before);
         proxy.classList.replace(replace, replaceBy);
         cmpElement.classList.replace(replace, replaceBy);
@@ -407,7 +407,7 @@ describe("ElementProxy.classList", () => {
     ];
 
     for (const { replace, replaceBy } of invalidReplaceCases) {
-      test(`[classList.replace] Should fail replacing with invalid tokens: '${replace}' by '${replaceBy}'.`, () => {
+      void test(`[classList.replace] Should fail replacing with invalid tokens: '${replace}' by '${replaceBy}'.`, () => {
         setClass("some");
         const proxyFunc = () => proxy.classList.replace(replace, replaceBy);
         const cmpFunc = () => cmpElement.classList.replace(replace, replaceBy);
@@ -416,7 +416,7 @@ describe("ElementProxy.classList", () => {
       });
     }
   });
-  describe("classList.toggle", () => {
+  void describe("classList.toggle", () => {
     const toggleCases = [
       {
         before: null,
@@ -517,7 +517,7 @@ describe("ElementProxy.classList", () => {
     ];
 
     for (const { before, toggle, force, after, count, comment } of toggleCases) {
-      test(`[classList.toggle] ${comment}: [${before}]/toggle/[${toggle}]/f=${force} = [${after}] (${count})`, () => {
+      void test(`[classList.toggle] ${comment}: [${before}]/toggle/[${toggle}]/f=${force} = [${after}] (${count})`, () => {
         setClass(before);
         proxy.classList.toggle(toggle, force);
         cmpElement.classList.toggle(toggle, force);
@@ -532,7 +532,7 @@ describe("ElementProxy.classList", () => {
     ];
 
     for (const { toggle, force } of invalidToggleCases) {
-      test(`[classList.toggle] Should fail toggling to invalid token '${toggle}' (force-mode: ${force})`, () => {
+      void test(`[classList.toggle] Should fail toggling to invalid token '${toggle}' (force-mode: ${force})`, () => {
         setClass("some");
         const proxyFunc = () => proxy.classList.toggle(toggle, force);
         const cmpFunc = () => cmpElement.classList.toggle(toggle, force);
@@ -561,7 +561,7 @@ type ApplyRulesData = [
     restart?: string;
   },
 ];
-describe("ElementProxy.applyRules()", () => {
+void describe("ElementProxy.applyRules()", () => {
   const applyRulesTests: ApplyRulesData[] = [
     [
       "should do nothing on empty rule set",
@@ -1023,7 +1023,7 @@ describe("ElementProxy.applyRules()", () => {
 
   const serializer = new XMLSerializer();
   for (const [name, testData] of applyRulesTests) {
-    test(`(${name})`, () => {
+    void test(`(${name})`, () => {
       const xpath = "//el";
       const xmlDocument: Document = requireValidXml(testData.from);
       const xmlExpectedDocument: Document = requireValidXml(testData.to);

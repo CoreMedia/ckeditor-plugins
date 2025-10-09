@@ -7,9 +7,9 @@ import {
   withTypeDefaults,
 } from "../../src/content/MockContentType";
 
-describe("MockContentType", () => {
-  describe("withTypeDefaults", () => {
-    test("Should provide default configuration for only ID-config (folder)", () => {
+void describe("MockContentType", () => {
+  void describe("withTypeDefaults", () => {
+    void test("Should provide default configuration for only ID-config (folder)", () => {
       const input = { id: 13 };
       const expected = {
         type: "folder",
@@ -21,7 +21,7 @@ describe("MockContentType", () => {
       expect(result).toStrictEqual(expected);
     });
 
-    test("Should provide default configuration for only ID-config (document)", () => {
+    void test("Should provide default configuration for only ID-config (document)", () => {
       const input: MockContentTypeSpecificPropertiesConfig = { id: 12 };
       const expected: MockContentTypeSpecificProperties = {
         type: "document",
@@ -33,7 +33,7 @@ describe("MockContentType", () => {
       expect(result).toStrictEqual(expected);
     });
 
-    test("Should provide linkable default if missing in config (folder)", () => {
+    void test("Should provide linkable default if missing in config (folder)", () => {
       const input = {
         // Enforce check, that default relies on type not id.
         id: 42,
@@ -48,7 +48,7 @@ describe("MockContentType", () => {
       expect(result).toStrictEqual(expected);
     });
 
-    test("Should provide linkable default if missing in config (document)", () => {
+    void test("Should provide linkable default if missing in config (document)", () => {
       const input = {
         // Enforce check, that default relies on type not id.
         id: 43,
@@ -63,7 +63,7 @@ describe("MockContentType", () => {
       expect(result).toStrictEqual(expected);
     });
 
-    test("Should provide embeddable default if missing in config", () => {
+    void test("Should provide embeddable default if missing in config", () => {
       const input = {
         id: 42,
         type: "document",
@@ -77,7 +77,7 @@ describe("MockContentType", () => {
       expect(result).toStrictEqual(expected);
     });
 
-    test("Should ignore default configuration if everything set", () => {
+    void test("Should ignore default configuration if everything set", () => {
       const input = {
         id: 42,
         type: "document",
@@ -88,7 +88,7 @@ describe("MockContentType", () => {
       expect(result).toStrictEqual(input);
     });
 
-    test("Should keep additional settings in configuration as is", () => {
+    void test("Should keep additional settings in configuration as is", () => {
       type ExtendedType = MockContentTypeSpecificPropertiesConfig & { lorem: string };
       const input: ExtendedType = {
         id: 42,

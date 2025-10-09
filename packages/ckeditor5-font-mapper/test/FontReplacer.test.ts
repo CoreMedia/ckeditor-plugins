@@ -13,7 +13,7 @@ const cases: [string, string][] = [
   ["system-ui ,serif", "system-ui"],
 ];
 
-void test("escapeFontFamily parses correctly", async (t: TestContext) => {
+void void test("escapeFontFamily parses correctly", async (t: TestContext) => {
   for (const [input, expected] of cases) {
     await t.test(
       `Should '${input}' parse to the first font-family '${expected}' without leading and trailing special characters.`,

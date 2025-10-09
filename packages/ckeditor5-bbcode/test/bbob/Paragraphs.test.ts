@@ -23,11 +23,11 @@ describe(`Paragraphs`, () => {
   describe(`paragraphAwareContent`, () => {
     // ---------------------------------------------------------------------------------------------------[ content=[] ]
     describe(`content=[]`, () => {
-      test(`should return "[]" with default options`, () => {
+      void test(`should return "[]" with default options`, () => {
         expect(paragraphAwareContent([])).toMatchObject([]);
       });
 
-      test(`should return "[]" wrapped in paragraph with "requireParagraph=true"`, () => {
+      void test(`should return "[]" wrapped in paragraph with "requireParagraph=true"`, () => {
         const expected = [toNode("p", {}, [])];
         expect(paragraphAwareContent([], { requireParagraph: true })).toMatchObject(expected);
       });
@@ -35,12 +35,12 @@ describe(`Paragraphs`, () => {
 
     // ---------------------------------------------------------------------------------------------[ content=string[] ]
     describe(`content=string[]: Content only containing strings without EOL characters`, () => {
-      test(`should skip extra paragraph (requireParagraphs=default false)`, () => {
+      void test(`should skip extra paragraph (requireParagraphs=default false)`, () => {
         const input = ["lorem", "ipsum"];
         expect(paragraphAwareContent(input)).toMatchObject(input);
       });
 
-      test(`should wrap content into paragraph (requireParagraphs=true)`, () => {
+      void test(`should wrap content into paragraph (requireParagraphs=true)`, () => {
         const input = ["lorem", "ipsum"];
         const expected = [toNode("p", {}, input)];
         expect(paragraphAwareContent(input, { requireParagraph: true })).toMatchObject(expected);
@@ -64,7 +64,7 @@ describe(`Paragraphs`, () => {
         },
       ] as const;
 
-      test("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { input, comment }] of cases.entries()) {
           await t.test(
             `[${i}] should skip extra paragraph (requireParagraphs=default false, ${comment}): ${input}`,
@@ -81,7 +81,7 @@ describe(`Paragraphs`, () => {
         { input: ["lorem", "ipsum", b(["dolor"])], comment: "tag-node at the end" },
       ] as const;
 
-      test("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { input, comment }] of wrapParagraphCases.entries()) {
           await t.test(
             `[${i}] should wrap content into paragraph (requireParagraphs=default true, ${comment}): ${input}`,
@@ -103,7 +103,7 @@ describe(`Paragraphs`, () => {
         { input: ["\n", "\n", "\n"], expected: ["\n"], comment: "squash newlines, keep at least one" },
       ] as const;
 
-      test("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { input, expected, comment }] of cases.entries()) {
           await t.test(`[${i}] should transform from ${input} to ${expected} (all defaults): ${comment}`, () => {
             const actual = paragraphAwareContent(input);
@@ -118,7 +118,7 @@ describe(`Paragraphs`, () => {
         { input: ["\n", "\n", "\n"], expected: [p([])], comment: "Design scope: Trim irrelevant newline" },
       ] as const;
 
-      test("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { input, expected, comment }] of trimNewlineCases.entries()) {
           await t.test(
             `[${i}] should transform from ${input} to ${expected} (requireParagraph=true): ${comment}`,
@@ -133,7 +133,7 @@ describe(`Paragraphs`, () => {
 
       // ---------------------------------------------------------------------------------------[ content=(string|EOL)[] ]
       describe(`content=(string|EOL)[]: Content only containing strings (including EOL characters)`, () => {
-        describe("Default Options", () => {
+        void describe("Default Options", () => {
           const singleEOLCases: { input: ContentFixture; expected: ContentFixture; comment: string }[] = [
             {
               input: ["\n", "ipsum", "dolor"],
@@ -148,7 +148,7 @@ describe(`Paragraphs`, () => {
             { input: ["lorem", "ipsum", "\n"], expected: ["lorem", "ipsum", "\n"], comment: "keep single EOL at end" },
           ] as const;
 
-          test("cases", async (t: TestContext) => {
+          void test("cases", async (t: TestContext) => {
             for (const [i, { input, expected, comment }] of singleEOLCases.entries()) {
               await t.test(`[${i}] should keep single newline characters (${comment}): ${input}`, () => {
                 const actual = paragraphAwareContent(input);
@@ -176,7 +176,7 @@ describe(`Paragraphs`, () => {
             },
           ] as const;
 
-          test("cases", async (t: TestContext) => {
+          void test("cases", async (t: TestContext) => {
             for (const [i, { input, expected, comment }] of squashNewlinesCases.entries()) {
               await t.test(`[${i}] should handle consecutive EOL at threshold (${comment}): ${input}`, () => {
                 const actual = paragraphAwareContent(input);
@@ -186,7 +186,7 @@ describe(`Paragraphs`, () => {
           });
         });
 
-        describe("requireParagraph=true", () => {
+        void describe("requireParagraph=true", () => {
           const options: ParagraphAwareContentOptions = { requireParagraph: true };
 
           const paragraphizeSingleEOLCases: { input: ContentFixture; expected: ContentFixture; comment: string }[] = [
@@ -207,7 +207,7 @@ describe(`Paragraphs`, () => {
             },
           ] as const;
 
-          test("cases", async (t: TestContext) => {
+          void test("cases", async (t: TestContext) => {
             for (const [i, { input, expected, comment }] of paragraphizeSingleEOLCases.entries()) {
               await t.test(`[${i}] should keep single newline characters (${comment}): ${input}`, () => {
                 const actual = paragraphAwareContent(input, options);
@@ -235,7 +235,7 @@ describe(`Paragraphs`, () => {
             },
           ] as const;
 
-          test("cases", async (t: TestContext) => {
+          void test("cases", async (t: TestContext) => {
             for (const [i, { input, expected, comment }] of paragraphizeMultipleEOLCases.entries()) {
               await t.test(`[${i}] should handle consecutive EOL at threshold (${comment}): ${input}`, () => {
                 const actual = paragraphAwareContent(input, options);
@@ -248,7 +248,7 @@ describe(`Paragraphs`, () => {
 
       // -------------------------------------------------------------------------------[ content=(string|TagNode|EOL)[] ]
       describe(`content=(string|TagNode|EOL)[]: Content containing anything (including EOL characters)`, () => {
-        describe("Default Options", () => {
+        void describe("Default Options", () => {
           const singleEOLWithTagNodes: { input: ContentFixture; expected: ContentFixture; comment: string }[] = [
             {
               input: ["\n", b(["ipsum"]), "dolor"],
@@ -267,7 +267,7 @@ describe(`Paragraphs`, () => {
             },
           ] as const;
 
-          test("cases", async (t: TestContext) => {
+          void test("cases", async (t: TestContext) => {
             for (const [i, { input, expected, comment }] of singleEOLWithTagNodes.entries()) {
               await t.test(`[${i}] should keep single newline characters (${comment}): ${input}`, () => {
                 const actual = paragraphAwareContent(input);
@@ -295,7 +295,7 @@ describe(`Paragraphs`, () => {
             },
           ] as const;
 
-          test("cases", async (t: TestContext) => {
+          void test("cases", async (t: TestContext) => {
             for (const [i, { input, expected, comment }] of multipleEOLWithTagNodes.entries()) {
               await t.test(`[${i}] should handle consecutive EOL at threshold (${comment}): ${input}`, () => {
                 const actual = paragraphAwareContent(input);
@@ -305,7 +305,7 @@ describe(`Paragraphs`, () => {
           });
         });
 
-        describe("requireParagraph=true", () => {
+        void describe("requireParagraph=true", () => {
           const options: ParagraphAwareContentOptions = { requireParagraph: true };
 
           const singleEOLWithTagNodes: { input: ContentFixture; expected: ContentFixture; comment: string }[] = [
@@ -326,7 +326,7 @@ describe(`Paragraphs`, () => {
             },
           ] as const;
 
-          test("cases", async (t: TestContext) => {
+          void test("cases", async (t: TestContext) => {
             for (const [i, { input, expected, comment }] of singleEOLWithTagNodes.entries()) {
               await t.test(`[${i}] should keep single newline characters (${comment}): ${input}`, () => {
                 const actual = paragraphAwareContent(input, options);
@@ -354,7 +354,7 @@ describe(`Paragraphs`, () => {
             },
           ] as const;
 
-          test("cases", async (t: TestContext) => {
+          void test("cases", async (t: TestContext) => {
             for (const [i, { input, expected, comment }] of multipleEOLWithTagNodes.entries()) {
               await t.test(`[${i}] should handle consecutive EOL at threshold (${comment}): ${input}`, () => {
                 const actual = paragraphAwareContent(input, options);
@@ -366,7 +366,7 @@ describe(`Paragraphs`, () => {
       });
 
       // -------------------------------------------------------------------------------------------[ Block Tag Handling ]
-      describe("Block Tag Handling", () => {
+      void describe("Block Tag Handling", () => {
         const quoteBlocksWithParagraphs: { input: ContentFixture; expected: ContentFixture; comment: string }[] = [
           {
             input: [q(["lorem"])],
@@ -385,7 +385,7 @@ describe(`Paragraphs`, () => {
           },
         ] as const;
 
-        test("cases", async (t: TestContext) => {
+        void test("cases", async (t: TestContext) => {
           for (const [i, { input, expected, comment }] of quoteBlocksWithParagraphs.entries()) {
             await t.test(`[${i}] should not wrap (default) block tags within paragraphs: ${comment}`, () => {
               const options: ParagraphAwareContentOptions = { requireParagraph: true };

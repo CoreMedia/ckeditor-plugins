@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 
 import "global-jsdom/register";
 import { describe } from "node:test";
@@ -25,7 +25,7 @@ const wrapContent = (content: string): string => `<div xmlns="${ns_richtext}">${
  *   class CDATA #IMPLIED >
  * ```
  */
-describe("CoreMediaRichTextConfig: Miscellaneous", () => {
+void describe("CoreMediaRichTextConfig: Miscellaneous", () => {
   const data: DataProcessingTestCase[] = [
     {
       name: "EMPTY#1: Should not modify empty RichText.",

@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 
 import "global-jsdom/register";
 import test, { describe } from "node:test";
 import { formatLink } from "../../../../src/compatibility/v10/rules/IdHelper";
 
-describe("IdHelper", () => {
+void describe("IdHelper", () => {
   const cases = [
     { href: "", expected: "" },
     { href: "https://example.org/", expected: "https://example.org/" },
@@ -15,7 +15,7 @@ describe("IdHelper", () => {
   ];
 
   for (const [index, { href, expected }] of cases.entries()) {
-    test(`[${index}] \`${href}\` -> \`${expected}\``, () => {
+    void test(`[${index}] \`${href}\` -> \`${expected}\``, () => {
       const actual = formatLink(href);
       expect(actual).toStrictEqual(expected);
     });

@@ -7,8 +7,8 @@ import { testShouldRetrieveValues } from "./ObservableTestUtil";
 
 const delays: Delayed = { initialDelayMs: 0, changeDelayMs: 1 };
 
-describe("DisplayHints", () => {
-  describe("observeNameHint", () => {
+void describe("DisplayHints", () => {
+  void describe("observeNameHint", () => {
     const testCases = [
       {
         names: ["Lorem"],
@@ -24,9 +24,9 @@ describe("DisplayHints", () => {
       },
     ];
 
-    describe("Should retrieve hints for names", () => {
+    void describe("Should retrieve hints for names", () => {
       for (const [i, { names, loop }] of testCases.entries()) {
-        test(`[${i}] Should retrieve hints for names: ${JSON.stringify(names)} (loop? ${loop})`, () => {
+        void test(`[${i}] Should retrieve hints for names: ${JSON.stringify(names)} (loop? ${loop})`, () => {
           const classes: string[] = [];
 
           const config: NameHintConfig = {
@@ -60,9 +60,9 @@ describe("DisplayHints", () => {
       { readableStates: [false, true, false], loop: true },
     ];
 
-    describe("Should retrieve name hints respecting readable states", () => {
+    void describe("Should retrieve name hints respecting readable states", () => {
       for (const [i, { readableStates, loop }] of testCases2.entries()) {
-        test(`[${i}] Should retrieve name hints respecting readable states: ${JSON.stringify(
+        void test(`[${i}] Should retrieve name hints respecting readable states: ${JSON.stringify(
           readableStates,
         )} (loop? ${loop})`, () => {
           const name = "Lorem";

@@ -9,15 +9,15 @@ import {
 } from "../../src/bbob/Attributes";
 import { TagAttrs } from "@bbob/plugin-helper/es";
 
-describe("Attributes", () => {
-  describe("forEachAttribute", () => {
-    test("should do nothing on empty record", () => {
+void describe("Attributes", () => {
+  void describe("forEachAttribute", () => {
+    void test("should do nothing on empty record", () => {
       let called = false;
       forEachAttribute({}, () => (called = true));
       expect(called).toBe(false);
     });
 
-    test("should process expected entries", () => {
+    void test("should process expected entries", () => {
       const probe: TagAttrs = {
         src: "SRC",
         otherSrc: "SRC",
@@ -30,15 +30,15 @@ describe("Attributes", () => {
     });
   });
 
-  describe("setAttributesFromTagAttrs", () => {
-    test("should not set any attribute on empty attributes", () => {
+  void describe("setAttributesFromTagAttrs", () => {
+    void test("should not set any attribute on empty attributes", () => {
       const el = document.createElement("div");
       const originalLength = el.attributes.length;
       setAttributesFromTagAttrs(el, {});
       expect(el.attributes.length).toBe(originalLength);
     });
 
-    test("should set normal attributes as given", () => {
+    void test("should set normal attributes as given", () => {
       const el = document.createElement("div");
       const attrs: TagAttrs = {
         class: "CLASS",
@@ -51,7 +51,7 @@ describe("Attributes", () => {
       });
     });
 
-    test("should ignore invalid attributes, but process others", () => {
+    void test("should ignore invalid attributes, but process others", () => {
       const el = document.createElement("div");
       const invalidKey = "[invalid key]";
       const attrs: TagAttrs = {
@@ -74,14 +74,14 @@ describe("Attributes", () => {
    * tests may break, and we may need to investigate how to deal with the
    * results.
    */
-  describe("stripUniqueAttr (BBob integration)", () => {
-    test("should get only 'otherAttrs' for empty attributes", () => {
+  void describe("stripUniqueAttr (BBob integration)", () => {
+    void test("should get only 'otherAttrs' for empty attributes", () => {
       const attr = stripUniqueAttr({});
       expect(attr.uniqueAttrValue).toBeUndefined();
       expect(attr.otherAttrs).toMatchObject({});
     });
 
-    test("should get only 'otherAttrs' for attributes not having a unique attribute", () => {
+    void test("should get only 'otherAttrs' for attributes not having a unique attribute", () => {
       const attrs = {
         one: "1",
         two: "2",
@@ -91,7 +91,7 @@ describe("Attributes", () => {
       expect(attr.otherAttrs).toMatchObject(attrs);
     });
 
-    test("should extract unique attribute, if it is the only attribute", () => {
+    void test("should extract unique attribute, if it is the only attribute", () => {
       const uniqueAttr = "https://example.org/";
       const attrs = {
         // Typical representation of a URL, for example, in [url=https://example.org/].
@@ -102,7 +102,7 @@ describe("Attributes", () => {
       expect(attr.otherAttrs).toMatchObject({});
     });
 
-    test("should extract unique attribute, and separate from others", () => {
+    void test("should extract unique attribute, and separate from others", () => {
       const uniqueAttr = "https://example.org/";
       const otherAttrs = {
         one: "1",
@@ -121,7 +121,7 @@ describe("Attributes", () => {
     });
   });
 
-  describe("uniqueAttrToAttr", () => {
+  void describe("uniqueAttrToAttr", () => {
     type AutCall = (uniqueAttrName: string, attrs: TagAttrs, uniqueDefault: string) => TagAttrs;
     const aut = {
       callWithDefaults: (uniqueAttrName: string, attrs: TagAttrs) => uniqueAttrToAttr(uniqueAttrName, attrs),
@@ -148,7 +148,7 @@ describe("Attributes", () => {
       },
     ] as const;
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { autCall, callType }] of emptyAttrCases.entries()) {
         await t.test(`[${i}] should return empty attributes unchanged: ${callType}`, () => {
           const result = autCall("unique", {}, "uniqueDefault");
@@ -157,7 +157,7 @@ describe("Attributes", () => {
       }
     });
 
-    test("should use default unique attribute for empty attributes", () => {
+    void test("should use default unique attribute for empty attributes", () => {
       const autCall = aut.callWithDefaultSupplied;
       const uniqueKey = "unique";
       const uniqueDefault = "uniqueDefault";
@@ -180,7 +180,7 @@ describe("Attributes", () => {
       },
     ];
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { autCall, callType }] of uniqueAttrCases.entries()) {
         await t.test(`[${i}] should override from unique attributes: ${callType}`, () => {
           const uniqueKey = "unique";
@@ -197,7 +197,7 @@ describe("Attributes", () => {
       }
     });
 
-    test("should prefer existing attribute, when override is disabled", () => {
+    void test("should prefer existing attribute, when override is disabled", () => {
       const autCall = aut.callWithOverrideDisabled;
       const uniqueKey = "unique";
       const uniqueValueInAttrs = "uniqueValueInAttrs";

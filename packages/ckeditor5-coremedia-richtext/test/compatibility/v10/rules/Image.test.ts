@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 
 import "global-jsdom/register";
 import { describe } from "node:test";
@@ -58,7 +58,7 @@ const imageSourceToDummyHref = (document: Document): void => {
  *   xlink:role    CDATA     #IMPLIED >
  * ```
  */
-describe("CoreMediaRichTextConfig: Images", () => {
+void describe("CoreMediaRichTextConfig: Images", () => {
   // noinspection HtmlUnknownAttribute,RequiredAttributes
   const data: DataProcessingTestCase[] = [
     {

@@ -9,7 +9,7 @@ const someFunction = () => {
   // irrelevant, only type required
 };
 
-describe("MockContentUtils", () => {
+void describe("MockContentUtils", () => {
   const testCases = [
     { input: 0, upperBound: 0, expected: 0, expectedRestart: true },
     { input: 0, upperBound: 1, expected: 0, expectedRestart: true },
@@ -21,9 +21,9 @@ describe("MockContentUtils", () => {
     { input: 1, upperBound: 2, expected: 0, expectedRestart: true },
   ];
 
-  describe("increaseUpToAndRestart()", () => {
+  void describe("increaseUpToAndRestart()", () => {
     for (const [i, { input, upperBound, expected, expectedRestart }] of testCases.entries()) {
-      test(`[${i}] increaseUpToAndRestart(${input}, ${upperBound}) = ${expected}, restart? ${expectedRestart}`, () => {
+      void test(`[${i}] increaseUpToAndRestart(${input}, ${upperBound}) = ${expected}, restart? ${expectedRestart}`, () => {
         const actual = increaseUpToAndRestart(input, upperBound);
         expect(actual).toStrictEqual({
           value: expected,
@@ -53,9 +53,9 @@ describe("MockContentUtils", () => {
     { input: { lorem: "ipsum" }, expected: true },
   ];
 
-  describe("isObject()", () => {
+  void describe("isObject()", () => {
     for (const [i, { input, expected }] of testCases2.entries()) {
-      test(`[${i}] isObject(${formatValue(input)}) = ${expected}`, () => {
+      void test(`[${i}] isObject(${formatValue(input)}) = ${expected}`, () => {
         expect(isObject(input)).toStrictEqual(expected);
       });
     }
@@ -84,9 +84,9 @@ describe("MockContentUtils", () => {
     { input: "_lorem", expected: "_lorem" },
   ];
 
-  describe("capitalize()", () => {
+  void describe("capitalize()", () => {
     for (const [i, { input, expected }] of testCases3.entries()) {
-      test(`[${i}] capitalize("${input}") = "${expected}"`, () => {
+      void test(`[${i}] capitalize("${input}") = "${expected}"`, () => {
         expect(capitalize(input)).toStrictEqual(expected);
       });
     }

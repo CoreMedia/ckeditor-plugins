@@ -6,8 +6,8 @@ import { documentFromHtml, documentFromXml } from "../src/Documents";
 import { extractNodeContents, lookupNamespaceURI, serializeToXmlString } from "../src/Nodes";
 import { fragmentFromNodeContents } from "../src/DocumentFragments";
 
-describe("Nodes", () => {
-  describe("serializeToXmlString", () => {
+void describe("Nodes", () => {
+  void describe("serializeToXmlString", () => {
     test(USE_CASE_NAME, () => {
       const document = documentFromHtml("<body/>");
       const xmlString = serializeToXmlString(document);
@@ -29,14 +29,14 @@ describe("Nodes", () => {
     ];
 
     for (const [i, { node, expectedXml }] of nodes.entries()) {
-      test(`[${i}] Should transform ${node instanceof Node ? node.nodeName : String(node)} to: ${expectedXml}`, () => {
+      void test(`[${i}] Should transform ${node instanceof Node ? node.nodeName : String(node)} to: ${expectedXml}`, () => {
         const xmlString = serializeToXmlString(node);
         expect(xmlString).toStrictEqual(expectedXml);
       });
     }
   });
 
-  describe("extractNodeContents", () => {
+  void describe("extractNodeContents", () => {
     test(USE_CASE_NAME, () => {
       const xmlDocument = documentFromXml("<root><child/></root>");
       const { documentElement } = xmlDocument;
@@ -47,7 +47,7 @@ describe("Nodes", () => {
       expect(serializeToXmlString(extracted)).toStrictEqual("<child/>");
     });
 
-    test("should extract all child nodes to fragment recursively", () => {
+    void test("should extract all child nodes to fragment recursively", () => {
       const xmlDocument = documentFromXml("<root><child>1</child><child>2</child></root>");
       const { documentElement } = xmlDocument;
 
@@ -57,7 +57,7 @@ describe("Nodes", () => {
       expect(serializeToXmlString(extracted)).toStrictEqual("<child>1</child><child>2</child>");
     });
 
-    test("should extract text node as fragment", () => {
+    void test("should extract text node as fragment", () => {
       const xmlDocument = documentFromXml("<root>TEXT</root>");
       const { documentElement } = xmlDocument;
 
@@ -67,7 +67,7 @@ describe("Nodes", () => {
       expect(serializeToXmlString(extracted)).toStrictEqual("TEXT");
     });
 
-    test("should do nothing on empty node", () => {
+    void test("should do nothing on empty node", () => {
       const xmlDocument = documentFromXml("<root/>");
       const { documentElement } = xmlDocument;
 
@@ -78,7 +78,7 @@ describe("Nodes", () => {
     });
   });
 
-  describe("lookupNamespaceURI", () => {
+  void describe("lookupNamespaceURI", () => {
     const parser = new DOMParser();
     type Input = "document" | "documentElement" | "firstChild";
 
@@ -183,7 +183,7 @@ describe("Nodes", () => {
         for (const [inputIndex, input] of inputs.entries()) {
           describe(`[${inputIndex}] For input node: ${input} (force: ${force})`, () => {
             for (const [caseIndex, testCase] of testCases.entries()) {
-              test(`[${caseIndex}] Parsing ${testCase.toParse} as ${testCase.type} and lookup for prefix ${
+              void test(`[${caseIndex}] Parsing ${testCase.toParse} as ${testCase.type} and lookup for prefix ${
                 testCase.prefix
               } at ${input} should result in: ${testCase.expected(input)} (force: ${force})`, () => {
                 const node = parseAndGet(testCase.toParse, testCase.type, input);

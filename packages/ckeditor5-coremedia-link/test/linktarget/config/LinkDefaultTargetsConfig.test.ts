@@ -5,8 +5,8 @@ import expect from "expect";
 import { Config } from "ckeditor5";
 import { computeDefaultLinkTargetForUrl } from "../../../src/linktarget/config/LinkTargetConfig";
 
-void describe("LinkTargetDefaultsConfig", () => {
-  void describe("computeDefaultLinkTargetForUrl", () => {
+void void describe("LinkTargetDefaultsConfig", () => {
+  void void describe("computeDefaultLinkTargetForUrl", () => {
     // @ts-expect-error - Requires generic type since CKEditor 37.x.
     let config: Config;
     beforeEach(() => {
@@ -33,7 +33,7 @@ void describe("LinkTargetDefaultsConfig", () => {
       { url: "unexpectedFormat", expectedTarget: undefined },
     ] as const;
 
-    void test("cases", async (t: TestContext) => {
+    void void test("cases", async (t: TestContext) => {
       for (const [i, { url, expectedTarget }] of cases.entries()) {
         await t.test(`[${i}] For the url '${url}' a target with the value '${expectedTarget}' is expected.`, () => {
           const target = computeDefaultLinkTargetForUrl(url, config);

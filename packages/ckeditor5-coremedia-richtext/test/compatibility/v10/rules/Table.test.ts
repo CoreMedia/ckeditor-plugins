@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 
 import "global-jsdom/register";
 import { describe } from "node:test";
@@ -54,7 +54,7 @@ const wrapContent = (content: string): string => `<div xmlns="${ns_richtext}">${
  *   class    CDATA                        #IMPLIED >
  * ```
  */
-describe("CoreMediaRichTextConfig: Table", () => {
+void describe("CoreMediaRichTextConfig: Table", () => {
   const elementMapping = [
     {
       name: "TABLE#01: Empty table should be removed, as it is invalid.",

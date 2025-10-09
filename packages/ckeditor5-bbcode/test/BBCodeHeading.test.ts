@@ -6,8 +6,8 @@ import { bbCodeHeading } from "../src/rules/BBCodeHeading";
 
 const prettyPrintNewlines = "\n\n";
 
-describe("BBCodeHeading", () => {
-  test("Default Configuration", async (t: TestContext) => {
+void describe("BBCodeHeading", () => {
+  void test("Default Configuration", async (t: TestContext) => {
     const rule = bbCodeHeading;
 
     const cases: { dataView: string; expected: string }[] = [

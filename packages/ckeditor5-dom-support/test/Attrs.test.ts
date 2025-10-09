@@ -10,8 +10,8 @@ const onlyRootXmlDocument = documentFromXml(`<root lang="en" id="ID"/>`);
 const langAttribute = onlyRootXmlDocument.documentElement.getAttributeNode("lang");
 const idAttribute = onlyRootXmlDocument.documentElement.getAttributeNode("id");
 
-describe("Attrs", () => {
-  describe("isAttr", () => {
+void describe("Attrs", () => {
+  void describe("isAttr", () => {
     test(USE_CASE_NAME, () => {
       const value: unknown = langAttribute;
       if (isAttr(value)) {
@@ -23,7 +23,7 @@ describe("Attrs", () => {
     const cases = [langAttribute, idAttribute];
 
     for (const [i, matched] of cases.entries()) {
-      test(`[${i}] should match any Attribute: ${matched}`, () => {
+      void test(`[${i}] should match any Attribute: ${matched}`, () => {
         expect(isAttr(matched)).toBeTruthy();
       });
     }
@@ -31,13 +31,13 @@ describe("Attrs", () => {
     const cases2 = [undefined, null, langAttribute?.ownerDocument];
 
     for (const [i, unmatched] of cases2.entries()) {
-      test(`[${i}] should not match any other objects than Attributes: ${unmatched}`, () => {
+      void test(`[${i}] should not match any other objects than Attributes: ${unmatched}`, () => {
         expect(isAttr(unmatched)).toBeFalsy();
       });
     }
   });
 
-  describe("copyAttributesFrom", () => {
+  void describe("copyAttributesFrom", () => {
     test(USE_CASE_NAME, () => {
       const { documentElement } = onlyRootXmlDocument;
       const { namespaceURI } = documentElement;

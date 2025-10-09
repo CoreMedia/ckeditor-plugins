@@ -6,8 +6,8 @@ import { documentFromHtml, documentFromXml } from "../src/Documents";
 import { ElementDefinition, isElement, removeClass, renameElement } from "../src/Elements";
 import { serializeToXmlString } from "../src/Nodes";
 
-describe("Elements", () => {
-  describe("isElement", () => {
+void describe("Elements", () => {
+  void describe("isElement", () => {
     test(USE_CASE_NAME, () => {
       const node: Node = documentFromHtml("<body/>").body;
       if (isElement(node)) {
@@ -19,7 +19,7 @@ describe("Elements", () => {
     const matchedCases = [documentFromHtml("<body/>").body, documentFromXml("<root><child/></root>").firstElementChild];
 
     for (const [i, matched] of matchedCases.entries()) {
-      test(`[${i}] should match any Element: ${matched}`, () => {
+      void test(`[${i}] should match any Element: ${matched}`, () => {
         expect(isElement(matched)).toBeTruthy();
       });
     }
@@ -27,13 +27,13 @@ describe("Elements", () => {
     const unmatchedCases = [undefined, null, documentFromHtml("<body/>")];
 
     for (const [i, unmatched] of unmatchedCases.entries()) {
-      test(`[${i}] should not match any other objects than Elements: ${String(unmatched)}`, () => {
+      void test(`[${i}] should not match any other objects than Elements: ${String(unmatched)}`, () => {
         expect(isElement(unmatched)).toBeFalsy();
       });
     }
   });
 
-  describe("renameElement", () => {
+  void describe("renameElement", () => {
     test(USE_CASE_NAME, () => {
       const xmlDocument = documentFromXml(`<root lang="en" id="ID"><child/></root>`);
       const { documentElement: originalElement } = xmlDocument;
@@ -43,7 +43,7 @@ describe("Elements", () => {
       expect(serializeToXmlString(xmlDocument)).toStrictEqual(`<renamed lang="en" id="ID"><child/></renamed>`);
     });
 
-    test("should be possible to rename element just by providing its qualified name", () => {
+    void test("should be possible to rename element just by providing its qualified name", () => {
       const xmlDocument = documentFromXml(`<root/>`);
       const { documentElement: originalElement } = xmlDocument;
       const newName = "renamed";
@@ -58,7 +58,7 @@ describe("Elements", () => {
       expect(tagName).toStrictEqual(newName);
     });
 
-    test("should be possible to rename element by providing its full definition", () => {
+    void test("should be possible to rename element by providing its full definition", () => {
       const xmlDocument = documentFromXml(`<root/>`);
       const { documentElement: originalElement } = xmlDocument;
       const newPrefix = "c";
@@ -80,7 +80,7 @@ describe("Elements", () => {
       expect(tagName).toStrictEqual(qualifiedName);
     });
 
-    test("should move children, if requested by `deep=true` (default)", () => {
+    void test("should move children, if requested by `deep=true` (default)", () => {
       const xmlDocument = documentFromXml(`<root><child/></root>`);
       const { documentElement: originalElement } = xmlDocument;
 
@@ -89,7 +89,7 @@ describe("Elements", () => {
       expect(serializeToXmlString(xmlDocument)).toStrictEqual(`<renamed><child/></renamed>`);
     });
 
-    test("should not move children, if requested by `deep=false`", () => {
+    void test("should not move children, if requested by `deep=false`", () => {
       const xmlDocument = documentFromXml(`<root><child/></root>`);
       const { documentElement: originalElement } = xmlDocument;
 
@@ -98,7 +98,7 @@ describe("Elements", () => {
       expect(serializeToXmlString(xmlDocument)).toStrictEqual(`<renamed/>`);
     });
 
-    test("should copy all attributes to new element", () => {
+    void test("should copy all attributes to new element", () => {
       const xmlDocument = documentFromXml(`<root lang="en" id="ID"/>`);
       const { documentElement: originalElement } = xmlDocument;
 
@@ -108,8 +108,8 @@ describe("Elements", () => {
     });
   });
 
-  describe("removeClass", () => {
-    test("should be able to clean up class attribute (optional corner case)", () => {
+  void describe("removeClass", () => {
+    void test("should be able to clean up class attribute (optional corner case)", () => {
       const xmlDocument = documentFromXml(`<root class="CLASS"/>`);
       const element = xmlDocument.documentElement;
       element.classList.remove("CLASS");
@@ -119,14 +119,14 @@ describe("Elements", () => {
       expect(element.hasAttribute("class")).toStrictEqual(false);
     });
 
-    test("should remove class 'without traces'", () => {
+    void test("should remove class 'without traces'", () => {
       const xmlDocument = documentFromXml(`<root class="CLASS"/>`);
       const element = xmlDocument.documentElement;
       removeClass(element, "CLASS");
       expect(element.hasAttribute("class")).toStrictEqual(false);
     });
 
-    test("should keep other classes", () => {
+    void test("should keep other classes", () => {
       const xmlDocument = documentFromXml(`<root class="CLASS1 CLASS2"/>`);
       const element = xmlDocument.documentElement;
       removeClass(element, "CLASS1");

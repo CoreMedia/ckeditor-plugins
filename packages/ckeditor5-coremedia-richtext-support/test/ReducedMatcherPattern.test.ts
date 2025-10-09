@@ -68,9 +68,9 @@ const inflate = (abbrev: AbbreviatedPattern | undefined): ReducedMatcherPattern 
 const isReducedMatcherPattern = (pattern: ReducedMatcherPattern | undefined): pattern is ReducedMatcherPattern =>
   !!pattern;
 
-describe("ReducedMatcherPattern", () => {
-  describe("mergePatterns", () => {
-    test("should accept empty array", () => {
+void describe("ReducedMatcherPattern", () => {
+  void describe("mergePatterns", () => {
+    void test("should accept empty array", () => {
       const actual = mergePatterns();
       const expected: ReducedMatcherPattern = {};
       expect(actual).toStrictEqual(expected);
@@ -215,9 +215,9 @@ describe("ReducedMatcherPattern", () => {
       },
     ];
 
-    describe("mergePatterns()", () => {
+    void describe("mergePatterns()", () => {
       for (const [i, { category, p1, p2, p3, expected, comment }] of testCases.entries()) {
-        test(`[${i}] ${category} - should merge to ${JSON.stringify(expected)} for: [p1, p2, p3] = [${JSON.stringify(p1)}, ${JSON.stringify(p2)}, ${JSON.stringify(p3)}] - ${comment}`, () => {
+        void test(`[${i}] ${category} - should merge to ${JSON.stringify(expected)} for: [p1, p2, p3] = [${JSON.stringify(p1)}, ${JSON.stringify(p2)}, ${JSON.stringify(p3)}] - ${comment}`, () => {
           const pattern1 = inflate(p1);
           const pattern2 = inflate(p2);
           const pattern3 = inflate(p3);
@@ -232,8 +232,8 @@ describe("ReducedMatcherPattern", () => {
     });
   });
 
-  describe("findFirstPattern", () => {
-    test("should accept empty array", () => {
+  void describe("findFirstPattern", () => {
+    void test("should accept empty array", () => {
       const actual = findFirstPattern("any");
       expect(actual).toBeUndefined();
     });
@@ -318,9 +318,9 @@ describe("ReducedMatcherPattern", () => {
       },
     ];
 
-    describe("findFirstPattern()", () => {
+    void describe("findFirstPattern()", () => {
       for (const [i, { name, p1, p2, expected, comment }] of testCases.entries()) {
-        test(`[${i}] find first named ${name} in [${JSON.stringify(p1)}, ${JSON.stringify(p2)}] = ${JSON.stringify(expected)} - ${comment}`, () => {
+        void test(`[${i}] find first named ${name} in [${JSON.stringify(p1)}, ${JSON.stringify(p2)}] = ${JSON.stringify(expected)} - ${comment}`, () => {
           const pattern1 = inflate(p1);
           const pattern2 = inflate(p2);
           const patterns = [pattern1, pattern2].filter(isReducedMatcherPattern);
@@ -372,9 +372,9 @@ describe("ReducedMatcherPattern", () => {
     },
   ];
 
-  describe("toLookupStrategy()", () => {
+  void describe("toLookupStrategy()", () => {
     for (const [i, { name, p1, p2, expected, comment }] of testCases.entries()) {
-      test(`[${i}] find first named ${name} in [${JSON.stringify(p1)}, ${JSON.stringify(p2)}] = ${JSON.stringify(expected)} - ${comment}`, () => {
+      void test(`[${i}] find first named ${name} in [${JSON.stringify(p1)}, ${JSON.stringify(p2)}] = ${JSON.stringify(expected)} - ${comment}`, () => {
         const pattern1 = inflate(p1);
         const pattern2 = inflate(p2);
         const patterns = [pattern1, pattern2].filter(isReducedMatcherPattern);
@@ -388,7 +388,7 @@ describe("ReducedMatcherPattern", () => {
     }
   });
 
-  describe("resolveInheritance", () => {
+  void describe("resolveInheritance", () => {
     const deflatedPatterns: AbbreviatedPattern[] = [
       {
         n: "first",
@@ -403,7 +403,7 @@ describe("ReducedMatcherPattern", () => {
     const existingPatterns: ReducedMatcherPattern[] = deflatedPatterns.map(inflate).filter(isReducedMatcherPattern);
     const strategy = toLookupStrategy(...existingPatterns);
 
-    test("should use provided lookup strategy", () => {
+    void test("should use provided lookup strategy", () => {
       const pattern: InheritingMatcherPattern = {
         name: "custom",
         inherit: "first",
@@ -419,7 +419,7 @@ describe("ReducedMatcherPattern", () => {
       expect(actual).toStrictEqual(expected);
     });
 
-    test("should dynamically create lookup strategy from existing patterns", () => {
+    void test("should dynamically create lookup strategy from existing patterns", () => {
       const pattern: InheritingMatcherPattern = {
         name: "custom",
         inherit: "first",
@@ -435,7 +435,7 @@ describe("ReducedMatcherPattern", () => {
       expect(actual).toStrictEqual(expected);
     });
 
-    test("should use apply attributes from inherited pattern", () => {
+    void test("should use apply attributes from inherited pattern", () => {
       const pattern: InheritingMatcherPattern = {
         name: "custom",
         inherit: "second",
@@ -452,7 +452,7 @@ describe("ReducedMatcherPattern", () => {
       expect(actual).toStrictEqual(expected);
     });
 
-    test("should fail, if inherited target not found", () => {
+    void test("should fail, if inherited target not found", () => {
       const pattern: InheritingMatcherPattern = {
         name: "custom",
         inherit: "not-existing",
@@ -463,7 +463,7 @@ describe("ReducedMatcherPattern", () => {
       expect(failing).toThrow(Error);
     });
 
-    test("convenience: should accept patterns without inheritance, deleting empty inherit", () => {
+    void test("convenience: should accept patterns without inheritance, deleting empty inherit", () => {
       const pattern: InheritingMatcherPattern = {
         name: "custom",
         inherit: "",
@@ -477,7 +477,7 @@ describe("ReducedMatcherPattern", () => {
       expect(actual).toStrictEqual(expected);
     });
 
-    test("convenience: should accept patterns without inheritance", () => {
+    void test("convenience: should accept patterns without inheritance", () => {
       const pattern: InheritingMatcherPattern = {
         name: "custom",
         classes: true,

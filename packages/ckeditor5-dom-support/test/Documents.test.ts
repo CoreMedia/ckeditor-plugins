@@ -4,8 +4,8 @@ import expect from "expect";
 import { documentFromHtml, documentFromXml, isDocument } from "../src/Documents";
 import { USE_CASE_NAME } from "./Constants";
 
-describe("Documents", () => {
-  describe("documentFromHtml", () => {
+void describe("Documents", () => {
+  void describe("documentFromHtml", () => {
     test(USE_CASE_NAME, () => {
       const document = documentFromHtml(`<body><p/></body>`);
       expect(document).toBeDefined();
@@ -24,7 +24,7 @@ describe("Documents", () => {
     ];
 
     for (const [i, { incompleteHtml }] of incompleteHtmlCases.entries()) {
-      test(`[${i}] should auto-complete missing root-elements for ${incompleteHtml}`, () => {
+      void test(`[${i}] should auto-complete missing root-elements for ${incompleteHtml}`, () => {
         const document = documentFromHtml(incompleteHtml);
         expect(document.documentElement.localName).toStrictEqual("html");
         expect(document.documentElement.firstElementChild?.localName).toStrictEqual("head");
@@ -33,7 +33,7 @@ describe("Documents", () => {
     }
   });
 
-  describe("documentFromXml", () => {
+  void describe("documentFromXml", () => {
     test(USE_CASE_NAME, () => {
       const document = documentFromXml(`<root><child/></root>`);
       expect(document).toBeDefined();
@@ -54,7 +54,7 @@ describe("Documents", () => {
     ];
 
     for (const [i, { xmlString, expectedRootElement, expectedFirstChildElement }] of xmlCases.entries()) {
-      test(`[${i}] should successfully parse XML string`, () => {
+      void test(`[${i}] should successfully parse XML string`, () => {
         const document = documentFromXml(xmlString);
         expect(document.documentElement.localName).toStrictEqual(expectedRootElement);
         expect(document.documentElement.firstElementChild?.localName).toStrictEqual(expectedFirstChildElement);
@@ -62,7 +62,7 @@ describe("Documents", () => {
     }
   });
 
-  describe("isDocument", () => {
+  void describe("isDocument", () => {
     test(USE_CASE_NAME, () => {
       const node: Node = documentFromHtml(`<body><p/></body>`);
       if (isDocument(node)) {
@@ -71,7 +71,7 @@ describe("Documents", () => {
       }
     });
 
-    test("should match Document nodes", () => {
+    void test("should match Document nodes", () => {
       const document = documentFromHtml(`<body/>`);
       expect(isDocument(document)).toBeTruthy();
     });
@@ -79,7 +79,7 @@ describe("Documents", () => {
     const unmatchedCases = [undefined, null, documentFromHtml("<body/>").firstElementChild];
 
     for (const [i, unmatched] of unmatchedCases.entries()) {
-      test(`[${i}] should not match any other objects than Document: ${unmatched}`, () => {
+      void test(`[${i}] should not match any other objects than Document: ${unmatched}`, () => {
         expect(isDocument(unmatched)).toBeFalsy();
       });
     }

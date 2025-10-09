@@ -1,5 +1,5 @@
 // noinspection HtmlUnknownAttribute
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
@@ -8,8 +8,8 @@ import { p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-dat
 import { RulesTester } from "./RulesTester";
 import { bijective, TestDirection } from "./TestDirection";
 
-describe("AnchorElement", () => {
-  describe("parseDataContentLink", () => {
+void describe("AnchorElement", () => {
+  void describe("parseDataContentLink", () => {
     const cases: { data: string; expectedId: number | undefined }[] = [
       { data: ``, expectedId: undefined },
       { data: `https://example.org/`, expectedId: undefined },
@@ -30,13 +30,13 @@ describe("AnchorElement", () => {
     ];
 
     for (const { data, expectedId } of cases) {
-      test(`Should parse "${data}" to ${expectedId}`, () => {
+      void test(`Should parse "${data}" to ${expectedId}`, () => {
         expect(aut.parseDataContentLink(data)).toStrictEqual(expectedId);
       });
     }
   });
 
-  describe("parseViewContentLink", () => {
+  void describe("parseViewContentLink", () => {
     const testCases: { view: string; expectedId: number | undefined }[] = [
       { view: `https://example.org/`, expectedId: undefined },
       { view: `content:42`, expectedId: 42 },
@@ -48,13 +48,13 @@ describe("AnchorElement", () => {
     ];
 
     for (const { view, expectedId } of testCases) {
-      test(`Should parse "${view}" to ${expectedId}`, () => {
+      void test(`Should parse "${view}" to ${expectedId}`, () => {
         expect(aut.parseViewContentLink(view)).toStrictEqual(expectedId);
       });
     }
   });
 
-  describe("toDataContentLink", () => {
+  void describe("toDataContentLink", () => {
     const testCases: { id: number; expectedLink: string }[] = [
       { id: 0, expectedLink: `content/0` },
       { id: 42, expectedLink: `content/42` },
@@ -62,13 +62,13 @@ describe("AnchorElement", () => {
     ];
 
     for (const { id, expectedLink } of testCases) {
-      test(`Should format ${id} to ${expectedLink}`, () => {
+      void test(`Should format ${id} to ${expectedLink}`, () => {
         expect(aut.toDataContentLink(id)).toStrictEqual(expectedLink);
       });
     }
   });
 
-  describe("toViewContentLink", () => {
+  void describe("toViewContentLink", () => {
     const testCases: { id: number; expectedLink: string }[] = [
       { id: 0, expectedLink: `content:0` },
       { id: 42, expectedLink: `content:42` },
@@ -76,13 +76,13 @@ describe("AnchorElement", () => {
     ];
 
     for (const [index, { id, expectedLink }] of testCases.entries()) {
-      test(`[${index}] Should format ${id} to ${expectedLink}`, () => {
+      void test(`[${index}] Should format ${id} to ${expectedLink}`, () => {
         expect(aut.toViewContentLink(id)).toStrictEqual(expectedLink);
       });
     }
   });
 
-  describe("formatHrefForData", () => {
+  void describe("formatHrefForData", () => {
     const testCases: { view: string; expectedHref: string }[] = [
       { view: ``, expectedHref: `` },
       { view: `https://example.org/`, expectedHref: `https://example.org/` },
@@ -95,13 +95,13 @@ describe("AnchorElement", () => {
     ];
 
     for (const [index, { view, expectedHref }] of testCases.entries()) {
-      test(`[${index}] Should format data view representation ${view} to HREF for data: ${expectedHref}`, () => {
+      void test(`[${index}] Should format data view representation ${view} to HREF for data: ${expectedHref}`, () => {
         expect(aut.formatHrefForData(view)).toStrictEqual(expectedHref);
       });
     }
   });
 
-  describe("formatHrefForView", () => {
+  void describe("formatHrefForView", () => {
     const testCases: { data: string; expectedHref: string }[] = [
       { data: `https://example.org/`, expectedHref: `https://example.org/` },
       { data: `content/42`, expectedHref: `content:42` },
@@ -127,13 +127,13 @@ describe("AnchorElement", () => {
     ];
 
     for (const [index, { data, expectedHref }] of testCases.entries()) {
-      test(`[${index}] Should format data representation ${data} to HREF well supported by CKEditor 5 Link Feature: ${expectedHref}`, () => {
+      void test(`[${index}] Should format data representation ${data} to HREF well supported by CKEditor 5 Link Feature: ${expectedHref}`, () => {
         expect(aut.formatHrefForView(data)).toStrictEqual(expectedHref);
       });
     }
   });
 
-  describe("formatTarget & parseTarget", () => {
+  void describe("formatTarget & parseTarget", () => {
     const testCases: {
       show?: string;
       role?: string;
@@ -158,7 +158,7 @@ describe("AnchorElement", () => {
 
     for (const [index, { show, role, target, bijective }] of testCases.entries()) {
       describe(`[${index}] Should format xlink:show=${show} and xlink:role=${role} to target '${target}' and vice versa (if bijective? ${bijective})`, () => {
-        test("formatTarget", () => {
+        void test("formatTarget", () => {
           // We expect some warnings and info logs. Thus, suppressing.
           // TODO[ntr] const actual = silenced(() => aut.formatTarget({ show, role }));
           const actual = aut.formatTarget({ show, role });
@@ -166,7 +166,7 @@ describe("AnchorElement", () => {
         });
 
         if (bijective) {
-          test("parseTarget", () => {
+          void test("parseTarget", () => {
             // Validates the counterpart to formatTarget, that it is able to
             // parse the attributes again.
             // No strict check, as implementation may/will not set irrelevant
@@ -178,7 +178,7 @@ describe("AnchorElement", () => {
     }
   });
 
-  describe("Data Processing", () => {
+  void describe("Data Processing", () => {
     const ruleConfigurations = [aut.anchorElements];
 
     const url = "https://e.org/";
@@ -221,7 +221,7 @@ describe("AnchorElement", () => {
 
     for (const [index, { data, direction, view }] of testCases.entries()) {
       describe(`[${index}] Should transform data to view and vice versa: data: ${data}, view: ${view}`, () => {
-        test("executeTests", () => {
+        void test("executeTests", () => {
           const dataString = richtext(p(data));
           const htmlString = `<body><p>${view}</p></body>`;
           const tester = new RulesTester(ruleConfigurations, "p > *");
@@ -236,7 +236,7 @@ describe("AnchorElement", () => {
     }
   });
 
-  describe("Data Processing (Artificial Role Mapping)", () => {
+  void describe("Data Processing (Artificial Role Mapping)", () => {
     const ruleConfigurations = [
       aut.anchorElements,
       /*
@@ -313,7 +313,7 @@ describe("AnchorElement", () => {
 
     for (const [index, { data, direction, view }] of testCases.entries()) {
       describe(`[${index}] Should transform data to view and vice versa: data: ${data}, view: ${view}`, () => {
-        test("executeTests", () => {
+        void test("executeTests", () => {
           const dataString = richtext(p(data));
           const htmlString = `<body><p>${view}</p></body>`;
           const tester = new RulesTester(ruleConfigurations, "p > *");

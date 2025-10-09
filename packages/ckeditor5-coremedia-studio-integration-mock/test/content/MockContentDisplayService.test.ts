@@ -7,16 +7,16 @@ import MockContentDisplayService from "../../src/content/MockContentDisplayServi
 import { testShouldRetrieveValuesThat } from "./ObservableTestUtil";
 import { first } from "rxjs/operators";
 
-describe("MockContentDisplayService", () => {
+void describe("MockContentDisplayService", () => {
   afterEach(() => {
     serviceAgent.unregisterServices();
   });
 
-  describe("serviceAgent Integration", () => {
+  void describe("serviceAgent Integration", () => {
     const service = new MockContentDisplayService();
     serviceAgent.registerService(service);
 
-    test("Should be able to retrieve mock service.", () => {
+    void test("Should be able to retrieve mock service.", () => {
       expect.hasAssertions();
       return expect(serviceAgent.fetchService(createContentDisplayServiceDescriptor())).resolves.toMatchObject({
         ...service,
@@ -24,14 +24,14 @@ describe("MockContentDisplayService", () => {
     });
   });
 
-  describe("name(UriPath): Promise<string>", () => {
-    test("should provide some static name by default containing the ID", async () => {
+  void describe("name(UriPath): Promise<string>", () => {
+    void test("should provide some static name by default containing the ID", async () => {
       const service = new MockContentDisplayService();
       const result = await service.name("content/42");
       expect(result).toMatch(/.*42.*/);
     });
   });
-  describe("observe_asLink(UriPath): Observable<ContentAsLink>", () => {
+  void describe("observe_asLink(UriPath): Observable<ContentAsLink>", () => {
     const service = new MockContentDisplayService();
     const observable = service.observe_asLink("content/42").pipe(first());
 

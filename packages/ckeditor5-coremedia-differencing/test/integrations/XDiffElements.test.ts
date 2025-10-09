@@ -5,7 +5,7 @@ import { blockquote, richtext } from "@coremedia-internal/ckeditor5-coremedia-ex
 import { TestDirection, toData, toView } from "./TestDirection";
 import { RulesTester } from "./RulesTester";
 
-describe("XDiffElements", () => {
+void describe("XDiffElements", () => {
   const ruleConfigurations = [aut.xDiffElements];
 
   const cases: { data: string; direction: TestDirection; view: string }[] = [
@@ -51,9 +51,9 @@ describe("XDiffElements", () => {
     },
   ];
 
-  describe("cases", () => {
+  void describe("cases", () => {
     for (const { data, direction, view } of cases) {
-      test(`Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
+      void test(`Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
         // Using blockquote as it may contain multiple paragraphs, and we need one central
         // element to do the comparison.
         const dataString = richtext(blockquote(data));

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 import "global-jsdom/register";
 import test, { describe } from "node:test";
 import * as aut from "../../src/rules/BasicInlineElements";
@@ -6,7 +6,7 @@ import { p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-dat
 import { bijective, TestDirection, toData } from "./TestDirection";
 import { RulesTester } from "./RulesTester";
 
-describe("BasicInlineElements", () => {
+void describe("BasicInlineElements", () => {
   const ruleConfigurations = aut.basicInlineElements;
   const text = "T";
 
@@ -20,7 +20,7 @@ describe("BasicInlineElements", () => {
   ];
 
   for (const [index, { data, direction, view }] of formattingTestCases.entries()) {
-    test(`[${index}] Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
+    void test(`[${index}] Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
       const dataString = richtext(p(data));
       const htmlString = `<body><p>${view}</p></body>`;
       const tester = new RulesTester(ruleConfigurations, "p > *");

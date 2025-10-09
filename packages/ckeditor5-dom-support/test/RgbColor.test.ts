@@ -3,8 +3,8 @@ import test, { describe } from "node:test";
 import expect from "expect";
 import { RgbColor, rgb } from "../src/RgbColor";
 
-describe("RgbColor", () => {
-  describe("RgbColor.tryParse", () => {
+void describe("RgbColor", () => {
+  void describe("RgbColor.tryParse", () => {
     const rgbTests = [
       { rgb: "", expected: undefined, comment: "empty string not considered valid" },
       { rgb: "rgb(1,2,3)", expected: rgb(1, 2, 3), comment: "rgb without spacing" },
@@ -27,7 +27,7 @@ describe("RgbColor", () => {
     ];
 
     for (const [i, { rgb: rgbString, expected, comment }] of rgbTests.entries()) {
-      test(`[${i}] Should parse '${rgbString}' to ${expected} (${comment})`, () => {
+      void test(`[${i}] Should parse '${rgbString}' to ${expected} (${comment})`, () => {
         const actual = RgbColor.tryParseRgb(rgbString);
         if (!expected) {
           expect(actual).toBeUndefined();
@@ -38,8 +38,8 @@ describe("RgbColor", () => {
     }
   });
 
-  describe("Hexadecimal Representation", () => {
-    describe("RgbColor.hex", () => {
+  void describe("Hexadecimal Representation", () => {
+    void describe("RgbColor.hex", () => {
       const data = [
         { rgb: rgb(1, 2, 3), expected: "#010203", comment: "" },
         { rgb: rgb(0, 0, 0), expected: "#000000", comment: "" },
@@ -52,13 +52,13 @@ describe("RgbColor", () => {
       ];
 
       for (const [i, { rgb, expected, comment }] of data.entries()) {
-        test(`[${i}] Should represent ${JSON.stringify(rgb)} as hex: ${expected} (${comment})`, () => {
+        void test(`[${i}] Should represent ${JSON.stringify(rgb)} as hex: ${expected} (${comment})`, () => {
           expect(rgb.hex).toStrictEqual(expected);
         });
       }
     });
 
-    describe("RgbColor.hexa", () => {
+    void describe("RgbColor.hexa", () => {
       const data = [
         { rgb: rgb(1, 2, 3), expected: "#010203ff", comment: "should default to alpha = 1.0 (=#255 = #xFF)" },
         { rgb: rgb(0, 0, 0), expected: "#000000ff", comment: "should default to alpha = 1.0 (=#255 = #xFF)" },
@@ -71,13 +71,13 @@ describe("RgbColor", () => {
       ];
 
       for (const [i, { rgb, expected, comment }] of data.entries()) {
-        test(`[${i}] Should represent ${JSON.stringify(rgb)} as hex: ${expected} (${comment})`, () => {
+        void test(`[${i}] Should represent ${JSON.stringify(rgb)} as hex: ${expected} (${comment})`, () => {
           expect(rgb.hexa).toStrictEqual(expected);
         });
       }
     });
 
-    describe("RgbColor.toHex", () => {
+    void describe("RgbColor.toHex", () => {
       const testData = [
         { rgb: rgb(1, 2, 3), expected: "#010203", comment: "" },
         { rgb: rgb(0, 0, 0), expected: "#000000", comment: "" },
@@ -90,15 +90,15 @@ describe("RgbColor", () => {
       ];
 
       for (const [i, { rgb, expected, comment }] of testData.entries()) {
-        test(`[${i}] Should represent ${rgb} as hex: ${expected} (${comment})`, () => {
+        void test(`[${i}] Should represent ${rgb} as hex: ${expected} (${comment})`, () => {
           expect(rgb.toHex()).toStrictEqual(expected);
         });
       }
     });
   });
 
-  describe("RGB Representation", () => {
-    describe("RgbColor.rgb", () => {
+  void describe("RGB Representation", () => {
+    void describe("RgbColor.rgb", () => {
       const rgbTests = [
         { rgb: rgb(1, 2, 3), expected: "rgb(1,2,3)", comment: "" },
         { rgb: rgb(0, 0, 0), expected: "rgb(0,0,0)", comment: "" },
@@ -111,13 +111,13 @@ describe("RgbColor", () => {
       ];
 
       for (const [i, { rgb, expected, comment }] of rgbTests.entries()) {
-        test(`[${i}] Should represent ${rgb} as RGB: ${expected} (${comment})`, () => {
+        void test(`[${i}] Should represent ${rgb} as RGB: ${expected} (${comment})`, () => {
           expect(rgb.rgb).toStrictEqual(expected);
         });
       }
     });
 
-    describe("RgbColor.rgba", () => {
+    void describe("RgbColor.rgba", () => {
       const rgbaTests = [
         { rgb: rgb(1, 2, 3), expected: "rgba(1,2,3,1)", comment: "should add default alpha 1.0" },
         { rgb: rgb(0, 0, 0), expected: "rgba(0,0,0,1)", comment: "should add default alpha 1.0" },
@@ -130,13 +130,13 @@ describe("RgbColor", () => {
       ];
 
       for (const [i, { rgb, expected, comment }] of rgbaTests.entries()) {
-        test(`[${i}] Should represent ${rgb} as RGBA: ${expected} (${comment})`, () => {
+        void test(`[${i}] Should represent ${rgb} as RGBA: ${expected} (${comment})`, () => {
           expect(rgb.rgba).toStrictEqual(expected);
         });
       }
     });
 
-    describe("RgbColor.toRgb", () => {
+    void describe("RgbColor.toRgb", () => {
       const rgbTests = [
         { rgb: rgb(1, 2, 3), expected: "rgb(1,2,3)", comment: "" },
         { rgb: rgb(0, 0, 0), expected: "rgb(0,0,0)", comment: "" },
@@ -149,15 +149,15 @@ describe("RgbColor", () => {
       ];
 
       for (const [i, { rgb, expected, comment }] of rgbTests.entries()) {
-        test(`[${i}] Should represent ${rgb} as RGB: ${expected} (${comment})`, () => {
+        void test(`[${i}] Should represent ${rgb} as RGB: ${expected} (${comment})`, () => {
           expect(rgb.toRgb()).toStrictEqual(expected);
         });
       }
     });
   });
 
-  describe("Color Name Representation", () => {
-    describe("RgbColor.colorName", () => {
+  void describe("Color Name Representation", () => {
+    void describe("RgbColor.colorName", () => {
       const colorNameTests = [
         { rgb: rgb(1, 2, 3), expected: undefined, comment: "no pre-defined W3C color" },
         { rgb: rgb(0, 0, 0), expected: "black", comment: "" },
@@ -169,13 +169,13 @@ describe("RgbColor", () => {
       ];
 
       for (const [i, { rgb, expected, comment }] of colorNameTests.entries()) {
-        test(`[${i}] Should represent ${rgb} as color name: ${expected} (${comment})`, () => {
+        void test(`[${i}] Should represent ${rgb} as color name: ${expected} (${comment})`, () => {
           expect(rgb.colorName).toStrictEqual(expected);
         });
       }
     });
 
-    describe("RgbColor.toColorNameOrHex", () => {
+    void describe("RgbColor.toColorNameOrHex", () => {
       const preferredColorTests = [
         { rgb: rgb(1, 2, 3), expected: "#010203", comment: "fall-back to hex for unknown name" },
         { rgb: rgb(0, 0, 0), expected: "black", comment: "" },
@@ -187,15 +187,15 @@ describe("RgbColor", () => {
       ];
 
       for (const [i, { rgb, expected, comment }] of preferredColorTests.entries()) {
-        test(`[${i}] Should represent ${rgb} as preferred color name: ${expected} (${comment})`, () => {
+        void test(`[${i}] Should represent ${rgb} as preferred color name: ${expected} (${comment})`, () => {
           expect(rgb.toColorNameOrHex()).toStrictEqual(expected);
         });
       }
     });
   });
 
-  describe("Alpha Handling", () => {
-    describe("hasAlpha", () => {
+  void describe("Alpha Handling", () => {
+    void describe("hasAlpha", () => {
       const alphaTests = [
         { rgb: rgb(1, 2, 3), expected: false },
         { rgb: rgb(1, 2, 3, 0), expected: true },
@@ -204,13 +204,13 @@ describe("RgbColor", () => {
       ];
 
       for (const [i, { rgb, expected }] of alphaTests.entries()) {
-        test(`[${i}] Should signal for ${rgb} if alpha is set: ${expected}`, () => {
+        void test(`[${i}] Should signal for ${rgb} if alpha is set: ${expected}`, () => {
           expect(rgb.hasAlpha).toStrictEqual(expected);
         });
       }
     });
 
-    describe("alpha", () => {
+    void describe("alpha", () => {
       const alphaValueTests = [
         { rgb: rgb(1, 2, 3), expected: undefined, comment: "" },
         { rgb: rgb(1, 2, 3, 0), expected: 0, comment: "" },
@@ -226,7 +226,7 @@ describe("RgbColor", () => {
       ];
 
       for (const [i, { rgb, expected, comment }] of alphaValueTests.entries()) {
-        test(`[${i}] Should expose alpha for ${rgb} as: ${expected} (${comment})`, () => {
+        void test(`[${i}] Should expose alpha for ${rgb} as: ${expected} (${comment})`, () => {
           expect(rgb.alpha).toStrictEqual(expected);
         });
       }

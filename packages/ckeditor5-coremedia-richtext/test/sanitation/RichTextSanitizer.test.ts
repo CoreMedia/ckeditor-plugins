@@ -1,5 +1,5 @@
 // noinspection HtmlRequiredAltAttribute,RequiredAttributes
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 
 import "global-jsdom/register";
 import test, { beforeEach, describe } from "node:test";
@@ -40,7 +40,7 @@ export const createRichTextSanitizer = (strictness: Strictness = defaultStrictne
  * =====================================================================================================================
  */
 
-describe("RichTextSanitizer", () => {
+void describe("RichTextSanitizer", () => {
   beforeEach(() => {
     sanitationListener.clear();
   });
@@ -53,12 +53,12 @@ describe("RichTextSanitizer", () => {
       const sanitizer = createRichTextSanitizer(strictness);
       const disabled = strictness === Strictness.NONE;
 
-      test("Should not modify empty richtext on sanitation", () => {
+      void test("Should not modify empty richtext on sanitation", () => {
         const inputXml = richtext();
         expectSanitationResult(sanitizer, inputXml, inputXml);
       });
 
-      test("Should fail on any non-richtext Document despite for Strictness.NONE", () => {
+      void test("Should fail on any non-richtext Document despite for Strictness.NONE", () => {
         const document = parseXml("<root/>");
 
         const result = sanitizer.sanitize(document);
@@ -80,12 +80,12 @@ describe("RichTextSanitizer", () => {
           const elementUnderTest = "<div>";
 
           describe(`${elementUnderTest} attributes; strictness: ${strictnessKey}`, () => {
-            test("Should not modify for only strictly valid attributes", () => {
+            void test("Should not modify for only strictly valid attributes", () => {
               const validXml = richtext("", true, ["xlink"]);
               expectSanitationResult(sanitizer, validXml, validXml);
             });
 
-            test("Should remove invalid attributes", () => {
+            void test("Should remove invalid attributes", () => {
               const validXml = richtext();
               const invalidXml = validXml.replace("div", `div invalid="true" stillinvalid="true"`);
               expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
@@ -99,7 +99,7 @@ describe("RichTextSanitizer", () => {
             const validChildren = ["", p(), ul(li()), ol(li()), pre(), blockquote(), table(tr(td()))];
 
             for (const [i, validChild] of validChildren.entries()) {
-              test(`[${i}] Should keep valid child: ${validChild}`, () => {
+              void test(`[${i}] Should keep valid child: ${validChild}`, () => {
                 const validXml = richtext(validChild);
                 expectSanitationResult(sanitizer, validXml, validXml);
               });
@@ -112,7 +112,7 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { invalidChild, sanitizedChildren }] of invalidChildrenCases.entries()) {
-              test(`[${i}] Should clean up invalid children: ${invalidChild} to ${sanitizedChildren}`, () => {
+              void test(`[${i}] Should clean up invalid children: ${invalidChild} to ${sanitizedChildren}`, () => {
                 const invalidXml = richtext(invalidChild);
                 const sanitizedXml = richtext(sanitizedChildren);
                 expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {
@@ -142,13 +142,13 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { validElement }] of validElements.entries()) {
-              test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
+              void test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
                 const validXml = richtext(validElement);
                 expectSanitationResult(sanitizer, validXml, validXml);
               });
             }
 
-            test("Should remove invalid attributes", () => {
+            void test("Should remove invalid attributes", () => {
               const validXml = richtext(p());
               const invalidXml = richtext(p("", { class: "I", lang: "en" }))
                 .replace("class", "invalid")
@@ -170,7 +170,7 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { invalidAttributes, invalidAttributesCount }] of invalidAttrsTestCases.entries()) {
-              test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
+              void test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
                 const validXml = richtext(p());
                 const invalidXml = richtext(`<p ${invalidAttributes}/>`);
                 const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
@@ -199,7 +199,7 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { validChild }] of validChildTestCases.entries()) {
-              test(`[${i}] Should keep valid child: ${validChild}`, () => {
+              void test(`[${i}] Should keep valid child: ${validChild}`, () => {
                 const validXml = richtext(p(validChild));
                 expectSanitationResult(sanitizer, validXml, validXml);
               });
@@ -211,7 +211,7 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { invalidChild, sanitizedChildren }] of invalidChildTestCases.entries()) {
-              test(`[${i}] Should clean up invalid children: ${invalidChild} to ${sanitizedChildren}`, () => {
+              void test(`[${i}] Should clean up invalid children: ${invalidChild} to ${sanitizedChildren}`, () => {
                 const invalidXml = richtext(p(invalidChild));
                 const sanitizedXml = richtext(p(sanitizedChildren));
                 expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {
@@ -247,13 +247,13 @@ describe("RichTextSanitizer", () => {
               ];
 
               for (const [i, { validElement }] of cases.entries()) {
-                test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
+                void test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
                   const validXml = richtext(validElement);
                   expectSanitationResult(sanitizer, validXml, validXml);
                 });
               }
 
-              test("Should remove invalid attributes", () => {
+              void test("Should remove invalid attributes", () => {
                 const validXml = richtext(factory(li()));
                 const invalidXml = richtext(factory(li(), { class: "I", lang: "en" }))
                   .replace("class", "invalid")
@@ -272,7 +272,7 @@ describe("RichTextSanitizer", () => {
               ];
 
               for (const [i, { invalidAttributes, invalidAttributesCount }] of invalidAttributeCases.entries()) {
-                test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
+                void test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
                   const validXml = richtext(factory(li()));
                   const invalidXml = richtext(`<${element} ${invalidAttributes}>${li()}</${element}>`);
                   const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
@@ -293,13 +293,13 @@ describe("RichTextSanitizer", () => {
               ];
 
               for (const [i, { validChild }] of validChildCases.entries()) {
-                test(`[${i}] Should keep valid child: ${Array.isArray(validChild) ? validChild.join(", ") : validChild}`, () => {
+                void test(`[${i}] Should keep valid child: ${Array.isArray(validChild) ? validChild.join(", ") : validChild}`, () => {
                   const validXml = richtext(factory(validChild));
                   expectSanitationResult(sanitizer, validXml, validXml);
                 });
               }
 
-              test("Should remove illegal empty element", () => {
+              void test("Should remove illegal empty element", () => {
                 const validXml = richtext();
                 const invalidXml = richtext(`<${element}/>`);
                 expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
@@ -319,7 +319,7 @@ describe("RichTextSanitizer", () => {
               ];
 
               for (const [i, { invalidChild, sanitizedChildren }] of invalidChildCases.entries()) {
-                test(`[${i}] Should clean up invalid children: ${Array.isArray(invalidChild) ? invalidChild.join(", ") : invalidChild} → ${Array.isArray(sanitizedChildren) ? sanitizedChildren.join(", ") : sanitizedChildren}`, () => {
+                void test(`[${i}] Should clean up invalid children: ${Array.isArray(invalidChild) ? invalidChild.join(", ") : invalidChild} → ${Array.isArray(sanitizedChildren) ? sanitizedChildren.join(", ") : sanitizedChildren}`, () => {
                   const invalidXml = richtext(factory(invalidChild));
                   const sanitizedXml = richtext(factory(sanitizedChildren));
 
@@ -355,13 +355,13 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { validElement }] of validElementCases.entries()) {
-              test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
+              void test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
                 const validXml = richtext(container(validElement));
                 expectSanitationResult(sanitizer, validXml, validXml);
               });
             }
 
-            test("Should remove invalid attributes", () => {
+            void test("Should remove invalid attributes", () => {
               const validXml = richtext(container(li()));
               const invalidXml = richtext(container(li("", { class: "I", lang: "en" })))
                 .replace("class", "invalid")
@@ -383,7 +383,7 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { invalidAttributes, invalidAttributesCount }] of invalidAttributeCases.entries()) {
-              test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
+              void test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
                 const validXml = richtext(container(li()));
                 const invalidXml = richtext(container(`<li ${invalidAttributes}/>`));
                 const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
@@ -412,7 +412,7 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { validChild }] of validChildCases.entries()) {
-              test(`[${i}] Should keep valid child: ${validChild}`, () => {
+              void test(`[${i}] Should keep valid child: ${validChild}`, () => {
                 const validXml = richtext(container(li(validChild)));
                 expectSanitationResult(sanitizer, validXml, validXml);
               });
@@ -423,7 +423,7 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { invalidChild, sanitizedChildren }] of invalidChildCases.entries()) {
-              test(`[${i}] Should clean up invalid children: ${invalidChild} to ${sanitizedChildren}`, () => {
+              void test(`[${i}] Should clean up invalid children: ${invalidChild} to ${sanitizedChildren}`, () => {
                 const invalidXml = richtext(p(invalidChild));
                 const sanitizedXml = richtext(p(sanitizedChildren));
                 expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {
@@ -453,13 +453,13 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, validElement] of validElements.entries()) {
-              test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
+              void test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
                 const validXml = richtext(validElement);
                 expectSanitationResult(sanitizer, validXml, validXml);
               });
             }
 
-            test("Should remove invalid attributes", () => {
+            void test("Should remove invalid attributes", () => {
               const validXml = richtext(pre());
               const invalidXml = richtext(pre("", { class: "I", lang: "en" }))
                 .replace("class", "invalid")
@@ -470,7 +470,7 @@ describe("RichTextSanitizer", () => {
               });
             });
 
-            test("Should keep valid fixed attribute", () => {
+            void test("Should keep valid fixed attribute", () => {
               const validXml = richtext(pre("", { "xml:space": "preserve" }));
               expectSanitationResult(sanitizer, validXml, validXml);
             });
@@ -484,7 +484,7 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { invalidAttributes, invalidAttributesCount }] of invalidAttributeCases.entries()) {
-              test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
+              void test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
                 const validXml = richtext(pre());
                 const invalidXml = richtext(`<pre ${invalidAttributes}/>`);
                 const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
@@ -512,7 +512,7 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, validChild] of validChildCases.entries()) {
-              test(`[${i}] Should keep valid child: ${validChild}`, () => {
+              void test(`[${i}] Should keep valid child: ${validChild}`, () => {
                 const validXml = richtext(pre(validChild));
                 expectSanitationResult(sanitizer, validXml, validXml);
               });
@@ -524,7 +524,7 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { invalidChild, sanitizedChildren }] of cases.entries()) {
-              test(`[${i}] Should clean up invalid children: ${invalidChild} to ${sanitizedChildren}`, () => {
+              void test(`[${i}] Should clean up invalid children: ${invalidChild} to ${sanitizedChildren}`, () => {
                 const invalidXml = richtext(pre(invalidChild));
                 const sanitizedXml = richtext(pre(sanitizedChildren));
 
@@ -557,13 +557,13 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, validElement] of validElements.entries()) {
-              test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
+              void test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
                 const validXml = richtext(validElement);
                 expectSanitationResult(sanitizer, validXml, validXml);
               });
             }
 
-            test("Should remove invalid attributes", () => {
+            void test("Should remove invalid attributes", () => {
               const validXml = richtext(blockquote());
               const invalidXml = richtext(blockquote("", { class: "I", lang: "en" }))
                 .replace("class", "invalid")
@@ -582,7 +582,7 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { invalidAttributes, invalidAttributesCount }] of invalidAttributesCases.entries()) {
-              test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
+              void test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
                 const validXml = richtext(blockquote());
                 const invalidXml = richtext(`<blockquote ${invalidAttributes}/>`);
                 const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
@@ -600,7 +600,7 @@ describe("RichTextSanitizer", () => {
             const validChildren: string[] = ["", p(), ul(li()), ol(li()), pre(), blockquote(), table(tr(td()))];
 
             for (const [i, validChild] of validChildren.entries()) {
-              test(`[${i}] Should keep valid child: ${validChild}`, () => {
+              void test(`[${i}] Should keep valid child: ${validChild}`, () => {
                 const validXml = richtext(blockquote(validChild));
                 expectSanitationResult(sanitizer, validXml, validXml);
               });
@@ -609,7 +609,7 @@ describe("RichTextSanitizer", () => {
             const invalidChildren: string[] = ["T", br(), span(), em(), strong(), sub(), sup()];
 
             for (const [i, invalidChild] of invalidChildren.entries()) {
-              test(`[${i}] Should clean up invalid children: ${invalidChild}`, () => {
+              void test(`[${i}] Should clean up invalid children: ${invalidChild}`, () => {
                 const invalidXml = richtext(blockquote(invalidChild));
                 const sanitizedXml = richtext(blockquote());
                 expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {
@@ -643,13 +643,13 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, validElement] of validElements.entries()) {
-              test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
+              void test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
                 const validXml = richtext(p(validElement));
                 expectSanitationResult(sanitizer, validXml, validXml);
               });
             }
 
-            test("Should remove invalid attributes", () => {
+            void test("Should remove invalid attributes", () => {
               const validXml = richtext(p(a("", { "xlink:href": "" })));
               const invalidXml = richtext(p(a("", { "xlink:href": "", "class": "I", "lang": "en" })))
                 .replace("class", "invalid")
@@ -660,7 +660,7 @@ describe("RichTextSanitizer", () => {
               });
             });
 
-            test("Should add missing required attribute (silently)", () => {
+            void test("Should add missing required attribute (silently)", () => {
               const validXml = richtext(p(a("", { "xlink:href": "" })));
               const invalidXml = validXml.replace(`xlink:href=""`, "");
               expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
@@ -669,7 +669,7 @@ describe("RichTextSanitizer", () => {
               });
             });
 
-            test("Should keep valid fixed attribute", () => {
+            void test("Should keep valid fixed attribute", () => {
               const validXml = richtext(p(a("", { "xlink:href": "", "xlink:type": "simple" })));
               expectSanitationResult(sanitizer, validXml, validXml);
             });
@@ -688,7 +688,7 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { invalidAttributes, invalidAttributesCount }] of testCases.entries()) {
-              test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
+              void test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
                 const validXml = richtext(p(a("", { "xlink:href": "" })));
                 const invalidXml = richtext(p(a("", { "xlink:href": "" }))).replace("<a", `<a ${invalidAttributes}`);
                 const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
@@ -716,7 +716,7 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, validChild] of validChildren.entries()) {
-              test(`[${i}] Should keep valid child: ${validChild}`, () => {
+              void test(`[${i}] Should keep valid child: ${validChild}`, () => {
                 const validXml = richtext(p(a(validChild, { "xlink:href": "" })));
                 expectSanitationResult(sanitizer, validXml, validXml);
               });
@@ -729,7 +729,7 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { invalidChild, sanitizedChildren }] of cases.entries()) {
-              test(`[${i}] Should clean up invalid children: ${invalidChild} to ${sanitizedChildren}`, () => {
+              void test(`[${i}] Should clean up invalid children: ${invalidChild} to ${sanitizedChildren}`, () => {
                 const invalidXml = richtext(p(a(invalidChild, { "xlink:href": "" })));
                 const sanitizedXml = richtext(p(a(sanitizedChildren, { "xlink:href": "" })));
 
@@ -772,13 +772,13 @@ describe("RichTextSanitizer", () => {
               ];
 
               for (const [i, { validElement }] of validElements.entries()) {
-                test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
+                void test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
                   const validXml = richtext(p(validElement));
                   expectSanitationResult(sanitizer, validXml, validXml);
                 });
               }
 
-              test("Should remove invalid attributes", () => {
+              void test("Should remove invalid attributes", () => {
                 const validXml = richtext(p(factory()));
                 const invalidXml = richtext(p(factory("", { class: "I", lang: "en" })))
                   .replace("class", "invalid")
@@ -800,7 +800,7 @@ describe("RichTextSanitizer", () => {
               ];
 
               for (const [i, { invalidAttributes, invalidAttributesCount }] of invalidAttributesCases.entries()) {
-                test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
+                void test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
                   const validXml = richtext(p(factory()));
                   const invalidXml = validXml.replace(`<${element}`, `<${element} ${invalidAttributes}`);
                   const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
@@ -829,7 +829,7 @@ describe("RichTextSanitizer", () => {
               ];
 
               for (const [i, validChild] of validChildren.entries()) {
-                test(`[${i}] Should keep valid child: ${validChild}`, () => {
+                void test(`[${i}] Should keep valid child: ${validChild}`, () => {
                   const validXml = richtext(p(factory(validChild)));
                   expectSanitationResult(sanitizer, validXml, validXml);
                 });
@@ -841,7 +841,7 @@ describe("RichTextSanitizer", () => {
               ];
 
               for (const [i, { invalidChild, sanitizedChildren }] of testCases.entries()) {
-                test(`[${i}] Should clean up invalid children: ${invalidChild} to ${sanitizedChildren}`, () => {
+                void test(`[${i}] Should clean up invalid children: ${invalidChild} to ${sanitizedChildren}`, () => {
                   const invalidXml = richtext(p(factory(invalidChild)));
                   const sanitizedXml = richtext(p(factory(sanitizedChildren)));
                   expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {
@@ -876,13 +876,13 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { validElement }] of validElements.entries()) {
-              test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
+              void test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
                 const validXml = richtext(p(validElement));
                 expectSanitationResult(sanitizer, validXml, validXml);
               });
             }
 
-            test("Should remove invalid attributes", () => {
+            void test("Should remove invalid attributes", () => {
               const validXml = richtext(p(img({ "alt": "", "xlink:href": "" })));
               const invalidXml = richtext(p(img({ "alt": "", "xlink:href": "", "class": "I", "lang": "en" })))
                 .replace("class", "invalid")
@@ -900,13 +900,13 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { withFixed }] of fixedAttributes.entries()) {
-              test(`[${i}] Should keep fixed attribute: ${withFixed}`, () => {
+              void test(`[${i}] Should keep fixed attribute: ${withFixed}`, () => {
                 const validXml = richtext(p(withFixed));
                 expectSanitationResult(sanitizer, validXml, validXml);
               });
             }
 
-            test("Should add missing required attribute (silently)", () => {
+            void test("Should add missing required attribute (silently)", () => {
               // Skipping test for required `alt` attribute here, as we had hassle
               // with attribute orders during validation – and for some reason, the
               // alt attribute is serialized having a `ns1` attribute prefix applied,
@@ -935,7 +935,7 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { invalidAttributes, invalidAttributesCount }] of invalidAttrs.entries()) {
-              test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
+              void test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
                 const validXml = richtext(p(img({ "alt": "", "xlink:href": "" })));
                 const invalidXml = richtext(p(img({ "alt": "", "xlink:href": "" }))).replace(
                   "<img",
@@ -956,7 +956,7 @@ describe("RichTextSanitizer", () => {
             const invalidChildren: string[] = [p(), p("T")];
 
             for (const [i, invalidChild] of invalidChildren.entries()) {
-              test(`[${i}] Should clean up invalid children: ${invalidChild}`, () => {
+              void test(`[${i}] Should clean up invalid children: ${invalidChild}`, () => {
                 const invalidXml = richtext(p(img({ "alt": "", "xlink:href": "" }))).replace(
                   "/>",
                   `>${invalidChild}</img>`,
@@ -991,13 +991,13 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, validElement] of validElements.entries()) {
-              test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
+              void test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
                 const validXml = richtext(validElement);
                 expectSanitationResult(sanitizer, validXml, validXml);
               });
             }
 
-            test("Should remove invalid attributes", () => {
+            void test("Should remove invalid attributes", () => {
               const validXml = richtext(table(tr(td())));
               const invalidXml = richtext(table(tr(td()), { class: "I", lang: "en" }))
                 .replace("class", "invalid")
@@ -1016,7 +1016,7 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { invalidAttributes, invalidAttributesCount }] of testCases.entries()) {
-              test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
+              void test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
                 const validXml = richtext(table(tr(td())));
                 const invalidXml = validXml.replace("<table", `<table ${invalidAttributes}`);
                 const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
@@ -1034,13 +1034,13 @@ describe("RichTextSanitizer", () => {
             const testCases = [{ validChild: tr(td()) }, { validChild: tbody(tr(td())) }];
 
             for (const [i, { validChild }] of testCases.entries()) {
-              test(`[${i}] Should keep valid child: ${validChild}`, () => {
+              void test(`[${i}] Should keep valid child: ${validChild}`, () => {
                 const validXml = richtext(table(validChild));
                 expectSanitationResult(sanitizer, validXml, validXml);
               });
             }
 
-            test("Should remove illegal empty element", () => {
+            void test("Should remove illegal empty element", () => {
               const validXml = richtext();
               const invalidXml = richtext(`<table/>`);
               expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
@@ -1052,7 +1052,7 @@ describe("RichTextSanitizer", () => {
             const testCases2 = [{ invalidChild: "T" }, { invalidChild: p() }];
 
             for (const [i, { invalidChild }] of testCases2.entries()) {
-              test(`[${i}] Should clean up invalid children: ${invalidChild}`, () => {
+              void test(`[${i}] Should clean up invalid children: ${invalidChild}`, () => {
                 const invalidXml = richtext(table([invalidChild, tr(td()), invalidChild]));
                 const sanitizedXml = richtext(table(tr(td())));
                 expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {
@@ -1084,13 +1084,13 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, validElement] of validElements.entries()) {
-              test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
+              void test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
                 const validXml = richtext(table(validElement));
                 expectSanitationResult(sanitizer, validXml, validXml);
               });
             }
 
-            test("Should remove invalid attributes", () => {
+            void test("Should remove invalid attributes", () => {
               const validXml = richtext(table(tbody(tr(td()))));
               const invalidXml = richtext(table(tbody(tr(td()), { class: "I", lang: "en" })))
                 .replace("class", "invalid")
@@ -1111,7 +1111,7 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { invalidAttributes, invalidAttributesCount }] of invalidAttributeCases.entries()) {
-              test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
+              void test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
                 const validXml = richtext(table(tbody(tr(td()))));
                 const invalidXml = validXml.replace("<tbody", `<tbody ${invalidAttributes}`);
                 const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
@@ -1132,13 +1132,13 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { validChildren }] of validChildrenCases.entries()) {
-              test(`[${i}] Should keep valid children: ${JSON.stringify(validChildren)}`, () => {
+              void test(`[${i}] Should keep valid children: ${JSON.stringify(validChildren)}`, () => {
                 const validXml = richtext(table(tbody(validChildren)));
                 expectSanitationResult(sanitizer, validXml, validXml);
               });
             }
 
-            test("Should remove illegal empty element", () => {
+            void test("Should remove illegal empty element", () => {
               const validXml = richtext();
               const invalidXml = richtext(table(`<tbody/>`));
               expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
@@ -1150,7 +1150,7 @@ describe("RichTextSanitizer", () => {
             const invalidChildrenCases: { invalidChild: string }[] = [{ invalidChild: "T" }, { invalidChild: p() }];
 
             for (const [i, { invalidChild }] of invalidChildrenCases.entries()) {
-              test(`[${i}] Should clean up invalid children: ${JSON.stringify(invalidChild)}`, () => {
+              void test(`[${i}] Should clean up invalid children: ${JSON.stringify(invalidChild)}`, () => {
                 const invalidXml = richtext(table(tbody([invalidChild, tr(td()), invalidChild])));
                 const sanitizedXml = richtext(table(tbody(tr(td()))));
 
@@ -1183,13 +1183,13 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, validElement] of validElements.entries()) {
-              test(`[${i}] Should not modify for only strictly valid attributes: ${JSON.stringify(validElement)}`, () => {
+              void test(`[${i}] Should not modify for only strictly valid attributes: ${JSON.stringify(validElement)}`, () => {
                 const validXml = richtext(table(validElement));
                 expectSanitationResult(sanitizer, validXml, validXml);
               });
             }
 
-            test("Should remove invalid attributes", () => {
+            void test("Should remove invalid attributes", () => {
               const validXml = richtext(table(tr(td())));
               const invalidXml = richtext(table(tr(td(), { class: "I", lang: "en" })))
                 .replace("class", "invalid")
@@ -1210,7 +1210,7 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { invalidAttributes, invalidAttributesCount }] of invalidAttrsCases.entries()) {
-              test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
+              void test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
                 const validXml = richtext(table(tr(td())));
                 const invalidXml = validXml.replace("<tr", `<tr ${invalidAttributes}`);
                 const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
@@ -1231,13 +1231,13 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { validChildren }] of validChildrenCases.entries()) {
-              test(`[${i}] Should keep valid children: ${validChildren}`, () => {
+              void test(`[${i}] Should keep valid children: ${validChildren}`, () => {
                 const validXml = richtext(table(tr(validChildren)));
                 expectSanitationResult(sanitizer, validXml, validXml);
               });
             }
 
-            test("Should remove illegal empty element", () => {
+            void test("Should remove illegal empty element", () => {
               const validXml = richtext();
               const invalidXml = richtext(table(`<tr/>`));
               expectSanitationResult(sanitizer, invalidXml, validXml, (listener) => {
@@ -1249,7 +1249,7 @@ describe("RichTextSanitizer", () => {
             const invalidChildrenCases: { invalidChild: string }[] = [{ invalidChild: "T" }, { invalidChild: p() }];
 
             for (const [i, { invalidChild }] of invalidChildrenCases.entries()) {
-              test(`[${i}] Should clean up invalid children: ${invalidChild}`, () => {
+              void test(`[${i}] Should clean up invalid children: ${invalidChild}`, () => {
                 const invalidXml = richtext(table(tr([invalidChild, td(), invalidChild])));
                 const sanitizedXml = richtext(table(tr(td())));
                 expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {
@@ -1284,13 +1284,13 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { validElement }] of validElements.entries()) {
-              test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
+              void test(`[${i}] Should not modify for only strictly valid attributes: ${validElement}`, () => {
                 const validXml = richtext(table(tr(validElement)));
                 expectSanitationResult(sanitizer, validXml, validXml);
               });
             }
 
-            test("Should remove invalid attributes", () => {
+            void test("Should remove invalid attributes", () => {
               const validXml = richtext(table(tr(td(""))));
               const invalidXml = richtext(table(tr(td("", { class: "I", lang: "en" }))))
                 .replace("class", "invalid")
@@ -1314,7 +1314,7 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { invalidAttributes, invalidAttributesCount }] of invalidAttributesCases.entries()) {
-              test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
+              void test(`[${i}] Should keep invalid attribute value only in legacy mode for: ${invalidAttributes}`, () => {
                 const validXml = richtext(table(tr(td())));
                 const invalidXml = validXml.replace("<td", `<td ${invalidAttributes}`);
                 const expectedXml = strictness === Strictness.LEGACY ? invalidXml : validXml;
@@ -1340,7 +1340,7 @@ describe("RichTextSanitizer", () => {
               i,
               { suspiciousAttributes, suspiciousAttributesCount },
             ] of suspiciousAttributesCases.entries()) {
-              test(`[${i}] Should remove suspicious attribute value only in strict mode for: ${suspiciousAttributes}`, () => {
+              void test(`[${i}] Should remove suspicious attribute value only in strict mode for: ${suspiciousAttributes}`, () => {
                 const validXml = richtext(table(tr(td())));
                 const invalidXml = validXml.replace("<td", `<td ${suspiciousAttributes}`);
                 const expectedXml = strictness !== Strictness.STRICT ? invalidXml : validXml;
@@ -1364,7 +1364,7 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { validChildren }] of validChildrenCases.entries()) {
-              test(`[${i}] Should keep valid children: ${validChildren}`, () => {
+              void test(`[${i}] Should keep valid children: ${validChildren}`, () => {
                 const validXml = richtext(table(tr(td(validChildren))));
                 expectSanitationResult(sanitizer, validXml, validXml);
               });
@@ -1376,7 +1376,7 @@ describe("RichTextSanitizer", () => {
             ];
 
             for (const [i, { invalidChild }] of invalidChildrenCases.entries()) {
-              test(`[${i}] Should clean up invalid children: ${invalidChild}`, () => {
+              void test(`[${i}] Should clean up invalid children: ${invalidChild}`, () => {
                 const invalidXml = richtext(table(tr(td(invalidChild))));
                 const sanitizedXml = richtext(table(tr(td())));
                 expectSanitationResult(sanitizer, invalidXml, sanitizedXml, (listener) => {

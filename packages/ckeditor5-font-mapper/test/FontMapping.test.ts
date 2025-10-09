@@ -203,7 +203,7 @@ const mappedCharacterToLowCharCode: string[][] = [
   // ["ÿ", "ÿ"],
 ];
 
-void test("Special characters are mapped correctly", async (t: TestContext) => {
+void void test("Special characters are mapped correctly", async (t: TestContext) => {
   const fontMapping = new FontMapping(symbolFontMap);
   for (const [input, expected] of mappedCharacterToLowCharCode) {
     await t.test(`Should replace character '${input}' with '${expected}'.`, () => {

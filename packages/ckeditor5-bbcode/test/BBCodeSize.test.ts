@@ -4,8 +4,8 @@ import expect from "expect";
 import { requireHTMLElement } from "./DOMUtils";
 import { bbCodeSize } from "../src/rules/BBCodeSize";
 
-describe("BBCodeSize", () => {
-  describe("Default Configuration", () => {
+void describe("BBCodeSize", () => {
+  void describe("Default Configuration", () => {
     const rule = bbCodeSize;
 
     const cases = [
@@ -31,7 +31,7 @@ describe("BBCodeSize", () => {
       },
     ] as const;
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { dataView, expected, comment }] of cases.entries()) {
         await t.test(`[${i}] Should process '${dataView}' to '${expected}' (${comment})`, () => {
           const element = requireHTMLElement(dataView);

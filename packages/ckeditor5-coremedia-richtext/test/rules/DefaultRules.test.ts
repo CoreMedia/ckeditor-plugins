@@ -1,5 +1,5 @@
 // noinspection HtmlUnknownAttribute
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 import "global-jsdom/register";
 import test, { describe } from "node:test";
 import * as aut from "../../src/rules/DefaultRules";
@@ -16,7 +16,7 @@ import { RulesTester } from "./RulesTester";
  *
  * Find more detailed tests regarding the respective elements.
  */
-describe("DefaultRules", () => {
+void describe("DefaultRules", () => {
   const ruleConfigurations = aut.defaultRules;
   const text = "T";
   const url = "https://e.org/";
@@ -221,7 +221,7 @@ describe("DefaultRules", () => {
   ];
 
   for (const [index, { data, direction, view }] of cases.entries()) {
-    test(`[${index}] Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
+    void test(`[${index}] Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
       const dataString = richtext(data);
       const htmlString = `<body>${view}</body>`;
       const tester = new RulesTester(ruleConfigurations, "*", "body > *");

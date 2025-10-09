@@ -1,5 +1,5 @@
 /* eslint no-null/no-null: off */
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 
 import "global-jsdom/register";
 import test, { describe, beforeEach, TestContext } from "node:test";
@@ -16,7 +16,7 @@ Node.prototype.toString = function nodeToString(): string {
 
 type NodeProxyAction = (proxy: NodeProxy) => unknown;
 
-describe("NodeProxy.constructor", () => {
+void describe("NodeProxy.constructor", () => {
   let rootNode: Node;
 
   beforeEach(() => {
@@ -24,25 +24,25 @@ describe("NodeProxy.constructor", () => {
     rootNode = document.getRootNode();
   });
 
-  test("Should default to mutable state.", () => {
+  void test("Should default to mutable state.", () => {
     const proxy = new NodeProxy(rootNode);
     expect(proxy.mutable).toStrictEqual(true);
   });
 
   for (const mutable of [true, false]) {
-    test(`Should respect mutable state ${mutable}`, () => {
+    void test(`Should respect mutable state ${mutable}`, () => {
       const proxy = new NodeProxy(rootNode, mutable);
       expect(proxy.mutable).toStrictEqual(mutable);
     });
   }
 
-  test("Should provide access to delegate.", () => {
+  void test("Should provide access to delegate.", () => {
     const proxy = new NodeProxy(rootNode);
     expect(proxy.delegate).toStrictEqual(rootNode);
   });
 });
 
-describe("NodeProxy.wrap", () => {
+void describe("NodeProxy.wrap", () => {
   let rootNode: Node;
 
   beforeEach(() => {
@@ -50,18 +50,18 @@ describe("NodeProxy.wrap", () => {
     rootNode = document.getRootNode();
   });
 
-  test("Should wrap given node.", () => {
+  void test("Should wrap given node.", () => {
     const proxy = NodeProxy.proxy(rootNode);
     expect(proxy?.delegate).toStrictEqual(rootNode);
   });
 
-  test("Should default to mutable state.", () => {
+  void test("Should default to mutable state.", () => {
     const proxy = NodeProxy.proxy(rootNode);
     expect(proxy?.mutable).toStrictEqual(true);
   });
 
   const mutableCases = [true, false];
-  test("cases", async (t: TestContext) => {
+  void test("cases", async (t: TestContext) => {
     for (const [i, mutable] of mutableCases.entries()) {
       await t.test(`[${i}] Should respect mutable state (${mutable})`, () => {
         const proxy = NodeProxy.proxy(rootNode, mutable);
@@ -71,7 +71,7 @@ describe("NodeProxy.wrap", () => {
   });
 
   const falsyCases = [undefined, null];
-  test("cases", async (t: TestContext) => {
+  void test("cases", async (t: TestContext) => {
     for (const [i, value] of falsyCases.entries()) {
       await t.test(`[${i}] Should return null when wrapping falsy values like (${value})`, () => {
         // @ts-expect-error the value has an invalid type. tsc already knows this
@@ -82,7 +82,7 @@ describe("NodeProxy.wrap", () => {
   });
 });
 
-describe("Immutable NodeProxy", () => {
+void describe("Immutable NodeProxy", () => {
   interface ImmutableTestData {
     action: NodeProxyAction;
     expectException: boolean;
@@ -165,7 +165,7 @@ describe("Immutable NodeProxy", () => {
   });
 
   for (const [index, [name, data]] of testData.entries()) {
-    test(`(${index}) ${name}`, () => {
+    void test(`(${index}) ${name}`, () => {
       if (data.expectException) {
         expect(() => data.action(immutableProxy)).toThrow(Error);
       } else {
@@ -175,7 +175,7 @@ describe("Immutable NodeProxy", () => {
   }
 });
 
-describe("NodeProxy.isEmpty and NodeProxy.empty", () => {
+void describe("NodeProxy.isEmpty and NodeProxy.empty", () => {
   const document = PARSER.parseFromString("<parent><child/></parent>", "text/xml");
   const documentRootNode = document.getRootNode();
   const rootNode = documentRootNode.firstChild as Node;
@@ -190,7 +190,7 @@ describe("NodeProxy.isEmpty and NodeProxy.empty", () => {
   ];
 
   for (const [index, [expected, proxy]] of emptyCases.entries()) {
-    test(`(${index}) Should provide expected state on proxy.empty: ${expected} for ${proxy}`, () => {
+    void test(`(${index}) Should provide expected state on proxy.empty: ${expected} for ${proxy}`, () => {
       expect(proxy.empty).toStrictEqual(expected);
     });
   }
@@ -201,18 +201,18 @@ describe("NodeProxy.isEmpty and NodeProxy.empty", () => {
   ];
 
   for (const [index, [expected, proxy]] of isEmptyCases.entries()) {
-    test(`(${index}) Should provide expected state on proxy.isEmpty(): ${expected} for ${proxy}`, () => {
+    void test(`(${index}) Should provide expected state on proxy.isEmpty(): ${expected} for ${proxy}`, () => {
       expect(proxy.isEmpty()).toStrictEqual(expected);
     });
   }
 
-  test("Should be able to ignore children when testing for isEmpty", () => {
+  void test("Should be able to ignore children when testing for isEmpty", () => {
     const actual = nonEmptyProxy.isEmpty((c) => c.nodeName !== "child");
     expect(actual).toStrictEqual(true);
   });
 });
 
-describe("NodeProxy.ownerDocument", () => {
+void describe("NodeProxy.ownerDocument", () => {
   const document = PARSER.parseFromString("<parent><child/></parent>", "text/xml");
   const documentRootNode = document.getRootNode();
   const rootNode = documentRootNode.firstChild as Node;
@@ -221,13 +221,13 @@ describe("NodeProxy.ownerDocument", () => {
   const nodes = [rootNode, childNode];
 
   for (const [index, node] of nodes.entries()) {
-    test(`(${index}) Should provide expected ownerDocument for ${node.nodeName}`, () => {
+    void test(`(${index}) Should provide expected ownerDocument for ${node.nodeName}`, () => {
       expect(new NodeProxy(node).ownerDocument).toStrictEqual(document);
     });
   }
 });
 
-describe("NodeProxy.parentNode", () => {
+void describe("NodeProxy.parentNode", () => {
   const document = PARSER.parseFromString("<parent><child/></parent>", "text/xml");
   const documentRootNode = document.getRootNode();
   const rootNode = documentRootNode.firstChild as Node;
@@ -239,13 +239,13 @@ describe("NodeProxy.parentNode", () => {
   ];
 
   for (const [index, [child, parent]] of cases.entries()) {
-    test(`(${index}) Should provide expected parentNode for ${child.nodeName}: ${parent.nodeName}`, () => {
+    void test(`(${index}) Should provide expected parentNode for ${child.nodeName}: ${parent.nodeName}`, () => {
       expect(new NodeProxy(child).parentNode?.delegate).toStrictEqual(parent);
     });
   }
 });
 
-describe("NodeProxy.parentElement", () => {
+void describe("NodeProxy.parentElement", () => {
   const document = PARSER.parseFromString("<parent><child/></parent>", "text/xml");
   const documentRootNode = document.getRootNode();
   const rootNode = documentRootNode.firstChild as Node;
@@ -256,13 +256,13 @@ describe("NodeProxy.parentElement", () => {
   ];
 
   for (const [index, [child, parent]] of cases.entries()) {
-    test(`(${index}) Should provide expected parentElement for ${child}: ${parent}`, () => {
+    void test(`(${index}) Should provide expected parentElement for ${child}: ${parent}`, () => {
       expect(new NodeProxy(child as never).parentElement?.delegate).toStrictEqual(parent);
     });
   }
 });
 
-describe("NodeProxy.name and NodeProxy.realName", () => {
+void describe("NodeProxy.name and NodeProxy.realName", () => {
   const document = PARSER.parseFromString("<parent><child/></parent>", "text/xml");
   const documentRootNode = document.getRootNode();
   const rootNode = documentRootNode.firstChild as Node;
@@ -271,7 +271,7 @@ describe("NodeProxy.name and NodeProxy.realName", () => {
   const nodes = [childNode, rootNode];
 
   for (const [index, node] of nodes.entries()) {
-    test(`(${index}) Should provide expected name and realName for ${node.nodeName}`, () => {
+    void test(`(${index}) Should provide expected name and realName for ${node.nodeName}`, () => {
       const { name, realName } = new NodeProxy(node);
       expect(name).toStrictEqual(node.nodeName.toLowerCase());
       expect(realName).toStrictEqual(node.nodeName.toLowerCase());
@@ -279,7 +279,7 @@ describe("NodeProxy.name and NodeProxy.realName", () => {
   }
 });
 
-describe("NodeProxy.singleton", () => {
+void describe("NodeProxy.singleton", () => {
   const document = PARSER.parseFromString("<parent><child><pair1/><pair2/><pair3/></child></parent>", "text/xml");
   const documentRootNode = document.getRootNode();
   const rootNode = documentRootNode.firstChild as Node;
@@ -298,13 +298,13 @@ describe("NodeProxy.singleton", () => {
   ];
 
   for (const [index, [node, expected]] of cases.entries()) {
-    test(`(${index}) Should provide expected singleton state for ${node.nodeName}: ${expected}`, () => {
+    void test(`(${index}) Should provide expected singleton state for ${node.nodeName}: ${expected}`, () => {
       expect(new NodeProxy(node).singleton).toStrictEqual(expected);
     });
   }
 });
 
-describe("NodeProxy.lastNode", () => {
+void describe("NodeProxy.lastNode", () => {
   const document = PARSER.parseFromString("<parent><child><pair1/><pair2/><pair3/></child></parent>", "text/xml");
   const documentRootNode = document.getRootNode();
   const rootNode = documentRootNode.firstChild as Node;
@@ -323,13 +323,13 @@ describe("NodeProxy.lastNode", () => {
   ];
 
   for (const [index, [node, expected]] of cases.entries()) {
-    test(`(${index}) Should provide expected lastNode state for ${node.nodeName}: ${expected}`, () => {
+    void test(`(${index}) Should provide expected lastNode state for ${node.nodeName}: ${expected}`, () => {
       expect(new NodeProxy(node).lastNode).toStrictEqual(expected);
     });
   }
 });
 
-describe("NodeProxy.findFirst", () => {
+void describe("NodeProxy.findFirst", () => {
   const document = PARSER.parseFromString("<parent><child><pair1/><pair2/><pair3/></child></parent>", "text/xml");
   const documentRootNode = document.getRootNode();
   const rootNode = documentRootNode.firstChild as Node;
@@ -348,7 +348,7 @@ describe("NodeProxy.findFirst", () => {
   ];
 
   for (const [index, [node, firstChild]] of cases.entries()) {
-    test(`(${index}) Should find expected first child node for ${node.nodeName}: ${firstChild}`, () => {
+    void test(`(${index}) Should find expected first child node for ${node.nodeName}: ${firstChild}`, () => {
       const result = new NodeProxy(node).findFirst();
       if (firstChild === null) {
         expect(result).toStrictEqual(firstChild);
@@ -372,7 +372,7 @@ describe("NodeProxy.findFirst", () => {
   ];
 
   for (const [index, [node, childName, firstChild]] of byChildNameCases.entries()) {
-    test(`(${index}) Should find expected first child node for ${node.nodeName} searching for '${childName}': ${firstChild}`, () => {
+    void test(`(${index}) Should find expected first child node for ${node.nodeName} searching for '${childName}': ${firstChild}`, () => {
       const result = new NodeProxy(node).findFirst(childName);
       if (firstChild === null) {
         expect(result).toStrictEqual(firstChild);
@@ -394,7 +394,7 @@ describe("NodeProxy.findFirst", () => {
   ];
 
   for (const [index, [node, childPredicate, firstChild]] of byPredicateCases.entries()) {
-    test(`(${index}) Should find expected first child node for ${node.nodeName} searching by predicate`, () => {
+    void test(`(${index}) Should find expected first child node for ${node.nodeName} searching by predicate`, () => {
       const result = new NodeProxy(node).findFirst(childPredicate);
       if (firstChild === null) {
         expect(result).toStrictEqual(firstChild);
@@ -405,7 +405,7 @@ describe("NodeProxy.findFirst", () => {
   }
 });
 
-describe("NodeProxy.persistToDom", () => {
+void describe("NodeProxy.persistToDom", () => {
   const dom = "<parent><child><pair1/><pair2/><pair3/></child></parent>";
 
   interface PersistTestData {
@@ -506,7 +506,7 @@ describe("NodeProxy.persistToDom", () => {
 
   for (const [testIndex, [name, data]] of testData.entries()) {
     for (const hasOwnerDocument of [true, false]) {
-      test(`(${testIndex}) ${name} - has ownerDocument: ${hasOwnerDocument}`, () => {
+      void test(`(${testIndex}) ${name} - has ownerDocument: ${hasOwnerDocument}`, () => {
         const document = PARSER.parseFromString(dom, "text/xml");
         const node = document.evaluate(data.nodeXPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE)
           .singleNodeValue as Node;

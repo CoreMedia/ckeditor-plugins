@@ -25,8 +25,8 @@ const aut = {
  * The given probes may also be worth evaluating in context of alternative
  * BBCode processors (like KefirBB, for example).
  */
-describe("BBob Known Issues", () => {
-  describe("toJSONRaw", () => {
+void describe("BBob Known Issues", () => {
+  void describe("toJSONRaw", () => {
     /*
      * Active parameters:
      *
@@ -63,7 +63,7 @@ describe("BBob Known Issues", () => {
       },
     ] as const;
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { bbCode, expectedActual, expected, issue, comment }] of cases.entries()) {
         await t.test(`[${i}] ${comment}: ${bbCode} -> ${expectedActual} (${issue}; expected: ${expected})`, () => {
           expect(aut.toJSONRaw(bbCode)).toBe(expectedActual);

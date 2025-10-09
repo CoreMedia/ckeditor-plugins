@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 
 import "global-jsdom/register";
 import { describe } from "node:test";
@@ -27,7 +27,7 @@ const wrapContent = (content: string): string =>
 // TODO[cke] Up to now, Differencing is not implemented for CKEditor 5.
 //   Thus, there is more to come and existing configuration is subject to change.
 //   It is expected, for example, that the data view representation changes.
-describe("CoreMediaRichTextConfig: Differencing Tags", () => {
+void describe("CoreMediaRichTextConfig: Differencing Tags", () => {
   const data: DataProcessingTestCase[] = [
     {
       name: "XDIFF#1: Should remove invalid <xdiff:span> tag, but keep children.",

@@ -1,5 +1,5 @@
 // noinspection HtmlUnknownAttribute,HtmlRequiredAltAttribute
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 import "global-jsdom/register";
 import test, { describe } from "node:test";
 import * as aut from "../../src/rules/FixedAttributes";
@@ -7,7 +7,7 @@ import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/s
 import { TestDirection, toData } from "./TestDirection";
 import { RulesTester } from "./RulesTester";
 
-describe("FixedAttributes", () => {
+void describe("FixedAttributes", () => {
   const ruleConfigurations = [aut.stripFixedAttributes()];
 
   const mappingTestCases: { view: string; direction: TestDirection; data: string }[] = [
@@ -19,7 +19,7 @@ describe("FixedAttributes", () => {
   ];
 
   for (const [index, { data, direction, view }] of mappingTestCases.entries()) {
-    test(`[${index}] Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
+    void test(`[${index}] Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
       const dataString = richtext(data);
       const htmlString = `<body>${view}</body>`;
       const tester = new RulesTester(ruleConfigurations, "*", "body > *");

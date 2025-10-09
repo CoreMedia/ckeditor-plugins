@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 import "global-jsdom/register";
 import test, { describe } from "node:test";
 import * as aut from "../../src/rules/LanguageAttributes";
@@ -6,7 +6,7 @@ import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { bijective, TestDirection, toData, toView } from "./TestDirection";
 import { RulesTester } from "./RulesTester";
 
-describe("HeadingElements", () => {
+void describe("HeadingElements", () => {
   const ruleConfigurations = [aut.languageAttributes];
 
   const text = "T";
@@ -25,7 +25,7 @@ describe("HeadingElements", () => {
   ];
 
   for (const [index, { data, direction, view }] of testCases.entries()) {
-    test(`[${index}] Should provide mapping from data ${direction} view: ${data} -> ${view}`, () => {
+    void test(`[${index}] Should provide mapping from data ${direction} view: ${data} -> ${view}`, () => {
       const dataString = richtext(data);
       const htmlString = `<body>${view}</body>`;
       const tester = new RulesTester(ruleConfigurations, "p", "p");

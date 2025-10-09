@@ -52,9 +52,9 @@ const aut = {
  * so that changed behaviors may also be triggered by BBob update. On failed
  * tests a possible option is just to adjust the expectations.
  */
-describe("bbcode2html", () => {
-  describe("Standard Tag Processing", () => {
-    describe("Supported Inline Tags", () => {
+void describe("bbcode2html", () => {
+  void describe("Standard Tag Processing", () => {
+    void describe("Supported Inline Tags", () => {
       const cases = [
         {
           data: `[b]T[/b]`,
@@ -114,7 +114,7 @@ describe("bbcode2html", () => {
         },
       ] as const;
 
-      test("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { data, expectedDataView }] of cases.entries()) {
           await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView}`, () => {
             aut.expectTransformation({ data, expectedDataView });
@@ -123,7 +123,7 @@ describe("bbcode2html", () => {
       });
     });
 
-    describe("Supported Block Tags", () => {
+    void describe("Supported Block Tags", () => {
       const cases = [
         {
           data: `[code]T[/code]`,
@@ -163,7 +163,7 @@ describe("bbcode2html", () => {
         },
       ] as const;
 
-      test("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { data, expectedDataView }] of cases.entries()) {
           await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView}`, () => {
             aut.expectTransformation({ data, expectedDataView });
@@ -172,7 +172,7 @@ describe("bbcode2html", () => {
       });
     });
 
-    describe("Escaping", () => {
+    void describe("Escaping", () => {
       const cases = [
         {
           data: `\\[b\\]not bold\\[/b\\]`,
@@ -191,7 +191,7 @@ describe("bbcode2html", () => {
         },
       ] as const;
 
-      test("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
           await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
             aut.expectTransformation({ data, expectedDataView });
@@ -201,7 +201,7 @@ describe("bbcode2html", () => {
     });
   });
 
-  describe("By Tag", () => {
+  void describe("By Tag", () => {
     // Some standard behaviors bundled.
     describe.each`
       tag          | openTag                   | closeTag      | openElement                                        | closeElement
@@ -264,7 +264,7 @@ describe("bbcode2html", () => {
           },
         ] as const;
 
-        test("cases", async (t: TestContext) => {
+        void test("cases", async (t: TestContext) => {
           for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
             await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
               aut.expectTransformation({ data, expectedDataView });
@@ -274,7 +274,7 @@ describe("bbcode2html", () => {
       },
     );
 
-    describe("[code]", () => {
+    void describe("[code]", () => {
       const cases = [
         {
           data: `[code]T[/code]`,
@@ -338,7 +338,7 @@ describe("bbcode2html", () => {
         },
       ] as const;
 
-      test("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
           await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
             aut.expectTransformation({ data, expectedDataView });
@@ -347,7 +347,7 @@ describe("bbcode2html", () => {
       });
     });
 
-    describe("[quote]", () => {
+    void describe("[quote]", () => {
       const cases = [
         {
           data: `[quote]T[/quote]`,
@@ -381,7 +381,7 @@ describe("bbcode2html", () => {
         },
       ] as const;
 
-      test("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
           await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
             aut.expectTransformation({ data, expectedDataView });
@@ -390,7 +390,7 @@ describe("bbcode2html", () => {
       });
     });
 
-    describe("[img]", () => {
+    void describe("[img]", () => {
       const cases = [
         {
           data: `[img]https://example.org/1.png[/img]`,
@@ -424,7 +424,7 @@ describe("bbcode2html", () => {
         },
       ] as const;
 
-      test("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
           await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
             aut.expectTransformation({ data, expectedDataView });
@@ -434,7 +434,7 @@ describe("bbcode2html", () => {
     });
   });
 
-  describe("Paragraphs", () => {
+  void describe("Paragraphs", () => {
     const cases = [
       {
         data: `P1\n\nP2`,
@@ -518,7 +518,7 @@ describe("bbcode2html", () => {
       },
     ] as const;
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
         await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
           aut.expectTransformation({ data, expectedDataView });
@@ -527,7 +527,7 @@ describe("bbcode2html", () => {
     });
   });
 
-  describe("Tag Processing Challenges", () => {
+  void describe("Tag Processing Challenges", () => {
     /**
      * We may meet unexpected formatting. This is handled (and tested) by
      * BBob. These tests are mainly meant as proof-of-concept to understand
@@ -538,7 +538,7 @@ describe("bbcode2html", () => {
      * after BBob upgrade. Thus, the current number of expected errors only
      * represents the current behavior of BBob.
      */
-    describe("Formatting Errors", () => {
+    void describe("Formatting Errors", () => {
       const cases = [
         {
           data: `[b]T`,
@@ -566,7 +566,7 @@ describe("bbcode2html", () => {
         },
       ] as const;
 
-      test("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { data, expectedDataView, expectedErrors, comment }] of cases.entries()) {
           await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
             aut.expectTransformation({ data, expectedDataView }, expectedErrors);
@@ -575,7 +575,7 @@ describe("bbcode2html", () => {
       });
     });
 
-    describe("Attribute Challenges", () => {
+    void describe("Attribute Challenges", () => {
       const cases = [
         {
           data: `[url=]T[/url]`,
@@ -589,7 +589,7 @@ describe("bbcode2html", () => {
         },
       ] as const;
 
-      test("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
           await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
             aut.expectTransformation({ data, expectedDataView });
@@ -599,8 +599,8 @@ describe("bbcode2html", () => {
     });
   });
 
-  describe("Security", () => {
-    describe("Raw HTML Injections", () => {
+  void describe("Security", () => {
+    void describe("Raw HTML Injections", () => {
       const cases = [
         {
           data: `A <b>B</b>`,
@@ -614,7 +614,7 @@ describe("bbcode2html", () => {
         },
       ] as const;
 
-      test("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
           await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
             aut.expectTransformation({ data, expectedDataView });
@@ -636,7 +636,7 @@ describe("bbcode2html", () => {
      * @see https://github.com/JiLiZART/BBob/issues/201
      * @see https://swarm.ptsecurity.com/fuzzing-for-xss-via-nested-parsers-condition/
      */
-    describe("XSS attacks", () => {
+    void describe("XSS attacks", () => {
       // noinspection CssInvalidPropertyValue
       const cases = [
         {
@@ -676,7 +676,7 @@ describe("bbcode2html", () => {
         },
       ] as const;
 
-      test("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { tainted, expected, comment }] of cases.entries()) {
           await t.test(`[${i}] Should prevent XSS-attack for: ${tainted}, expected: ${expected} (${comment})`, () => {
             aut.expectTransformation({ data: tainted, expectedDataView: expected });
@@ -696,7 +696,7 @@ describe("bbcode2html", () => {
    * Decision for now is to stick with BBob, which just strips broken BBCode
    * and tries to render the rest at best effort.
    */
-  describe("Error Handling", () => {
+  void describe("Error Handling", () => {
     const cases = [
       {
         erred: `[/]`,
@@ -715,7 +715,7 @@ describe("bbcode2html", () => {
       },
     ] as const;
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { erred: data, expected: expectedDataView, comment }] of cases.entries()) {
         await t.test(
           `[${i}] Should handle BBCode errors with care: ${data}, expected: ${expectedDataView} (${comment})`,
@@ -734,7 +734,7 @@ describe("bbcode2html", () => {
    * aspects to either ease debugging or to validate unchanged behavior after
    * BBob upgrade.
    */
-  describe("BBob Integratino", () => {
+  void describe("BBob Integratino", () => {
     /**
      * Demonstrates (and validates) that the BBob parser is unaware of
      * newline representations different to LF (Unix). As a result, we need
@@ -777,7 +777,7 @@ describe("bbcode2html", () => {
       },
     ] as const;
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { newline, expectedTree, type }] of cases.entries()) {
         await t.test(`[${i}] Should parse system dependent newline representation for ${type} as expected.`, () => {
           // deconstruct to remove extra "candy" like messages from the resulting

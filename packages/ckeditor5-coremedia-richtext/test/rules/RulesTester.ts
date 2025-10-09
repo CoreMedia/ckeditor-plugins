@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import test from "node:test";
 import expect from "expect";
 import { RuleBasedHtmlDomConverterFactory } from "./RuleBasedHtmlDomConverters";
-import { isToData, isToView, TestDirection } from "./TestDirection";
+import { isToView, TestDirection } from "./TestDirection";
 import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
 
 /**

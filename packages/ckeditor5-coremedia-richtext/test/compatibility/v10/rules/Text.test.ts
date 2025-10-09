@@ -1,5 +1,5 @@
 /* eslint @typescript-eslint/naming-convention: off */
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 
 import "global-jsdom/register";
 import { describe } from "node:test";
@@ -18,7 +18,7 @@ const emptyRichText = `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}"/>`;
 const wrapContent = (content: string): string =>
   `<div xmlns="${ns_richtext}" xmlns:xlink="${ns_xlink}">${content}</div>`;
 
-describe("CoreMediaRichTextConfig: Text Fixtures", () => {
+void describe("CoreMediaRichTextConfig: Text Fixtures", () => {
   const textEntityFixtures: DataProcessingTestCase[] = flatten(
     [
       "&nbsp;",

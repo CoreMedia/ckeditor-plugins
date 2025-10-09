@@ -1,5 +1,5 @@
 /* eslint no-null/no-null: off */
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 
 import "global-jsdom/register";
 import test, { describe } from "node:test";
@@ -234,7 +234,7 @@ function viewToDom(xml: string): DocumentFragment {
   fragment.append(...nodes);
   return fragment;
 }
-describe("RichTextDataProcessor.toData", () => {
+void describe("RichTextDataProcessor.toData", () => {
   const testData: NamedTestData[] = [
     [
       "BASIC#1: First basic test with simple text content.",
@@ -273,7 +273,7 @@ describe("RichTextDataProcessor.toData", () => {
           elements,
         };
       }
-      test(`Should not have consumed more than ${maximumMilliseconds >= 0 ? maximumMilliseconds : "<unlimited>"} ms (median).`, () => {
+      void test(`Should not have consumed more than ${maximumMilliseconds >= 0 ? maximumMilliseconds : "<unlimited>"} ms (median).`, () => {
         const { elements } = performToData();
         const measuredMilliseconds: number[] = [];
         for (let i = 0; i < EXECUTION_REPETITIONS; i++) {

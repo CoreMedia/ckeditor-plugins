@@ -1,5 +1,5 @@
 /* eslint no-null/no-null: off */
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 
 import "global-jsdom/register";
 import test, { describe } from "node:test";
@@ -76,7 +76,7 @@ interface TextFilterTestData extends CommentableTestData, DisablableTestData {
   restartPath?: string;
 }
 
-describe("TextProxy.applyRules()", () => {
+void describe("TextProxy.applyRules()", () => {
   type ApplyRulesData = [
     /**
      * A name/description for the test (will be printed to output).

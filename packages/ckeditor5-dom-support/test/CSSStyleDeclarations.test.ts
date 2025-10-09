@@ -34,8 +34,8 @@ const style = (s?: string): CSSStyleDeclaration => {
   return element.style;
 };
 
-describe("CSSStyleDeclarations", () => {
-  describe("getColor", () => {
+void describe("CSSStyleDeclarations", () => {
+  void describe("getColor", () => {
     const cases: { style: string | undefined; expected: RgbColor | string | undefined; comment: string }[] = [
       { style: undefined, expected: undefined, comment: `no color information for no style set` },
       { style: "font-weight: bold;", expected: undefined, comment: `no color information for only other styles set` },
@@ -69,7 +69,7 @@ describe("CSSStyleDeclarations", () => {
     ];
 
     for (const [i, { style: styleDecl, expected, comment }] of cases.entries()) {
-      test(`[${i}] Should parse style '${styleDecl}' to color: ${expected} — ${comment}`, () => {
+      void test(`[${i}] Should parse style '${styleDecl}' to color: ${expected} — ${comment}`, () => {
         const declaration = style(styleDecl);
         const actual = getColor(declaration);
         if (expected === undefined) {
@@ -87,8 +87,8 @@ describe("CSSStyleDeclarations", () => {
     }
   });
 
-  describe("getFontWeightNumeric", () => {
-    describe("getFontWeightNumeric", () => {
+  void describe("getFontWeightNumeric", () => {
+    void describe("getFontWeightNumeric", () => {
       const cases = [
         { style: undefined, expected: undefined, comment: `unset style` },
         { style: "color: fuchsia;", expected: undefined, comment: `No font-weight information.` },
@@ -107,7 +107,7 @@ describe("CSSStyleDeclarations", () => {
       ];
 
       for (const [i, { style: styleDecl, expected, comment }] of cases.entries()) {
-        test(`[${i}] Should parse style '${styleDecl}' to numeric font-weight: ${expected} — ${comment}`, () => {
+        void test(`[${i}] Should parse style '${styleDecl}' to numeric font-weight: ${expected} — ${comment}`, () => {
           const declaration = style(styleDecl);
           const actual = getFontWeightNumeric(declaration);
           expect(actual).toBe(expected);
@@ -116,7 +116,7 @@ describe("CSSStyleDeclarations", () => {
     });
   });
 
-  describe("getFontWeight", () => {
+  void describe("getFontWeight", () => {
     const fwAll = (asText: string, asNumber: number): Required<FontWeightInformation> => ({
       asText,
       asNumber,
@@ -171,7 +171,7 @@ describe("CSSStyleDeclarations", () => {
     ];
 
     for (const [i, { style: styleDecl, expected, comment }] of cases.entries()) {
-      test(`[${i}] Should parse style '${styleDecl}' to font-weight: ${expected} — ${comment}`, () => {
+      void test(`[${i}] Should parse style '${styleDecl}' to font-weight: ${expected} — ${comment}`, () => {
         const declaration = style(styleDecl);
         const actual = getFontWeight(declaration);
         if (expected === undefined) {

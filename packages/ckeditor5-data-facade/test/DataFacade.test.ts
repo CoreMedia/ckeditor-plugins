@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 
 import "global-jsdom/register";
 import test, { describe, beforeEach } from "node:test";
@@ -19,11 +19,11 @@ const simulateEditorialUpdate = (data: SetDataData, editor: Editor) => {
   editor.data.set(data);
 };
 
-describe("DataFacade", () => {
+void describe("DataFacade", () => {
   beforeEach(() => {
     prepareDocument(document);
   });
-  test("should forward previously set data once initialized", async () => {
+  void test("should forward previously set data once initialized", async () => {
     const dataFixture = "<p>DATA</p>";
     const editor = await createTestEditor();
     const dataFacade = editor.plugins.get(DataFacade);
@@ -40,7 +40,7 @@ describe("DataFacade", () => {
     simulateDataReformat(dataFixture.toLowerCase(), editor);
     expect(dataFacade.getData()).toEqual(dataFixture);
   });
-  describe("Autosave integration", () => {
+  void describe("Autosave integration", () => {
     const dataFixture = "<p>DATA</p>";
     let savedData = "";
     let editor: Editor;
@@ -60,7 +60,7 @@ describe("DataFacade", () => {
       autosave = editor.plugins.get(Autosave);
       dataFacade = editor.plugins.get(DataFacade);
     });
-    test("should hook into autosave and use custom configuration for saving cached data", async () => {
+    void test("should hook into autosave and use custom configuration for saving cached data", async () => {
       dataFacade.setData(dataFixture);
       simulateDataReformat(dataFixture.toLowerCase(), editor);
       expect.assertions(1);
@@ -71,7 +71,7 @@ describe("DataFacade", () => {
         expect(savedData).toEqual(dataFixture);
       });
     });
-    test("should hook into autosave but prefer editorial changes on data facade's save", async () => {
+    void test("should hook into autosave but prefer editorial changes on data facade's save", async () => {
       dataFacade.setData(dataFixture);
       simulateEditorialUpdate(dataFixture.toLowerCase(), editor);
       expect.assertions(1);

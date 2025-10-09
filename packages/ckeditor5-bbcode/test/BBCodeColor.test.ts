@@ -14,8 +14,8 @@ const enforceHexRepresentation: ColorMapper = (color: string | RgbColor): string
   return color.toHex();
 };
 
-describe("BBCodeColor", () => {
-  test("Default Configuration", async (t: TestContext) => {
+void describe("BBCodeColor", () => {
+  void test("Default Configuration", async (t: TestContext) => {
     const rule = bbCodeColor;
 
     const cases: { dataView: string; expected: string; comment: string }[] = [
@@ -65,7 +65,7 @@ describe("BBCodeColor", () => {
     }
   });
 
-  test("Custom Color Mapper Configuration", async (t: TestContext) => {
+  void test("Custom Color Mapper Configuration", async (t: TestContext) => {
     const rule = new BBCodeColor({ mapper: enforceHexRepresentation });
 
     const cases: { dataView: string; expected: string; comment: string }[] = [

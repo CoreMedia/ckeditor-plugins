@@ -4,8 +4,8 @@ import expect from "expect";
 import { requireHTMLElement } from "./DOMUtils";
 import { bbCodeStrikethrough } from "../src/rules/BBCodeStrikethrough";
 
-describe("BBCodeStrikethrough", () => {
-  describe("Default Configuration", () => {
+void describe("BBCodeStrikethrough", () => {
+  void describe("Default Configuration", () => {
     const rule = bbCodeStrikethrough;
 
     const cases = [
@@ -41,7 +41,7 @@ describe("BBCodeStrikethrough", () => {
       },
     ] as const;
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { dataView, expected, comment }] of cases.entries()) {
         await t.test(`[${i}] Should process '${dataView}' to '${expected}' (${comment})`, () => {
           const element = requireHTMLElement(dataView);

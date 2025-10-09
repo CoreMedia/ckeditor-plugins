@@ -4,8 +4,8 @@ import expect from "expect";
 import { requireHTMLElement } from "./DOMUtils";
 import { BBCodeCode, bbCodeCode } from "../src/rules/BBCodeCode";
 
-describe("BBCodeCode", () => {
-  describe("Default Configuration", () => {
+void describe("BBCodeCode", () => {
+  void describe("Default Configuration", () => {
     const rule = bbCodeCode;
 
     const cases = [
@@ -61,7 +61,7 @@ describe("BBCodeCode", () => {
       },
     ] as const;
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { dataView, expected, comment }] of cases.entries()) {
         await t.test(`[${i}] Should process '${dataView}' to '${expected}' (${comment})`, () => {
           const element = requireHTMLElement(dataView);
@@ -72,7 +72,7 @@ describe("BBCodeCode", () => {
     });
   });
 
-  describe("Custom Configuration", () => {
+  void describe("Custom Configuration", () => {
     const isUnsetCases = [
       {
         dataView: `<pre><code class="language-css">TEXT</code></pre>`,
@@ -86,7 +86,7 @@ describe("BBCodeCode", () => {
       },
     ] as const;
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { dataView, expected, comment }] of isUnsetCases.entries()) {
         await t.test(`[${i}] Custom isUnset: Should process '${dataView}' to '${expected}' (${comment})`, () => {
           const rule = new BBCodeCode({
@@ -112,7 +112,7 @@ describe("BBCodeCode", () => {
       },
     ] as const;
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { dataView, expected, comment }] of fromClassCases.entries()) {
         await t.test(`[${i}] Custom fromClass: Should process '${dataView}' to '${expected}' (${comment})`, () => {
           const rule = new BBCodeCode({

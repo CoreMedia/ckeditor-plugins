@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 
 import "global-jsdom/register";
 import test, { describe } from "node:test";
@@ -58,19 +58,19 @@ const replaceElementByChildren: ElementFilterRule = (p) => {
 const reverseText: TextFilterRule = (p) => {
   p.node.textContent = p.node.textContent.split("").reverse().join("");
 };
-describe("Rules.parseFilterRuleSetConfiguration, All Empty Handling", () => {
-  test("Should accept empty configuration.", () => {
+void describe("Rules.parseFilterRuleSetConfiguration, All Empty Handling", () => {
+  void test("Should accept empty configuration.", () => {
     const toDataAndView = parseFilterRuleSetConfigurations({});
     expect(toDataAndView).toHaveProperty("toData", {});
     expect(toDataAndView).toHaveProperty("toView", {});
   });
-  test("Invariant: Should accept empty custom configuration and empty default.", () => {
+  void test("Invariant: Should accept empty custom configuration and empty default.", () => {
     const toDataAndView = parseFilterRuleSetConfigurations({}, {});
     expect(toDataAndView).toHaveProperty("toData", {});
     expect(toDataAndView).toHaveProperty("toView", {});
   });
 });
-describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No Defaults)", () => {
+void describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No Defaults)", () => {
   type TestData = CommentableTestData & DisablableTestCase & ParseFilterRuleSetConfigurationTestData;
   type TestFixture = [string, TestData];
   // noinspection RequiredAttributes,HtmlUnknownAttribute
@@ -321,7 +321,7 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
     toDataFilter.applyTo(from.documentElement);
     const dataXml: string = serializer.serializeToString(from.documentElement);
 
-    test(`toData: Should have transformed as expected: ${testData.from} -> ${testData.data}.`, () => {
+    void test(`toData: Should have transformed as expected: ${testData.from} -> ${testData.data}.`, () => {
       expect(dataXml).toEqual(testData.data);
     });
 
@@ -329,12 +329,12 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Main Configuration (No 
     toViewFilter.applyTo(data.documentElement);
     const viewXml: string = serializer.serializeToString(data.documentElement);
 
-    test(`toView: Should have transformed as expected: ${dataXml} -> ${testData.view}`, () => {
+    void test(`toView: Should have transformed as expected: ${dataXml} -> ${testData.view}`, () => {
       expect(viewXml).toEqual(testData.view);
     });
   }
 });
-describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having Defaults)", () => {
+void describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having Defaults)", () => {
   type TestData = CommentableTestData &
     DisablableTestCase &
     ParseFilterRuleSetConfigurationTestData &
@@ -527,7 +527,7 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
     toDataFilter.applyTo(from.documentElement);
     const dataXml: string = serializer.serializeToString(from.documentElement);
 
-    test(`toData: Should have transformed as expected: ${testData.from} -> ${testData.data}.`, () => {
+    void test(`toData: Should have transformed as expected: ${testData.from} -> ${testData.data}.`, () => {
       expect(dataXml).toEqual(testData.data);
     });
 
@@ -537,7 +537,7 @@ describe("Rules.parseFilterRuleSetConfiguration, Parsing Configuration (Having D
     toViewFilter.applyTo(data.documentElement);
     const viewXml: string = serializer.serializeToString(data.documentElement);
 
-    test(`toView: Should have transformed as expected: ${dataXml} -> ${testData.view}`, () => {
+    void test(`toView: Should have transformed as expected: ${dataXml} -> ${testData.view}`, () => {
       expect(viewXml).toEqual(testData.view);
     });
   }

@@ -19,10 +19,10 @@ import {
 } from "@coremedia/ckeditor5-dom-support";
 import { toData, toDataView } from "./DataProcessorSimulation";
 
-describe("HtmlDomConverter", () => {
+void describe("HtmlDomConverter", () => {
   describe(USE_CASE_NAME, () => {
-    describe("toData Transformation", () => {
-      test("should transform simple HTML to Rich Text just by adapting namespaces", () => {
+    void describe("toData Transformation", () => {
+      void test("should transform simple HTML to Rich Text just by adapting namespaces", () => {
         const dataViewDocument = documentFromHtml(`<body><p class="CLASS">TEXT</p></body>`);
         const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
@@ -41,8 +41,8 @@ describe("HtmlDomConverter", () => {
       });
     });
 
-    describe("toDataView Transformation", () => {
-      test("should transform simple Rich Text to HTML just by adapting namespaces", () => {
+    void describe("toDataView Transformation", () => {
+      void test("should transform simple Rich Text to HTML just by adapting namespaces", () => {
         const dataViewDocument = documentFromHtml(`<body/>`);
         const dataDocument = documentFromXml(`<div xmlns="${dataNs}"><p class="CLASS">TEXT</p></div>`);
 
@@ -62,8 +62,8 @@ describe("HtmlDomConverter", () => {
     });
   });
 
-  describe("Default Behaviors", () => {
-    test("should align default namespace for elements", () => {
+  void describe("Default Behaviors", () => {
+    void test("should align default namespace for elements", () => {
       const dataViewDocument = documentFromHtml(`<body><p/></body>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
@@ -74,7 +74,7 @@ describe("HtmlDomConverter", () => {
       expect(serializeToXmlString(dataDocument)).toStrictEqual(`<div xmlns="${dataNs}"><p/></div>`);
     });
 
-    test("should not align namespace for elements different to default namespace", () => {
+    void test("should not align namespace for elements different to default namespace", () => {
       const customNs = "https://example.org/custom";
       const dataViewDocument = documentFromHtml(`<body/>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}" xmlns:c="${customNs}"><c:customEl/></div>`);
@@ -92,7 +92,7 @@ describe("HtmlDomConverter", () => {
       );
     });
 
-    test("should align default namespace for attributes", () => {
+    void test("should align default namespace for attributes", () => {
       const dataViewDocument = documentFromHtml(`<body><p class="CLASS" id="ID" lang="en" dir="ltr"/></body>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
@@ -110,7 +110,7 @@ describe("HtmlDomConverter", () => {
       );
     });
 
-    test("should not align namespace for attributes of different namespace than the default", () => {
+    void test("should not align namespace for attributes of different namespace than the default", () => {
       const customNs = "https://example.org/custom";
       const dataViewDocument = documentFromHtml(`<body/>`);
       const dataDocument = documentFromXml(
@@ -131,7 +131,7 @@ describe("HtmlDomConverter", () => {
       );
     });
 
-    test("should process nested elements", () => {
+    void test("should process nested elements", () => {
       const dataViewDocument = documentFromHtml(`<body><p><span class="CLASS">TEXT</span></p></body>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
@@ -154,8 +154,8 @@ describe("HtmlDomConverter", () => {
    * Thus, it is intended, that the `HtmlDomConverter` can be overridden, like,
    * for example, to replace elements by different elements or structures.
    */
-  describe("Override Behaviors", () => {
-    test("Replace element by different element", () => {
+  void describe("Override Behaviors", () => {
+    void test("Replace element by different element", () => {
       const dataViewDocument = documentFromHtml(`<body><p><mark>TEXT</mark></p></body>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
@@ -177,7 +177,7 @@ describe("HtmlDomConverter", () => {
       );
     });
 
-    test("Remove element along with its children", () => {
+    void test("Remove element along with its children", () => {
       const dataViewDocument = documentFromHtml(`<body><p><mark>Marked Text</mark></p></body>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
@@ -199,7 +199,7 @@ describe("HtmlDomConverter", () => {
 
     const modes = ["atImported", "atImportedWithChildren"];
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, mode] of modes.entries()) {
         await t.test(`[${i}] Replace element by its children, processing stage: ${mode}`, () => {
           const dataViewDocument = documentFromHtml(`<body><p><mark>Marked Text</mark></p></body>`);
@@ -243,7 +243,7 @@ describe("HtmlDomConverter", () => {
      *
      * This test demonstrates the conversion from data view to data.
      */
-    test("Restructure children for data view to data", () => {
+    void test("Restructure children for data view to data", () => {
       const dataViewDocument = documentFromHtml(`<body><table><thead><tr/></thead><tbody><tr/></tbody></table></body>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"></div>`);
 
@@ -278,7 +278,7 @@ describe("HtmlDomConverter", () => {
      *
      * This test demonstrates the conversion from data to data view.
      */
-    test("Restructure children for data to data view", () => {
+    void test("Restructure children for data to data view", () => {
       const dataViewDocument = documentFromHtml(`<body/>`);
       const dataDocument = documentFromXml(
         `<div xmlns="${dataNs}"><table><tbody><tr class="tr--head"/><tr/></tbody></table></div>`,
@@ -298,7 +298,7 @@ describe("HtmlDomConverter", () => {
       );
     });
 
-    test("Data View to Data: Convert HTML attribute to artificial element in CoreMedia RichText 1.0", () => {
+    void test("Data View to Data: Convert HTML attribute to artificial element in CoreMedia RichText 1.0", () => {
       const dataViewDocument = documentFromHtml(`<body><em data-editor="Peter">Text</em></body>`);
       const dataDocument = documentFromXml(`<div xmlns="${dataNs}"/>`);
 
@@ -315,7 +315,7 @@ describe("HtmlDomConverter", () => {
       );
     });
 
-    test("Data to Data View: Convert artificial element CoreMedia RichText 1.0 to attribute in HTML", () => {
+    void test("Data to Data View: Convert artificial element CoreMedia RichText 1.0 to attribute in HTML", () => {
       const dataViewDocument = documentFromHtml(`<body/>`);
       const dataDocument = documentFromXml(
         `<div xmlns="${dataNs}"><em><span class="dataset--editor">Peter</span>Text</em></div>`,

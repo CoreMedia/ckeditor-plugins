@@ -14,9 +14,9 @@ import {
 import Delayed from "../../src/content/Delayed";
 import { testShouldRetrieveValues } from "./ObservableTestUtil";
 
-describe("MutableProperties", () => {
-  describe("withPropertiesDefaults", () => {
-    test("Should provide defaults for empty config", () => {
+void describe("MutableProperties", () => {
+  void describe("withPropertiesDefaults", () => {
+    void test("Should provide defaults for empty config", () => {
       const config: MutablePropertiesConfig = {};
       const result = withPropertiesDefaults(config);
       const {
@@ -40,9 +40,9 @@ describe("MutableProperties", () => {
       { name: ["Lorem", "Ipsum", "Sit"], expected: ["Lorem", "Ipsum", "Sit"] },
     ];
 
-    describe("withPropertiesDefaults()", () => {
+    void describe("withPropertiesDefaults()", () => {
       for (const [i, data] of testCases.entries()) {
-        test(`[${i}] Should respect name value: ${JSON.stringify(data.name)}`, () => {
+        void test(`[${i}] Should respect name value: ${JSON.stringify(data.name)}`, () => {
           const { name, expected } = data;
           const config: MutablePropertiesConfig = { name };
           const result = withPropertiesDefaults(config);
@@ -68,9 +68,9 @@ describe("MutableProperties", () => {
       { editing: [false, true], expected: [false, true] },
     ];
 
-    describe("withPropertiesDefaults()", () => {
+    void describe("withPropertiesDefaults()", () => {
       for (const [i, data] of testCases2.entries()) {
-        test(`[${i}] Should respect editing value: ${JSON.stringify(data.editing)}`, () => {
+        void test(`[${i}] Should respect editing value: ${JSON.stringify(data.editing)}`, () => {
           const { editing, expected } = data;
           const config: MutablePropertiesConfig = { editing };
           const result = withPropertiesDefaults(config);
@@ -97,9 +97,9 @@ describe("MutableProperties", () => {
       { readable: [false, true], expected: [false, true] },
     ];
 
-    describe("withPropertiesDefaults()", () => {
+    void describe("withPropertiesDefaults()", () => {
       for (const [i, data] of testCases3.entries()) {
-        test(`[${i}] Should respect readable value: ${JSON.stringify(data.readable)}`, () => {
+        void test(`[${i}] Should respect readable value: ${JSON.stringify(data.readable)}`, () => {
           const { readable, expected } = data;
           const config: MutablePropertiesConfig = { readable };
           const result = withPropertiesDefaults(config);
@@ -145,9 +145,9 @@ describe("MutableProperties", () => {
       },
     ];
 
-    describe("withPropertiesDefaults()", () => {
+    void describe("withPropertiesDefaults()", () => {
       for (const [i, data] of testCases4.entries()) {
-        test(`[${i}] Should respect blob value: ${JSON.stringify(data.blob)}`, () => {
+        void test(`[${i}] Should respect blob value: ${JSON.stringify(data.blob)}`, () => {
           const { blob, expected } = data;
           const config: MutablePropertiesConfig = { blob };
           const result = withPropertiesDefaults(config);
@@ -168,11 +168,11 @@ describe("MutableProperties", () => {
     });
   });
 
-  describe("Observables", () => {
-    describe("observeName", () => {
+  void describe("Observables", () => {
+    void describe("observeName", () => {
       type NameConfig = Delayed & Pick<MutableProperties, "name">;
 
-      describe("Should provide single name and complete", () => {
+      void describe("Should provide single name and complete", () => {
         const values = ["Lorem"];
         const config: NameConfig = {
           initialDelayMs: 0,
@@ -183,7 +183,7 @@ describe("MutableProperties", () => {
         testShouldRetrieveValues(observable, values);
       });
 
-      describe("Should just complete for no names to provide", () => {
+      void describe("Should just complete for no names to provide", () => {
         const values: string[] = [];
         const config: NameConfig = {
           initialDelayMs: 0,
@@ -194,7 +194,7 @@ describe("MutableProperties", () => {
         testShouldRetrieveValues(observable, values);
       });
 
-      describe("Should provide names and restart", () => {
+      void describe("Should provide names and restart", () => {
         const values = ["Lorem", "Ipsum"];
         const config: NameConfig = {
           initialDelayMs: 0,
@@ -209,14 +209,14 @@ describe("MutableProperties", () => {
       });
     });
 
-    describe("observeEditing", () => {
+    void describe("observeEditing", () => {
       type EditingConfig = Delayed & Pick<MutableProperties, "editing">;
 
       const testCases = [{ value: true }, { value: false }];
 
-      describe("observeEditing()", () => {
+      void describe("observeEditing()", () => {
         for (const [i, { value }] of testCases.entries()) {
-          test(`[${i}] Should provide single value '${value}' and complete`, () => {
+          void test(`[${i}] Should provide single value '${value}' and complete`, () => {
             const values = [value];
             const config: EditingConfig = {
               initialDelayMs: 0,
@@ -231,7 +231,7 @@ describe("MutableProperties", () => {
         }
       });
 
-      describe("Should just complete for no values to provide", () => {
+      void describe("Should just complete for no values to provide", () => {
         const values: boolean[] = [];
         const config: EditingConfig = {
           initialDelayMs: 0,
@@ -244,7 +244,7 @@ describe("MutableProperties", () => {
         testShouldRetrieveValues(observable, values);
       });
 
-      describe("Should provide values and restart", () => {
+      void describe("Should provide values and restart", () => {
         const values = [true, false];
         const config: EditingConfig = {
           initialDelayMs: 0,
@@ -259,14 +259,14 @@ describe("MutableProperties", () => {
       });
     });
 
-    describe("observeReadable", () => {
+    void describe("observeReadable", () => {
       type ReadableConfig = Delayed & Pick<MutableProperties, "readable">;
 
       const testCases = [{ value: true }, { value: false }];
 
-      describe("observeReadable()", () => {
+      void describe("observeReadable()", () => {
         for (const [i, { value }] of testCases.entries()) {
-          test(`[${i}] Should provide single value '${value}' and complete`, () => {
+          void test(`[${i}] Should provide single value '${value}' and complete`, () => {
             const values = [value];
             const config: ReadableConfig = {
               initialDelayMs: 0,
@@ -280,7 +280,7 @@ describe("MutableProperties", () => {
         }
       });
 
-      describe("Should just complete for no values to provide", () => {
+      void describe("Should just complete for no values to provide", () => {
         const values: boolean[] = [];
         const config: ReadableConfig = {
           initialDelayMs: 0,
@@ -292,7 +292,7 @@ describe("MutableProperties", () => {
         testShouldRetrieveValues(observable, values);
       });
 
-      describe("Should provide values and restart", () => {
+      void describe("Should provide values and restart", () => {
         const values = [true, false];
         const config: ReadableConfig = {
           initialDelayMs: 0,

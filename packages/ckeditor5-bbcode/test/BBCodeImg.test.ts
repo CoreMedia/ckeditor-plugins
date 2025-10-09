@@ -4,9 +4,9 @@ import expect from "expect";
 import { requireHTMLElement } from "./DOMUtils";
 import { bbCodeImg } from "../src/rules/BBCodeImg";
 
-describe("BBCodeImg", () => {
+void describe("BBCodeImg", () => {
 
-  test("Default Configuration", async (t: TestContext) => {
+  void test("Default Configuration", async (t: TestContext) => {
     const rule = bbCodeImg;
     const someUrl = "https://example.org/";
 

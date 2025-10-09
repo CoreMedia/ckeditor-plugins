@@ -1,5 +1,5 @@
 /* eslint @typescript-eslint/naming-convention: off */
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 // noinspection InnerHTMLJS
 
 import "global-jsdom/register";
@@ -215,8 +215,8 @@ const applyToData: ApplyToData[] = [
     },
   ],
 ];
-describe("HtmlFilter.applyTo()", () => {
-  test("cases", async (t: TestContext) => {
+void describe("HtmlFilter.applyTo()", () => {
+  void test("cases", async (t: TestContext) => {
     for (const [i, [name, testData]] of applyToData.entries()) {
       await t.test(`[${i}] ${name} (disabled by test selector for debugging purpose)`, () => {
         if (TEST_SELECTOR && !name.startsWith(TEST_SELECTOR)) {

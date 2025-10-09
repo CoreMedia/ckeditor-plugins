@@ -1,5 +1,5 @@
 // noinspection HtmlUnknownAttribute,HtmlRequiredAltAttribute
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 import "global-jsdom/register";
 import test, { describe } from "node:test";
 import * as aut from "../../src/rules/ImageElements";
@@ -8,7 +8,7 @@ import { bijective, TestDirection, toData } from "./TestDirection";
 import { INLINE_IMG } from "../../src/rules/ImageElements";
 import { RulesTester } from "./RulesTester";
 
-describe("ImageElements", () => {
+void describe("ImageElements", () => {
   const ruleConfigurations = [aut.imageElements];
   const imgHref = "content/0#properties.data";
   const someImageUrl = "https://e.org/external.webp";
@@ -72,7 +72,7 @@ describe("ImageElements", () => {
   ];
 
   for (const [index, { data, direction, view }] of testCases.entries()) {
-    test(`[${index}] Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
+    void test(`[${index}] Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
       const dataString = richtext(data);
       const htmlString = `<body>${view}</body>`;
       const tester = new RulesTester(ruleConfigurations, "p", "p");

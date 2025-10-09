@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 import "global-jsdom/register";
 import test, { describe } from "node:test";
 import * as aut from "../../src/rules/CodeElements";
@@ -6,7 +6,7 @@ import { p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-dat
 import { bijective, TestDirection } from "./TestDirection";
 import { RulesTester } from "./RulesTester";
 
-describe("CodeElements", () => {
+void describe("CodeElements", () => {
   const ruleConfigurations = [aut.codeElements];
   const text = "T";
 
@@ -25,7 +25,7 @@ describe("CodeElements", () => {
   ];
 
   for (const [index, { data, direction, view }] of codeMappingTestCases.entries()) {
-    test(`[${index}] Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
+    void test(`[${index}] Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
       const dataString = richtext(p(data));
       const htmlString = `<body><p>${view}</p></body>`;
       const tester = new RulesTester(ruleConfigurations, "p > *");

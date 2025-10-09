@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 
 import "global-jsdom/register";
 import test, { describe } from "node:test";
@@ -52,7 +52,7 @@ const wrapContent = (content: string): string => `<div xmlns="${ns_richtext}">${
  *   class    CDATA     #IMPLIED >
  * ```
  */
-describe("CoreMediaRichTextConfig: Miscellaneous Inline Tags", () => {
+void describe("CoreMediaRichTextConfig: Miscellaneous Inline Tags", () => {
   const replaceInlineSimpleFixtures: DataProcessingTestCase[] = flatten(
     [
       {
@@ -240,7 +240,7 @@ describe("CoreMediaRichTextConfig: Miscellaneous Inline Tags", () => {
 
   allDataProcessingTests(data);
 
-  describe("Ambiguous States", () => {
+  void describe("Ambiguous States", () => {
     const cases = [
       { classes: "strike underline", remainingClasses: [] },
       { classes: "underline strike", remainingClasses: [] },
@@ -251,7 +251,7 @@ describe("CoreMediaRichTextConfig: Miscellaneous Inline Tags", () => {
     ];
 
     for (const [index, { classes, remainingClasses }] of cases.entries()) {
-      test(`[${index}] Should map ambiguous <span class="${classes}"> to either <u> or <s> keeping possibly remaining classes.`, () => {
+      void test(`[${index}] Should map ambiguous <span class="${classes}"> to either <u> or <s> keeping possibly remaining classes.`, () => {
         const filter = getFilter(Direction.toDataView);
         const input = wrapContent(`<p><span class="${classes}">${text}</span></p>`);
         // silent: We expect a warning here. Don't show it in tests.

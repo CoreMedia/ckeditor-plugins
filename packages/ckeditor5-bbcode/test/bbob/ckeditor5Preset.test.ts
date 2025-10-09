@@ -11,47 +11,47 @@ type HtmlResult = ReturnType<typeof html>;
 
 const parse = (input: HtmlInput): HtmlResult => html(input, preset());
 
-describe("ckeditor5Preset", () => {
-  describe("Original Tests from: @bbob/preset-html5", () => {
-    test("[b]bolded text[/b]", () => {
+void describe("ckeditor5Preset", () => {
+  void describe("Original Tests from: @bbob/preset-html5", () => {
+    void test("[b]bolded text[/b]", () => {
       const input = "[b]bolded text[/b]";
       const result = '<span style="font-weight: bold;">bolded text</span>';
       expect(parse(input)).toBe(result);
     });
 
-    test("[i]italicized text[/i]", () => {
+    void test("[i]italicized text[/i]", () => {
       const input = "[i]italicized text[/i]";
       const result = '<span style="font-style: italic;">italicized text</span>';
       expect(parse(input)).toBe(result);
     });
 
-    test("[u]underlined text[/u]", () => {
+    void test("[u]underlined text[/u]", () => {
       const input = "[u]underlined text[/u]";
       const result = '<span style="text-decoration: underline;">underlined text</span>';
       expect(parse(input)).toBe(result);
     });
 
-    test("[s]strikethrough text[/s]", () => {
+    void test("[s]strikethrough text[/s]", () => {
       const input = "[s]strikethrough text[/s]";
       const result = '<span style="text-decoration: line-through;">strikethrough text</span>';
       expect(parse(input)).toBe(result);
     });
 
-    test("[url]https://en.wikipedia.org[/url]", () => {
+    void test("[url]https://en.wikipedia.org[/url]", () => {
       const input = "[url]https://en.wikipedia.org[/url]";
       const result = '<a href="https://en.wikipedia.org">https://en.wikipedia.org</a>';
 
       expect(parse(input)).toBe(result);
     });
 
-    test("[url=http://step.pgc.edu/]ECAT[/url]", () => {
+    void test("[url=http://step.pgc.edu/]ECAT[/url]", () => {
       const input = "[url=http://step.pgc.edu/]ECAT[/url]";
       const result = '<a href="http://step.pgc.edu/">ECAT</a>';
 
       expect(parse(input)).toBe(result);
     });
 
-    test("[img]https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Go-home-2.svg/100px-Go-home-2.svg.png[/img]", () => {
+    void test("[img]https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Go-home-2.svg/100px-Go-home-2.svg.png[/img]", () => {
       const input =
         "[img]https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Go-home-2.svg/100px-Go-home-2.svg.png[/img]";
       const result =
@@ -97,14 +97,14 @@ describe("ckeditor5Preset", () => {
       expect(parse(input)).toBe(result);
     });
 
-    test(`[list][*]Entry 1[/list]`, () => {
+    void test(`[list][*]Entry 1[/list]`, () => {
       const input = `[list][*]Entry 1[*]Entry 2[/list]`;
       const result = "<ul><li>Entry 1</li><li>Entry 2</li></ul>";
 
       expect(parse(input)).toBe(result);
     });
 
-    test(`[list]*Entry 1[/list]`, () => {
+    void test(`[list]*Entry 1[/list]`, () => {
       const input = `\
     [list]
     *Entry 1
@@ -121,21 +121,21 @@ describe("ckeditor5Preset", () => {
       expect(parse(input)).toBe(result.trim());
     });
 
-    test("[list=1][/list]", () => {
+    void test("[list=1][/list]", () => {
       const input = `[list=1][/list]`;
       const result = `<ol type="1"></ol>`;
 
       expect(parse(input)).toBe(result);
     });
 
-    test("[list=A][/list]", () => {
+    void test("[list=A][/list]", () => {
       const input = `[list=A][/list]`;
       const result = `<ol type="A"></ol>`;
 
       expect(parse(input)).toBe(result);
     });
 
-    test(`[table][/table]`, () => {
+    void test(`[table][/table]`, () => {
       const input = `[table][tr][td]table 1[/td][td]table 2[/td][/tr][tr][td]table 3[/td][td]table 4[/td][/tr][/table]`;
       const result = `<table><tr><td>table 1</td><td>table 2</td></tr><tr><td>table 3</td><td>table 4</td></tr></table>`;
 
@@ -154,7 +154,7 @@ describe("ckeditor5Preset", () => {
    * Added tests in here should reference an issue and specify a type, thus,
    * if we just accepted it as known issue, or if we had to apply a workaround.
    */
-  describe("BBob Flawed Behaviors", () => {
+  void describe("BBob Flawed Behaviors", () => {
     // noinspection HtmlUnknownTarget,HtmlUnknownAttribute,BadExpressionStatementJS
     const cases = [
       {
@@ -196,7 +196,7 @@ describe("ckeditor5Preset", () => {
       },
     ] as const;
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { bbcode, expected, issue, comment }] of cases.entries()) {
         await t.test(`[${i}] Expected flawed behavior: '${bbcode}' to '${expected}' (${issue}, ${comment})`, () => {
           expect(parse(bbcode)).toBe(expected);
@@ -205,10 +205,10 @@ describe("ckeditor5Preset", () => {
     });
   });
 
-  describe("CKEditor 5 Data View Specific Adaptations", () => {
+  void describe("CKEditor 5 Data View Specific Adaptations", () => {
     // We have overridden the behavior to also include a nested `<code>`
     // element.
-    describe("[code]", () => {
+    void describe("[code]", () => {
       const cases = [
         {
           bbcode: "[code]text[/code]",
@@ -227,7 +227,7 @@ describe("ckeditor5Preset", () => {
         },
       ] as const;
 
-      test("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { bbcode, expected, comment }] of cases.entries()) {
           await t.test(`[${i}] Should transform $bbcode to: ${expected} (${comment})`, () => {
             expect(parse(bbcode)).toBe(expected);
@@ -236,7 +236,7 @@ describe("ckeditor5Preset", () => {
       });
     });
 
-    describe("Paragraphs (denoted by double newline)", () => {
+    void describe("Paragraphs (denoted by double newline)", () => {
       const cases = [
         {
           bbcode: `Lorem\n\nIpsum`,
@@ -290,7 +290,7 @@ describe("ckeditor5Preset", () => {
         },
       ] as const;
 
-      test("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { bbcode, expected, comment }] of cases.entries()) {
           await t.test(`[${i}] Should transform $bbcode to: ${expected} (${comment})`, () => {
             expect(parse(bbcode)).toBe(expected);
@@ -300,11 +300,11 @@ describe("ckeditor5Preset", () => {
     });
   });
 
-  describe("Additional Tag Support", () => {
+  void describe("Additional Tag Support", () => {
     // [size] Was supported in CKEditor 4 BBCode Plugin. The number represented
     // a percentage value. As CKEditor 5 does not support percentage values in
     // Font Size Feature, some enum-like mapping to classes is applied.
-    describe("[size]", () => {
+    void describe("[size]", () => {
       const cases = [
         {
           bbcode: `[size]T[/size]`,
@@ -405,7 +405,7 @@ describe("ckeditor5Preset", () => {
         },
       ] as const;
 
-      test("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { bbcode, expected, comment }] of cases.entries()) {
           await t.test(`[${i}] Should transform $bbcode to: ${expected} (${comment})`, () => {
             expect(parse(bbcode)).toBe(expected);

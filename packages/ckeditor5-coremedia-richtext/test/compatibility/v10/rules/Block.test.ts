@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+
 
 import "global-jsdom/register";
 import { describe } from "node:test";
@@ -40,7 +40,7 @@ const wrapContent = (content: string): string => `<div xmlns="${ns_richtext}">${
  *   class     CDATA      #IMPLIED >
  * ```
  */
-describe("CoreMediaRichTextConfig: Miscellaneous Block Tags", () => {
+void describe("CoreMediaRichTextConfig: Miscellaneous Block Tags", () => {
   const defaultBlockFixtures: DataProcessingTestCase[] = flatten(
     ["p", "pre", "blockquote"].map((el): DataProcessingTestCase[] => {
       const key = el.toUpperCase();

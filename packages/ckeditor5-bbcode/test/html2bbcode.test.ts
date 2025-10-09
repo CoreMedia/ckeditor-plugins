@@ -28,7 +28,7 @@ const url = {
   relative: "/example",
 };
 
-describe("html2bbcode", () => {
+void describe("html2bbcode", () => {
   // noinspection HtmlDeprecatedTag,XmlDeprecatedElement
   describe.each`
     tag               | openElement                                        | closeElement   | openTag                      | closeTag
@@ -74,7 +74,7 @@ describe("html2bbcode", () => {
         },
       ];
 
-      test("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { dataView, expectedData, comment }] of cases.entries()) {
           await t.test(`[${i}] Should process data view '${dataView}' to: '${expectedData}' (${comment})`, () => {
             aut.expectTransformation({ dataView, expectedData });
@@ -84,7 +84,7 @@ describe("html2bbcode", () => {
     },
   );
 
-  describe("[url]", () => {
+  void describe("[url]", () => {
     const cases = [
       {
         dataView: `<a href="${url.absolute}">T</a>`,
@@ -128,7 +128,7 @@ describe("html2bbcode", () => {
       },
     ] as const;
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { dataView, expectedData, comment }] of cases.entries()) {
         await t.test(`[${i}] Should process data view '${dataView}' to: '${expectedData}' (${comment})`, () => {
           aut.expectTransformation({ dataView, expectedData });
@@ -137,7 +137,7 @@ describe("html2bbcode", () => {
     });
   });
 
-  describe("[img]", () => {
+  void describe("[img]", () => {
     // noinspection HtmlRequiredAltAttribute
     const cases = [
       {
@@ -198,7 +198,7 @@ describe("html2bbcode", () => {
       },
     ] as const;
 
-    test("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { dataView, expectedData, comment }] of cases.entries()) {
         await t.test(`[${i}] Should process data view '${dataView}' to: '${expectedData}' (${comment})`, () => {
           aut.expectTransformation({ dataView, expectedData });

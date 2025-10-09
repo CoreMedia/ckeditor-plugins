@@ -8,8 +8,8 @@ import { isHasNamespaceUri } from "../src/HasNamespaceUris";
 const htmlDocument = documentFromHtml(`<html lang="aa" id="ID"/>`);
 const langAttribute = htmlDocument.documentElement.getAttributeNode("lang");
 
-describe("HasNamespaceUris", () => {
-  describe("isHasNamespaceUri", () => {
+void describe("HasNamespaceUris", () => {
+  void describe("isHasNamespaceUri", () => {
     test(USE_CASE_NAME, () => {
       const value: unknown = htmlDocument;
       if (isHasNamespaceUri(value)) {
@@ -21,7 +21,7 @@ describe("HasNamespaceUris", () => {
     const matchedCases = [langAttribute, htmlDocument.documentElement];
 
     for (const [i, matched] of matchedCases.entries()) {
-      test(`[${i}] should match any node providing namespaceURI: ${String(matched)}`, () => {
+      void test(`[${i}] should match any node providing namespaceURI: ${String(matched)}`, () => {
         expect(isHasNamespaceUri(matched)).toBeTruthy();
       });
     }
@@ -29,7 +29,7 @@ describe("HasNamespaceUris", () => {
     const unmatchedCases = [undefined, null];
 
     for (const [i, unmatched] of unmatchedCases.entries()) {
-      test(`[${i}] should not match any other objects than HasNamespaceUris: ${String(unmatched)}`, () => {
+      void test(`[${i}] should not match any other objects than HasNamespaceUris: ${String(unmatched)}`, () => {
         expect(isHasNamespaceUri(unmatched)).toBeFalsy();
       });
     }
