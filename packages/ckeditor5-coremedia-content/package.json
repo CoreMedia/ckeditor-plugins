@@ -36,7 +36,9 @@
   ],
   "license": "Apache-2.0",
   "devDependencies": {
+    "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.d5b6464",
     "@coremedia/service-agent": "^1.1.5",
+    "@types/node": "^22.0.0",
     "ckeditor5": "46.1.1",
     "copyfiles": "^2.4.1",
     "rimraf": "^6.0.1",

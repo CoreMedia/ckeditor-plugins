@@ -62,7 +62,8 @@
     "@coremedia/ckeditor5-logging": "25.0.4-rc.1"
   },
   "devDependencies": {
-    "@types/node": "^20.16.5",
+    "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.d5b6464",
+    "@types/node": "^22.0.0",
     "ckeditor5": "46.1.1",
     "copyfiles": "^2.4.1",
     "expect": "^30.2.0",

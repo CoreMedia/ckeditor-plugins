@@ -37,7 +37,8 @@
   ],
   "license": "Apache-2.0",
   "devDependencies": {
-    "@types/node": "^20.16.5",
+    "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.d5b6464",
+    "@types/node": "^22.0.0",
     "@types/webpack": "^5.28.5",
     "ckeditor5": "46.1.1",
     "copyfiles": "^2.4.1",
