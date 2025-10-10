@@ -48,7 +48,7 @@
     "/theme"
   ],
   "devDependencies": {
-    "@coremedia/service-agent": "^1.1.5",
+    "@coremedia/service-agent": "^2.1.2",
     "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.d5b6464",
     "@types/node": "^22.0.0",
     "ckeditor5": "46.1.1",
@@ -60,7 +60,7 @@
     "typescript": "5.4.5"
   },
   "peerDependencies": {
-    "@coremedia/service-agent": "^1.1.5 || ^2.0.1",
+    "@coremedia/service-agent": "^2.1.2",
     "ckeditor5": "46.1.1"
   },
   "dependencies": {

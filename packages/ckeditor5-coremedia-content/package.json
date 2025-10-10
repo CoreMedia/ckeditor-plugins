@@ -37,7 +37,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.d5b6464",
-    "@coremedia/service-agent": "^1.1.5",
+    "@coremedia/service-agent": "^2.1.2",
     "@types/node": "^22.0.0",
     "ckeditor5": "46.1.1",
     "copyfiles": "^2.4.1",
@@ -49,7 +49,7 @@
     "@coremedia/ckeditor5-logging": "25.0.4-rc.1"
   },
   "peerDependencies": {
-    "@coremedia/service-agent": "^1.1.5 || ^2.0.1",
+    "@coremedia/service-agent": "^2.1.2",
     "ckeditor5": "46.1.1"
   },
   "scripts": {
