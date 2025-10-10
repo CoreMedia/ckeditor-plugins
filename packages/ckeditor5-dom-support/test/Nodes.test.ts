@@ -1,10 +1,9 @@
-import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
-import { USE_CASE_NAME } from "./Constants";
 import { documentFromHtml, documentFromXml } from "../src/Documents";
 import { extractNodeContents, lookupNamespaceURI, serializeToXmlString } from "../src/Nodes";
 import { fragmentFromNodeContents } from "../src/DocumentFragments";
+import { USE_CASE_NAME } from "./Constants";
 
 void describe("Nodes", () => {
   void describe("serializeToXmlString", () => {

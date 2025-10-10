@@ -1,9 +1,9 @@
 import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
-import { USE_CASE_NAME } from "./Constants";
 import { fragmentFromNodeContents, isDocumentFragment } from "../src/DocumentFragments";
 import { documentFromHtml } from "../src/Documents";
+import { USE_CASE_NAME } from "./Constants";
 
 void describe("DocumentFragments", () => {
   void describe("fragmentFromNodeContents", () => {

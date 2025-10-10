@@ -1,16 +1,9 @@
-import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
-import { documentFromHtml, isHTMLElement, rgb } from "../src";
-import {
-  fontWeightToNumber,
-  FontWeightInformation,
-  getFontWeight,
-  getColor,
-  getFontWeightNumeric,
-} from "../src/CSSStyleDeclarations";
-import { RequireSelected } from "@coremedia/ckeditor5-common";
-import { RgbColor } from "@coremedia/ckeditor5-dom-support";
+import type { RequireSelected } from "@coremedia/ckeditor5-common";
+import { documentFromHtml, isHTMLElement, rgb, RgbColor } from "../src";
+import type { FontWeightInformation } from "../src/CSSStyleDeclarations";
+import { fontWeightToNumber, getFontWeight, getColor, getFontWeightNumeric } from "../src/CSSStyleDeclarations";
 
 const parseFirstElement = (html: string): Element | undefined =>
   documentFromHtml(html).body.firstElementChild ?? undefined;

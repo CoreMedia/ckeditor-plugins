@@ -1,4 +1,3 @@
-import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
 import { documentFromHtml, documentFromXml, isDocument } from "../src/Documents";

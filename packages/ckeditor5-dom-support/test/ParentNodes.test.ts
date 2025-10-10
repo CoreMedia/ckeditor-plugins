@@ -1,9 +1,8 @@
-import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
-import { USE_CASE_NAME } from "./Constants";
 import { documentFromHtml, documentFromXml } from "../src/Documents";
 import { isParentNode } from "../src/ParentNodes";
+import { USE_CASE_NAME } from "./Constants";
 
 void describe("ParentNodes", () => {
   void describe("isParentNodes", () => {

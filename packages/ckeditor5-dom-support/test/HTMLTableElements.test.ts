@@ -1,9 +1,8 @@
-import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
-import { USE_CASE_NAME } from "./Constants";
 import { documentFromHtml, documentFromXml } from "../src/Documents";
 import { HTMLTableElementWrapper, isHTMLTableElement, wrapIfTableElement } from "../src/HTMLTableElements";
+import { USE_CASE_NAME } from "./Constants";
 
 void describe("HTMLTableElements", () => {
   void describe("isHTMLTableElement", () => {
@@ -44,9 +43,8 @@ void describe("HTMLTableElements", () => {
     });
 
     const matchedCases = [
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       documentFromHtml("<body><table/></body>").body.firstElementChild!,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
       documentFromXml("<root><table/></root>").documentElement.firstElementChild!,
     ];
 

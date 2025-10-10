@@ -1,10 +1,10 @@
-import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
-import { USE_CASE_NAME } from "./Constants";
 import { documentFromHtml, documentFromXml } from "../src/Documents";
-import { ElementDefinition, isElement, removeClass, renameElement } from "../src/Elements";
+import type { ElementDefinition } from "../src/Elements";
+import { isElement, removeClass, renameElement } from "../src/Elements";
 import { serializeToXmlString } from "../src/Nodes";
+import { USE_CASE_NAME } from "./Constants";
 
 void describe("Elements", () => {
   void describe("isElement", () => {

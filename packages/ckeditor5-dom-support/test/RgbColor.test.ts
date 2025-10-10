@@ -1,11 +1,10 @@
-import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
 import { RgbColor, rgb } from "../src/RgbColor";
 
 void describe("RgbColor", () => {
   void describe("RgbColor.tryParse", () => {
-    const rgbTests = [
+    const rgbTests: { rgb: string; expected: RgbColor | undefined; comment: string }[] = [
       { rgb: "", expected: undefined, comment: "empty string not considered valid" },
       { rgb: "rgb(1,2,3)", expected: rgb(1, 2, 3), comment: "rgb without spacing" },
       { rgb: "rgb( 1 , 2 , 3 )", expected: rgb(1, 2, 3), comment: "rgb with spacing" },
@@ -32,7 +31,7 @@ void describe("RgbColor", () => {
         if (!expected) {
           expect(actual).toBeUndefined();
         } else {
-          expect(actual).toMatchObject(expected);
+          expect(actual?.toHex()).toStrictEqual(expected.toHex());
         }
       });
     }
