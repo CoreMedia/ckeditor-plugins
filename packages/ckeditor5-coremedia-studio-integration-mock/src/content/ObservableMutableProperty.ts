@@ -47,14 +47,20 @@ class MutablePropertyObservationHandler<T> {
    * `changeDelayMs < 1`.
    */
   readonly #iterateOnlyOnce: boolean;
+  /**
+   * Optional count of iterations
+   */
+  readonly #iterations: number | undefined;
 
   /**
-   * Constructor.
-   *
-   * @param delays - delays in milliseconds to apply
-   * @param property - property values to possibly iterate
+   ;;; * Constructor.
+   ;;; *
+   ;;; * @param delays - delays in milliseconds to apply
+   ;;; * @param property - property values to possibly iterate
+   ;;; * @param iterations - optional count of iterations
+   ;;;
    */
-  constructor(delays: Delayed, property: AtomicOrArray<T>) {
+  constructor(delays: Delayed, property: AtomicOrArray<T>, iterations?: number) {
     const { initialDelayMs, changeDelayMs } = delays;
     this.#values = ([] as T[]).concat(property);
 
@@ -68,6 +74,7 @@ class MutablePropertyObservationHandler<T> {
     // Nevertheless, a change delay of 0 or less is meant for testing purpose
     // to trigger only one iteration through all values.
     this.#iterateOnlyOnce = changeDelayMs < 1 || this.#valuesLength < 2;
+    this.#iterations = iterations;
   }
 
   /**
@@ -87,9 +94,10 @@ class MutablePropertyObservationHandler<T> {
     let idxCurrentValue = 0;
     // Timer ID to unsubscribe.
     let timerId: number | undefined;
-
+    let lap = 0;
     // Nested Timeout: https://javascript.info/settimeout-setinterval#nested-settimeout
     const handler = (): number | undefined => {
+      lap++;
       if (anyValue) {
         // There is at least one value, so let's provide it.
         const nextValue = values[idxCurrentValue];
@@ -109,6 +117,10 @@ class MutablePropertyObservationHandler<T> {
         //
         // Tests need to ensure, to trigger completion on their own, for
         // example by limiting the retrieved values via `take(number)` operator.
+        return undefined;
+      }
+
+      if (typeof this.#iterations === "number" && lap > this.#iterations) {
         return undefined;
       }
 
@@ -151,13 +163,13 @@ class MutablePropertyObservationHandler<T> {
  * until subscription ends.
  */
 class ObservableMutableProperty<T> extends Observable<T> {
-  constructor(delays: Delayed, property: AtomicOrArray<T>) {
-    super(new MutablePropertyObservationHandler(delays, property).subscription);
+  constructor(delays: Delayed, property: AtomicOrArray<T>, iterations?: number) {
+    super(new MutablePropertyObservationHandler(delays, property, iterations).subscription);
   }
 }
 
-const observeMutableProperty = <T>(delays: Delayed, property: AtomicOrArray<T>): Observable<T> =>
-  new ObservableMutableProperty<T>(delays, property);
+const observeMutableProperty = <T>(delays: Delayed, property: AtomicOrArray<T>, iterations?: number): Observable<T> =>
+  new ObservableMutableProperty<T>(delays, property, iterations);
 
 export default ObservableMutableProperty;
 export { observeMutableProperty, MutablePropertyObservationHandler };
