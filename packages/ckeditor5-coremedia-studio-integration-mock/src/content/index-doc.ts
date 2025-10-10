@@ -19,7 +19,6 @@ export { default as MockClipboardService } from "./MockClipboardService";
 export * from "./MockContent";
 export { default as MockContent } from "./MockContent";
 
-export * from "./MockContentDisplayService";
 export { default as MockContentDisplayService } from "./MockContentDisplayService";
 
 export * from "./MockContentObject";
@@ -33,7 +32,6 @@ export { default as MockContentType } from "./MockContentType";
 
 export * from "./MockContentUtils";
 
-export * from "./MockDragDropService";
 export { default as MockDragDropService } from "./MockDragDropService";
 
 export * from "./MockExternalContentPlugin";
@@ -44,12 +42,10 @@ export * from "./MockFixtures";
 export * from "./MockInputExamplePlugin";
 export { default as MockInputExamplePlugin } from "./MockInputExamplePlugin";
 
-export * from "./MockRichtextConfigurationService";
 export { default as MockRichtextConfigurationService } from "./MockRichtextConfigurationService";
 
 export { default as MockServiceAgentPlugin } from "./MockServiceAgentPlugin";
 
-export * from "./MockContentFormService";
 export { default as MockContentFormService } from "./MockContentFormService";
 
 export * from "./MutableProperties";
@@ -62,7 +58,6 @@ export * from "./PredefinedMockContents";
 export * from "./RequiredFrom";
 export { default as RequiredFrom } from "./RequiredFrom";
 
-export * from "./RequireOnly";
 export { default as RequireOnly } from "./RequireOnly";
 
 export * from "./RxJsConvenience";

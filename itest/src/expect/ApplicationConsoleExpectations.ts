@@ -1,5 +1,5 @@
-import { ApplicationConsole } from "../aut/ApplicationConsole";
 import { ConsoleMessage } from "playwright-core";
+import { ApplicationConsole } from "../aut/ApplicationConsole";
 
 /**
  * Maps messages to some representation for output. Ignores arguments, as they

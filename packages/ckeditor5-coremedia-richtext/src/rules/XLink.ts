@@ -48,7 +48,7 @@ export const extractXLinkDataSetEntries = (element: HTMLElement): XLinkAttribute
         // no-dynamic-delete: I do not see any better option here to remove
         // the data attribute without mangling with the attribute name, which
         // again may open a door to XSS attacks if not carefully designed.
-        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+
         delete element.dataset[key];
         // noinspection SuspiciousTypeOfGuard
         if (typeof value === "string") {

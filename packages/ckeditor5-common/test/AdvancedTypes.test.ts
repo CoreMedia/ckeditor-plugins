@@ -1,4 +1,3 @@
-/* eslint no-null/no-null: off */
 import "global-jsdom/register";
 import test, { describe, TestContext } from "node:test";
 import expect from "expect";

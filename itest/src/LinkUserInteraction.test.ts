@@ -1,9 +1,9 @@
-import { ApplicationWrapper } from "./aut/ApplicationWrapper";
-import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { a, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
+import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { Page } from "playwright";
+import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { MockServiceAgentPluginWrapper } from "./aut/services/MockServiceAgentPluginWrapper";
 import "./expect/Expectations";
-import { Page } from "playwright";
 
 const externalLinkUrl = "https://www.coremedia.com/";
 

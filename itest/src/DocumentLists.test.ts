@@ -1,4 +1,3 @@
-import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import {
   a,
   blockquote,
@@ -19,6 +18,7 @@ import {
   ul,
   blobReference,
 } from "@coremedia-internal/ckeditor5-coremedia-example-data";
+import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import "./expect/Expectations";
 
 const olString = "ol";

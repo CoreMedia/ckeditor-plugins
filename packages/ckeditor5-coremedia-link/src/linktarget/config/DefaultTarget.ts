@@ -1,8 +1,8 @@
-import LinkTargetOptionDefinition from "./LinkTargetOptionDefinition";
 import selfIcon from "../../../theme/icons/openInCurrentTab.svg";
 import blankIcon from "../../../theme/icons/openInNewTab.svg";
 import embedIcon from "../../../theme/icons/embed.svg";
 import otherIcon from "../../../theme/icons/openInFrame.svg";
+import LinkTargetOptionDefinition from "./LinkTargetOptionDefinition";
 
 /**
  * Artificial target name for the recommended minimal target configuration to
@@ -17,9 +17,7 @@ export type DefaultTarget = "_self" | "_blank" | "_embed" | typeof OTHER_TARGET_
 
 export default DefaultTarget;
 
-export type DefaultTargetOptions = {
-  [key in DefaultTarget]: Required<Omit<LinkTargetOptionDefinition, "name">>;
-};
+export type DefaultTargetOptions = Record<DefaultTarget, Required<Omit<LinkTargetOptionDefinition, "name">>>;
 
 /**
  * Default targets to choose from.

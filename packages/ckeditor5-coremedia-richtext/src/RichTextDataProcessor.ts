@@ -1,6 +1,4 @@
 import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import RichTextXmlWriter from "./RichTextXmlWriter";
-import { COREMEDIA_RICHTEXT_NAMESPACE_URI, COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import {
   DataProcessor,
   ViewDomConverter,
@@ -18,10 +16,12 @@ import {
   RuleConfig,
   RuleSection,
 } from "@coremedia/ckeditor5-dom-converter";
+import { registerNamespacePrefixes } from "@coremedia/ckeditor5-dom-support";
+import RichTextXmlWriter from "./RichTextXmlWriter";
+import { COREMEDIA_RICHTEXT_NAMESPACE_URI, COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import { declareCoreMediaRichText10Entities } from "./Entities";
 import { defaultRules } from "./rules/DefaultRules";
 import { Strictness } from "./Strictness";
-import { registerNamespacePrefixes } from "@coremedia/ckeditor5-dom-support";
 import { TrackingSanitationListener } from "./sanitation/TrackingSanitationListener";
 import { RichTextSanitizer } from "./sanitation/RichTextSanitizer";
 import { getLatestCoreMediaRichTextConfig } from "./CoreMediaRichTextConfig";

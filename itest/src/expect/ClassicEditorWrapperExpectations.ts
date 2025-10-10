@@ -1,5 +1,5 @@
-import { extendingWaitForExpect } from "./ExpectationsBase";
 import { ClassicEditorWrapper } from "../aut/ClassicEditorWrapper";
+import { extendingWaitForExpect } from "./ExpectationsBase";
 
 /**
  * JEST Extension: Add matchers for `ClassicEditorWrapper`.

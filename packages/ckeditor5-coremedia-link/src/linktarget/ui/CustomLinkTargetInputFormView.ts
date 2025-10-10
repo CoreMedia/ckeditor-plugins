@@ -5,7 +5,6 @@ import {
   ButtonView,
   ViewCollection,
   FocusCycler,
-  injectCssTransitionDisabler,
   submitHandler,
   InputTextView,
   FocusableView,
@@ -111,7 +110,7 @@ export default class CustomLinkTargetInputFormView extends View {
     });
 
     // TODO[cke] Address Deprecation
-    injectCssTransitionDisabler(this);
+    //injectCssTransitionDisabler(this);
   }
 
   /**
@@ -178,5 +177,9 @@ export default class CustomLinkTargetInputFormView extends View {
     const labeledInput = new LabeledFieldView<InputTextView>(this.locale, createLabeledInputText);
     labeledInput.label = t?.("Target") ?? "Target";
     return labeledInput;
+  }
+
+  getFocusCycler(): FocusCycler {
+    return this.#focusCycler;
   }
 }

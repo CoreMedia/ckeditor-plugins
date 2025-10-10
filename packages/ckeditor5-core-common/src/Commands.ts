@@ -1,5 +1,6 @@
 import { Editor, Command } from "ckeditor5";
 import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+
 const commandsLogger: Logger = LoggerProvider.getLogger("Commands");
 
 /**
@@ -90,7 +91,7 @@ export const recommendCommand = (
  * @param commandName - command name to search for
  */
 // Promise used to benefit from then-API.
-// eslint-disable-next-line @typescript-eslint/require-await
+
 export const ifCommand = async (editor: Editor, commandName: string): Promise<Command> => {
   const command = editor.commands.get(commandName);
   if (!command) {

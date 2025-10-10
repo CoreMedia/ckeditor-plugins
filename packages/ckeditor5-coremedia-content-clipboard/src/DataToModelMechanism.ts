@@ -1,9 +1,6 @@
-import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
-import ContentInputDataCache, { ContentInputData } from "./ContentInputDataCache";
 import { serviceAgent } from "@coremedia/service-agent";
 import { Editor, ModelNode, ModelPosition, ModelRange, ModelWriter, PendingActions } from "ckeditor5";
 import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import MarkerRepositionUtil from "./MarkerRepositionUtil";
 import {
   ContentImportService,
   COREMEDIA_CONTEXT_KEY,
@@ -13,9 +10,12 @@ import {
   IContentReferenceService,
   RichtextConfigurationService,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common";
+import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
+import ContentInputDataCache, { ContentInputData } from "./ContentInputDataCache";
+import MarkerRepositionUtil from "./MarkerRepositionUtil";
 import ContentToModelRegistry, { CreateModelFunction } from "./ContentToModelRegistry";
 import { enableUndo, UndoSupport } from "./integrations/Undo";
-import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common";
 
 const UTILITY_NAME = "DataToModelMechanism";
 
@@ -54,7 +54,7 @@ const UTILITY_NAME = "DataToModelMechanism";
  * Now, the model then is written, the view updates accordingly and the marker
  * (loading animation) gets removed.
  */
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
+
 export default class DataToModelMechanism {
   static readonly #logger: Logger = LoggerProvider.getLogger(UTILITY_NAME);
 

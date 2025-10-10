@@ -17,11 +17,9 @@ export { default as CoreMediaRichText10Dtd } from "./CoreMediaRichText10Dtd";
 export * from "./CoreMediaRichTextSupportConfig";
 export { default as CoreMediaRichTextSupportConfig } from "./CoreMediaRichTextSupportConfig";
 
-export * from "./GeneralRichTextSupport";
 export { default as GeneralRichTextSupport } from "./GeneralRichTextSupport";
 
 export * from "./ReducedMatcherPattern";
 export { default as ReducedMatcherPattern } from "./ReducedMatcherPattern";
 
-export * from "./RichTextDataFilter";
 export { default as RichTextDataFilter } from "./RichTextDataFilter";

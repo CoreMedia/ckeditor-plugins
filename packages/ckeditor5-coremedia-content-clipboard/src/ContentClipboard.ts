@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import {
   Clipboard,
@@ -21,17 +19,17 @@ import {
   ViewDocumentFragment,
   ViewRange,
 } from "ckeditor5";
-import ContentClipboardEditing from "./ContentClipboardEditing";
 import { InitInformation, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
-import { disableUndo, UndoSupport } from "./integrations/Undo";
 import { isRaw } from "@coremedia/ckeditor5-common";
-import { insertContentMarkers } from "./ContentMarkers";
 import {
   getEvaluationResult,
   isDroppable,
   IsDroppableEvaluationResult,
   receiveDraggedItemsFromDataTransfer,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import ContentClipboardEditing from "./ContentClipboardEditing";
+import { disableUndo, UndoSupport } from "./integrations/Undo";
+import { insertContentMarkers } from "./ContentMarkers";
 
 const PLUGIN_NAME = "ContentClipboardPlugin";
 

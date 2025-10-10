@@ -1,5 +1,5 @@
-import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 import { FontWeightInformation, fontWeightToNumber, getFontWeight } from "@coremedia/ckeditor5-dom-support";
+import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 
 /**
  * Possible HTML tags that denote a bold style.

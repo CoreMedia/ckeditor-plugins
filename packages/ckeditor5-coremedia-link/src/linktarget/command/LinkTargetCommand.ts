@@ -1,4 +1,3 @@
-import { LINK_TARGET_MODEL } from "../Constants";
 import { LINK_HREF_MODEL } from "@coremedia/ckeditor5-link-common";
 import {
   Command,
@@ -12,6 +11,7 @@ import {
   first,
   findAttributeRange,
 } from "ckeditor5";
+import { LINK_TARGET_MODEL } from "../Constants";
 
 /**
  * Signals to delete a target.

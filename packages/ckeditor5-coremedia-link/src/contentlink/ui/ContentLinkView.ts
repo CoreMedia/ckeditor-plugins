@@ -7,9 +7,9 @@ import {
   ContentAsLink,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { Subscription } from "rxjs";
+import { ButtonView, Editor } from "ckeditor5";
 import CoreMediaIconView from "./CoreMediaIconView";
 import CancelButtonView from "./CancelButtonView";
-import { ButtonView, Editor } from "ckeditor5";
 
 const getTooltip = (contentAsLink: ContentAsLink) => {
   const sitePart = contentAsLink.site.name ? ` - ${contentAsLink.site.name}` : "";
@@ -231,6 +231,10 @@ export default class ContentLinkView extends ButtonView {
 
   get cancelButton(): ButtonView | undefined {
     return this.#cancelButton;
+  }
+
+  getEditor(): Editor {
+    return this.#editor;
   }
 
   override destroy(): void {

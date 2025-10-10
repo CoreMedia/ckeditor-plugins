@@ -53,6 +53,7 @@
     "clean:dist": "rimraf ./dist",
     "build": "tsc --project ./tsconfig.release.json",
     "postbuild": "node prepare-package.cjs && copyfiles ./README.md dist",
-    "test": "test-runner-react"
+    "test": "test-runner-react",
+    "lint": "eslint \"**/*.{js,cjs,mjs,ts,tsx}\""
   }
 }

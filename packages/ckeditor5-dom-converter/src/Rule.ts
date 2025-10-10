@@ -1,11 +1,12 @@
 import { PriorityString, priorities } from "ckeditor5";
+import { RequireSelected } from "@coremedia/ckeditor5-common";
 import {
   AppendedFunction,
   ImportedFunction,
   ImportedWithChildrenFunction,
   PrepareFunction,
 } from "./DomConverterStages";
-import { RequireSelected } from "@coremedia/ckeditor5-common";
+
 export interface RuleConfigBase {
   /**
    * Optional ID for rule. Possibly useful for debugging purpose. Propagated
@@ -138,7 +139,8 @@ export type RuleSectionConfig =
 export type TransformPropertyType<Type extends object, Key extends keyof Type, ValueType> = Pick<
   Type,
   keyof Omit<Type, Key>
-> & { [P in Key]: ValueType };
+> &
+  Record<Key, ValueType>;
 
 /**
  * Parsed Rule Section.

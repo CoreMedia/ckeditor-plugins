@@ -1,12 +1,12 @@
-/* eslint no-null/no-null: off */
-
-import { serviceAgent } from "@coremedia/service-agent";
+import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common";
 import {
   createBlobDisplayServiceDescriptor,
   InlinePreview,
   requireContentUriPath,
   UriPath,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import { serviceAgent } from "@coremedia/service-agent";
 import {
   DowncastDispatcher,
   ViewDowncastWriter,
@@ -17,12 +17,10 @@ import {
   UpcastDispatcher,
   ViewElement,
 } from "ckeditor5";
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { IMAGE_PLUGIN_NAME, IMAGE_SPINNER_CSS_CLASS, IMAGE_SPINNER_SVG } from "./constants";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import "../theme/loadmask.css";
 import "./lang/contentimage";
-import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common";
 
 const LOGGER = LoggerProvider.getLogger(IMAGE_PLUGIN_NAME);
 
@@ -96,7 +94,7 @@ export const editingDowncastXlinkHref =
         // applying the loading spinner and resolving the image src
         return;
       }
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+
       onXlinkHrefEditingDowncast(editor, eventInfo, data, logger);
     });
   };
@@ -115,11 +113,11 @@ const onXlinkHrefEditingDowncast = (
   let uriPath: UriPath;
   try {
     uriPath = toUriPath(xlinkHref);
-  } catch (e) {
+  } catch (e: unknown) {
     // toUriPath() might throw an exception, but an unresolvable
     // uriPath should not result in an error, which would break the editor.
     // Therefore: Return early. An endless loading spinner will be displayed as a result.
-    logger.debug("Cannot resolve valid uriPath from xlink-href attribute:", xlinkHref);
+    logger.debug("Cannot resolve valid uriPath from xlink-href attribute:", xlinkHref, e);
     return;
   }
   const property: string = toProperty(xlinkHref);

@@ -22,6 +22,7 @@
     "clean": "pnpm clean:src && pnpm clean:dist",
     "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
     "clean:dist": "rimraf ./dist",
+    "lint": "eslint \"**/*.{js,cjs,mjs,ts,tsx}\"",
     "npm-check-updates": "npm-check-updates --upgrade"
   },
   "exports": {

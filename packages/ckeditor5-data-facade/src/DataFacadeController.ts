@@ -1,10 +1,10 @@
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+import { Editor, CKEditorError } from "ckeditor5";
 import type { GetDataOptions, SetDataData, SetDataOptions } from "./DataControllerApi";
 import type { DataContextOptions } from "./DataContextOptions";
 import { DataApi } from "./DataApi";
 import { CachedData } from "./CachedData";
 import { ContextMismatchError } from "./ContextMismatchError";
-import { Editor, CKEditorError } from "ckeditor5";
 
 /**
  * Controller for getting and setting data. It prefers providing data on get

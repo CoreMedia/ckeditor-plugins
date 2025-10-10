@@ -1,10 +1,10 @@
-import { editingDowncastXlinkHref, preventUpcastImageSrc } from "./converters";
 // ImageUtils: See ckeditor/ckeditor5#12027.
 // ImageInline: See ckeditor/ckeditor5#12027.
 import { Editor, ImageInline, ImageUtils, Plugin } from "ckeditor5";
-import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import { getOptionalPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
+import { editingDowncastXlinkHref, preventUpcastImageSrc } from "./converters";
 import {
   openImageInTabCommandName,
   registerOpenImageInTabCommand,

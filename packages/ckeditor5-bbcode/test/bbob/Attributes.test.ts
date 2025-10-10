@@ -1,13 +1,13 @@
 import "global-jsdom/register";
 import test, { describe, TestContext } from "node:test";
 import expect from "expect";
+import { TagAttrs } from "@bbob/plugin-helper/es";
 import {
   forEachAttribute,
   setAttributesFromTagAttrs,
   stripUniqueAttr,
   uniqueAttrToAttr,
 } from "../../src/bbob/Attributes";
-import { TagAttrs } from "@bbob/plugin-helper/es";
 
 void describe("Attributes", () => {
   void describe("forEachAttribute", () => {

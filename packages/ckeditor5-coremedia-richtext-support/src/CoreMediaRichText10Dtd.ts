@@ -17,7 +17,7 @@ import ReducedMatcherPattern, { mergePatterns } from "./ReducedMatcherPattern";
  * the configuration adds the known attribute `data-xlink-actuate` for
  * element `<a>`, for example.
  */
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
+
 class CoreMediaRichText10Dtd {
   static readonly coreattrs: ReducedMatcherPattern = {
     // Any class attribute values are allowed.

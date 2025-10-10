@@ -1,6 +1,7 @@
+import { ButtonView, ToolbarView } from "ckeditor5";
 import ToolbarViewWrapper from "../ToolbarViewWrapper";
 import ButtonViewWrapper from "./ButtonViewWrapper";
-import { ButtonView, ToolbarView } from "ckeditor5";
+
 export default class ImageContextualBalloonToolbar {
   readonly #toolbarViewWrapper: ToolbarViewWrapper;
   constructor(toolbarViewWrapper: ToolbarViewWrapper) {

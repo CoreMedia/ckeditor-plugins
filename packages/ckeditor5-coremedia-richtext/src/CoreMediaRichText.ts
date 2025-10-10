@@ -1,7 +1,7 @@
-import V10RichTextDataProcessor from "./compatibility/v10/V10RichTextDataProcessor";
-import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { Plugin, DataProcessor } from "ckeditor5";
+import V10RichTextDataProcessor from "./compatibility/v10/V10RichTextDataProcessor";
+import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import RichTextDataProcessor from "./RichTextDataProcessor";
 import { getCoreMediaRichTextConfig } from "./CoreMediaRichTextConfig";
 import { LinkIntegration } from "./integrations/LinkIntegration";

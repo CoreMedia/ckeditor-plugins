@@ -6,9 +6,9 @@ import { bundler, loaders } from "@ckeditor/ckeditor5-dev-utils";
 import { CKEditorTranslationsPlugin } from "@ckeditor/ckeditor5-dev-translations";
 import TerserPlugin from "terser-webpack-plugin";
 import CircularDependencyPlugin from "circular-dependency-plugin";
-import dotenv from "dotenv";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import dotenv from "dotenv";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);

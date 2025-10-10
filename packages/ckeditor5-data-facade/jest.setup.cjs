@@ -1,7 +1,5 @@
-// jsdom does not yet provide createObjectURL: https://github.com/jsdom/jsdom/issues/1721
-// @ts-ignore
 URL.createObjectURL = jest.fn();
-// @ts-ignore
+// @ts-expect-error place ResizeObserver
 global.window.ResizeObserver = class {
   observe() {}
 

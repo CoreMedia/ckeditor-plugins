@@ -55,6 +55,7 @@
     "clean:dist": "rimraf ./dist",
     "build": "tsc --project ./tsconfig.release.json",
     "postbuild": "node prepare-package.cjs && copyfiles ./README.md dist",
+    "lint": "eslint \"**/*.{js,cjs,mjs,ts,tsx}\"",
     "npm-check-updates": "npm-check-updates --upgrade"
   }
 }

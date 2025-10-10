@@ -12,7 +12,7 @@ export interface ConversionListener {
    *
    * @param originalNode - original (mutable!) node
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   prepare?: (originalNode: Node) => void;
 
   /**
@@ -37,7 +37,7 @@ export interface ConversionListener {
    * signal what to do instead; `undefined` or not implemented would continue
    * processing with the `importedNode`
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   importedWithChildren?: (importedNode: Node, context: ConversionContext) => Node | Skip | undefined;
 
   /**
@@ -50,6 +50,6 @@ export interface ConversionListener {
    * @param childNode - child node that got appended
    * @param context - current conversion context
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   appended?: (parentNode: Node, childNode: Node, context: ConversionContext) => void;
 }

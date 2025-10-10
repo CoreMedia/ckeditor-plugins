@@ -17,7 +17,7 @@
  * "content-input:1642076134128:2"
  * ```
  */
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
+
 export class ContentClipboardMarkerDataUtils {
   static readonly CONTENT_INPUT_MARKER_PREFIX = "content-input";
 

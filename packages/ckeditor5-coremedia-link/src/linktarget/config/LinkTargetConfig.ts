@@ -1,16 +1,14 @@
-/* eslint no-null/no-null: off */
-
-import LinkTargetOptionDefinition from "./LinkTargetOptionDefinition";
-import DefaultTarget, { DEFAULT_TARGETS_ARRAY, getDefaultTargetDefinition } from "./DefaultTarget";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { Config, EditorConfig } from "ckeditor5";
+import { DEFAULT_TARGETS_ARRAY, DefaultTarget, getDefaultTargetDefinition } from "./DefaultTarget";
+import { getFilterByType } from "./DefaultTargetTypeFilters";
 import {
   isTargetDefaultRuleDefinitionWithFilter,
   isTargetDefaultRuleDefinitionWithType,
   TargetDefaultRuleDefinition,
   TargetDefaultRuleDefinitionWithFilter,
 } from "./LinkTargetDefaultRuleDefinition";
-import { getFilterByType } from "./DefaultTargetTypeFilters";
-import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+import LinkTargetOptionDefinition from "./LinkTargetOptionDefinition";
 
 /**
  * Provides the given targets to select from and a list of rules to
@@ -67,6 +65,7 @@ interface LinkTargetConfig {
   targets?: (DefaultTarget | LinkTargetOptionDefinition)[];
   defaultTargets?: TargetDefaultRuleDefinition[];
 }
+
 const logger = LoggerProvider.getLogger("LinkTargetConfig");
 
 /**
@@ -169,7 +168,7 @@ const getLinkTargetDefinitions = (linkTargetsConfig: unknown): Required<LinkTarg
       // Complicated? The following lines are a typesafe approach to validate,
       // if required attributes have been set. It requires no type-checking nor
       // casting, as we "fulfill" the required attributes on our own.
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
       const definition: LinkTargetOptionDefinition = {
         // Provoke a default empty name, which will fail if not set in object.
         name: "",

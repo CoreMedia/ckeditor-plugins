@@ -1,9 +1,5 @@
 import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import RichTextXmlWriter from "../../RichTextXmlWriter";
 import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support";
-import RichTextSchema from "./RichTextSchema";
-import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "../../Constants";
-import { getConfig } from "./V10CoreMediaRichTextConfig";
 import {
   DataProcessor,
   ViewDomConverter,
@@ -15,8 +11,12 @@ import {
   ViewDocument,
   ViewDocumentFragment,
 } from "ckeditor5";
+import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "../../Constants";
+import RichTextXmlWriter from "../../RichTextXmlWriter";
 import ToDataProcessor from "../../ToDataProcessor";
 import { declareCoreMediaRichText10Entities } from "../../Entities";
+import { getConfig } from "./V10CoreMediaRichTextConfig";
+import RichTextSchema from "./RichTextSchema";
 
 interface HtmlWriter {
   getHtml(fragment: DocumentFragment): string;

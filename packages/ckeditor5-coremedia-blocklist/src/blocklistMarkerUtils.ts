@@ -1,4 +1,5 @@
 import { uid } from "ckeditor5";
+
 export interface MarkerDetails {
   id: string;
   blockedWord: string | undefined;

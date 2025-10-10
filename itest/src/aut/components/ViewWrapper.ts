@@ -1,6 +1,6 @@
+import type { View } from "ckeditor5";
 import { JSWrapper } from "../JSWrapper";
 import ContextualBalloonWrapper from "./balloon/ContextualBalloonWrapper";
-import type { View } from "ckeditor5";
 
 /**
  * Wraps the CKEditor 5 view.

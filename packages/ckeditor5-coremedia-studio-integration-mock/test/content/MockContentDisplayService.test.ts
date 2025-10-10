@@ -3,9 +3,9 @@ import test, { describe, afterEach } from "node:test";
 import expect from "expect";
 import { serviceAgent } from "@coremedia/service-agent";
 import { createContentDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { first } from "rxjs/operators";
 import MockContentDisplayService from "../../src/content/MockContentDisplayService";
 import { testShouldRetrieveValuesThat } from "./ObservableTestUtil";
-import { first } from "rxjs/operators";
 
 void describe("MockContentDisplayService", () => {
   afterEach(() => {

@@ -1,5 +1,5 @@
-import { extendingWaitForExpect } from "./ExpectationsBase";
 import { ApplicationWrapper } from "../aut/ApplicationWrapper";
+import { extendingWaitForExpect } from "./ExpectationsBase";
 
 /**
  * JEST Extension: Add matchers for `ApplicationConsole`.

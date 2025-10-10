@@ -1,7 +1,4 @@
-/* eslint no-null/no-null: off */
-
 import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import createContentLinkView from "./ContentLinkViewFactory";
 import {
   CONTENT_CKE_MODEL_URI_REGEXP,
   createCollectionViewLinkServiceDescriptor,
@@ -16,19 +13,20 @@ import {
   requireContentCkeModelUri,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { Command, ContextualBalloon, LabeledFieldView, LinkUI, Plugin, View } from "ckeditor5";
-import { showContentLinkField } from "../ContentLinkViewUtils";
-import ContentLinkCommandHook from "../ContentLinkCommandHook";
-import { hasContentUriPath, hasContentUriPathAndName } from "./ViewExtensions";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { serviceAgent } from "@coremedia/service-agent";
-import ContentLinkView from "./ContentLinkView";
+import { handleFocusManagement, hasRequiredInternalFocusablesProperty } from "@coremedia/ckeditor5-link-common";
+import { combineLatest, from, of, switchMap } from "rxjs";
+import { showContentLinkField } from "../ContentLinkViewUtils";
+import ContentLinkCommandHook from "../ContentLinkCommandHook";
 import { addClassToTemplate } from "../../utils";
+import { COREMEDIA_CONTEXT_KEY } from "../ContextConfig";
+import { hasContentUriPath, hasContentUriPathAndName } from "./ViewExtensions";
+import ContentLinkView from "./ContentLinkView";
 import { AugmentedLinkFormView, LinkFormView } from "./AugmentedLinkFormView";
 import { requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
-import { handleFocusManagement, hasRequiredInternalFocusablesProperty } from "@coremedia/ckeditor5-link-common";
 import { ContentLinkSuggesterView } from "./dropdown/ContentLinkSuggesterView";
-import { combineLatest, from, of, switchMap } from "rxjs";
-import { COREMEDIA_CONTEXT_KEY } from "../ContextConfig";
+import createContentLinkView from "./ContentLinkViewFactory";
 import LibraryButtonView from "./LibraryButtonView";
 import "../../../theme/linkformviewextension.css";
 
@@ -421,10 +419,7 @@ class ContentLinkFormViewExtension extends Plugin {
     dragEvent.preventDefault();
     ContentLinkFormViewExtension.#toggleUrlInputLoadingState(linkUI, true);
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const linkable: IsDroppableEvaluationResult =
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      await getOrEvaluateIsDroppableResult(uris);
+    const linkable: IsDroppableEvaluationResult = await getOrEvaluateIsDroppableResult(uris);
     if (!linkable || linkable === "PENDING") {
       return;
     }
@@ -461,7 +456,7 @@ class ContentLinkFormViewExtension extends Plugin {
       return contentReference.contentUri;
     }
     if (!contentReference.externalUriInformation) {
-      return Promise.reject("No content found and uri is not importable.");
+      return Promise.reject(new Error("No content found and uri is not importable."));
     }
     if (contentReference.externalUriInformation.contentUri) {
       //The external content has been imported previously. A content representation already exists.

@@ -1,6 +1,6 @@
-import dotenv from "dotenv";
 import * as path from "path";
 import * as fs from "fs";
+import dotenv from "dotenv";
 
 function findEnvFile(startDir = process.cwd()): string | undefined {
   let dir = startDir;
