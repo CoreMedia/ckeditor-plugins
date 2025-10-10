@@ -40,8 +40,7 @@ declare global {
         WaitToHaveAriaLabel,
         WaitToBeOn {}
 
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    interface Matchers<R = unknown, T = {}>
+    interface Matchers<R, T>
       extends ApplicationConsoleMatchers<R, T>,
         ApplicationWrapperMatchers<R, T>,
         ClassicEditorWrapperMatchers<R, T>,

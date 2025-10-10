@@ -179,4 +179,8 @@ export default class CustomLinkTargetInputFormView extends View {
     labeledInput.label = t?.("Target") ?? "Target";
     return labeledInput;
   }
+
+  getFocusCycler(): FocusCycler {
+    return this.#focusCycler;
+  }
 }

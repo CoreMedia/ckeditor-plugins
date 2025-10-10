@@ -1,4 +1,5 @@
 import { Command, Editor } from "ckeditor5";
+
 export const BLOCKLIST_COMMAND_NAME = "Blocklist";
 
 /**
@@ -12,7 +13,7 @@ export default class BlocklistCommand extends Command {
    *
    * @readonly
    */
-  public declare value: string[];
+  declare public value: string[];
   constructor(editor: Editor) {
     super(editor);
     this.value = [];

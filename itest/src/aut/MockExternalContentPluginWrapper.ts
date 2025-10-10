@@ -1,9 +1,9 @@
-import { JSWrapper } from "./JSWrapper";
-import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import type {
   MockExternalContentPlugin,
   MockExternalContent,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
+import { JSWrapper } from "./JSWrapper";
+import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 
 const PLUGIN_NAME = "MockExternalContent";
 
@@ -17,7 +17,6 @@ export class MockExternalContentPluginWrapper extends JSWrapper<MockExternalCont
    * @param data - content definitions
    */
   async addContents(...data: MockExternalContent[]): Promise<void> {
-    // eslint-disable-next-line max-statements-per-line
     await this.evaluate((p, data) => {
       p.addExternalContents(data);
     }, data);

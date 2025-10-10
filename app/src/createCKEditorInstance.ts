@@ -1,7 +1,7 @@
-import { ApplicationState } from "./ApplicationState";
 import { ClassicEditor, Command, Editor } from "ckeditor5";
-import { CKEditorInstanceFactory } from "./CKEditorInstanceFactory";
 import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing";
+import { ApplicationState } from "./ApplicationState";
+import { CKEditorInstanceFactory } from "./CKEditorInstanceFactory";
 import { initReadOnlyToggle } from "./ReadOnlySwitch";
 import { initPreview, updatePreview } from "./preview";
 import { createRichTextEditor } from "./editors/richtext";
@@ -14,7 +14,7 @@ import { initExamplesAndBindTo } from "./example-data";
  * Typings for CKEditorInspector, as it does not ship with typings yet.
  */
 // See https://github.com/ckeditor/ckeditor5-inspector/issues/173
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
+
 declare class CKEditorInspector {
   static attach(
     editorOrConfig: Editor | Record<string, Editor>,
@@ -58,7 +58,7 @@ const registerResetUndo = (editor: Editor): void => {
   const undoCommand: Command | undefined = editor.commands.get("undo");
   if (undoCommand) {
     //@ts-expect-error Editor extension, no typing available.
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
+
     editor.resetUndo = () => undoCommand.clearStack();
     console.log("Registered `editor.resetUndo()` to clear undo history.");
   }

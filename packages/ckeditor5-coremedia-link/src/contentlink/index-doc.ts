@@ -8,12 +8,10 @@
 export * as clipboard from "./clipboard/index-doc";
 export * as ui from "./ui/index-doc";
 
-export * from "./ContentLinkCommandHook";
 export { default as ContentLinkCommandHook } from "./ContentLinkCommandHook";
 
 export { default as ContentLinkClipboardPlugin } from "./ContentLinkClipboardPlugin";
 
-export * from "./ContentLinks";
 export { default as ContentLinks } from "./ContentLinks";
 
 export { default as LinkUserActionsPlugin } from "./LinkUserActionsPlugin";

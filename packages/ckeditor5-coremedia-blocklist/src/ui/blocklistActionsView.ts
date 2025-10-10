@@ -46,7 +46,7 @@ export default class BlocklistActionsView extends View {
    * The list of words, to be displayed in this view.
    * Used to create a ViewList, that represents the words in the current selection.
    */
-  public declare blockedWords: string[];
+  declare public blockedWords: string[];
   constructor(editor: Editor) {
     super(editor.locale);
     this.editor = editor;

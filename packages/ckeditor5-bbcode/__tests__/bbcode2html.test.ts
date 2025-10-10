@@ -1,8 +1,8 @@
 // noinspection HtmlUnknownTarget,SpellCheckingInspection,HtmlRequiredAltAttribute
 
+import { CoreTree } from "@bbob/core/es";
 import { bbCodeDefaultRules } from "../src";
 import { bbcode2html, processBBCode } from "../src/bbcode2html";
-import { CoreTree } from "@bbob/core/es";
 
 const supportedTags = bbCodeDefaultRules.flatMap((r) => r.tags ?? ([] as string[]));
 

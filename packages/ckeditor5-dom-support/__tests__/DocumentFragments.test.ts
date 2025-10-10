@@ -1,6 +1,6 @@
-import { USE_CASE_NAME } from "./Constants";
 import { fragmentFromNodeContents, isDocumentFragment } from "../src/DocumentFragments";
 import { documentFromHtml } from "../src/Documents";
+import { USE_CASE_NAME } from "./Constants";
 
 describe("DocumentFragments", () => {
   describe("fragmentFromNodeContents", () => {

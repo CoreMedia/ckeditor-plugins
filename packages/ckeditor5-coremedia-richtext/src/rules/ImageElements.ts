@@ -1,12 +1,12 @@
+import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
+import { isHTMLImageElement, isElement } from "@coremedia/ckeditor5-dom-support";
+import { namespaces } from "../Namespaces";
 import {
   extractXLinkAttributes,
   extractXLinkDataSetEntries,
   setXLinkAttributes,
   setXLinkDataSetEntries,
 } from "./XLink";
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
-import { isHTMLImageElement, isElement } from "@coremedia/ckeditor5-dom-support";
-import { namespaces } from "../Namespaces";
 
 /**
  * Placeholder for images when CoreMedia ContentImagePlugin is not enabled.

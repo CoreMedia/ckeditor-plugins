@@ -1,10 +1,10 @@
 import "./expect/Expectations";
-import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { a, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
+import waitForExpect from "wait-for-expect";
+import { ApplicationWrapper } from "./aut/ApplicationWrapper";
 import { ctrlOrMeta } from "./browser/UserAgent";
 import { expectFocusedElementHasAriaText } from "./aria/AriaUtils";
-import waitForExpect from "wait-for-expect";
 
 describe("Content Link Feature", () => {
   // noinspection DuplicatedCode

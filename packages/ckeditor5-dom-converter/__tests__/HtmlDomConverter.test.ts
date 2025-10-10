@@ -1,7 +1,5 @@
 // noinspection HtmlRequiredLangAttribute,HtmlRequiredTitleElement,HtmlUnknownAttribute,HttpUrlsUsage
 
-import { ConversionContext, HtmlDomConverter, Skip, skip } from "../src";
-import { dataNs, dataViewNs, USE_CASE_NAME } from "./Constants";
 import {
   documentFromHtml,
   documentFromXml,
@@ -12,6 +10,8 @@ import {
   wrapIfHTMLElement,
   wrapIfTableElement,
 } from "@coremedia/ckeditor5-dom-support";
+import { ConversionContext, HtmlDomConverter, Skip, skip } from "../src";
+import { dataNs, dataViewNs, USE_CASE_NAME } from "./Constants";
 import { toData, toDataView } from "./DataProcessorSimulation";
 
 describe("HtmlDomConverter", () => {

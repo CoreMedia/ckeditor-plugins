@@ -1,5 +1,5 @@
-import { requireHTMLElement } from "./DOMUtils";
 import { bbCodeItalic } from "../src";
+import { requireHTMLElement } from "./DOMUtils";
 
 describe("BBCodeItalic", () => {
   describe("Default Configuration", () => {

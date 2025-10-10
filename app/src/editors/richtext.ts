@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 // ImageInline: See ckeditor/ckeditor5#12027.
 
 // ImageBlockEditing: See ckeditor/ckeditor5#12027.
@@ -25,7 +23,6 @@ import {
   CoreMediaStudioEssentials,
   Strictness,
 } from "@coremedia/ckeditor5-coremedia-studio-essentials";
-import { initInputExampleContent } from "../inputExampleContents";
 import {
   Alignment,
   Autoformat,
@@ -78,13 +75,14 @@ import {
 } from "@coremedia/ckeditor5-coremedia-richtext";
 import "ckeditor5/ckeditor5.css";
 import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support";
-import { getHashParam } from "../HashParams";
 import { LinkAttributes, LinkAttributesConfig } from "@coremedia/ckeditor5-link-common";
 import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing";
-import { CKEditorInstanceFactory } from "../CKEditorInstanceFactory";
-import { ApplicationState } from "../ApplicationState";
 import { Blocklist } from "@coremedia/ckeditor5-coremedia-blocklist";
 import { DataFacade } from "@coremedia/ckeditor5-data-facade";
+import { CKEditorInstanceFactory } from "../CKEditorInstanceFactory";
+import { ApplicationState } from "../ApplicationState";
+import { getHashParam } from "../HashParams";
+import { initInputExampleContent } from "../inputExampleContents";
 import { updatePreview } from "../preview";
 
 export const licenseKeyErrorMessage =
@@ -469,6 +467,7 @@ export const createRichTextEditor: CKEditorInstanceFactory = async (
       return newEditor;
     });
   } catch (e) {
+    console.error("Catched error when creating Editor.", e);
     throw Error(licenseKeyErrorMessage);
   }
 };

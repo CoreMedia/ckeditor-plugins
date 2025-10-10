@@ -31,7 +31,7 @@ export class MockContentReferenceService implements IContentReferenceService {
       MockExternalContentPlugin.pluginName,
     ) as MockExternalContentPlugin;
     const response = this.#evaluateResponse(mockContentPlugin, mockExternalContentPlugin, request);
-    return response ? Promise.resolve(response) : Promise.reject();
+    return response ? Promise.resolve(response) : Promise.reject(new Error("Undefined response"));
   }
 
   #evaluateResponse(

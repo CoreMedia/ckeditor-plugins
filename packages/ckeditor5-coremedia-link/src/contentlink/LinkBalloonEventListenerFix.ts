@@ -1,7 +1,7 @@
 import { Emitter, LinkUI } from "ckeditor5";
+import { requireNonNulls } from "@coremedia/ckeditor5-common";
 import { keepOpen } from "./LinkBalloonConfig";
 import { hasRequiredInternalLinkUI } from "./InternalLinkUI";
-import { requireNonNulls } from "@coremedia/ckeditor5-common";
 
 /**
  * Whether the mouseDown event occurred on an allow-listed element.

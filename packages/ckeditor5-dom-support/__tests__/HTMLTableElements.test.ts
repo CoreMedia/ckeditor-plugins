@@ -1,6 +1,6 @@
-import { USE_CASE_NAME } from "./Constants";
 import { documentFromHtml, documentFromXml } from "../src/Documents";
 import { HTMLTableElementWrapper, isHTMLTableElement, wrapIfTableElement } from "../src/HTMLTableElements";
+import { USE_CASE_NAME } from "./Constants";
 
 describe("HTMLTableElements", () => {
   describe("isHTMLTableElement", () => {

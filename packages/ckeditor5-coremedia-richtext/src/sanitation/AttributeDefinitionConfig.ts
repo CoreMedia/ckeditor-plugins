@@ -1,6 +1,6 @@
-import { acAny, AttributeContent } from "./AttributeContent";
 import { ActiveStrictness } from "../Strictness";
 import { isKnownNamespacePrefix, namespaces } from "../Namespaces";
+import { acAny, AttributeContent } from "./AttributeContent";
 
 /**
  * Definition of an attribute, closely related to DTD definition.
@@ -54,7 +54,6 @@ export type ParsedAttributeDefinitionConfig = Required<AttributeDefinitionConfig
  */
 export const parseAttributeDefinitionConfig = (config: AttributeDefinitionConfig): ParsedAttributeDefinitionConfig => {
   const content = config.content ?? acAny;
-  // eslint-disable-next-line no-null/no-null
   const prefix = config.prefix ?? null;
   // Simplified to fall back to default namespace. May need to be adjusted if
   // we want to provide more sophisticated namespace support.
@@ -66,7 +65,6 @@ export const parseAttributeDefinitionConfig = (config: AttributeDefinitionConfig
     prefix,
     namespaceURI,
     required: false,
-    // eslint-disable-next-line no-null/no-null
     fixed: null,
     content,
     validateValue: (value: string | null, strictness: ActiveStrictness): boolean =>

@@ -28,7 +28,6 @@ export const requireNonNulls = <T extends object | Record<string, unknown>, K ex
   obj: T,
   ...propertyNames: K[]
 ): RequiredNonNull<T, K> => {
-  // eslint-disable-next-line no-null/no-null
   const unmatchedProperties = propertyNames.filter((name) => obj[name] === null || obj[name] === undefined);
   if (unmatchedProperties.length > 0) {
     const label = unmatchedProperties.length > 1 ? "properties" : "property";

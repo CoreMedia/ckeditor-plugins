@@ -13,11 +13,8 @@ export * as ui from "./ui/index-doc";
 
 export * as Constants from "./Constants";
 
-export * from "./LinkTarget";
 export { default as LinkTarget } from "./LinkTarget";
 
-export * from "./LinkTargetActionsViewExtension";
 export { default as LinkTargetActionsViewExtension } from "./LinkTargetActionsViewExtension";
 
-export * from "./LinkTargetModelView";
 export { default as LinkTargetModelView } from "./LinkTargetModelView";

@@ -1,8 +1,8 @@
 // noinspection HtmlUnknownAttribute
 
+import { p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import * as aut from "../../src/rules/AnchorElements";
 import { silenced } from "../Silenced";
-import { p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { RulesTester } from "./RulesTester";
 import { bijective, TestDirection } from "./TestDirection";
 

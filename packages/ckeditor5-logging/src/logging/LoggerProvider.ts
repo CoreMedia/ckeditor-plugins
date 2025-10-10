@@ -17,7 +17,7 @@ import LogLevel from "./LogLevel";
  *   LoggerProvider.getLogger(SymbolOnPasteMapper.pluginName);
  * ```
  */
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
+
 export default class LoggerProvider {
   static readonly #verbose = "verbose";
   static readonly #none = "none";
@@ -32,7 +32,7 @@ export default class LoggerProvider {
   static readonly #hashParamRegExp = /([^=]*)=(.*)/;
 
   // noinspection JSUnusedLocalSymbols
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+
   private constructor() {
     // This is just a utility class. Must not be instantiated.
   }

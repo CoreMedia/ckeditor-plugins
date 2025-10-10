@@ -1,5 +1,5 @@
-import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 import { FontSizeConfiguration, fontSizes, normalSize } from "../utils/FontSizes";
+import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 
 /**
  * Tries to find an applicable font-size configuration for the given element.

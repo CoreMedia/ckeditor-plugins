@@ -1,5 +1,4 @@
 import { Plugin } from "ckeditor5";
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { MockContentConfig } from "./MockContent";
 import MockContentPlugin from "./MockContentPlugin";
@@ -73,7 +72,6 @@ const EXTERNAL_CONTENTS: MockExternalContent[] = [
 ];
 export default class MockExternalContentPlugin extends Plugin {
   static readonly pluginName: string = PLUGIN_NAME;
-  static readonly #logger: Logger = LoggerProvider.getLogger(PLUGIN_NAME);
   readonly #registeredExternalContents: ExternalContentsByUri = new Map<string, MockExternalContent>();
   static readonly requires = [MockContentPlugin];
 

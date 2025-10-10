@@ -1,6 +1,6 @@
-import LinkActionsViewWrapper from "./LinkActionsViewWrapper";
 import { HasContentName } from "../../../expect/contentName/HasContentName";
 import { JSWrapper } from "../../JSWrapper";
+import LinkActionsViewWrapper from "./LinkActionsViewWrapper";
 
 export default class ContentLinkViewWrapper extends JSWrapper<Element> implements HasContentName {
   get contentName(): Promise<string> {

@@ -1,5 +1,5 @@
-import { requireHTMLElement } from "./DOMUtils";
 import { bbCodeUnderline } from "../src";
+import { requireHTMLElement } from "./DOMUtils";
 
 describe("BBCodeUnderline", () => {
   describe("Default Configuration", () => {

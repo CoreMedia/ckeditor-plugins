@@ -13,6 +13,7 @@
  * It shall provide some ideas, which options you may want to enable. To
  * do so, just remove the corresponding comments.
  */
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const base = require("./jest-playwright.config.js");
 
 /**
@@ -23,12 +24,12 @@ const headless = false;
 /**
  * Open Chromium DevTools; enforces headless: `false`.
  */
-const devtools = true;
+// const devtools = true;
 
 /**
  * Run tests in slow motion.
  */
-const slowMo = 200;
+// const slowMo = 200;
 
 /**
  * Launch options for local run.
@@ -46,9 +47,7 @@ const launchOptions = {
  * Enables recording videos. `videos/` folder is ignored
  * in `.gitignore`.
  */
-const recordVideo = {
-  dir: "videos/",
-};
+// const recordVideo = { dir: "videos/",};
 
 /**
  * Context options for local run.

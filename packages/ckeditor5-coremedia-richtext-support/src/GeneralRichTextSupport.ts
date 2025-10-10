@@ -1,6 +1,6 @@
 import { Plugin, GeneralHtmlSupport } from "ckeditor5";
-import RichTextDataFilter from "./RichTextDataFilter";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
+import RichTextDataFilter from "./RichTextDataFilter";
 
 /**
  * Wrapper plugin to enable GeneralRichTextSupport based on CKEditor's

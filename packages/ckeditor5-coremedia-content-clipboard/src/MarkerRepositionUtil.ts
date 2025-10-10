@@ -1,9 +1,9 @@
-import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
 import { Editor, Position as ModelPosition, Writer } from "ckeditor5";
+import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
 import ContentInputDataCache from "./ContentInputDataCache";
+
 type MarkerFilterFunction = (markerData: MarkerData, otherMarkerData: MarkerData) => boolean;
 
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class MarkerRepositionUtil {
   static repositionMarkers(
     editor: Editor,

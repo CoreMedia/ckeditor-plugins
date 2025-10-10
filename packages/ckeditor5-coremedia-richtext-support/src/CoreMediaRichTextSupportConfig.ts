@@ -1,5 +1,6 @@
-import { InheritingMatcherPattern } from "./ReducedMatcherPattern";
 import { EditorConfig, Config } from "ckeditor5";
+import { InheritingMatcherPattern } from "./ReducedMatcherPattern";
+
 const COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY = "coremedia:richtextSupport";
 
 /**

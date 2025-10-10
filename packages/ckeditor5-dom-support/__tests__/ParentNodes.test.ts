@@ -1,6 +1,6 @@
-import { USE_CASE_NAME } from "./Constants";
 import { documentFromHtml, documentFromXml } from "../src/Documents";
 import { isParentNode } from "../src/ParentNodes";
+import { USE_CASE_NAME } from "./Constants";
 
 describe("ParentNodes", () => {
   describe("isParentNodes", () => {

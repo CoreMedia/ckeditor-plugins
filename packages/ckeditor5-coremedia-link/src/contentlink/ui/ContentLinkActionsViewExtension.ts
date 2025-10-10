@@ -1,19 +1,18 @@
-/* eslint no-null/no-null: off */
-
-import ContentLinkView from "./ContentLinkView";
 import type { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { isModelUriPath, requireContentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { ifCommand, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common";
 import { Command, ContextualBalloon, LinkUI, Plugin, ToolbarView } from "ckeditor5";
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { hasContentUriPath } from "./ViewExtensions";
 import { showContentLinkField } from "../ContentLinkViewUtils";
+import { executeOpenContentInTabCommand } from "../OpenContentInTabCommand";
+import { hasContentUriPath } from "./ViewExtensions";
 import { asAugmentedLinkUI, AugmentedLinkUI } from "./AugmentedLinkUI";
 import { AugmentedLinkActionsView } from "./AugmentedLinkActionsView";
-import { executeOpenContentInTabCommand } from "../OpenContentInTabCommand";
+import ContentLinkView from "./ContentLinkView";
 
 export const CONTENT_LINK_VIEW_COMPONENT_NAME = "contentLinkView";
+
 /**
  * Extends the action view for Content link display. This includes:
  *

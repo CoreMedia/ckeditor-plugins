@@ -1,6 +1,6 @@
-import { ContextMismatchError, DataFacade, DataFacadeController, SetDataData } from "../src";
 import { CKEditorError, Editor } from "ckeditor5";
 import { jest } from "@jest/globals";
+import { ContextMismatchError, DataFacade, DataFacadeController, SetDataData } from "../src";
 import { createTestEditor, prepareDocument } from "./helpers/TestEditor";
 
 /**

@@ -1,7 +1,7 @@
-import { USE_CASE_NAME } from "./Constants";
 import { documentFromHtml, documentFromXml } from "../src/Documents";
 import { extractNodeContents, lookupNamespaceURI, serializeToXmlString } from "../src/Nodes";
 import { fragmentFromNodeContents } from "../src/DocumentFragments";
+import { USE_CASE_NAME } from "./Constants";
 
 describe("Nodes", () => {
   describe("serializeToXmlString", () => {

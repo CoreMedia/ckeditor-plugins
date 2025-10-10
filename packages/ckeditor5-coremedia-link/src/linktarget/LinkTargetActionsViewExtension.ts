@@ -1,11 +1,11 @@
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+import { ButtonView, Command, LinkUI, Plugin } from "ckeditor5";
+import { OTHER_TARGET_NAME } from "./config/DefaultTarget";
+import "../../theme/linktargetactionsviewextension.css";
 import { parseLinkTargetConfig } from "./config/LinkTargetConfig";
 import LinkTargetOptionDefinition from "./config/LinkTargetOptionDefinition";
 import CustomLinkTargetUI from "./ui/CustomLinkTargetUI";
-import { OTHER_TARGET_NAME } from "./config/DefaultTarget";
-import "../../theme/linktargetactionsviewextension.css";
-import { Plugin, Command, LinkUI, ButtonView } from "ckeditor5";
-import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
-import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 
 /**
  * Extends the action view of the linkUI plugin for link target display. This includes:

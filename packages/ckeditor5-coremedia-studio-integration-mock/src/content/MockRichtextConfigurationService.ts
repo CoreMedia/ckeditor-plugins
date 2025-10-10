@@ -1,14 +1,14 @@
 /* async: Methods require to be asynchronous in production scenario. */
-/* eslint-disable @typescript-eslint/require-await */
+
 import {
   createContentReferenceServiceDescriptor,
   isUriPath,
   RichtextConfigurationService,
   UriPath,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
 import { serviceAgent } from "@coremedia/service-agent";
 import { Editor } from "ckeditor5";
+import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
 import MockExternalContentPlugin from "./MockExternalContentPlugin";
 
 class MockRichtextConfigurationService implements RichtextConfigurationService {
@@ -26,7 +26,7 @@ class MockRichtextConfigurationService implements RichtextConfigurationService {
   async hasLinkableType(uriPath: UriPath): Promise<boolean> {
     const contentReferenceService = serviceAgent.getService(createContentReferenceServiceDescriptor());
     if (!contentReferenceService) {
-      return Promise.reject("ContentReferenceService unavailable");
+      return Promise.reject(new Error("ContentReferenceService unavailable"));
     }
     const contentReference = await contentReferenceService.getContentReference(uriPath);
     if (contentReference.contentUri) {
