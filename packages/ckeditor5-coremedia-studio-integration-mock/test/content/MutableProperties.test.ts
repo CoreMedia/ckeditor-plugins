@@ -1,18 +1,14 @@
-/* eslint no-null/no-null: off */
-
-import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
+import type { MutableProperties, MutablePropertiesConfig } from "../../src/content/MutableProperties";
 import {
-  MutableProperties,
-  MutablePropertiesConfig,
   observeEditing,
   observeName,
   observeReadable,
   withPropertiesDefaults,
 } from "../../src/content/MutableProperties";
-import Delayed from "../../src/content/Delayed";
-import { testShouldRetrieveValues } from "./ObservableTestUtil";
+import type Delayed from "../../src/content/Delayed";
+import { retrieveValues } from "./ObservableTestUtil";
 
 void describe("MutableProperties", () => {
   void describe("withPropertiesDefaults", () => {
@@ -172,7 +168,7 @@ void describe("MutableProperties", () => {
     void describe("observeName", () => {
       type NameConfig = Delayed & Pick<MutableProperties, "name">;
 
-      void describe("Should provide single name and complete", () => {
+      void describe("Should provide single name and complete", async () => {
         const values = ["Lorem"];
         const config: NameConfig = {
           initialDelayMs: 0,
@@ -180,10 +176,10 @@ void describe("MutableProperties", () => {
           name: values,
         };
         const observable = observeName(config);
-        testShouldRetrieveValues(observable, values);
+        await test(async () => expect(await retrieveValues(observable, values)).toStrictEqual(values));
       });
 
-      void describe("Should just complete for no names to provide", () => {
+      void describe("Should just complete for no names to provide", async () => {
         const values: string[] = [];
         const config: NameConfig = {
           initialDelayMs: 0,
@@ -191,10 +187,10 @@ void describe("MutableProperties", () => {
           name: values,
         };
         const observable = observeName(config);
-        testShouldRetrieveValues(observable, values);
+        await test(async () => expect(await retrieveValues(observable, values)).toStrictEqual(values));
       });
 
-      void describe("Should provide names and restart", () => {
+      void describe("Should provide names and restart", async () => {
         const values = ["Lorem", "Ipsum"];
         const config: NameConfig = {
           initialDelayMs: 0,
@@ -204,69 +200,66 @@ void describe("MutableProperties", () => {
         const expectedValues = [...values, ...values.slice(0, 1)];
         // We only take values from first iteration, and the first of
         // the second, to see looping behavior.
-        const observable = observeName(config);
-        testShouldRetrieveValues(observable, expectedValues);
+        const observable = observeName(config, 2);
+        await test(async () => expect(await retrieveValues(observable, expectedValues)).toStrictEqual(expectedValues));
       });
-    });
 
-    void describe("observeEditing", () => {
-      type EditingConfig = Delayed & Pick<MutableProperties, "editing">;
+      void describe("observeEditing", async () => {
+        type EditingConfig = Delayed & Pick<MutableProperties, "editing">;
 
-      const testCases = [{ value: true }, { value: false }];
+        const testCases = [{ value: true }, { value: false }];
 
-      void describe("observeEditing()", () => {
         for (const [i, { value }] of testCases.entries()) {
-          void test(`[${i}] Should provide single value '${value}' and complete`, () => {
-            const values = [value];
-            const config: EditingConfig = {
-              initialDelayMs: 0,
-              changeDelayMs: 1,
-              editing: values,
-            };
+          const values = [value];
+          const config: EditingConfig = {
+            initialDelayMs: 0,
+            changeDelayMs: 1,
+            editing: values,
+          };
 
-            const observable = observeEditing(config);
+          const observable = observeEditing(config);
 
-            testShouldRetrieveValues(observable, values);
-          });
+          await test(`[${i}] Should provide single value '${value}' and complete`, async () =>
+            expect(await retrieveValues(observable, values)).toStrictEqual(values));
         }
+
+        void describe("Should just complete for no values to provide", async () => {
+          const values: boolean[] = [];
+          const config: EditingConfig = {
+            initialDelayMs: 0,
+            changeDelayMs: 1,
+            editing: values,
+          };
+
+          const observable = observeEditing(config);
+
+          await test(async () => expect(await retrieveValues(observable, values)).toStrictEqual(values));
+        });
+
+        void describe("Should provide values and restart", async () => {
+          const values = [true, false];
+          const config: EditingConfig = {
+            initialDelayMs: 0,
+            changeDelayMs: 1,
+            editing: values,
+          };
+          const expectedValues = [...values, ...values.slice(0, 1)];
+
+          const observable = observeEditing(config, 2);
+
+          await test(async () =>
+            expect(await retrieveValues(observable, expectedValues)).toStrictEqual(expectedValues),
+          );
+        });
       });
 
-      void describe("Should just complete for no values to provide", () => {
-        const values: boolean[] = [];
-        const config: EditingConfig = {
-          initialDelayMs: 0,
-          changeDelayMs: 1,
-          editing: values,
-        };
+      void describe("observeReadable", () => {
+        type ReadableConfig = Delayed & Pick<MutableProperties, "readable">;
 
-        const observable = observeEditing(config);
+        const testCases = [{ value: true }, { value: false }];
 
-        testShouldRetrieveValues(observable, values);
-      });
-
-      void describe("Should provide values and restart", () => {
-        const values = [true, false];
-        const config: EditingConfig = {
-          initialDelayMs: 0,
-          changeDelayMs: 1,
-          editing: values,
-        };
-        const expectedValues = [...values, ...values.slice(0, 1)];
-
-        const observable = observeEditing(config);
-
-        testShouldRetrieveValues(observable, expectedValues);
-      });
-    });
-
-    void describe("observeReadable", () => {
-      type ReadableConfig = Delayed & Pick<MutableProperties, "readable">;
-
-      const testCases = [{ value: true }, { value: false }];
-
-      void describe("observeReadable()", () => {
-        for (const [i, { value }] of testCases.entries()) {
-          void test(`[${i}] Should provide single value '${value}' and complete`, () => {
+        void describe("observeReadable()", () => {
+          for (const [i, { value }] of testCases.entries()) {
             const values = [value];
             const config: ReadableConfig = {
               initialDelayMs: 0,
@@ -275,35 +268,36 @@ void describe("MutableProperties", () => {
             };
             const observable = observeReadable(config);
 
-            testShouldRetrieveValues(observable, values);
-          });
-        }
-      });
+            void test(`[${i}] Should provide single value '${value}' and complete`, async () =>
+              expect(await retrieveValues(observable, values)).toStrictEqual(values));
+          }
+        });
 
-      void describe("Should just complete for no values to provide", () => {
-        const values: boolean[] = [];
-        const config: ReadableConfig = {
-          initialDelayMs: 0,
-          changeDelayMs: 1,
-          readable: values,
-        };
-        const observable = observeReadable(config);
+        void describe("Should just complete for no values to provide", () => {
+          const values: boolean[] = [];
+          const config: ReadableConfig = {
+            initialDelayMs: 0,
+            changeDelayMs: 1,
+            readable: values,
+          };
+          const observable = observeReadable(config);
 
-        testShouldRetrieveValues(observable, values);
-      });
+          void test(async () => expect(await retrieveValues(observable, values)).toStrictEqual(values));
+        });
 
-      void describe("Should provide values and restart", () => {
-        const values = [true, false];
-        const config: ReadableConfig = {
-          initialDelayMs: 0,
-          changeDelayMs: 1,
-          readable: values,
-        };
-        const expectedValues = [...values, ...values.slice(0, 1)];
+        void describe("Should provide values and restart", () => {
+          const values = [true, false];
+          const config: ReadableConfig = {
+            initialDelayMs: 0,
+            changeDelayMs: 1,
+            readable: values,
+          };
+          const expectedValues = [...values, ...values.slice(0, 1)];
 
-        const observable = observeReadable(config);
+          const observable = observeReadable(config, 2);
 
-        testShouldRetrieveValues(observable, expectedValues);
+          void test(async () => expect(await retrieveValues(observable, expectedValues)).toStrictEqual(expectedValues));
+        });
       });
     });
   });

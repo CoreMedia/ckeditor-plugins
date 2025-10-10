@@ -1,7 +1,7 @@
-import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
-import { withDelayDefaults, DelayedConfig, DelayedDefaults } from "../../src/content/Delayed";
+import type { DelayedConfig } from "../../src/content/Delayed";
+import { withDelayDefaults, DelayedDefaults } from "../../src/content/Delayed";
 
 void describe("Delayed", () => {
   void describe("withDelayDefaults", () => {

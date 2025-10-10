@@ -108,9 +108,9 @@ const unreadableLocaleNameHint = (config: UnreadableSiteNameHintConfig, classes:
  *
  * @param config - content configuration
  */
-const observeNameHint = (config: NameHintConfig): Observable<DisplayHint> => {
-  const observableReadable = observeReadable(config);
-  const observableName = observeName(config);
+const observeNameHint = (config: NameHintConfig, iterations?: number): Observable<DisplayHint> => {
+  const observableReadable = observeReadable(config, iterations);
+  const observableName = observeName(config, iterations);
   const combinedObservable = combineLatest([observableName, observableReadable]);
   const classes: string[] = [];
   const unreadableState = unreadableNameHint(config, classes);
@@ -136,10 +136,11 @@ const observeNameHint = (config: NameHintConfig): Observable<DisplayHint> => {
  * `id` and `type` are only used in unreadable state.
  *
  * @param config - content configuration
+ * @param iterations - number of iterations to observe (for testing)
  */
-const observeSiteNameHint = (config: SiteNameHintConfig): Observable<DisplayHint> => {
-  const observableReadable = observeReadable(config);
-  const observableSiteName = observeSiteName(config);
+const observeSiteNameHint = (config: SiteNameHintConfig, iterations?: number): Observable<DisplayHint> => {
+  const observableReadable = observeReadable(config, iterations);
+  const observableSiteName = observeSiteName(config, iterations);
   const combinedObservable = combineLatest([observableSiteName, observableReadable]);
   const classes: string[] = [];
   const unreadableState = unreadableSiteNameHint(config, classes);
@@ -165,10 +166,11 @@ const observeSiteNameHint = (config: SiteNameHintConfig): Observable<DisplayHint
  * `id` and `type` are only used in unreadable state.
  *
  * @param config - content configuration
+ * @param iterations - number of iterations to observe (for testing)
  */
-const observeLocaleNameHint = (config: LocaleNameHintConfig): Observable<DisplayHint> => {
-  const observableReadable = observeReadable(config);
-  const observableLocaleName = observeLocaleName(config);
+const observeLocaleNameHint = (config: LocaleNameHintConfig, iterations?: number): Observable<DisplayHint> => {
+  const observableReadable = observeReadable(config, iterations);
+  const observableLocaleName = observeLocaleName(config, iterations);
   const combinedObservable = combineLatest([observableLocaleName, observableReadable]);
   const classes: string[] = [];
   const unreadableState = unreadableLocaleNameHint(config, classes);
@@ -205,10 +207,11 @@ const unreadableEditingHint: DisplayHint = {
  * alternative name state.
  *
  * @param config - content configuration
+ * @param iterations - number of iterations to observe (for testing)
  */
-const observeEditingHint = (config: EditingHintConfig): Observable<DisplayHint> => {
-  const observableReadable = observeReadable(config);
-  const observableEditing = observeEditing(config);
+const observeEditingHint = (config: EditingHintConfig, iterations?: number): Observable<DisplayHint> => {
+  const observableReadable = observeReadable(config, iterations);
+  const observableEditing = observeEditing(config, iterations);
   const combinedObservable = combineLatest([observableEditing, observableReadable]);
   const editingState: DisplayHint = {
     name: "Checked Out",
@@ -251,13 +254,14 @@ const unreadableTypeHint: DisplayHint = {
  * be determined, because it is unreadable.
  *
  * @param config - content configuration
+ * @param iterations - number of iterations to observe (for testing)
  */
-const observeTypeHint = (config: TypeHintConfig): Observable<DisplayHint> => {
+const observeTypeHint = (config: TypeHintConfig, iterations?: number): Observable<DisplayHint> => {
   const { type } = config;
   const isFolder = "folder" === type;
   const name = capitalize(type);
   const classes = isFolder ? ["icon--folder"] : ["icon--document", `icon--document-${type.toLowerCase()}`];
-  const observableReadable = observeReadable(config);
+  const observableReadable = observeReadable(config, iterations);
   const typeHint: DisplayHint = {
     name,
     classes,

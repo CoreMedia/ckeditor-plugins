@@ -1,9 +1,10 @@
-import "global-jsdom/register";
 import test, { describe } from "node:test";
-import Delayed from "../../src/content/Delayed";
-import { NameHintConfig, observeNameHint, unreadableNameHint } from "../../src/content/DisplayHints";
-import { DisplayHint } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { testShouldRetrieveValues } from "./ObservableTestUtil";
+import type { DisplayHint } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import expect from "expect";
+import type Delayed from "../../src/content/Delayed";
+import type { NameHintConfig } from "../../src/content/DisplayHints";
+import { observeNameHint, unreadableNameHint } from "../../src/content/DisplayHints";
+import { retrieveValues } from "./ObservableTestUtil";
 
 const delays: Delayed = { initialDelayMs: 0, changeDelayMs: 1 };
 
@@ -24,27 +25,26 @@ void describe("DisplayHints", () => {
       },
     ];
 
-    void describe("Should retrieve hints for names", () => {
+    void describe("Should retrieve hints for names", async () => {
       for (const [i, { names, loop }] of testCases.entries()) {
-        void test(`[${i}] Should retrieve hints for names: ${JSON.stringify(names)} (loop? ${loop})`, () => {
-          const classes: string[] = [];
+        const classes: string[] = [];
 
-          const config: NameHintConfig = {
-            ...delays,
-            name: names,
-            readable: [true],
-          };
+        const config: NameHintConfig = {
+          ...delays,
+          name: names,
+          readable: [true],
+        };
 
-          const expectedNames = [...names, ...names.slice(0, loop ? 1 : 0)];
-          const expectedValues: DisplayHint[] = expectedNames.map(
-            (name: string): DisplayHint => ({
-              name,
-              classes,
-            }),
-          );
+        const expectedNames = [...names, ...names.slice(0, loop ? 1 : 0)];
+        const expectedValues: DisplayHint[] = expectedNames.map(
+          (name: string): DisplayHint => ({
+            name,
+            classes,
+          }),
+        );
 
-          testShouldRetrieveValues(observeNameHint(config), expectedValues);
-        });
+        await test(`[${i}] Should retrieve hints for names: ${JSON.stringify(names)} (loop? ${loop})`, async () =>
+          expect(await retrieveValues(observeNameHint(config, 10), expectedValues)).toStrictEqual(expectedValues));
       }
     });
 
@@ -60,32 +60,31 @@ void describe("DisplayHints", () => {
       { readableStates: [false, true, false], loop: true },
     ];
 
-    void describe("Should retrieve name hints respecting readable states", () => {
+    void describe("Should retrieve name hints respecting readable states", async () => {
       for (const [i, { readableStates, loop }] of testCases2.entries()) {
-        void test(`[${i}] Should retrieve name hints respecting readable states: ${JSON.stringify(
+        const name = "Lorem";
+        const classes: string[] = [];
+
+        const config: NameHintConfig = {
+          ...delays,
+          id: 42,
+          type: "document",
+          name: [name],
+          readable: readableStates,
+        };
+
+        const expectedReadableHint: DisplayHint = { name, classes };
+        const expectedUnreadableHint: DisplayHint = unreadableNameHint(config, classes);
+
+        const expectedReadableStates = [...readableStates, ...readableStates.slice(0, loop ? 1 : 0)];
+        const expectedValues: DisplayHint[] = expectedReadableStates.map((readable: boolean) =>
+          readable ? expectedReadableHint : expectedUnreadableHint,
+        );
+
+        await test(`[${i}] Should retrieve name hints respecting readable states: ${JSON.stringify(
           readableStates,
-        )} (loop? ${loop})`, () => {
-          const name = "Lorem";
-          const classes: string[] = [];
-
-          const config: NameHintConfig = {
-            ...delays,
-            id: 42,
-            type: "document",
-            name: [name],
-            readable: readableStates,
-          };
-
-          const expectedReadableHint: DisplayHint = { name, classes };
-          const expectedUnreadableHint: DisplayHint = unreadableNameHint(config, classes);
-
-          const expectedReadableStates = [...readableStates, ...readableStates.slice(0, loop ? 1 : 0)];
-          const expectedValues: DisplayHint[] = expectedReadableStates.map((readable: boolean) =>
-            readable ? expectedReadableHint : expectedUnreadableHint,
-          );
-
-          testShouldRetrieveValues(observeNameHint(config), expectedValues);
-        });
+        )} (loop? ${loop})`, async () =>
+          expect(await retrieveValues(observeNameHint(config, 10), expectedValues)).toStrictEqual(expectedValues));
       }
     });
   });
