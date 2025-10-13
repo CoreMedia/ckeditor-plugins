@@ -40,8 +40,11 @@
     "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.d5b6464",
     "@types/node": "^22.0.0",
     "copyfiles": "^2.4.1",
-    "jest": "^29.7.0",
+    "expect": "^30.2.0",
+    "global-jsdom": "27.0.0",
     "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.6",
     "typescript": "5.4.5"
   },
   "scripts": {
