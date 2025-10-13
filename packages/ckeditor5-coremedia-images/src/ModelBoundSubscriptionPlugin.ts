@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import type { ModelElement, ModelWriter, DifferItemInsert } from "ckeditor5";
 import { Plugin } from "ckeditor5";
 import type { Subscription } from "rxjs";

@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import type { TestContext } from "node:test";
 import test, { describe, beforeEach } from "node:test";
 import expect from "expect";

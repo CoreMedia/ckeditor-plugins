@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import type { DifferItem, DifferItemAttribute, Editor, ModelRange, ModelWriter } from "ckeditor5";

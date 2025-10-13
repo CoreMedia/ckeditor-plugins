@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import "global-jsdom/register";
 import type { TestContext } from "node:test";
 import test, { describe, beforeEach } from "node:test";

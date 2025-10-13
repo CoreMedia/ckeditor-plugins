@@ -391,7 +391,6 @@ export default class Blocklistui extends Plugin {
     const selection = this.editor.model.document.selection;
     const range = selection.getFirstRange();
     const isTextProxy = (node: unknown): node is ModelTextProxy =>
-      // eslint-disable-next-line no-null/no-null
       typeof node === "object" && node !== null && "data" in node;
     if (range) {
       return Array.from(range.getItems())

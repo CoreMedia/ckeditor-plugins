@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import type { EventInfo, DowncastConversionApi, ModelItem, ModelRange } from "ckeditor5";
 import ContentInputDataCache from "./ContentInputDataCache";
 import type { MarkerData } from "./ContentClipboardMarkerDataUtils";

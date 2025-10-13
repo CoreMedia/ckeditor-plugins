@@ -1,5 +1,3 @@
-/* eslint no-null/no-null: off */
-
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { getLinkAttributes, LinkAttributes } from "@coremedia/ckeditor5-link-common";
 import type {
