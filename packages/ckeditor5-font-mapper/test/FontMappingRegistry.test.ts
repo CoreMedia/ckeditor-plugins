@@ -6,17 +6,42 @@ import { expect } from "expect";
 import { FontMappingRegistry } from "../src/FontMappingRegistry";
 import { configToMap } from "../src/ConfigToMapUtil";
 import type { Mode } from "../src";
+import { FontMapping } from "../src/FontMapping";
 
 // Helper for spying on a method
-function createSpy<T extends (...args: any[]) => any>(obj: any, methodName: string) {
-  const original = obj[methodName] as T;
-  const calls: Parameters<T>[] = [];
-  obj[methodName] = ((...args: any[]) => {
+function createSpy<
+  K extends keyof FontMapping
+>(
+  obj: FontMapping,
+  methodName: K
+): { restore: () => void; calls: Parameters<FontMapping[K]>[] } {
+  const original = obj[methodName];
+
+  if (typeof original !== 'function') {
+    throw new Error(`${String(methodName)} is not a function`);
+  }
+
+  const calls: Parameters<typeof original>[] = [];
+
+  (obj as FontMapping)[methodName] = (function (
+    this: FontMapping,
+    ...args: Parameters<typeof original>
+  ) {
     calls.push(args);
-    return original.apply(obj, args);
-  }) as T;
-  return { calls, restore: () => (obj[methodName] = original) };
+    return (original as (...args: Parameters<typeof original>) => ReturnType<typeof original>).apply(
+      this,
+      args
+    );
+  }) as FontMapping[K];
+
+  return {
+    calls,
+    restore: () => {
+      (obj as FontMapping)[methodName] = original;
+    },
+  };
 }
+
 
 // ------------------------------
 // Test 1: FontMapper exists and ignores case
@@ -41,7 +66,9 @@ test("Should apply map for already registered font", async (t: TestContext) => {
       const fontMapping = fontMappingRegistry.getFontMapping("symbol");
       expect(fontMapping).toBeDefined();
 
-      // Create a spy manually
+      if (!fontMapping) {
+        return;
+      }
       const spy = createSpy(fontMapping, "applyMapConfig");
 
       fontMappingRegistry.registerFontMapping({
