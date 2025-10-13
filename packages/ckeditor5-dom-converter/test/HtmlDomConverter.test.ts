@@ -1,12 +1,9 @@
 // noinspection HtmlRequiredLangAttribute,HtmlRequiredTitleElement,HtmlUnknownAttribute,HttpUrlsUsage
 
 import "global-jsdom/register";
-import test, { describe, TestContext } from "node:test";
+import type { TestContext } from "node:test";
+import test, { describe } from "node:test";
 import expect from "expect";
-import { ConversionContext } from "../src/ConversionContext";
-import { HtmlDomConverter } from "../src/HtmlDomConverter";
-import { skip, type Skip } from "../src/Signals";
-import { dataNs, dataViewNs, USE_CASE_NAME } from "./Constants";
 import {
   documentFromHtml,
   documentFromXml,
@@ -17,6 +14,10 @@ import {
   wrapIfHTMLElement,
   wrapIfTableElement,
 } from "@coremedia/ckeditor5-dom-support";
+import type { ConversionContext } from "../src/ConversionContext";
+import { HtmlDomConverter } from "../src/HtmlDomConverter";
+import { skip, type Skip } from "../src/Signals";
+import { dataNs, dataViewNs, USE_CASE_NAME } from "./Constants";
 import { toData, toDataView } from "./DataProcessorSimulation";
 
 void describe("HtmlDomConverter", () => {

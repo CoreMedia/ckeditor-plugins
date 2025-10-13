@@ -7,7 +7,7 @@ import type {
   IsLinkableEvaluationResult,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { JSWrapper } from "./JSWrapper";
-import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
+import type { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 
 /**
  * Provides access to the `MockInputExamplePlugin`.

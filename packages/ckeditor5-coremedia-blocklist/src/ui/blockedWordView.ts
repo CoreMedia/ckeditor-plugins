@@ -1,4 +1,5 @@
-import { ButtonView, KeystrokeHandler, Locale, submitHandler, View, ViewCollection } from "ckeditor5";
+import type { Locale } from "ckeditor5";
+import { ButtonView, KeystrokeHandler, submitHandler, View, ViewCollection } from "ckeditor5";
 import trashbinIcon from "../../theme/icons/trashbin.svg";
 import "../../theme/blockedwordview.css";
 import "../lang/blocklist";

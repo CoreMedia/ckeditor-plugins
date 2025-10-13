@@ -9,7 +9,7 @@
  * casting.
  */
 
-import { LinkUI } from "ckeditor5";
+import type { LinkUI } from "ckeditor5";
 
 /**
  * Augmented properties for `LinkFormView`.

@@ -1,12 +1,17 @@
-import { ExampleData } from "../ExampleData";
+import type { ExampleData } from "../ExampleData";
+import type {
+  CoreAttributes,
+  DefaultBlock,
+  DefaultInline,
+  InternationalizationAttributions,
+  List,
+  TableDataAttributes,
+} from "../RichText";
 import {
   a,
   blockquote,
   br,
   code,
-  CoreAttributes,
-  DefaultBlock,
-  DefaultInline,
   em,
   h1,
   h2,
@@ -15,9 +20,7 @@ import {
   h5,
   h6,
   img,
-  InternationalizationAttributions,
   li,
-  List,
   ol,
   p,
   pre,
@@ -27,7 +30,6 @@ import {
   sub,
   sup,
   table,
-  TableDataAttributes,
   tbody,
   td,
   tr,

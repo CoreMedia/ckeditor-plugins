@@ -1,8 +1,9 @@
 import "global-jsdom/register";
-import test, { TestContext, describe } from "node:test";
+import type { TestContext } from "node:test";
+import test, { describe } from "node:test";
 import expect from "expect";
-import { requireHTMLElement } from "./DOMUtils";
 import { bbCodeItalic } from "../src/rules/BBCodeItalic";
+import { requireHTMLElement } from "./DOMUtils";
 
 void describe("BBCodeItalic", () => {
   void describe("Default Configuration", () => {

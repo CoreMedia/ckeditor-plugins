@@ -1,9 +1,5 @@
-import {
-  ElementProxy,
-  AttributeMapper,
-  preserveAttributeAs,
-  renameAttribute,
-} from "@coremedia/ckeditor5-dataprocessor-support";
+import type { ElementProxy, AttributeMapper } from "@coremedia/ckeditor5-dataprocessor-support";
+import { preserveAttributeAs, renameAttribute } from "@coremedia/ckeditor5-dataprocessor-support";
 import { formatLink } from "./IdHelper";
 
 /**

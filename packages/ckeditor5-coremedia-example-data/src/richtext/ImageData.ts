@@ -1,4 +1,4 @@
-import { ExampleData } from "../ExampleData";
+import type { ExampleData } from "../ExampleData";
 import { h1, p, richtext, img, a, h2 } from "../RichText";
 
 const documentReference = "content/100";

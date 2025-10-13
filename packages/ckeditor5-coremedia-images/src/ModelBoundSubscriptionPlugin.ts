@@ -1,8 +1,9 @@
 /* eslint no-null/no-null: off */
 
-import { Plugin, ModelElement, ModelWriter, DifferItemInsert } from "ckeditor5";
+import type { ModelElement, ModelWriter, DifferItemInsert } from "ckeditor5";
+import { Plugin } from "ckeditor5";
+import type { Subscription } from "rxjs";
 import SubscriptionCache from "./SubscriptionCache";
-import { Subscription } from "rxjs";
 
 /**
  * The ModelBoundSubscriptionPlugin enables to store subscriptions for a model

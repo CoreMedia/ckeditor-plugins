@@ -1,4 +1,5 @@
 import "../../../theme/customlinktargetform.css";
+import type { InputTextView, FocusableView, Locale, Emitter, Command } from "ckeditor5";
 import {
   View,
   LabeledFieldView,
@@ -6,15 +7,10 @@ import {
   ViewCollection,
   FocusCycler,
   submitHandler,
-  InputTextView,
-  FocusableView,
   createLabeledInputText,
-  Locale,
   FocusTracker,
   KeystrokeHandler,
-  Emitter,
   IconCheck,
-  Command,
   IconCancel,
 } from "ckeditor5";
 

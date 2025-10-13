@@ -11,7 +11,8 @@ import MockRichtextConfigurationService from "./content/MockRichtextConfiguratio
 import MockDragDropService from "./content/MockDragDropService";
 import MockContentFormService from "./content/MockContentFormService";
 import { MockCollectionViewLinkService } from "./content/MockCollectionViewLinkService";
-import MockContentPlugin, { MockContentProvider } from "./content/MockContentPlugin";
+import type { MockContentProvider } from "./content/MockContentPlugin";
+import MockContentPlugin from "./content/MockContentPlugin";
 import MockBlobDisplayService from "./content/MockBlobDisplayService";
 import MockServiceAgentPlugin from "./content/MockServiceAgentPlugin";
 import MockClipboardService from "./content/MockClipboardService";

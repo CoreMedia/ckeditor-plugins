@@ -1,8 +1,9 @@
 import test from "node:test";
 import expect from "expect";
+import type { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
 import { RuleBasedHtmlDomConverterFactory } from "./RuleBasedHtmlDomConverters";
-import { isToView, TestDirection } from "./TestDirection";
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
+import type { TestDirection } from "./TestDirection";
+import { isToView } from "./TestDirection";
 
 /**
  * Class to help writing data driven tests for `RuleConfig` objects.

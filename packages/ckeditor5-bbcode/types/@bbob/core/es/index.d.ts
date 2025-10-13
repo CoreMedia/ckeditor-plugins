@@ -1,4 +1,4 @@
-import { TagNode } from "@bbob/plugin-helper/es";
+import type { TagNode } from "@bbob/plugin-helper/es";
 
 export type CoreWalk = (callback: (node: string | TagNode) => string | TagNode) => void;
 

@@ -6,11 +6,13 @@ import {
   fragmentToString,
   isDocumentFragment,
 } from "@coremedia/ckeditor5-dom-support";
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { skip, Skip } from "./Signals";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type { Skip } from "./Signals";
+import { skip } from "./Signals";
 import { ConversionContext } from "./ConversionContext";
 import { ConversionApi } from "./ConversionApi";
-import { ConversionListener } from "./ConversionListener";
+import type { ConversionListener } from "./ConversionListener";
 
 const nodeToString = (node: Node | null | undefined): string => {
   if (!node) {

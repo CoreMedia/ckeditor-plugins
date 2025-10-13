@@ -1,4 +1,5 @@
-import { SwitchButton, SwitchButtonConfig } from "./SwitchButton";
+import type { SwitchButtonConfig } from "./SwitchButton";
+import { SwitchButton } from "./SwitchButton";
 
 export const uiLanguages = {
   ["en" as const]: "English",

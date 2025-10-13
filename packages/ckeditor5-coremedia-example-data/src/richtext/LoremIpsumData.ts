@@ -1,4 +1,4 @@
-import { ExampleData } from "../ExampleData";
+import type { ExampleData } from "../ExampleData";
 import { LOREM_IPSUM_WORD_COUNT, loremRichText } from "../LoremIpsum";
 
 const manyWords = LOREM_IPSUM_WORD_COUNT * 10;

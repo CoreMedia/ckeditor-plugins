@@ -1,8 +1,7 @@
-
-
 import "global-jsdom/register";
 import { describe } from "node:test";
-import { allDataProcessingTests, DataProcessingTestCase, Direction } from "../DataDrivenTests";
+import type { DataProcessingTestCase } from "../DataDrivenTests";
+import { allDataProcessingTests, Direction } from "../DataDrivenTests";
 import { flatten } from "../Utils";
 
 // noinspection HttpUrlsUsage

@@ -3,8 +3,9 @@
  */
 
 export { LinkAttributes, getLinkAttributes } from "./LinkAttributes";
-export { LinkAttributesConfig } from "./LinkAttributesConfig";
-export { RegisterAttributeConfig, LinkAttributeName, isRegisterAttributeConfig } from "./RegisterAttributeConfig";
+export type { LinkAttributesConfig } from "./LinkAttributesConfig";
+export type { RegisterAttributeConfig, LinkAttributeName } from "./RegisterAttributeConfig";
+export { isRegisterAttributeConfig } from "./RegisterAttributeConfig";
 export { LINK_COMMAND_NAME, LINK_HREF_MODEL } from "./Constants";
 export { hasRequiredInternalFocusablesProperty } from "./HasFocusables";
 export { handleFocusManagement } from "./FocusUtils";

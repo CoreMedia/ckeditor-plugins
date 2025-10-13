@@ -1,5 +1,6 @@
-import { Editor } from "ckeditor5";
-import { NodeProxy, PersistResponse } from "./NodeProxy";
+import type { Editor } from "ckeditor5";
+import type { PersistResponse } from "./NodeProxy";
+import { NodeProxy } from "./NodeProxy";
 
 /**
  * Proxy to manipulate text nodes. General contract is, that all modifications
@@ -141,4 +142,5 @@ interface TextFilterParams {
  */
 type TextFilterRule = (params: TextFilterParams) => void;
 
-export { TextFilterParams, TextFilterRule, TextProxy };
+export type { TextFilterParams, TextFilterRule };
+export { TextProxy };

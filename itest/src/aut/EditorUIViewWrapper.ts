@@ -1,10 +1,11 @@
-import { ClassicEditor } from "ckeditor5";
-import { Locator } from "playwright";
+import type { ClassicEditor } from "ckeditor5";
+import type { Locator } from "playwright";
 import { JSWrapper } from "./JSWrapper";
-import { EditorUIWrapper } from "./EditorUIWrapper";
+import type { EditorUIWrapper } from "./EditorUIWrapper";
 // ClassicEditorUIView: See ckeditor/ckeditor5#12027.
 import { BodyCollectionWrapper } from "./BodyCollectionWrapper";
-import { Locatable, visible } from "./Locatable";
+import type { Locatable } from "./Locatable";
+import { visible } from "./Locatable";
 
 export class EditorUIViewWrapper extends JSWrapper<ClassicEditor["ui"]["view"]> implements Locatable {
   readonly #parent: EditorUIWrapper;

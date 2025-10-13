@@ -1,7 +1,8 @@
 /**
  * Defines delayed behavior.
  */
-import RequiredFrom, { withDefaults } from "./RequiredFrom";
+import type RequiredFrom from "./RequiredFrom";
+import { withDefaults } from "./RequiredFrom";
 
 interface Delayed {
   /**
@@ -43,4 +44,5 @@ const withDelayDefaults = <T extends DelayedConfig>(config: T): RequiredFrom<T, 
   withDefaults(config, DelayedDefaults);
 
 export default Delayed;
-export { DelayedDefaults, DelayedConfig, withDelayDefaults };
+export type { DelayedConfig };
+export { DelayedDefaults, withDelayDefaults };

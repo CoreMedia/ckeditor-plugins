@@ -1,9 +1,11 @@
 /* eslint no-restricted-globals: off */
 
-import { Observable, Subscriber, TeardownLogic } from "rxjs";
-import Delayed from "./Delayed";
-import { AtomicOrArray, increaseUpToAndRestart } from "./MockContentUtils";
-import { Subscription } from "./RxJsConvenience";
+import type { Subscriber, TeardownLogic } from "rxjs";
+import { Observable } from "rxjs";
+import type Delayed from "./Delayed";
+import type { AtomicOrArray } from "./MockContentUtils";
+import { increaseUpToAndRestart } from "./MockContentUtils";
+import type { Subscription } from "./RxJsConvenience";
 
 /**
  * Provides a subscription on an endlessly changing property. If just one

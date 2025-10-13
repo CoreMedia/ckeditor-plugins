@@ -2,7 +2,8 @@
 import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
-import { RequiredNonNull, RequiredNonNullPropertiesMissingError, requireNonNulls } from "../src/RequiredNonNull";
+import type { RequiredNonNull } from "../src/RequiredNonNull";
+import { RequiredNonNullPropertiesMissingError, requireNonNulls } from "../src/RequiredNonNull";
 
 interface WithOptionalNullableValues {
   optionalNullable?: number | null;

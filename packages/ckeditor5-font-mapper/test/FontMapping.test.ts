@@ -1,5 +1,6 @@
 import "global-jsdom/register";
-import test, { TestContext } from "node:test";
+import type { TestContext } from "node:test";
+import test from "node:test";
 import { expect } from "expect";
 import { FontMapping } from "../src/FontMapping";
 import { symbolFontMap } from "../src/SymbolFontMap";

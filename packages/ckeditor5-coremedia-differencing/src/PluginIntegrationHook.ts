@@ -1,5 +1,6 @@
 import { Plugin, priorities } from "ckeditor5";
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 
 /**

@@ -1,5 +1,5 @@
 import waitForExpect from "wait-for-expect";
-import { Locator } from "playwright";
+import type { Locator } from "playwright";
 
 export const expectFocusedElementHasAriaText = async (ariaLabelContent: string) =>
   waitForExpect(async () => {

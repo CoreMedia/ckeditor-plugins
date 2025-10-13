@@ -1,4 +1,4 @@
-import { Config, EditorConfig } from "ckeditor5";
+import type { Config, EditorConfig } from "ckeditor5";
 
 export const COREMEDIA_LINK_CONFIG_KEY = "coremedia:link";
 

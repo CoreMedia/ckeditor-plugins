@@ -1,4 +1,4 @@
-import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
+import type { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 
 /**
  * Maps `<ol>`/`<ul> to `[list]`. Respects the `type` attribute for

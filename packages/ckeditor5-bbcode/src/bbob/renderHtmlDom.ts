@@ -1,5 +1,5 @@
 import { render as htmlRender } from "@bbob/html/es";
-import { CoreRenderable, CoreRenderer, CoreRenderNode } from "@bbob/core/es";
+import type { CoreRenderable, CoreRenderer, CoreRenderNode } from "@bbob/core/es";
 import { isStringNode, isTagNode } from "@bbob/plugin-helper/es";
 import { bbCodeLogger } from "../BBCodeLogger";
 import { setAttributesFromTagAttrs } from "./Attributes";

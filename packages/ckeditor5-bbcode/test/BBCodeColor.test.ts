@@ -1,9 +1,12 @@
 import "global-jsdom/register";
-import test, { describe, TestContext } from "node:test";
+import type { TestContext } from "node:test";
+import test, { describe } from "node:test";
 import expect from "expect";
+import type { RgbColor } from "@coremedia/ckeditor5-dom-support";
+import { w3ExtendedColorNames } from "@coremedia/ckeditor5-dom-support";
+import type { ColorMapper } from "../src/rules/BBCodeColor";
+import { BBCodeColor, bbCodeColor } from "../src/rules/BBCodeColor";
 import { requireHTMLElement } from "./DOMUtils";
-import { BBCodeColor, bbCodeColor, ColorMapper } from "../src/rules/BBCodeColor";
-import { RgbColor, w3ExtendedColorNames } from "@coremedia/ckeditor5-dom-support";
 
 const reverseW3CColorMap = Object.fromEntries(Object.entries(w3ExtendedColorNames).map(([key, value]) => [value, key]));
 

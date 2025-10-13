@@ -1,13 +1,12 @@
 /* eslint no-null/no-null: off */
 
-
 import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
-import ToDataProcessor from "../../../src/ToDataProcessor";
 import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support";
-import { getV10Config } from "./Utils";
 import { Editor } from "ckeditor5";
+import ToDataProcessor from "../../../src/ToDataProcessor";
+import { getV10Config } from "./Utils";
 import "../../config";
 
 const EXECUTION_REPETITIONS = 100;

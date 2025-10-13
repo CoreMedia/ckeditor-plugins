@@ -1,12 +1,13 @@
+import type { ContentFormService } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import {
   CONTENT_CKE_MODEL_URI_REGEXP,
-  ContentFormService,
   createContentFormServiceDescriptor,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { serviceAgent } from "@coremedia/service-agent";
-import { ContextualBalloon, Editor, Link, LinkCommand, LinkUI, Observable, Plugin } from "ckeditor5";
-import { Subscription } from "rxjs";
+import type { Editor, LinkCommand, Observable } from "ckeditor5";
+import { ContextualBalloon, Link, LinkUI, Plugin } from "ckeditor5";
+import type { Subscription } from "rxjs";
 import { createDecoratorHook } from "../utils";
 import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
 import ContentLinkCommandHook from "./ContentLinkCommandHook";

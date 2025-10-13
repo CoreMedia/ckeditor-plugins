@@ -1,16 +1,9 @@
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
-import {
-  Plugin,
-  Editor,
-  DowncastConversionApi,
-  ViewAttributeElement,
-  ViewElement,
-  TwoStepCaretMovement,
-  LinkEditing,
-} from "ckeditor5";
+import type { Editor, DowncastConversionApi, ViewAttributeElement, ViewElement } from "ckeditor5";
+import { Plugin, TwoStepCaretMovement, LinkEditing } from "ckeditor5";
 import LinkCleanup, { getLinkCleanup } from "./LinkCleanup";
-import { RegisterAttributeConfig } from "./RegisterAttributeConfig";
+import type { RegisterAttributeConfig } from "./RegisterAttributeConfig";
 import { parseAttributesConfig } from "./LinkAttributesConfig";
 
 /**

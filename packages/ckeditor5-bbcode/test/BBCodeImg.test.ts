@@ -1,11 +1,11 @@
 import "global-jsdom/register";
-import test, { describe, TestContext } from "node:test";
+import type { TestContext } from "node:test";
+import test, { describe } from "node:test";
 import expect from "expect";
-import { requireHTMLElement } from "./DOMUtils";
 import { bbCodeImg } from "../src/rules/BBCodeImg";
+import { requireHTMLElement } from "./DOMUtils";
 
 void describe("BBCodeImg", () => {
-
   void test("Default Configuration", async (t: TestContext) => {
     const rule = bbCodeImg;
     const someUrl = "https://example.org/";

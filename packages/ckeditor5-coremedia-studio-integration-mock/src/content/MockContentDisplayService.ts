@@ -1,13 +1,15 @@
-import {
+import type {
   ContentAsLink,
   ContentDisplayService,
-  createContentDisplayServiceDescriptor,
   DisplayHint,
   UriPath,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { combineLatest, delay, firstValueFrom, Observable, OperatorFunction } from "rxjs";
+import { createContentDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import type { Observable, OperatorFunction } from "rxjs";
+import { combineLatest, delay, firstValueFrom } from "rxjs";
 import { map } from "rxjs/operators";
-import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
+import type { MockContentProvider } from "./MockContentPlugin";
+import { defaultMockContentProvider } from "./MockContentPlugin";
 import {
   observeEditingHint,
   observeLocaleNameHint,

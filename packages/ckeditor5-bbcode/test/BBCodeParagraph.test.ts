@@ -1,8 +1,9 @@
 import "global-jsdom/register";
-import test, { describe, TestContext } from "node:test";
+import type { TestContext } from "node:test";
+import test, { describe } from "node:test";
 import expect from "expect";
-import { requireHTMLElement } from "./DOMUtils";
 import { bbCodeParagraph } from "../src/rules/BBCodeParagraph";
+import { requireHTMLElement } from "./DOMUtils";
 
 const prettyPrintNewlines = "\n\n";
 

@@ -1,8 +1,10 @@
 import "global-jsdom/register";
-import test, { describe, TestContext } from "node:test";
+import type { TestContext } from "node:test";
+import test, { describe } from "node:test";
 import expect from "expect";
+import type { IsBoldFontWeight } from "../src/rules/BBCodeBold";
+import { BBCodeBold, bbCodeBold } from "../src/rules/BBCodeBold";
 import { requireHTMLElement } from "./DOMUtils";
-import { BBCodeBold, bbCodeBold, IsBoldFontWeight } from "../src/rules/BBCodeBold";
 
 void describe("BBCodeBold", () => {
   void describe("Default Configuration", () => {

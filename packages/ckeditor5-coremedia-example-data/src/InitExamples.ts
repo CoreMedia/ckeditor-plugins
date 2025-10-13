@@ -1,4 +1,4 @@
-import { ExampleData } from "./ExampleData";
+import type { ExampleData } from "./ExampleData";
 
 const createLabelFor = (inputElement: HTMLInputElement): HTMLLabelElement => {
   const { id: inputId } = inputElement;

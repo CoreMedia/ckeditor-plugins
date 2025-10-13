@@ -1,30 +1,34 @@
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import {
-  Clipboard,
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type {
   ClipboardContentInsertionEvent,
   ClipboardEventData,
   ClipboardInputTransformationData,
   ClipboardInputTransformationEvent,
-  ClipboardPipeline,
-  ModelDocumentFragment,
   ViewDocumentDomEventData,
   Editor,
   EventInfo,
   GetCallback,
-  Plugin,
   ModelRange,
-  StylesProcessor,
-  ViewDocument,
   ViewDocumentClipboardInputEvent,
-  ViewDocumentFragment,
   ViewRange,
 } from "ckeditor5";
-import { InitInformation, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
+import {
+  Clipboard,
+  ClipboardPipeline,
+  ModelDocumentFragment,
+  Plugin,
+  StylesProcessor,
+  ViewDocument,
+  ViewDocumentFragment,
+} from "ckeditor5";
+import type { InitInformation } from "@coremedia/ckeditor5-core-common";
+import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { isRaw } from "@coremedia/ckeditor5-common";
+import type { IsDroppableEvaluationResult } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import {
   getEvaluationResult,
   isDroppable,
-  IsDroppableEvaluationResult,
   receiveDraggedItemsFromDataTransfer,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import ContentClipboardEditing from "./ContentClipboardEditing";
@@ -107,7 +111,10 @@ export default class ContentClipboard extends Plugin {
    * @param _evt - event information
    * @param data - clipboard data
    */
-  static readonly #dragOverHandler = (_evt: unknown, data: ViewDocumentDomEventData<DragEvent> & ClipboardEventData) => {
+  static readonly #dragOverHandler = (
+    _evt: unknown,
+    data: ViewDocumentDomEventData<DragEvent> & ClipboardEventData,
+  ) => {
     // The listener already processed the clipboard content on the
     // higher priority (for example, while pasting into the code block).
     if (isContentEventData(data) && !!data.content) {

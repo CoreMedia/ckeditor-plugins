@@ -1,10 +1,9 @@
-import {
+import type {
   ContentReferenceResponse,
-  createContentReferenceServiceDescriptor,
   IContentReferenceService,
-  isUriPath,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { Editor } from "ckeditor5";
+import { createContentReferenceServiceDescriptor, isUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import type { Editor } from "ckeditor5";
 import MockExternalContentPlugin from "./MockExternalContentPlugin";
 import MockContentPlugin from "./MockContentPlugin";
 

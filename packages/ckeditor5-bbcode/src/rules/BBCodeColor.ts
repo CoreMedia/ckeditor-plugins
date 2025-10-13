@@ -1,5 +1,6 @@
-import { getColor, RgbColor } from "@coremedia/ckeditor5-dom-support";
-import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
+import type { RgbColor } from "@coremedia/ckeditor5-dom-support";
+import { getColor } from "@coremedia/ckeditor5-dom-support";
+import type { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 
 /**
  * Maps a color to a representation suitable as unique argument to the

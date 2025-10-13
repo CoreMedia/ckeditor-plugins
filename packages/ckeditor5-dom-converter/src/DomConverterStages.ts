@@ -1,5 +1,5 @@
-import { ConversionContext } from "./ConversionContext";
-import { Skip } from "./Signals";
+import type { ConversionContext } from "./ConversionContext";
+import type { Skip } from "./Signals";
 
 /**
  * Prior to importing the original node, you may want to modify it. Note

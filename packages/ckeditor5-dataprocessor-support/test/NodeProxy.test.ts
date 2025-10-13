@@ -1,8 +1,8 @@
 /* eslint no-null/no-null: off */
 
-
 import "global-jsdom/register";
-import test, { describe, beforeEach, TestContext } from "node:test";
+import type { TestContext } from "node:test";
+import test, { describe, beforeEach } from "node:test";
 import expect from "expect";
 import { NodeProxy } from "../src/NodeProxy";
 
@@ -423,7 +423,7 @@ void describe("NodeProxy.persistToDom", () => {
       "PERSIST#1: Should not modify DOM if no operations got applied.",
       {
         nodeXPath: "//child",
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
+
         action: () => {},
         expectedDom: "<parent><child><pair1/><pair2/><pair3/></child></parent>",
         expectedAbort: false,

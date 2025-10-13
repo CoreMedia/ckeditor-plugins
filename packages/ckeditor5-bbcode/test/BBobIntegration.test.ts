@@ -1,7 +1,8 @@
 /// <reference lib="dom" />
 
 import "global-jsdom/register";
-import test, { describe, TestContext } from "node:test";
+import type { TestContext } from "node:test";
+import test, { describe } from "node:test";
 import expect from "expect";
 import { bbCodeDefaultRules } from "../src/rules/bbCodeDefaultRules";
 import { html2bbcode } from "../src/html2bbcode";

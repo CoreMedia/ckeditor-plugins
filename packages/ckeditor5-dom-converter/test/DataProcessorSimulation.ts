@@ -1,5 +1,5 @@
 import { registerNamespacePrefixes } from "@coremedia/ckeditor5-dom-support";
-import { HtmlDomConverter } from "../src/HtmlDomConverter";
+import type { HtmlDomConverter } from "../src/HtmlDomConverter";
 
 /**
  * Simulates processing from HTML document as hold in data view layer in

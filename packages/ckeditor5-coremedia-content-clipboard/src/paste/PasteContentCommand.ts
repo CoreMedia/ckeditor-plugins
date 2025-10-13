@@ -1,8 +1,8 @@
-import { Command, Editor } from "ckeditor5";
+import type { Editor } from "ckeditor5";
+import { Command } from "ckeditor5";
 import { serviceAgent } from "@coremedia/service-agent";
+import type { ClipboardItemRepresentation, ClipboardService } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import {
-  ClipboardItemRepresentation,
-  ClipboardService,
   createClipboardServiceDescriptor,
   createRichtextConfigurationServiceDescriptor,
   isUriPath,

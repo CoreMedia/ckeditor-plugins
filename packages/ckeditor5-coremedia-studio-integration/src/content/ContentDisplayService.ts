@@ -1,6 +1,6 @@
-import { Observable } from "rxjs";
-import { UriPath } from "./UriPath";
-import ContentAsLink from "./ContentAsLink";
+import type { Observable } from "rxjs";
+import type { UriPath } from "./UriPath";
+import type ContentAsLink from "./ContentAsLink";
 
 /**
  * Service to provide information how to display a content within CKEditor.

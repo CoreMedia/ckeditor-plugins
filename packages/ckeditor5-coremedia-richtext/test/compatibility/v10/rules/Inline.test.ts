@@ -1,9 +1,8 @@
-
-
 import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
-import { allDataProcessingTests, applyFilter, DataProcessingTestCase, Direction, getFilter } from "../DataDrivenTests";
+import type { DataProcessingTestCase } from "../DataDrivenTests";
+import { allDataProcessingTests, applyFilter, Direction, getFilter } from "../DataDrivenTests";
 import { flatten } from "../Utils";
 
 // noinspection HttpUrlsUsage

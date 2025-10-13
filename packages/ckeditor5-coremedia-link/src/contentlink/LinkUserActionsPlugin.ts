@@ -5,19 +5,10 @@ import {
   requireContentUriPath,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { openLink } from "@coremedia/ckeditor5-core-common";
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import {
-  EditingView,
-  Editor,
-  ModelElement,
-  env,
-  keyCodes,
-  ModelNode,
-  Plugin,
-  ModelTextProxy,
-  ViewDocumentFragment,
-  ViewElement,
-} from "ckeditor5";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type { EditingView, Editor, ModelElement, ModelNode, ViewElement } from "ckeditor5";
+import { env, keyCodes, Plugin, ModelTextProxy, ViewDocumentFragment } from "ckeditor5";
 
 /**
  * A Plugin to override default behavior for user action on links in CKEditor.

@@ -1,6 +1,6 @@
-import { ElementFilterRulesByName, FilterRuleSet } from "./HtmlFilter";
-import { ElementFilterParams, ElementFilterRule } from "./ElementProxy";
-import { TextFilterParams, TextFilterRule } from "./TextProxy";
+import type { ElementFilterRulesByName, FilterRuleSet } from "./HtmlFilter";
+import type { ElementFilterParams, ElementFilterRule } from "./ElementProxy";
+import type { TextFilterParams, TextFilterRule } from "./TextProxy";
 
 const parentChildElementRule =
   (parentRule: ElementFilterRule, childRule: ElementFilterRule): ElementFilterRule =>
@@ -313,7 +313,7 @@ class FilterRuleSetConfigurationParser {
   }
 }
 
-export {
+export type {
   ElementsFilterRuleSetConfiguration,
   ElementsFilterRuleSetConfigurationValueType,
   FilterRuleSetConfiguration,
@@ -324,6 +324,5 @@ export {
   TextFilterRuleSetConfigurationValueType,
   ToDataAndViewElementConfiguration,
   ToDataAndViewTextConfiguration,
-  mergePreParsedToViews,
-  parseFilterRuleSetConfigurations,
 };
+export { mergePreParsedToViews, parseFilterRuleSetConfigurations };

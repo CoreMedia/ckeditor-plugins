@@ -1,4 +1,3 @@
-/* eslint-disable import/no-duplicates */
 // noinspection JSUnusedGlobalSymbols
 
 // Import expect.extend
@@ -13,15 +12,15 @@ import "./contentName/WaitToHaveContentName";
 import "./aria/ToHaveAriaLabel";
 
 // Import Matcher Interfaces
-import { ApplicationWrapperMatchers } from "./ApplicationWrapperExpectations";
-import { ClassicEditorWrapperMatchers } from "./ClassicEditorWrapperExpectations";
-import { ElementHandleMatchers } from "./ElementHandleExpectations";
-import { ApplicationConsoleMatchers } from "./ApplicationConsoleExpectations";
-import { WaitToBeVisible } from "./IsVisible/WaitToBeVisible";
-import { WaitToBeOn } from "./isToggleable/WaitToBeOn";
-import { WaitToBeEnabled } from "./isEnabled/WaitToBeEnabled";
-import { WaitToHaveContentName } from "./contentName/WaitToHaveContentName";
-import { WaitToHaveAriaLabel } from "./aria/ToHaveAriaLabel";
+import type { ApplicationWrapperMatchers } from "./ApplicationWrapperExpectations";
+import type { ClassicEditorWrapperMatchers } from "./ClassicEditorWrapperExpectations";
+import type { ElementHandleMatchers } from "./ElementHandleExpectations";
+import type { ApplicationConsoleMatchers } from "./ApplicationConsoleExpectations";
+import type { WaitToBeVisible } from "./IsVisible/WaitToBeVisible";
+import type { WaitToBeOn } from "./isToggleable/WaitToBeOn";
+import type { WaitToBeEnabled } from "./isEnabled/WaitToBeEnabled";
+import type { WaitToHaveContentName } from "./contentName/WaitToHaveContentName";
+import type { WaitToHaveAriaLabel } from "./aria/ToHaveAriaLabel";
 
 /**
  * Tell TypeScript to know of new matchers.

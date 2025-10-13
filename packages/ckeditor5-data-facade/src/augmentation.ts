@@ -1,5 +1,5 @@
-import { DataFacade } from "./DataFacade";
-import { DataFacadeConfig } from "./DataFacadeConfig";
+import type { DataFacade } from "./DataFacade";
+import type { DataFacadeConfig } from "./DataFacadeConfig";
 
 declare module "ckeditor5" {
   interface PluginsMap {

@@ -1,11 +1,9 @@
-
-
 import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
 import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support";
-import { getV10Config, parseXml } from "./Utils";
 import { Editor } from "ckeditor5";
+import { getV10Config, parseXml } from "./Utils";
 import "../../config";
 
 //@ts-expect-error We should rather mock ClassicEditor or similar here.

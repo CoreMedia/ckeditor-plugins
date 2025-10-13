@@ -1,12 +1,11 @@
-
-
 import "global-jsdom/register";
 import test, { describe, beforeEach } from "node:test";
 import expect from "expect";
-import { Autosave, Editor } from "ckeditor5";
+import type { Editor } from "ckeditor5";
+import { Autosave } from "ckeditor5";
 import { DataFacade } from "../src/DataFacade";
-import { GetDataApi } from "../src/DataApi";
-import { SetDataData } from "../src/DataControllerApi";
+import type { GetDataApi } from "../src/DataApi";
+import type { SetDataData } from "../src/DataControllerApi";
 import { allPlugins, completeToolbar, createTestEditor, prepareDocument } from "./helpers/TestEditor";
 
 const simulateDataReformat = (data: SetDataData, editor: Editor) => {

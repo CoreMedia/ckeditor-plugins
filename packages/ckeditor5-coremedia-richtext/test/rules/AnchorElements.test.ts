@@ -3,10 +3,11 @@
 import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
-import * as aut from "../../src/rules/AnchorElements";
 import { p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
+import * as aut from "../../src/rules/AnchorElements";
 import { RulesTester } from "./RulesTester";
-import { bijective, TestDirection } from "./TestDirection";
+import type { TestDirection } from "./TestDirection";
+import { bijective } from "./TestDirection";
 
 void describe("AnchorElement", () => {
   void describe("parseDataContentLink", () => {

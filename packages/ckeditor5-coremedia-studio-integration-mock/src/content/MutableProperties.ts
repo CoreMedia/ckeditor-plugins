@@ -1,8 +1,9 @@
-import { Observable } from "rxjs";
-import { AtomicOrArray, isObject } from "./MockContentUtils";
-import MigrateTo from "./MigrateTo";
+import type { Observable } from "rxjs";
+import type { AtomicOrArray } from "./MockContentUtils";
+import { isObject } from "./MockContentUtils";
+import type MigrateTo from "./MigrateTo";
 import { observeMutableProperty } from "./ObservableMutableProperty";
-import Delayed from "./Delayed";
+import type Delayed from "./Delayed";
 
 /**
  * Represents BLOB data, which are stored as content-property.
@@ -312,17 +313,19 @@ const observeBlob = (config: Delayed & Pick<MutableProperties, "blob">, iteratio
   return observeMutableProperty(config, blob, iterations);
 };
 
-export {
+export type {
   BlobTypeConfig,
   BlobData,
   BlobType,
   EditingType,
   MutableProperties,
   MutablePropertiesConfig,
-  MutablePropertiesDefaultDefaultProviders,
   MutablePropertiesDefaultProviders,
   NameType,
   ReadableType,
+};
+export {
+  MutablePropertiesDefaultDefaultProviders,
   observeBlob,
   observeEditing,
   observeName,

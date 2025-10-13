@@ -1,20 +1,27 @@
 import { serviceAgent } from "@coremedia/service-agent";
-import { Editor, ModelNode, ModelPosition, ModelRange, ModelWriter, PendingActions } from "ckeditor5";
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import {
+import type { Editor, ModelNode, ModelPosition, ModelRange, ModelWriter } from "ckeditor5";
+import { PendingActions } from "ckeditor5";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type {
   ContentImportService,
+  IContentReferenceService,
+  RichtextConfigurationService,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
+import {
   COREMEDIA_CONTEXT_KEY,
   createContentImportServiceDescriptor,
   createContentReferenceServiceDescriptor,
   createRichtextConfigurationServiceDescriptor,
-  IContentReferenceService,
-  RichtextConfigurationService,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common";
-import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
-import ContentInputDataCache, { ContentInputData } from "./ContentInputDataCache";
+import type { MarkerData } from "./ContentClipboardMarkerDataUtils";
+import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUtils";
+import type { ContentInputData } from "./ContentInputDataCache";
+import ContentInputDataCache from "./ContentInputDataCache";
 import MarkerRepositionUtil from "./MarkerRepositionUtil";
-import ContentToModelRegistry, { CreateModelFunction } from "./ContentToModelRegistry";
+import type { CreateModelFunction } from "./ContentToModelRegistry";
+import ContentToModelRegistry from "./ContentToModelRegistry";
 import { enableUndo, UndoSupport } from "./integrations/Undo";
 
 const UTILITY_NAME = "DataToModelMechanism";

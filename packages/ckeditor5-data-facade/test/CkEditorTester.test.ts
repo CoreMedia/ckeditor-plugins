@@ -1,4 +1,3 @@
-
 import "global-jsdom/register";
 import test, { describe, beforeEach, afterEach } from "node:test";
 import expect from "expect";

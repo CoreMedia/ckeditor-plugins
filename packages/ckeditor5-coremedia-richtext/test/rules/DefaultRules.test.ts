@@ -2,12 +2,12 @@
 
 import "global-jsdom/register";
 import test, { describe } from "node:test";
-import * as aut from "../../src/rules/DefaultRules";
 import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
-import { bijective, TestDirection, toView } from "./TestDirection";
+import * as aut from "../../src/rules/DefaultRules";
 import { INLINE_IMG } from "../../src/rules/ImageElements";
+import type { TestDirection } from "./TestDirection";
+import { bijective, toView } from "./TestDirection";
 import { RulesTester } from "./RulesTester";
-
 
 /**
  * These tests are dedicated to the complete CoreMedia Rich Text 1.0 DTD.

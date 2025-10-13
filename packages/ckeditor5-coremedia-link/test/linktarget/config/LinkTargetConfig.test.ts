@@ -1,10 +1,11 @@
 /* eslint no-null/no-null: off */
 
-import test, { describe, beforeEach, TestContext } from "node:test";
+import type { TestContext } from "node:test";
+import test, { describe, beforeEach } from "node:test";
 import expect from "expect";
 import { Config } from "ckeditor5";
 import { parseLinkTargetConfig } from "../../../src/linktarget/config/LinkTargetConfig";
-import LinkTargetOptionDefinition from "../../../src/linktarget/config/LinkTargetOptionDefinition";
+import type LinkTargetOptionDefinition from "../../../src/linktarget/config/LinkTargetOptionDefinition";
 
 const someFunction = () => {
   // irrelevant, only type required
@@ -200,7 +201,6 @@ void void describe("LinkTargetConfig", () => {
 
     void void test("cases", async (t: TestContext) => {
       for (const [i, { config: brokenConfig }] of configCases.entries()) {
-        // eslint-disable-next-line @typescript-eslint/no-base-to-string
         await t.test(`[${i}] should fail on invalid configuration type for link.targets: ${brokenConfig})`, () => {
           config.set("link.targets", brokenConfig);
           config.set("link.toolbar", [brokenConfig]);

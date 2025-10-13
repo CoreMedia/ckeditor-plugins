@@ -1,4 +1,5 @@
-import { KnownNamespacePrefix, namespaces } from "./Namespaces";
+import type { KnownNamespacePrefix } from "./Namespaces";
+import { namespaces } from "./Namespaces";
 
 export const COREMEDIA_RICHTEXT_PLUGIN_NAME = "CoreMediaRichText";
 export const COREMEDIA_RICHTEXT_NAMESPACE_URI = namespaces.default;

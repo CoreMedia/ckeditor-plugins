@@ -1,6 +1,7 @@
-import { PriorityString, priorities } from "ckeditor5";
-import { RequireSelected } from "@coremedia/ckeditor5-common";
-import {
+import type { PriorityString } from "ckeditor5";
+import { priorities } from "ckeditor5";
+import type { RequireSelected } from "@coremedia/ckeditor5-common";
+import type {
   AppendedFunction,
   ImportedFunction,
   ImportedWithChildrenFunction,

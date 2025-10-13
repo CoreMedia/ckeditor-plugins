@@ -1,4 +1,5 @@
-import { isEOL, N, TagNode } from "@bbob/plugin-helper/es";
+import type { N, TagNode } from "@bbob/plugin-helper/es";
+import { isEOL } from "@bbob/plugin-helper/es";
 
 /**
  * Removes EOLs at the beginning and end, that may be a result of

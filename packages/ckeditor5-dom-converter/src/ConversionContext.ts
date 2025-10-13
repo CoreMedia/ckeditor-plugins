@@ -1,4 +1,4 @@
-import { ConversionApi } from "./ConversionApi";
+import type { ConversionApi } from "./ConversionApi";
 
 /**
  * Contextual information and API during DOM conversion.

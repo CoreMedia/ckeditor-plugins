@@ -1,27 +1,22 @@
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import {
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type {
   DataProcessor,
   ViewDomConverter,
   Editor,
-  HtmlDataProcessor,
   MatcherPattern,
-  ObservableMixin,
   ViewDocument,
   ViewDocumentFragment,
 } from "ckeditor5";
-import {
-  HtmlDomConverter,
-  parseRule,
-  RuleBasedConversionListener,
-  RuleConfig,
-  RuleSection,
-} from "@coremedia/ckeditor5-dom-converter";
+import { HtmlDataProcessor, ObservableMixin } from "ckeditor5";
+import type { RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter";
+import { HtmlDomConverter, parseRule, RuleBasedConversionListener } from "@coremedia/ckeditor5-dom-converter";
 import { registerNamespacePrefixes } from "@coremedia/ckeditor5-dom-support";
 import RichTextXmlWriter from "./RichTextXmlWriter";
 import { COREMEDIA_RICHTEXT_NAMESPACE_URI, COREMEDIA_RICHTEXT_PLUGIN_NAME } from "./Constants";
 import { declareCoreMediaRichText10Entities } from "./Entities";
 import { defaultRules } from "./rules/DefaultRules";
-import { Strictness } from "./Strictness";
+import type { Strictness } from "./Strictness";
 import { TrackingSanitationListener } from "./sanitation/TrackingSanitationListener";
 import { RichTextSanitizer } from "./sanitation/RichTextSanitizer";
 import { getLatestCoreMediaRichTextConfig } from "./CoreMediaRichTextConfig";

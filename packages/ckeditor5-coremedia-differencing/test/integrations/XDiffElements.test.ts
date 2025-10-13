@@ -1,8 +1,9 @@
 import "global-jsdom/register";
 import test, { describe } from "node:test";
-import * as aut from "../../src/integrations/XDiffElements";
 import { blockquote, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
-import { TestDirection, toData, toView } from "./TestDirection";
+import * as aut from "../../src/integrations/XDiffElements";
+import type { TestDirection } from "./TestDirection";
+import { toData, toView } from "./TestDirection";
 import { RulesTester } from "./RulesTester";
 
 void describe("XDiffElements", () => {

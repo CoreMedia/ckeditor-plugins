@@ -1,8 +1,9 @@
 import "global-jsdom/register";
-import test, { describe, TestContext } from "node:test";
+import type { TestContext } from "node:test";
+import test, { describe } from "node:test";
 import expect from "expect";
-import { asHTMLElement, requireHTMLElement } from "./DOMUtils";
 import { bbCodeListItem } from "../src/rules/BBCodeListItem";
+import { asHTMLElement, requireHTMLElement } from "./DOMUtils";
 
 void describe("BBCodeListItem", () => {
   void test("Default Configuration", async (t: TestContext) => {

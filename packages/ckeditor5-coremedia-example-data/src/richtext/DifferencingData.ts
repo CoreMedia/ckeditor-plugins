@@ -1,4 +1,4 @@
-import { ExampleData } from "../ExampleData";
+import type { ExampleData } from "../ExampleData";
 import { Differencing } from "../Differencing";
 import { h1, sectionHeading, richtext } from "../RichText";
 

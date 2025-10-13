@@ -1,9 +1,10 @@
 import { map } from "rxjs/operators";
-import { combineLatest, Observable } from "rxjs";
-import { DisplayHint } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import type { Observable } from "rxjs";
+import { combineLatest } from "rxjs";
+import type { DisplayHint } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { observeEditing, observeLocaleName, observeName, observeReadable, observeSiteName } from "./MutableProperties";
-import MockContent from "./MockContent";
-import Delayed from "./Delayed";
+import type MockContent from "./MockContent";
+import type Delayed from "./Delayed";
 import { capitalize } from "./MockContentUtils";
 
 /**
@@ -269,12 +270,8 @@ const observeTypeHint = (config: TypeHintConfig, iterations?: number): Observabl
   return observableReadable.pipe(map((readable): DisplayHint => (readable ? typeHint : unreadableTypeHint)));
 };
 
+export type { EditingHintConfig, NameHintConfig, ReadableNameHintConfig, TypeHintConfig, UnreadableNameHintConfig };
 export {
-  EditingHintConfig,
-  NameHintConfig,
-  ReadableNameHintConfig,
-  TypeHintConfig,
-  UnreadableNameHintConfig,
   observeEditingHint,
   observeNameHint,
   observeSiteNameHint,

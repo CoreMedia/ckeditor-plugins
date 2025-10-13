@@ -1,9 +1,9 @@
 /* eslint @typescript-eslint/naming-convention: off */
 
-
 import "global-jsdom/register";
 import { describe } from "node:test";
-import { allDataProcessingTests, DataProcessingTestCase, Direction } from "../DataDrivenTests";
+import type { DataProcessingTestCase } from "../DataDrivenTests";
+import { allDataProcessingTests, Direction } from "../DataDrivenTests";
 import { decodeEntity, encodeString, flatten } from "../Utils";
 
 // noinspection HttpUrlsUsage

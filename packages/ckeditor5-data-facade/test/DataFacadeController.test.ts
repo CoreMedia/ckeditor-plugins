@@ -1,10 +1,10 @@
-
-
 import "global-jsdom/register";
 import test, { describe, beforeEach } from "node:test";
 import expect from "expect";
-import { ContextMismatchError, DataFacade, DataFacadeController, SetDataData } from "../src";
-import { CKEditorError, Editor } from "ckeditor5";
+import type { Editor } from "ckeditor5";
+import { CKEditorError } from "ckeditor5";
+import type { SetDataData } from "../src";
+import { ContextMismatchError, DataFacade, DataFacadeController } from "../src";
 import { createTestEditor, prepareDocument } from "./helpers/TestEditor";
 
 /**

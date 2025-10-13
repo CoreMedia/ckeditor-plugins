@@ -1,4 +1,4 @@
-import { ExampleData } from "../ExampleData";
+import type { ExampleData } from "../ExampleData";
 
 const text = `\
 [h1]Paragraphs in BBCode[/h1]

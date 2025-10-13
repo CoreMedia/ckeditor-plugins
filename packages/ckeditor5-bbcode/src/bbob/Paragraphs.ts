@@ -1,6 +1,6 @@
 import { isEOL, isTagNode, N, TagNode } from "@bbob/plugin-helper/es";
 import { bbCodeLogger } from "../BBCodeLogger";
-import { Tag } from "./types";
+import type { Tag } from "./types";
 
 const toNode = TagNode.create;
 

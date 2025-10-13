@@ -1,11 +1,8 @@
 // noinspection HtmlRequiredAltAttribute,RequiredAttributes
 
-
 import "global-jsdom/register";
 import test, { beforeEach, describe } from "node:test";
 import expect from "expect";
-import { defaultStrictness, Strictness, StrictnessKey } from "../../src/Strictness";
-import { RichTextSanitizer } from "../../src/sanitation/RichTextSanitizer";
 import {
   a,
   blockquote,
@@ -27,6 +24,9 @@ import {
   tr,
   ul,
 } from "@coremedia-internal/ckeditor5-coremedia-example-data";
+import type { StrictnessKey } from "../../src/Strictness";
+import { defaultStrictness, Strictness } from "../../src/Strictness";
+import { RichTextSanitizer } from "../../src/sanitation/RichTextSanitizer";
 import { sanitationListener } from "./TestSanitationListener";
 import { parseXml } from "./XmlTestUtils";
 import { expectSanitationResult } from "./ExpectSanitationResult";

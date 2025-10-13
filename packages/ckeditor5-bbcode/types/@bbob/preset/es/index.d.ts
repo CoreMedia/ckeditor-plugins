@@ -1,4 +1,4 @@
-import { TagNode } from "@bbob/plugin-helper/es";
+import type { TagNode } from "@bbob/plugin-helper/es";
 
 type Content = TagNode["content"] | TagNode;
 

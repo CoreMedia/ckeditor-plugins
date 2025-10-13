@@ -1,9 +1,8 @@
-
-
 import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
-import { ActiveStrictnessKey, Strictness } from "../../src/Strictness";
+import type { ActiveStrictnessKey } from "../../src/Strictness";
+import { Strictness } from "../../src/Strictness";
 import * as aut from "../../src/sanitation/AttributeContent";
 
 void describe("AttributeContent", () => {

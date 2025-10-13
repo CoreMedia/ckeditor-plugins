@@ -23,6 +23,7 @@ import {
   CoreMediaStudioEssentials,
   Strictness,
 } from "@coremedia/ckeditor5-coremedia-studio-essentials";
+import type { PluginConstructor } from "ckeditor5";
 import {
   Alignment,
   Autoformat,
@@ -53,7 +54,6 @@ import {
   List,
   Paragraph,
   PasteFromOffice,
-  PluginConstructor,
   RemoveFormat,
   SourceEditing,
   Strikethrough,
@@ -63,7 +63,7 @@ import {
   TableToolbar,
   Underline,
 } from "ckeditor5";
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
+import type { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
 import type {
   LatestCoreMediaRichTextConfig,
   V10CoreMediaRichTextConfig,
@@ -74,13 +74,14 @@ import {
   stripFixedAttributes,
 } from "@coremedia/ckeditor5-coremedia-richtext";
 import "ckeditor5/ckeditor5.css";
-import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support";
-import { LinkAttributes, LinkAttributesConfig } from "@coremedia/ckeditor5-link-common";
+import type { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support";
+import type { LinkAttributesConfig } from "@coremedia/ckeditor5-link-common";
+import { LinkAttributes } from "@coremedia/ckeditor5-link-common";
 import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing";
 import { Blocklist } from "@coremedia/ckeditor5-coremedia-blocklist";
 import { DataFacade } from "@coremedia/ckeditor5-data-facade";
-import { CKEditorInstanceFactory } from "../CKEditorInstanceFactory";
-import { ApplicationState } from "../ApplicationState";
+import type { CKEditorInstanceFactory } from "../CKEditorInstanceFactory";
+import type { ApplicationState } from "../ApplicationState";
 import { getHashParam } from "../HashParams";
 import { initInputExampleContent } from "../inputExampleContents";
 import { updatePreview } from "../preview";

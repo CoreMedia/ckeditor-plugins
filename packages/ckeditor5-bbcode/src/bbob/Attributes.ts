@@ -1,4 +1,5 @@
-import { getUniqAttr, TagAttrs } from "@bbob/plugin-helper/es";
+import type { TagAttrs } from "@bbob/plugin-helper/es";
+import { getUniqAttr } from "@bbob/plugin-helper/es";
 import { bbCodeLogger } from "../BBCodeLogger";
 
 /**

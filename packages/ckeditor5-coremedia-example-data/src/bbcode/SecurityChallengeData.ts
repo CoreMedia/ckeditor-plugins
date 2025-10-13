@@ -1,4 +1,4 @@
-import { ExampleData } from "../ExampleData";
+import type { ExampleData } from "../ExampleData";
 
 // The following text uses `#` to represent a backslash character in BBCode.
 // This makes it easier to write the BBCode without struggling with escaping

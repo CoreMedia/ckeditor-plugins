@@ -1,4 +1,4 @@
-import { ApplicationWrapper } from "../aut/ApplicationWrapper";
+import type { ApplicationWrapper } from "../aut/ApplicationWrapper";
 import { extendingWaitForExpect } from "./ExpectationsBase";
 
 /**

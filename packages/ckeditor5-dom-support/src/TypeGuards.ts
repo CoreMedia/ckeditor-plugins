@@ -1,4 +1,4 @@
-import { HasChildren, HasNamespaceUri } from "./Types";
+import type { HasChildren, HasNamespaceUri } from "./Types";
 
 /**
  * Type-guard if given value is an attribute instance `Attr`.

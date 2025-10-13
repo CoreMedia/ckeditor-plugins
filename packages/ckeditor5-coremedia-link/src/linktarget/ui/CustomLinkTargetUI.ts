@@ -1,20 +1,10 @@
 import { ifCommand } from "@coremedia/ckeditor5-core-common";
-import {
-  Plugin,
-  Command,
-  ButtonView,
-  ContextualBalloon,
-  clickOutsideHandler,
-  Locale,
-  Config,
-  DomOptimalPositionOptions,
-  LinkUI,
-  EditorConfig,
-} from "ckeditor5";
+import type { Command, Locale, Config, DomOptimalPositionOptions, EditorConfig } from "ckeditor5";
+import { Plugin, ButtonView, ContextualBalloon, clickOutsideHandler, LinkUI } from "ckeditor5";
 import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common";
 import { parseLinkTargetConfig } from "../config/LinkTargetConfig";
 import { OTHER_TARGET_NAME, requireDefaultTargetDefinition } from "../config/DefaultTarget";
-import LinkTargetOptionDefinition from "../config/LinkTargetOptionDefinition";
+import type LinkTargetOptionDefinition from "../config/LinkTargetOptionDefinition";
 import CustomLinkTargetInputFormView from "./CustomLinkTargetInputFormView";
 
 /**

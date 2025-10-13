@@ -1,3 +1,4 @@
+import type { EditorConfig } from "ckeditor5";
 import {
   Autosave,
   Bold,
@@ -22,7 +23,6 @@ import {
   FontSize,
   AutoImage,
   Base64UploadAdapter,
-  EditorConfig,
   ClassicEditor,
 } from "ckeditor5";
 import { DataFacade } from "../../src";

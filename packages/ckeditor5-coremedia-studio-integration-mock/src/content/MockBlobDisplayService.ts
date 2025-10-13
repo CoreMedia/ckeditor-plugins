@@ -1,13 +1,12 @@
-import {
-  BlobDisplayService,
-  InlinePreview,
-  UriPath,
-  createBlobDisplayServiceDescriptor,
-} from "@coremedia/ckeditor5-coremedia-studio-integration";
+import type { BlobDisplayService, InlinePreview, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { createBlobDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { map } from "rxjs/operators";
-import { combineLatest, Observable } from "rxjs";
-import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
-import { BlobData, observeBlob, observeName, observeReadable } from "./MutableProperties";
+import type { Observable } from "rxjs";
+import { combineLatest } from "rxjs";
+import type { MockContentProvider } from "./MockContentPlugin";
+import { defaultMockContentProvider } from "./MockContentPlugin";
+import type { BlobData } from "./MutableProperties";
+import { observeBlob, observeName, observeReadable } from "./MutableProperties";
 import { PNG_EMPTY_24x24, PNG_LOCK_24x24 } from "./MockFixtures";
 import { unreadableName } from "./DisplayHints";
 

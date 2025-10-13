@@ -1,5 +1,6 @@
-import { serviceDescriptorFactory, ServiceDescriptorWithProps } from "@coremedia/service-agent";
-import ClipboardService from "./studioservices/ClipboardService";
+import type { ServiceDescriptorWithProps } from "@coremedia/service-agent";
+import { serviceDescriptorFactory } from "@coremedia/service-agent";
+import type ClipboardService from "./studioservices/ClipboardService";
 
 /**
  * Descriptor used to fetch service from service agent.

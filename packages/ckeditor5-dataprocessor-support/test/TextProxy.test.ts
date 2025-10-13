@@ -1,11 +1,11 @@
 /* eslint no-null/no-null: off */
 
-
 import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
-import { TextProxy, TextFilterRule } from "../src/TextProxy";
 import { Editor } from "ckeditor5";
+import type { TextFilterRule } from "../src/TextProxy";
+import { TextProxy } from "../src/TextProxy";
 import "./config";
 
 //@ts-expect-error We should rather mock ClassicEditor or similar here.

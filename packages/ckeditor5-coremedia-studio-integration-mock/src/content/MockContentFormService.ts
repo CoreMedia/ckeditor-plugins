@@ -2,10 +2,11 @@
 
 /* eslint no-restricted-globals: off */
 
-import { ContentFormService } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { Editor } from "ckeditor5";
+import type { ContentFormService } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import type { Editor } from "ckeditor5";
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { Observable, Subject } from "rxjs";
+import type { Observable } from "rxjs";
+import { Subject } from "rxjs";
 import MockContentPlugin from "./MockContentPlugin";
 
 class MockContentFormService implements ContentFormService {

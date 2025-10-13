@@ -1,4 +1,4 @@
-import { Subscription } from "rxjs";
+import type { Subscription } from "rxjs";
 
 /**
  * A cache for subscriptions done during conversion of elements.

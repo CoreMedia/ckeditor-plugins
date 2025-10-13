@@ -1,8 +1,5 @@
-import {
-  ElementFilterRule,
-  ElementsFilterRuleSetConfiguration,
-  warnOnAmbiguousElementState,
-} from "@coremedia/ckeditor5-dataprocessor-support";
+import type { ElementFilterRule, ElementsFilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support";
+import { warnOnAmbiguousElementState } from "@coremedia/ckeditor5-dataprocessor-support";
 import { langMapper } from "./Lang";
 
 const HEADING_NUMBER_PATTERN = /^h(\d+)$/;

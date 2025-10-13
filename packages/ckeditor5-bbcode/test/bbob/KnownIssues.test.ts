@@ -1,7 +1,9 @@
 import "global-jsdom/register";
-import test, { describe, TestContext } from "node:test";
+import type { TestContext } from "node:test";
+import test, { describe } from "node:test";
 import expect from "expect";
-import bbob, { CoreRenderer } from "@bbob/core/es";
+import type { CoreRenderer } from "@bbob/core/es";
+import bbob from "@bbob/core/es";
 
 const render: CoreRenderer = (node) => JSON.stringify(node);
 

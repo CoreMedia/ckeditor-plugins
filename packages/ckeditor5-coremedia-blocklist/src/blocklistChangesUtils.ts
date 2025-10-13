@@ -1,5 +1,4 @@
-import {
-  Collection,
+import type {
   Editor,
   DifferItem,
   DifferItemAttribute,
@@ -9,8 +8,8 @@ import {
   Model,
   ModelNode,
   ModelRange,
-  FindAndReplaceUtils,
 } from "ckeditor5";
+import { Collection, FindAndReplaceUtils } from "ckeditor5";
 import { createMarkerNameAndStoreWord } from "./blocklistMarkerUtils";
 
 // copied from @ckeditor/ckeditor5-find-and-replace/src/findandreplace.d.ts since not exported in index.js

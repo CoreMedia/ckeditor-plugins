@@ -1,10 +1,5 @@
 import { ifCommand } from "@coremedia/ckeditor5-core-common";
-import blocklistIcon from "../theme/icons/blocklist.svg";
-import {
-  Plugin,
-  ButtonView,
-  clickOutsideHandler,
-  ContextualBalloon,
+import type {
   ModelTextProxy,
   ViewAttributeElement,
   ViewDocumentClickEvent,
@@ -13,10 +8,13 @@ import {
   ViewPosition,
   DomOptimalPositionOptions,
 } from "ckeditor5";
-import BlocklistCommand, { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
+import { Plugin, ButtonView, clickOutsideHandler, ContextualBalloon } from "ckeditor5";
+import blocklistIcon from "../theme/icons/blocklist.svg";
+import type BlocklistCommand from "./blocklistCommand";
+import { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
 import BlocklistActionsView from "./ui/blocklistActionsView";
 import "./lang/blocklist";
-import { UnblockEvent } from "./ui/blockedWordView";
+import type { UnblockEvent } from "./ui/blockedWordView";
 import BlocklistEditing from "./blocklistediting";
 
 const BLOCKLIST_KEYSTROKE = "Ctrl+Shift+B";
@@ -251,7 +249,7 @@ export default class Blocklistui extends Plugin {
       }
 
       // Otherwise attach panel to the selection.
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
       return view.domConverter.viewRangeToDom(viewDocument.selection.getFirstRange()!);
     };
     return {
@@ -335,7 +333,7 @@ export default class Blocklistui extends Plugin {
     clickOutsideHandler({
       emitter: this.#getBlocklistActionsView(),
       activator: () => this.#isBlocklistViewInBalloonPanel(),
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
       contextElements: () => [this.#balloon!.view.element!],
       callback: () => this.#hideBlocklistBalloon(),
     });

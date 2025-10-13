@@ -1,9 +1,9 @@
-
 import "global-jsdom/register";
 import test, { describe } from "node:test";
-import * as aut from "../../src/rules/HeadingElements";
 import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
-import { bijective, TestDirection } from "./TestDirection";
+import * as aut from "../../src/rules/HeadingElements";
+import type { TestDirection } from "./TestDirection";
+import { bijective } from "./TestDirection";
 import { RulesTester } from "./RulesTester";
 
 void describe("HeadingElements", () => {

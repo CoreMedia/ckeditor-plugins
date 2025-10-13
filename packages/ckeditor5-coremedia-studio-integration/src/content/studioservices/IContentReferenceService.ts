@@ -1,4 +1,5 @@
-import { serviceDescriptorFactory, ServiceDescriptorWithProps } from "@coremedia/service-agent";
+import type { ServiceDescriptorWithProps } from "@coremedia/service-agent";
+import { serviceDescriptorFactory } from "@coremedia/service-agent";
 
 export interface IContentReferenceService {
   getContentReferences(requests: string[]): Promise<ContentReferenceResponse[]>;

@@ -1,7 +1,8 @@
 /**
  * Supported attributes in XDIFF Namespace.
  */
-import { emptyElement, ImageAttributes } from "./RichText";
+import type { ImageAttributes } from "./RichText";
+import { emptyElement } from "./RichText";
 
 export type XDiffAttribute = "class" | "id" | "previous" | "next" | "changetype" | "changes";
 

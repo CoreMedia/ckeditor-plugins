@@ -21,5 +21,5 @@ export * from "./ParentNodes";
 export * from "./RgbColor";
 export * from "./Texts";
 // eslint-disable-next-line import/export
-export * from "./Types";
+export type * from "./Types";
 export * from "./w3ExtendedColorNames";

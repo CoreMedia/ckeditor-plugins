@@ -1,13 +1,13 @@
 import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common";
+import type { InlinePreview, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import {
   createBlobDisplayServiceDescriptor,
-  InlinePreview,
   requireContentUriPath,
-  UriPath,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { serviceAgent } from "@coremedia/service-agent";
-import {
+import type {
   DowncastDispatcher,
   ViewDowncastWriter,
   Editor,

@@ -1,8 +1,9 @@
 import "global-jsdom/register";
-import test, { describe, TestContext } from "node:test";
+import type { TestContext } from "node:test";
+import test, { describe } from "node:test";
 import expect from "expect";
-import { requireHTMLElement } from "./DOMUtils";
 import { bbCodeSize } from "../src/rules/BBCodeSize";
+import { requireHTMLElement } from "./DOMUtils";
 
 void describe("BBCodeSize", () => {
   void describe("Default Configuration", () => {

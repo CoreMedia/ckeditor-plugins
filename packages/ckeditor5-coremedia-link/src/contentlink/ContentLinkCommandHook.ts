@@ -1,20 +1,9 @@
-import {
-  ModelUri,
-  requireContentCkeModelUri,
-  ROOT_NAME,
-  UriPath,
-} from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import {
-  DifferItem,
-  DifferItemInsert,
-  ModelItem,
-  LinkEditing,
-  Plugin,
-  ModelRange,
-  ModelTextProxy,
-  ModelWriter,
-} from "ckeditor5";
+import type { ModelUri, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { requireContentCkeModelUri, ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type { DifferItem, DifferItemInsert, ModelItem, ModelRange, ModelTextProxy, ModelWriter } from "ckeditor5";
+import { LinkEditing, Plugin } from "ckeditor5";
 import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common";
 import {
   ifCommand,

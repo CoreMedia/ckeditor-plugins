@@ -1,4 +1,4 @@
-import DisplayHint from "./DisplayHint";
+import type DisplayHint from "./DisplayHint";
 
 /**
  * Represents a content, which shall be rendered as link the CKEditor UI.

@@ -1,11 +1,12 @@
-import { getUniqAttr, isTagNode, TagAttrs, TagNode } from "@bbob/plugin-helper/es";
+import type { TagAttrs } from "@bbob/plugin-helper/es";
+import { getUniqAttr, isTagNode, TagNode } from "@bbob/plugin-helper/es";
 import { createPreset } from "@bbob/preset/es";
 import html5DefaultTags from "@bbob/preset-html5/es/defaultTags";
-import { CoreTree } from "@bbob/core/es";
+import type { CoreTree } from "@bbob/core/es";
 import { bbCodeLogger } from "../BBCodeLogger";
 import { fontSizes, normalSize } from "../utils/FontSizes";
 import { paragraphAwareContent } from "./Paragraphs";
-import { Core, DefaultTags, Options } from "./types";
+import type { Core, DefaultTags, Options } from "./types";
 import { stripUniqueAttr, uniqueAttrToAttr } from "./Attributes";
 import { renderRaw } from "./renderRaw";
 import { trimEOL } from "./TagNodes";

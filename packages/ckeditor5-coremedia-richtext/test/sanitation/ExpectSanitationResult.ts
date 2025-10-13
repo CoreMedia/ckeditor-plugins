@@ -1,7 +1,8 @@
 import expect from "expect";
-import { RichTextSanitizer } from "../../src/sanitation/RichTextSanitizer";
-import { expectNoIssues, sanitationListener, ListenerExpectations } from "./TestSanitationListener";
+import type { RichTextSanitizer } from "../../src/sanitation/RichTextSanitizer";
 import { Strictness } from "../../src/Strictness";
+import type { ListenerExpectations } from "./TestSanitationListener";
+import { expectNoIssues, sanitationListener } from "./TestSanitationListener";
 import { parseXml, serialize } from "./XmlTestUtils";
 
 export const expectSanitationResult = (

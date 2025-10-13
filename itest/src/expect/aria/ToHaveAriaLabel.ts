@@ -1,5 +1,6 @@
 import { extendingWaitForExpect } from "../ExpectationsBase";
-import { getAriaLabel, HasAriaLabel } from "../../aria/AriaUtils";
+import type { HasAriaLabel } from "../../aria/AriaUtils";
+import { getAriaLabel } from "../../aria/AriaUtils";
 
 expect.extend({
   async waitToHaveAriaLabel(hasAriaLabel: HasAriaLabel, expectedAriaLabel: string): Promise<jest.CustomMatcherResult> {

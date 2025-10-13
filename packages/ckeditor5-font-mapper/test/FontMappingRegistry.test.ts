@@ -1,10 +1,11 @@
 import "global-jsdom/register";
-import test, { TestContext } from "node:test";
+import type { TestContext } from "node:test";
+import test from "node:test";
 import assert from "node:assert";
 import { expect } from "expect";
 import { FontMappingRegistry } from "../src/FontMappingRegistry";
 import { configToMap } from "../src/ConfigToMapUtil";
-import { Mode } from "../src";
+import type { Mode } from "../src";
 
 // Helper for spying on a method
 function createSpy<T extends (...args: any[]) => any>(obj: any, methodName: string) {

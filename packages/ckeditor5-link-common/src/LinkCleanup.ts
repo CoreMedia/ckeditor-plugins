@@ -1,9 +1,10 @@
 /* eslint no-null/no-null: off */
 
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { LINK_HREF_MODEL } from "./Constants";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
-import { DifferItem, DifferItemAttribute, Editor, LinkEditing, Plugin, ModelRange, ModelWriter } from "ckeditor5";
+import type { DifferItem, DifferItemAttribute, Editor, ModelRange, ModelWriter } from "ckeditor5";
+import { LinkEditing, Plugin } from "ckeditor5";
+import { LINK_HREF_MODEL } from "./Constants";
 
 /**
  * Provides configuration options for attributes, which must not exist without
@@ -159,5 +160,6 @@ const isRemoveLinkHrefAttribute = (diffItem: DifferItem): boolean => {
   const isDeleteAttribute = attributeNewValue === null || attributeNewValue === undefined;
   return isDeleteAttribute && attributeKey === LINK_HREF_MODEL;
 };
-export { getLinkCleanup, LinkCleanupRegistry };
+export type { LinkCleanupRegistry };
+export { getLinkCleanup };
 export default LinkCleanup;

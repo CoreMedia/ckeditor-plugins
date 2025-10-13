@@ -1,9 +1,9 @@
-
 import "global-jsdom/register";
 import test, { describe } from "node:test";
-import * as aut from "../../src/rules/BasicInlineElements";
 import { p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
-import { bijective, TestDirection, toData } from "./TestDirection";
+import * as aut from "../../src/rules/BasicInlineElements";
+import type { TestDirection } from "./TestDirection";
+import { bijective, toData } from "./TestDirection";
 import { RulesTester } from "./RulesTester";
 
 void describe("BasicInlineElements", () => {

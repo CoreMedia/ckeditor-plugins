@@ -1,13 +1,13 @@
 import { serviceAgent } from "@coremedia/service-agent";
+import type { UriPath, ContentAsLink } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import {
   createContentDisplayServiceDescriptor,
   CONTENT_CKE_MODEL_URI_REGEXP,
   requireContentUriPath,
-  UriPath,
-  ContentAsLink,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { Subscription } from "rxjs";
-import { ButtonView, Editor } from "ckeditor5";
+import type { Subscription } from "rxjs";
+import type { Editor } from "ckeditor5";
+import { ButtonView } from "ckeditor5";
 import CoreMediaIconView from "./CoreMediaIconView";
 import CancelButtonView from "./CancelButtonView";
 

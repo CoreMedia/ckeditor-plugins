@@ -1,11 +1,11 @@
 /* eslint no-null/no-null: off */
 
-
 import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
-import { ElementFilterParams, ElementFilterRule, ElementProxy } from "../src/ElementProxy";
 import { Editor } from "ckeditor5";
+import type { ElementFilterParams, ElementFilterRule } from "../src/ElementProxy";
+import { ElementProxy } from "../src/ElementProxy";
 import "./config";
 
 //@ts-expect-error We should rather mock ClassicEditor or similar here.
@@ -831,7 +831,7 @@ void describe("ElementProxy.applyRules()", () => {
           (me) => {
             Object.keys(me.node.attributes).forEach((key) => {
               // To fix, we may migrate attributes to Map<> instead.
-              // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+
               delete me.node.attributes[key];
             });
           },
@@ -848,7 +848,7 @@ void describe("ElementProxy.applyRules()", () => {
             me.node.attributes.new = "new value";
             Object.keys(me.node.attributes).forEach((key) => {
               // To fix, we may migrate attributes to Map<> instead.
-              // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+
               delete me.node.attributes[key];
             });
           },
@@ -925,7 +925,7 @@ void describe("ElementProxy.applyRules()", () => {
                 const descriptor = Object.getOwnPropertyDescriptor(me.node.attributes, key);
                 if (descriptor) {
                   // False positive? Checks assume, that descriptor may be undefined here. But how?
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
                   // @ts-expect-error Possibly false positive.
                   descriptor.set(`prefixed:${descriptor.get()}`);
                 }

@@ -1,4 +1,5 @@
-import { isStringNode, isTagNode, TagNode } from "@bbob/plugin-helper/es";
+import type { TagNode } from "@bbob/plugin-helper/es";
+import { isStringNode, isTagNode } from "@bbob/plugin-helper/es";
 
 /**
  * Renders a tag node to its raw content.

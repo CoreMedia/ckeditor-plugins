@@ -1,6 +1,6 @@
-import { Command } from "ckeditor5";
+import type { Command } from "ckeditor5";
 import { JSWrapper } from "./JSWrapper";
-import { CommandCollectionWrapper } from "./CommandCollectionWrapper";
+import type { CommandCollectionWrapper } from "./CommandCollectionWrapper";
 
 /**
  * Wraps a CKEditor `Command`.

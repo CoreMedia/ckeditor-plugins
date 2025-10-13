@@ -1,6 +1,6 @@
 import { dataFormatter } from "./DataFormatter";
 import { initPreviewSwitch } from "./PreviewSwitch";
-import { ApplicationState } from "./ApplicationState";
+import type { ApplicationState } from "./ApplicationState";
 
 const previewToggleButtonId = "previewToggle";
 const withPreviewClass = "with-preview";

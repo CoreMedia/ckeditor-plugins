@@ -1,4 +1,5 @@
-import { FocusTracker, ViewCollection } from "ckeditor5";
+import type { FocusTracker } from "ckeditor5";
+import { ViewCollection } from "ckeditor5";
 import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common";
 
 /**

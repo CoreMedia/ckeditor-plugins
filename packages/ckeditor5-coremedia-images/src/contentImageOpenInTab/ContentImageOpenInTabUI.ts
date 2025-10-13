@@ -1,6 +1,8 @@
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { ButtonView, Editor, Plugin } from "ckeditor5";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type { Editor } from "ckeditor5";
+import { ButtonView, Plugin } from "ckeditor5";
 import openInTabIcon from "../../theme/icons/openInTab.svg";
 import "../lang/contentImageOpenInTab";
 import ContentImageEditingPlugin from "../ContentImageEditingPlugin";

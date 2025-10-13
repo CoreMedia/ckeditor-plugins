@@ -1,6 +1,5 @@
 import { LINK_HREF_MODEL } from "@coremedia/ckeditor5-link-common";
-import {
-  Command,
+import type {
   ModelElement,
   ModelRange,
   ModelSchema,
@@ -8,9 +7,8 @@ import {
   ModelPosition,
   Model,
   ModelWriter,
-  first,
-  findAttributeRange,
 } from "ckeditor5";
+import { Command, first, findAttributeRange } from "ckeditor5";
 import { LINK_TARGET_MODEL } from "../Constants";
 
 /**
@@ -206,4 +204,4 @@ class LinkTargetCommand extends Command {
 }
 
 export default LinkTargetCommand;
-export { Target, DeletedTarget };
+export type { Target, DeletedTarget };

@@ -1,4 +1,4 @@
-import { ModelRange } from "ckeditor5";
+import type { ModelRange } from "ckeditor5";
 
 /**
  * Meta-data on drop.

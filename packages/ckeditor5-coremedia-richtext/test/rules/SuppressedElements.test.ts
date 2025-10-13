@@ -1,8 +1,7 @@
-
 import "global-jsdom/register";
 import test, { describe } from "node:test";
-import * as aut from "../../src/rules/SuppressedElements";
 import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
+import * as aut from "../../src/rules/SuppressedElements";
 import { toData } from "./TestDirection";
 import { RulesTester } from "./RulesTester";
 

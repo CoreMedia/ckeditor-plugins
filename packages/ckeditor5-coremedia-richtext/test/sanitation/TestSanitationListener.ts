@@ -1,6 +1,6 @@
-import { SanitationListener } from "../../src/sanitation/SanitationListener";
-import { AttributeCause, ElementCause } from "../../src/sanitation/Causes";
 import expect from "expect";
+import { SanitationListener } from "../../src/sanitation/SanitationListener";
+import type { AttributeCause, ElementCause } from "../../src/sanitation/Causes";
 
 /**
  * An artificial listener providing some details to validate in tests.

@@ -3,10 +3,12 @@
 // noinspection InnerHTMLJS
 
 import "global-jsdom/register";
-import test, { describe, TestContext } from "node:test";
+import type { TestContext } from "node:test";
+import test, { describe } from "node:test";
 import expect from "expect";
-import { FilterRuleSet, HtmlFilter } from "../src/HtmlFilter";
 import { Editor } from "ckeditor5";
+import type { FilterRuleSet } from "../src/HtmlFilter";
+import { HtmlFilter } from "../src/HtmlFilter";
 import "./config";
 
 //@ts-expect-error We should rather mock ClassicEditor or similar here.

@@ -1,4 +1,4 @@
-import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support";
+import type { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support";
 import { COREMEDIA_RICHTEXT_NAMESPACE_URI } from "./Constants";
 
 /**

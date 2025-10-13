@@ -1,8 +1,7 @@
+import type { RuleConfig, RuleSection } from "@coremedia/ckeditor5-dom-converter";
 import {
   byPriority,
   parseRule,
-  RuleConfig,
-  RuleSection,
   RuleBasedConversionListener,
   HtmlDomConverter,
 } from "@coremedia/ckeditor5-dom-converter";

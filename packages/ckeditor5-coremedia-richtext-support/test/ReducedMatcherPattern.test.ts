@@ -1,14 +1,9 @@
 import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
-import ReducedMatcherPattern, {
-  AttributesType,
-  findFirstPattern,
-  InheritingMatcherPattern,
-  mergePatterns,
-  resolveInheritance,
-  toLookupStrategy,
-} from "../src/ReducedMatcherPattern";
+import type { AttributesType, InheritingMatcherPattern } from "../src/ReducedMatcherPattern";
+import type ReducedMatcherPattern from "../src/ReducedMatcherPattern";
+import { findFirstPattern, mergePatterns, resolveInheritance, toLookupStrategy } from "../src/ReducedMatcherPattern";
 
 /**
  * Abbreviated form of `ReducedMatcherPattern` to ease providing data for tests.

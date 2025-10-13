@@ -1,22 +1,14 @@
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support";
-import {
-  DataProcessor,
-  ViewDomConverter,
-  Editor,
-  global,
-  HtmlDataProcessor,
-  MatcherPattern,
-  ObservableMixin,
-  ViewDocument,
-  ViewDocumentFragment,
-} from "ckeditor5";
+import type { DataProcessor, Editor, MatcherPattern, ViewDocument, ViewDocumentFragment } from "ckeditor5";
+import { ViewDomConverter, global, HtmlDataProcessor, ObservableMixin } from "ckeditor5";
 import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "../../Constants";
 import RichTextXmlWriter from "../../RichTextXmlWriter";
 import ToDataProcessor from "../../ToDataProcessor";
 import { declareCoreMediaRichText10Entities } from "../../Entities";
 import { getConfig } from "./V10CoreMediaRichTextConfig";
-import RichTextSchema from "./RichTextSchema";
+import type RichTextSchema from "./RichTextSchema";
 
 interface HtmlWriter {
   getHtml(fragment: DocumentFragment): string;

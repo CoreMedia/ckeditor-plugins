@@ -1,5 +1,5 @@
 import { extendingWaitForExpect } from "../ExpectationsBase";
-import { HasEnabled } from "./HasEnabled";
+import type { HasEnabled } from "./HasEnabled";
 
 expect.extend({
   async waitToBeEnabled(hasEnabled: HasEnabled): Promise<jest.CustomMatcherResult> {

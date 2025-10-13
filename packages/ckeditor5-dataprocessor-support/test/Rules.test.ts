@@ -1,13 +1,12 @@
-
-
 import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
-import { parseFilterRuleSetConfigurations, FilterRuleSetConfiguration } from "../src/Rules";
-import { HtmlFilter } from "../src/HtmlFilter";
-import { ElementFilterRule } from "../src/ElementProxy";
-import { TextFilterRule } from "../src/TextProxy";
 import { Editor } from "ckeditor5";
+import type { FilterRuleSetConfiguration } from "../src/Rules";
+import { parseFilterRuleSetConfigurations } from "../src/Rules";
+import { HtmlFilter } from "../src/HtmlFilter";
+import type { ElementFilterRule } from "../src/ElementProxy";
+import type { TextFilterRule } from "../src/TextProxy";
 import "./config";
 
 /**

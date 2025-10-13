@@ -1,11 +1,11 @@
 /* eslint no-null/no-null: off */
 
-
 import "global-jsdom/register";
 import test, { describe } from "node:test";
 import expect from "expect";
-import RichTextSchema, { V10Strictness } from "../../../src/compatibility/v10/RichTextSchema";
 import { ElementProxy } from "@coremedia/ckeditor5-dataprocessor-support";
+import type { V10Strictness } from "../../../src/compatibility/v10/RichTextSchema";
+import RichTextSchema from "../../../src/compatibility/v10/RichTextSchema";
 import { Strictness } from "../../../src/Strictness";
 
 interface CommentableTestData {

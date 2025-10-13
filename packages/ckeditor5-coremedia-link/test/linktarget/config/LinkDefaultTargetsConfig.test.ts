@@ -1,6 +1,7 @@
 /* eslint no-null/no-null: off */
 
-import { describe, beforeEach, test, TestContext } from "node:test";
+import type { TestContext } from "node:test";
+import { describe, beforeEach, test } from "node:test";
 import expect from "expect";
 import { Config } from "ckeditor5";
 import { computeDefaultLinkTargetForUrl } from "../../../src/linktarget/config/LinkTargetConfig";

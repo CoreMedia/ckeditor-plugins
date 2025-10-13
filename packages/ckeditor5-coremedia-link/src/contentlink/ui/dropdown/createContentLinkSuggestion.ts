@@ -1,4 +1,4 @@
-import { Editor } from "ckeditor5";
+import type { Editor } from "ckeditor5";
 import ContentLinkView from "../ContentLinkView";
 
 export interface ContentLinkSuggestionProps {
