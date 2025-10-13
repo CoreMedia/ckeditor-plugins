@@ -2,8 +2,8 @@ import test from "node:test";
 import expect from "expect";
 import type { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
 import { RuleBasedHtmlDomConverterFactory } from "./RuleBasedHtmlDomConverters";
+import { isToData, isToView } from "./TestDirection";
 import type { TestDirection } from "./TestDirection";
-import { isToView } from "./TestDirection";
 
 /**
  * Class to help writing data driven tests for `RuleConfig` objects.
@@ -57,15 +57,14 @@ export class RulesTester {
       });
     }
 
-    /*if (isToData(direction)) {
+    if (isToData(direction)) {
       test("toData", () => {
         const { toDataConverter, htmlElement, xmlElementSerialized } = setUp();
         const result = toDataConverter.convert(htmlElement) as Element;
         // Unfortunately, does not ignore order of attributes. If we struggle
         // with this, we may want to search for alternative approaches.
-        // TODO[ntr]
-        // expect(xmlSerializer.serializeToString(result)).toEqual(xmlElementSerialized);
+        expect(xmlSerializer.serializeToString(result)).toEqual(xmlElementSerialized);
       });
-    }*/
+    }
   }
 }
