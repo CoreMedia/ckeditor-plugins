@@ -24,7 +24,7 @@
     "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
     "clean:dist": "rimraf ./dist",
     "npm-check-updates": "npm-check-updates --upgrade",
-    "lint": "eslint \"**/*.{js,cjs,mjs,ts,tsx}\"",
+    "lint": "eslint \"**/*.{ts,tsx}\"",
     "test": "test-runner-react"
   },
   "devDependencies": {

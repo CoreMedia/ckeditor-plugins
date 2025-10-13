@@ -50,7 +50,7 @@
     "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
     "clean:dist": "rimraf ./dist",
     "build": "exit 0",
-    "lint": "eslint \"**/*.{js,cjs,mjs,ts,tsx}\"",
+    "lint": "eslint \"**/*.{ts,tsx}\"",
     "preplaywright": "npx playwright install chromium",
     "playwright": "jest",
     "playwright-local": "jest --config ./jest.local.js",
