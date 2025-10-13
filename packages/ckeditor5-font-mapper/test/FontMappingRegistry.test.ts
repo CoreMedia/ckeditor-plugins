@@ -6,33 +6,25 @@ import { expect } from "expect";
 import { FontMappingRegistry } from "../src/FontMappingRegistry";
 import { configToMap } from "../src/ConfigToMapUtil";
 import type { Mode } from "../src";
-import { FontMapping } from "../src/FontMapping";
+import type { FontMapping } from "../src/FontMapping";
 
 // Helper for spying on a method
-function createSpy<
-  K extends keyof FontMapping
->(
+function createSpy<K extends keyof FontMapping>(
   obj: FontMapping,
-  methodName: K
+  methodName: K,
 ): { restore: () => void; calls: Parameters<FontMapping[K]>[] } {
   const original = obj[methodName];
 
-  if (typeof original !== 'function') {
+  if (typeof original !== "function") {
     throw new Error(`${String(methodName)} is not a function`);
   }
 
   const calls: Parameters<typeof original>[] = [];
 
-  (obj as FontMapping)[methodName] = (function (
-    this: FontMapping,
-    ...args: Parameters<typeof original>
-  ) {
+  (obj as FontMapping)[methodName] = function (this: FontMapping, ...args: Parameters<typeof original>) {
     calls.push(args);
-    return (original as (...args: Parameters<typeof original>) => ReturnType<typeof original>).apply(
-      this,
-      args
-    );
-  }) as FontMapping[K];
+    return (original as (...args: Parameters<typeof original>) => ReturnType<typeof original>).apply(this, args);
+  } as FontMapping[K];
 
   return {
     calls,
@@ -41,7 +33,6 @@ function createSpy<
     },
   };
 }
-
 
 // ------------------------------
 // Test 1: FontMapper exists and ignores case
