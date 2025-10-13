@@ -1,7 +1,7 @@
 /* eslint no-null/no-null: off */
 
 import "global-jsdom/register";
-import test, { describe } from "node:test";
+import test, { beforeEach, describe } from "node:test";
 import expect from "expect";
 import { Editor } from "ckeditor5";
 import type { ElementFilterParams, ElementFilterRule } from "../src/ElementProxy";
