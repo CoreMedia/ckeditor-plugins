@@ -103,6 +103,7 @@ jobs:
 
           echo "//${npmHost}/:_authToken=${npmAuthToken}" >> .npmrc
           echo "@coremedia:registry=${npmUrl}" >> .npmrc
+          echo "@coremedia-internal:registry=${npmUrl}" >> .npmrc
           # We must not commit this change.
           git update-index --assume-unchanged .npmrc
       - id: installPnpm
