@@ -266,6 +266,6 @@ describe("Content Link Feature", () => {
     await page.keyboard.press("Enter");
 
     const contentLink = view.locator.locator(`a`);
-    await expect(contentLink).toHaveText("content:101");
+    await expect(contentLink).toHaveText("Some Folder");
   });
 });
