@@ -1,11 +1,22 @@
 import "./setup.mjs";
-import test, { describe, beforeEach } from "node:test";
+import { describe, beforeEach, test } from "node:test";
+import type { TestContext } from "node:test";
 import expect from "expect";
-import type { Editor } from "ckeditor5";
+import type { DataController, Editor } from "ckeditor5";
 import { CKEditorError } from "ckeditor5";
 import type { SetDataData } from "../src";
 import { ContextMismatchError, DataFacade, DataFacadeController } from "../src";
 import { createTestEditor, prepareDocument } from "./helpers/TestEditor";
+
+type Mocked<T> = T & { mock: { calls: { arguments: unknown[] }[] } };
+
+function mockDataController(t: TestContext, data: DataController) {
+  data.set = t.mock.fn(data.set);
+
+  return data as DataController & {
+    set: Mocked<DataController["set"]>;
+  };
+}
 
 /**
  * Simulates an internal change to the data (like reordering attributes).
@@ -68,14 +79,14 @@ void describe("DataFacadeController", () => {
       }
       const dataFacade = editor.plugins.get(DataFacade);
       controller.setData(dataFixture);
-      t.mock.setter(editor.data, "set");
+      const mockedData = mockDataController(t, editor.data);
       controller.init(editor);
       expect(controller).toHaveProperty("delegating", true);
 
       // Should have propagated on init to delegate data-facade-controller and
       // to editor subsequently.
       expect(dataFacade.getData()).toEqual(dataFixture);
-      expect(editor.data.set).toHaveBeenCalledWith(dataFixture, {});
+      expect(mockedData.set.mock.calls[0].arguments).toStrictEqual([dataFixture, {}]);
 
       // Some additional check, that delegation also respects caching now.
       simulateDataReformat(dataFixture.toLowerCase(), editor);
@@ -133,9 +144,9 @@ void describe("DataFacadeController", () => {
           return;
         }
         controller.setData(dataFixture);
-        t.mock.setter(editor.data, "set");
+        const mockedData = mockDataController(t, editor.data);
         controller.init(editor);
-        expect(editor.data.set).toHaveBeenCalledWith(dataFixture, {});
+        expect(mockedData.set.mock.calls[0].arguments).toStrictEqual([dataFixture, {}]);
       });
     });
 
@@ -157,10 +168,10 @@ void describe("DataFacadeController", () => {
             expect(editor).toBeDefined();
             return;
           }
-          t.mock.setter(editor.data, "set");
+          const mockedData = mockDataController(t, editor.data);
           controller.setData(dataFixture);
           expect(controller.getData()).toEqual(dataFixture);
-          expect(editor.data.set).toHaveBeenCalledWith(dataFixture, {});
+          expect(mockedData.set.mock.calls[0].arguments).toStrictEqual([dataFixture, {}]);
         });
         void test("should read data directly, if none cached", async () => {
           const dataFixture = "<p>Some text.</p>";
