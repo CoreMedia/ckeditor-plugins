@@ -72,9 +72,8 @@ void describe("NodeProxy.wrap", () => {
   void test("cases", async (t: TestContext) => {
     for (const [i, value] of falsyCases.entries()) {
       await t.test(`[${i}] Should return null when wrapping falsy values like (${value})`, () => {
-        // @ts-expect-error the value has an invalid type. tsc already knows this
-        const proxy = NodeProxy.proxy(rootNode, value);
-        expect(proxy?.mutable).toStrictEqual(value);
+        const proxy = NodeProxy.proxy(value);
+        expect(proxy).toStrictEqual(null);
       });
     }
   });
