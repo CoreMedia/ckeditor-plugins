@@ -1,10 +1,9 @@
-import "global-jsdom/register";
-import test, { describe } from "node:test";
+import { describe } from "node:test";
 import { p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import * as aut from "../../src/rules/BasicInlineElements";
+import { RulesTester } from "./RulesTester";
 import type { TestDirection } from "./TestDirection";
 import { bijective, toData } from "./TestDirection";
-import { RulesTester } from "./RulesTester";
 
 void describe("BasicInlineElements", () => {
   const ruleConfigurations = aut.basicInlineElements;
@@ -20,7 +19,7 @@ void describe("BasicInlineElements", () => {
   ];
 
   for (const [index, { data, direction, view }] of formattingTestCases.entries()) {
-    void test(`[${index}] Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
+    void describe(`[${index}] Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
       const dataString = richtext(p(data));
       const htmlString = `<body><p>${view}</p></body>`;
       const tester = new RulesTester(ruleConfigurations, "p > *");

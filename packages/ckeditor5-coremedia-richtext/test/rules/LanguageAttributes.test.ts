@@ -1,10 +1,9 @@
-import "global-jsdom/register";
-import test, { describe } from "node:test";
+import { describe } from "node:test";
 import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import * as aut from "../../src/rules/LanguageAttributes";
+import { RulesTester } from "./RulesTester";
 import type { TestDirection } from "./TestDirection";
 import { bijective, toData, toView } from "./TestDirection";
-import { RulesTester } from "./RulesTester";
 
 void describe("HeadingElements", () => {
   const ruleConfigurations = [aut.languageAttributes];
@@ -25,7 +24,7 @@ void describe("HeadingElements", () => {
   ];
 
   for (const [index, { data, direction, view }] of testCases.entries()) {
-    void test(`[${index}] Should provide mapping from data ${direction} view: ${data} -> ${view}`, () => {
+    void describe(`[${index}] Should provide mapping from data ${direction} view: ${data} -> ${view}`, () => {
       const dataString = richtext(data);
       const htmlString = `<body>${view}</body>`;
       const tester = new RulesTester(ruleConfigurations, "p", "p");

@@ -1,5 +1,5 @@
-import "global-jsdom/register";
 import test, { describe } from "node:test";
+import expect from "expect";
 import { formatLink } from "../../../../src/compatibility/v10/rules/IdHelper";
 
 void describe("IdHelper", () => {

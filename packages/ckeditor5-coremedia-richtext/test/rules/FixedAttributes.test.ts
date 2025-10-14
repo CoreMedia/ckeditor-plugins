@@ -1,12 +1,12 @@
 // noinspection HtmlUnknownAttribute,HtmlRequiredAltAttribute
 
 import "global-jsdom/register";
-import test, { describe } from "node:test";
+import { describe } from "node:test";
 import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data/src/RichTextBase";
 import * as aut from "../../src/rules/FixedAttributes";
+import { RulesTester } from "./RulesTester";
 import type { TestDirection } from "./TestDirection";
 import { toData } from "./TestDirection";
-import { RulesTester } from "./RulesTester";
 
 void describe("FixedAttributes", () => {
   const ruleConfigurations = [aut.stripFixedAttributes()];
@@ -20,7 +20,7 @@ void describe("FixedAttributes", () => {
   ];
 
   for (const [index, { data, direction, view }] of mappingTestCases.entries()) {
-    void test(`[${index}] Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
+    void describe(`[${index}] Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
       const dataString = richtext(data);
       const htmlString = `<body>${view}</body>`;
       const tester = new RulesTester(ruleConfigurations, "*", "body > *");

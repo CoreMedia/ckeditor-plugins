@@ -1,10 +1,9 @@
-import "global-jsdom/register";
-import test, { describe } from "node:test";
+import { describe } from "node:test";
 import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import * as aut from "../../src/rules/DivElements";
+import { RulesTester } from "./RulesTester";
 import type { TestDirection } from "./TestDirection";
 import { bijective } from "./TestDirection";
-import { RulesTester } from "./RulesTester";
 
 void describe("DivElements", () => {
   const ruleConfigurations = [aut.divElements];
@@ -16,7 +15,7 @@ void describe("DivElements", () => {
   ];
 
   for (const [index, { data, direction, view }] of divMappingTestCases.entries()) {
-    void test(`[${index}] Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
+    void describe(`[${index}] Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
       const dataString = richtext(data);
       const htmlString = `<body>${view}</body>`;
       const tester = new RulesTester(ruleConfigurations, "*", "body > *");

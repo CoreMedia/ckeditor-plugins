@@ -1,12 +1,11 @@
 // noinspection HtmlUnknownAttribute
 
-import "global-jsdom/register";
-import test, { describe } from "node:test";
+import { describe } from "node:test";
 import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import * as aut from "../../src/rules/TableElements";
+import { RulesTester } from "./RulesTester";
 import type { TestDirection } from "./TestDirection";
 import { bijective, toData, toView } from "./TestDirection";
-import { RulesTester } from "./RulesTester";
 
 void describe("TableElements", () => {
   const ruleConfigurations = aut.tableElements;
@@ -107,7 +106,7 @@ void describe("TableElements", () => {
   ];
 
   for (const [index, { data, direction, view }] of tableTests.entries()) {
-    void test(`[${index}] Should provide mapping from data ${direction} view`, () => {
+    void describe(`[${index}] Should provide mapping from data ${direction} view`, () => {
       const dataString = richtext(data);
       const htmlString = `<body>${view}</body>`;
       const tester = new RulesTester(ruleConfigurations, "*", "body > *");

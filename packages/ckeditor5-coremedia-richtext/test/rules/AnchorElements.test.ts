@@ -222,7 +222,7 @@ void describe("AnchorElement", () => {
 
     for (const [index, { data, direction, view }] of testCases.entries()) {
       describe(`[${index}] Should transform data to view and vice versa: data: ${data}, view: ${view}`, () => {
-        void test("executeTests", () => {
+        void describe("executeTests", () => {
           const dataString = richtext(p(data));
           const htmlString = `<body><p>${view}</p></body>`;
           const tester = new RulesTester(ruleConfigurations, "p > *");
@@ -314,7 +314,7 @@ void describe("AnchorElement", () => {
 
     for (const [index, { data, direction, view }] of testCases.entries()) {
       describe(`[${index}] Should transform data to view and vice versa: data: ${data}, view: ${view}`, () => {
-        void test("executeTests", () => {
+        void describe("executeTests", () => {
           const dataString = richtext(p(data));
           const htmlString = `<body><p>${view}</p></body>`;
           const tester = new RulesTester(ruleConfigurations, "p > *");

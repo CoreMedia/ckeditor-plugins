@@ -1,13 +1,12 @@
 // noinspection HtmlUnknownAttribute
 
-import "global-jsdom/register";
-import test, { describe } from "node:test";
+import { describe } from "node:test";
 import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import * as aut from "../../src/rules/DefaultRules";
 import { INLINE_IMG } from "../../src/rules/ImageElements";
+import { RulesTester } from "./RulesTester";
 import type { TestDirection } from "./TestDirection";
 import { bijective, toView } from "./TestDirection";
-import { RulesTester } from "./RulesTester";
 
 /**
  * These tests are dedicated to the complete CoreMedia Rich Text 1.0 DTD.
@@ -221,7 +220,7 @@ void describe("DefaultRules", () => {
   ];
 
   for (const [index, { data, direction, view }] of cases.entries()) {
-    void test(`[${index}] Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
+    void describe(`[${index}] Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
       const dataString = richtext(data);
       const htmlString = `<body>${view}</body>`;
       const tester = new RulesTester(ruleConfigurations, "*", "body > *");
