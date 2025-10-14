@@ -68,7 +68,7 @@ void describe("DataFacadeController", () => {
       }
       const dataFacade = editor.plugins.get(DataFacade);
       controller.setData(dataFixture);
-      editor.data.set = t.mock.fn(editor.data.set);
+      t.mock.setter(editor.data, "set");
       controller.init(editor);
       expect(controller).toHaveProperty("delegating", true);
 
@@ -133,7 +133,7 @@ void describe("DataFacadeController", () => {
           return;
         }
         controller.setData(dataFixture);
-        editor.data.set = t.mock.fn(editor.data.set);
+        t.mock.setter(editor.data, "set");
         controller.init(editor);
         expect(editor.data.set).toHaveBeenCalledWith(dataFixture, {});
       });
@@ -157,7 +157,7 @@ void describe("DataFacadeController", () => {
             expect(editor).toBeDefined();
             return;
           }
-          editor.data.set = t.mock.fn(editor.data.set);
+          t.mock.setter(editor.data, "set");
           controller.setData(dataFixture);
           expect(controller.getData()).toEqual(dataFixture);
           expect(editor.data.set).toHaveBeenCalledWith(dataFixture, {});
