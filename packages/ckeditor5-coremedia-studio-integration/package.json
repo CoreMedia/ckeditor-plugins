@@ -47,7 +47,7 @@
     "test": "test-runner-react"
   },
   "devDependencies": {
-    "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.d5b6464",
+    "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.050b44a",
     "@coremedia/service-agent": "^2.1.2",
     "@types/node": "^22.0.0",
     "copyfiles": "^2.4.1",

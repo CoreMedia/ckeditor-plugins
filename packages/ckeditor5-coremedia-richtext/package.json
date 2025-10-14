@@ -25,11 +25,11 @@
     "clean:dist": "rimraf ./dist",
     "npm-check-updates": "npm-check-updates --upgrade",
     "lint": "eslint \"**/*.{ts,tsx}\"",
-    "test": "test-runner-react"
+    "test": "test-runner-react --test-force-exit=true"
   },
   "devDependencies": {
     "@coremedia-internal/ckeditor5-coremedia-example-data": "^1.0.0",
-    "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.d5b6464",
+    "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.050b44a",
     "@types/node": "^22.0.0",
     "ckeditor5": "46.1.1",
     "copyfiles": "^2.4.1",

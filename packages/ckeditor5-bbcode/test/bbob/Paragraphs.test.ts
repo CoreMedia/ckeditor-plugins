@@ -1,4 +1,3 @@
-import "global-jsdom/register";
 import type { TestContext } from "node:test";
 import test, { describe } from "node:test";
 import expect from "expect";
@@ -26,12 +25,12 @@ describe(`Paragraphs`, () => {
     // ---------------------------------------------------------------------------------------------------[ content=[] ]
     describe(`content=[]`, () => {
       void test(`should return "[]" with default options`, () => {
-        expect(paragraphAwareContent([])).toMatchObject([]);
+        expect({ expected: paragraphAwareContent([]) }).toMatchObject([]);
       });
 
       void test(`should return "[]" wrapped in paragraph with "requireParagraph=true"`, () => {
         const expected = [toNode("p", {}, [])];
-        expect(paragraphAwareContent([], { requireParagraph: true })).toMatchObject(expected);
+        expect({ expected: paragraphAwareContent([], { requireParagraph: true }) }).toMatchObject({ expected });
       });
     });
 
@@ -39,13 +38,13 @@ describe(`Paragraphs`, () => {
     describe(`content=string[]: Content only containing strings without EOL characters`, () => {
       void test(`should skip extra paragraph (requireParagraphs=default false)`, () => {
         const input = ["lorem", "ipsum"];
-        expect(paragraphAwareContent(input)).toMatchObject(input);
+        expect({ expected: paragraphAwareContent(input) }).toMatchObject({ expected: input });
       });
 
       void test(`should wrap content into paragraph (requireParagraphs=true)`, () => {
         const input = ["lorem", "ipsum"];
         const expected = [toNode("p", {}, input)];
-        expect(paragraphAwareContent(input, { requireParagraph: true })).toMatchObject(expected);
+        expect({ expected: paragraphAwareContent(input, { requireParagraph: true }) }).toMatchObject({ expected });
       });
     });
 
@@ -71,17 +70,17 @@ describe(`Paragraphs`, () => {
           await t.test(
             `[${i}] should skip extra paragraph (requireParagraphs=default false, ${comment}): ${input}`,
             () => {
-              expect(paragraphAwareContent(input)).toMatchObject(input);
+              expect({ expected: paragraphAwareContent(input) }).toMatchObject({ expected: input });
             },
           );
         }
       });
 
-      const wrapParagraphCases = [
+      const wrapParagraphCases: { input: (TagNode | string)[]; comment: string }[] = [
         { input: [b(["lorem"]), "ipsum", "dolor"], comment: "tag-node at start" },
         { input: ["lorem", b(["ipsum"]), "dolor"], comment: "tag-node in the middle" },
         { input: ["lorem", "ipsum", b(["dolor"])], comment: "tag-node at the end" },
-      ] as const;
+      ];
 
       void test("cases", async (t: TestContext) => {
         for (const [i, { input, comment }] of wrapParagraphCases.entries()) {
@@ -90,7 +89,7 @@ describe(`Paragraphs`, () => {
             () => {
               const expected = [toNode("p", {}, input)];
               const actual = paragraphAwareContent(input, { requireParagraph: true });
-              expect(actual).toMatchObject(expected);
+              expect({ expected: actual }).toMatchObject({ expected });
             },
           );
         }
@@ -109,7 +108,7 @@ describe(`Paragraphs`, () => {
         for (const [i, { input, expected, comment }] of cases.entries()) {
           await t.test(`[${i}] should transform from ${input} to ${expected} (all defaults): ${comment}`, () => {
             const actual = paragraphAwareContent(input);
-            expect(actual).toMatchObject(expected);
+            expect({ expected: actual }).toMatchObject({ expected });
           });
         }
       });
@@ -127,7 +126,7 @@ describe(`Paragraphs`, () => {
             () => {
               const options: ParagraphAwareContentOptions = { requireParagraph: true };
               const actual = paragraphAwareContent(input, options);
-              expect(actual).toMatchObject(expected);
+              expect({ expected: actual }).toMatchObject({ expected });
             },
           );
         }
@@ -154,7 +153,7 @@ describe(`Paragraphs`, () => {
             for (const [i, { input, expected, comment }] of singleEOLCases.entries()) {
               await t.test(`[${i}] should keep single newline characters (${comment}): ${input}`, () => {
                 const actual = paragraphAwareContent(input);
-                expect(actual).toMatchObject(expected);
+                expect({ expected: actual }).toMatchObject({ expected });
               });
             }
           });
@@ -182,7 +181,7 @@ describe(`Paragraphs`, () => {
             for (const [i, { input, expected, comment }] of squashNewlinesCases.entries()) {
               await t.test(`[${i}] should handle consecutive EOL at threshold (${comment}): ${input}`, () => {
                 const actual = paragraphAwareContent(input);
-                expect(actual).toMatchObject(expected);
+                expect({ expected: actual }).toMatchObject({ expected });
               });
             }
           });
@@ -213,7 +212,7 @@ describe(`Paragraphs`, () => {
             for (const [i, { input, expected, comment }] of paragraphizeSingleEOLCases.entries()) {
               await t.test(`[${i}] should keep single newline characters (${comment}): ${input}`, () => {
                 const actual = paragraphAwareContent(input, options);
-                expect(actual).toMatchObject(expected);
+                expect({ expected: actual }).toMatchObject({ expected });
               });
             }
           });
@@ -241,7 +240,7 @@ describe(`Paragraphs`, () => {
             for (const [i, { input, expected, comment }] of paragraphizeMultipleEOLCases.entries()) {
               await t.test(`[${i}] should handle consecutive EOL at threshold (${comment}): ${input}`, () => {
                 const actual = paragraphAwareContent(input, options);
-                expect(actual).toMatchObject(expected);
+                expect({ expected: actual }).toMatchObject({ expected });
               });
             }
           });
@@ -273,7 +272,7 @@ describe(`Paragraphs`, () => {
             for (const [i, { input, expected, comment }] of singleEOLWithTagNodes.entries()) {
               await t.test(`[${i}] should keep single newline characters (${comment}): ${input}`, () => {
                 const actual = paragraphAwareContent(input);
-                expect(actual).toMatchObject(expected);
+                expect({ expected: actual }).toMatchObject({ expected });
               });
             }
           });
@@ -301,7 +300,7 @@ describe(`Paragraphs`, () => {
             for (const [i, { input, expected, comment }] of multipleEOLWithTagNodes.entries()) {
               await t.test(`[${i}] should handle consecutive EOL at threshold (${comment}): ${input}`, () => {
                 const actual = paragraphAwareContent(input);
-                expect(actual).toMatchObject(expected);
+                expect({ expected: actual }).toMatchObject({ expected });
               });
             }
           });
@@ -332,7 +331,7 @@ describe(`Paragraphs`, () => {
             for (const [i, { input, expected, comment }] of singleEOLWithTagNodes.entries()) {
               await t.test(`[${i}] should keep single newline characters (${comment}): ${input}`, () => {
                 const actual = paragraphAwareContent(input, options);
-                expect(actual).toMatchObject(expected);
+                expect({ expected: actual }).toMatchObject({ expected });
               });
             }
           });
@@ -360,7 +359,7 @@ describe(`Paragraphs`, () => {
             for (const [i, { input, expected, comment }] of multipleEOLWithTagNodes.entries()) {
               await t.test(`[${i}] should handle consecutive EOL at threshold (${comment}): ${input}`, () => {
                 const actual = paragraphAwareContent(input, options);
-                expect(actual).toMatchObject(expected);
+                expect({ expected: actual }).toMatchObject({ expected });
               });
             }
           });
@@ -392,7 +391,7 @@ describe(`Paragraphs`, () => {
             await t.test(`[${i}] should not wrap (default) block tags within paragraphs: ${comment}`, () => {
               const options: ParagraphAwareContentOptions = { requireParagraph: true };
               const actual = paragraphAwareContent(input, options);
-              expect(actual).toMatchObject(expected);
+              expect({ expected: actual }).toMatchObject({ expected });
             });
           }
         });

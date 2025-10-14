@@ -1,10 +1,9 @@
-import "global-jsdom/register";
-import test, { describe } from "node:test";
+import { describe } from "node:test";
 import { blockquote, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import * as aut from "../../src/integrations/XDiffElements";
+import { RulesTester } from "./RulesTester";
 import type { TestDirection } from "./TestDirection";
 import { toData, toView } from "./TestDirection";
-import { RulesTester } from "./RulesTester";
 
 void describe("XDiffElements", () => {
   const ruleConfigurations = [aut.xDiffElements];
@@ -54,7 +53,7 @@ void describe("XDiffElements", () => {
 
   void describe("cases", () => {
     for (const { data, direction, view } of cases) {
-      void test(`Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
+      void describe(`Should provide mapping from data ${direction} view: ${data} ${direction} ${view}`, () => {
         // Using blockquote as it may contain multiple paragraphs, and we need one central
         // element to do the comparison.
         const dataString = richtext(blockquote(data));

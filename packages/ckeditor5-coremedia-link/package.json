@@ -49,7 +49,7 @@
   ],
   "devDependencies": {
     "@coremedia/service-agent": "^2.1.2",
-    "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.d5b6464",
+    "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.050b44a",
     "@types/node": "^22.0.0",
     "ckeditor5": "46.1.1",
     "copyfiles": "^2.4.1",

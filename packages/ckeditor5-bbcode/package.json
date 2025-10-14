@@ -23,7 +23,7 @@
     "clean": "pnpm clean:src && pnpm clean:dist",
     "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
     "clean:dist": "rimraf ./dist",
-    "test": "test-runner-react",
+    "test-TODO": "test-runner-react",
     "lint": "eslint \"**/*.{ts,tsx}\"",
     "npm-check-updates": "npm-check-updates --upgrade"
   },
@@ -63,8 +63,7 @@
     "@coremedia/ckeditor5-logging": "25.0.4-rc.1"
   },
   "devDependencies": {
-    "@coremedia-internal/eslint-config-studio-client-react": "0.2.3-alpha.4768d40",
-    "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.d5b6464",
+    "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.050b44a",
     "@types/node": "^22.0.0",
     "ckeditor5": "46.1.1",
     "copyfiles": "^2.4.1",

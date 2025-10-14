@@ -1,4 +1,4 @@
-import "global-jsdom/register";
+import "./setup.mjs";
 import test, { describe, beforeEach } from "node:test";
 import expect from "expect";
 import type { Editor } from "ckeditor5";
@@ -25,6 +25,10 @@ void describe("DataFacade", () => {
   void test("should forward previously set data once initialized", async () => {
     const dataFixture = "<p>DATA</p>";
     const editor = await createTestEditor();
+    if (!editor) {
+      expect(editor).toBeDefined();
+      return;
+    }
     const dataFacade = editor.plugins.get(DataFacade);
     // This will also forward the data to the editor, but we will not know
     // if the editor itself does not override these afterward, e.g., when
@@ -47,7 +51,7 @@ void describe("DataFacade", () => {
     let dataFacade: InstanceType<typeof DataFacade>;
     beforeEach(async () => {
       prepareDocument(document);
-      editor = await createTestEditor("main", allPlugins, completeToolbar, {
+      const newEditor = await createTestEditor("main", allPlugins, completeToolbar, {
         dataFacade: {
           save(dataApi: GetDataApi): Promise<void> {
             savedData = dataApi.getData();
@@ -55,6 +59,10 @@ void describe("DataFacade", () => {
           },
         },
       });
+      if (!newEditor) {
+        throw new Error("Editor creation failed");
+      }
+      editor = newEditor;
       // await editor.initPlugins();
       autosave = editor.plugins.get(Autosave);
       dataFacade = editor.plugins.get(DataFacade);
