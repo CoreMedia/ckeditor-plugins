@@ -13,7 +13,7 @@
     "ckeditor5",
     "clipboard"
   ],
-  "version": "25.0.4-rc.1",
+  "version": "25.0.4-rc.2",
   "type": "module",
   "license": "Apache-2.0",
   "scripts": {
@@ -61,9 +61,9 @@
     "ckeditor5": "46.1.1"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "25.0.4-rc.1",
-    "@coremedia/ckeditor5-core-common": "25.0.4-rc.1",
-    "@coremedia/ckeditor5-coremedia-studio-integration": "25.0.4-rc.1",
-    "@coremedia/ckeditor5-logging": "25.0.4-rc.1"
+    "@coremedia/ckeditor5-common": "25.0.4-rc.2",
+    "@coremedia/ckeditor5-core-common": "25.0.4-rc.2",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "25.0.4-rc.2",
+    "@coremedia/ckeditor5-logging": "25.0.4-rc.2"
   }
 }

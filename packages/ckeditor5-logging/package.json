@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-logging",
-  "version": "25.0.4-rc.1",
+  "version": "25.0.4-rc.2",
   "type": "module",
   "description": "Logging Facade",
   "author": {

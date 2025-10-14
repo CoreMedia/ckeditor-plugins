@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-studio-essentials",
-  "version": "25.0.4-rc.1",
+  "version": "25.0.4-rc.2",
   "type": "module",
   "description": "CoreMedia Studio: Aggregator Plugin for essential plugins",
   "author": {
@@ -55,7 +55,7 @@
     "ckeditor5": "46.1.1"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-coremedia-richtext": "25.0.4-rc.1",
-    "@coremedia/ckeditor5-coremedia-richtext-support": "25.0.4-rc.1"
+    "@coremedia/ckeditor5-coremedia-richtext": "25.0.4-rc.2",
+    "@coremedia/ckeditor5-coremedia-richtext-support": "25.0.4-rc.2"
   }
 }
