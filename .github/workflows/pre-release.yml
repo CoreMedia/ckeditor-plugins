@@ -83,7 +83,7 @@ jobs:
       - name: Test
         env:
           CKEDITOR_LICENSE_KEY: ${{ secrets.CKEDITOR_LICENSE }}
-        run: pnpm jest
+        run: pnpm test
       - name: Playwright Tests
         run: pnpm playwright
       - name: TypeDoc
