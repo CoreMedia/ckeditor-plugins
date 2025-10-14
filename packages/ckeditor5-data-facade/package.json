@@ -24,7 +24,7 @@
     "clean:dist": "rimraf ./dist",
     "npm-check-updates": "npm-check-updates --upgrade",
     "lint": "eslint \"**/*.{ts,tsx}\"",
-    "test-TODO": "test-runner-react --test-force-exit=true"
+    "test": "test-runner-react --test-force-exit=true"
   },
   "exports": {
     ".": {
