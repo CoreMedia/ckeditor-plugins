@@ -19,7 +19,6 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@coremedia-internal/ckeditor5-coremedia-example-data": "^1.0.0",
-    "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
     "@coremedia/ckeditor5-coremedia-link": "25.0.4-rc.1",
     "@coremedia/ckeditor5-coremedia-richtext": "25.0.4-rc.1",
     "@coremedia/ckeditor5-coremedia-studio-integration": "25.0.4-rc.1",
