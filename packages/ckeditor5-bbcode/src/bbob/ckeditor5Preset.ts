@@ -1,19 +1,19 @@
-import type { TagAttrs } from "@bbob/plugin-helper/es";
-import { getUniqAttr, isTagNode, TagNode } from "@bbob/plugin-helper/es";
-import { createPreset } from "@bbob/preset/es";
-import html5DefaultTags from "@bbob/preset-html5/es/defaultTags";
-import type { CoreTree } from "@bbob/core/es";
+import type { BBobCoreTagNodeTree, ProcessorFunction } from "@bbob/types";
 import { bbCodeLogger } from "../BBCodeLogger";
 import { fontSizes, normalSize } from "../utils/FontSizes";
-import { paragraphAwareContent } from "./Paragraphs";
-import type { Core, DefaultTags, Options } from "./types";
 import { stripUniqueAttr, uniqueAttrToAttr } from "./Attributes";
+import { paragraphAwareContent } from "./Paragraphs";
 import { renderRaw } from "./renderRaw";
 import { trimEOL } from "./TagNodes";
+import type { DefaultTags } from "./types";
+
+const { getUniqAttr, isTagNode, TagNode } = await import("@bbob/plugin-helper");
+const { createPreset } = await import("@bbob/preset");
+const { defaultTags } = await import("@bbob/preset-html5/defaultTags");
+
+type TagNodeType = ReturnType<typeof TagNode.create>;
 
 type DefaultTagsRule = DefaultTags[string];
-
-const toNode = TagNode.create;
 
 /**
  * To be able to handle paragraphs also on root-level within the defined
@@ -34,9 +34,9 @@ const rootNodeName = "root";
  * when the tree changed in an unexpected way, i.e., does not have a singleton
  * node of type _root-node_ anymore.
  */
-const wrapInRoot = (tree: CoreTree): (() => void) => {
+const wrapInRoot = (tree: BBobCoreTagNodeTree): (() => void) => {
   const treeContents = [...tree];
-  const rootNode = toNode(rootNodeName, {}, treeContents);
+  const rootNode = TagNode.create(rootNodeName, {}, treeContents);
   tree.length = 0;
   tree.push(rootNode);
 
@@ -56,7 +56,7 @@ const wrapInRoot = (tree: CoreTree): (() => void) => {
       );
     }
     tree.length = 0;
-    tree.push(...(processedRootNode.content ?? []));
+    tree.push(...(Array.isArray(processedRootNode.content) ? processedRootNode.content : []));
   };
 };
 
@@ -64,7 +64,7 @@ const wrapInRoot = (tree: CoreTree): (() => void) => {
  * Copy of default processor with adaptations to incorporate workaround for
  * https://github.com/JiLiZART/BBob/issues/125.
  */
-const process = (tags: DefaultTags, tree: CoreTree, core: Core, options: Options) => {
+const process: ProcessorFunction<DefaultTags> = (tags, tree, core, options) => {
   const logger = bbCodeLogger;
 
   if (logger.isDebugEnabled()) {
@@ -81,6 +81,7 @@ const process = (tags: DefaultTags, tree: CoreTree, core: Core, options: Options
   if (logger.isDebugEnabled()) {
     logger.debug(`Done processing parsed AST: ${JSON.stringify(tree)}`);
   }
+  return tree;
 };
 
 /**
@@ -91,19 +92,19 @@ const process = (tags: DefaultTags, tree: CoreTree, core: Core, options: Options
  * here (and export it as `ckeditor5Preset` directly). We keep this split-up
  * state to possibly revert to extending the `html5Preset` instead.
  */
-const basePreset: ReturnType<typeof createPreset> = createPreset(html5DefaultTags, process);
+const basePreset: ReturnType<typeof createPreset> = createPreset(defaultTags, process);
 
 /**
  * Transforms the node as is, but ensures that its content respects possible
  * paragraph formatting.
  */
-const toParagraphAwareNode = (node: TagNode): TagNode =>
-  toNode(node.tag, node.attrs, paragraphAwareContent(node.content ?? []));
+const toParagraphAwareNode = (node: TagNodeType): TagNodeType =>
+  TagNode.create(node.tag, node.attrs, paragraphAwareContent(node.content ?? []));
 
-const toHtmlAnchorAttrs = (node: TagNode): TagAttrs =>
+const toHtmlAnchorAttrs = (node: TagNodeType): Record<string, unknown> =>
   uniqueAttrToAttr("href", node.attrs, false, () => renderRaw(node));
 
-const toHtmlImageAttrs = (node: TagNode): TagAttrs => {
+const toHtmlImageAttrs = (node: TagNodeType): Record<string, unknown> => {
   const { attrs } = node;
   // We ignore unique attributes here, but keep all others, just in case
   // they got defined. Some BBCode dialects use the unique attribute to
@@ -128,10 +129,10 @@ const toHtmlImageAttrs = (node: TagNode): TagAttrs => {
  *
  * See also: <https://github.com/JiLiZART/BBob/issues/205>.
  */
-const code: DefaultTagsRule = (node: TagNode): TagNode => {
+const code = (node: TagNodeType): TagNodeType => {
   // Using `||` also for possibly empty string.
   const language = getUniqAttr(node.attrs) || "plaintext";
-  return toNode("pre", {}, [toNode("htmlCode", { class: `language-${language}` }, node.content)]);
+  return TagNode.create("pre", {}, [TagNode.create("htmlCode", { class: `language-${language}` }, node.content)]);
 };
 
 /**
@@ -140,7 +141,7 @@ const code: DefaultTagsRule = (node: TagNode): TagNode => {
  * we must not add a `code` node within the `[code]` to `<pre>` processing,
  * which again is required for proper code block support in CKEditor 5.
  */
-const htmlCode: DefaultTagsRule = (node: TagNode): TagNode => toNode("code", node.attrs, trimEOL(node.content));
+const htmlCode = (node: TagNodeType): TagNodeType => TagNode.create("code", node.attrs, trimEOL(node.content));
 
 /**
  * Transforms `quote` to `blockquote`. Ensures that only block-level
@@ -148,17 +149,17 @@ const htmlCode: DefaultTagsRule = (node: TagNode): TagNode => toNode("code", nod
  * content into a paragraph node.
  */
 const quote: DefaultTagsRule = (node) =>
-  toNode("blockquote", {}, paragraphAwareContent(node.content ?? [], { requireParagraph: true }));
+  TagNode.create("blockquote", {}, paragraphAwareContent(node.content ?? [], { requireParagraph: true }));
 
-const url: DefaultTagsRule = (node: TagNode): TagNode => toNode("a", toHtmlAnchorAttrs(node), node.content);
+const url = (node: TagNodeType): TagNodeType => TagNode.create("a", toHtmlAnchorAttrs(node), node.content);
 
-const img: DefaultTagsRule = (node: TagNode): TagNode => ({
-  ...toNode("img", toHtmlImageAttrs(node), null),
+const img = (node: TagNodeType) => ({
+  ...TagNode.create("img", toHtmlImageAttrs(node), null),
   // Workaround: https://github.com/JiLiZART/BBob/issues/206
   content: null,
 });
 
-const toFontSizeSpanAttrs = (node: TagNode): TagAttrs => {
+const toFontSizeSpanAttrs = (node: TagNodeType): Record<string, unknown> => {
   // Stage 1: Check if (expected) unique attribute exists; return only other attributes otherwise
   const { uniqueAttrValue, otherAttrs } = stripUniqueAttr(node.attrs);
   if (!uniqueAttrValue) {
@@ -179,7 +180,7 @@ const toFontSizeSpanAttrs = (node: TagNode): TagAttrs => {
 
   // Stage 4: Prepare new attributes including `class` attribute (possibly merge with existing)
 
-  const existingClass: string | undefined = otherAttrs.class;
+  const existingClass = typeof otherAttrs.class === "string" ? otherAttrs.class : undefined;
   const classValue = existingClass ? `${matchedEntry.className} ${existingClass}` : matchedEntry.className;
   return {
     ...otherAttrs,
@@ -191,7 +192,7 @@ const toFontSizeSpanAttrs = (node: TagNode): TagAttrs => {
  * Parses the font-size given by `[size=number]` within BBCode and transforms
  * it to a `<span>` with a size representing class attribute.
  */
-const size: DefaultTagsRule = (node: TagNode): TagNode => toNode("span", toFontSizeSpanAttrs(node), node.content);
+const size = (node: TagNodeType): TagNodeType => TagNode.create("span", toFontSizeSpanAttrs(node), node.content);
 
 /**
  * Mappings for nodes, that need to be aware of internal paragraph handling
@@ -204,15 +205,16 @@ const size: DefaultTagsRule = (node: TagNode): TagNode => toNode("span", toFontS
  *   from `*` nodes. As a subsequent step, we add support for nested paragraphs
  *   within these tags.
  */
-const paragraphAwareTags: DefaultTags = Object.fromEntries(["root", "li"].map((tag) => [tag, toParagraphAwareNode]));
+const paragraphAwareTags = Object.fromEntries(["root", "li"].map((tag) => [tag, toParagraphAwareNode]));
 
 /**
  * Extension of the HTML 5 Default Preset, that ships with BBob. It adapts
  * the given presets, so that they align with the expectations by CKEditor 5
  * regarding the representation in data view.
  */
-export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.extend((tags: DefaultTags): DefaultTags => {
-  const extendedTags: DefaultTags = {
+// @ts-expect-error TODO just for now
+export const ckeditor5Preset = basePreset.extend((tags) => {
+  const extendedTags = {
     ...tags,
     ...paragraphAwareTags,
     quote,
@@ -223,5 +225,6 @@ export const ckeditor5Preset: ReturnType<typeof createPreset> = basePreset.exten
     size,
   };
   bbCodeLogger.debug(`Extended Tags to: ${Object.keys(extendedTags)}`);
+
   return extendedTags;
 });

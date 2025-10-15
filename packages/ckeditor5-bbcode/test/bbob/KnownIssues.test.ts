@@ -1,18 +1,17 @@
-import "global-jsdom/register";
 import type { TestContext } from "node:test";
 import test, { describe } from "node:test";
 import expect from "expect";
-import type { CoreRenderer } from "@bbob/core/es";
-import bbob from "@bbob/core/es";
 
-const render: CoreRenderer = (node) => JSON.stringify(node);
+const { default: bbob } = await import("@bbob/core");
+
+const render = (node: unknown) => JSON.stringify(node);
 
 const aut = {
   /**
    * Uses `JSON.stringify` as renderer and no plugins, thus, we process the
    * raw tree to plain JSON.
    */
-  toJSONRaw: (input: string) => bbob().process(input, { render }).html,
+  toJSONRaw: (input: string) => bbob().process(input, { render }),
 };
 
 /**

@@ -1,23 +1,24 @@
 import type { TestContext } from "node:test";
 import test, { describe } from "node:test";
 import expect from "expect";
-import { TagNode } from "@bbob/plugin-helper/es";
 import type { ParagraphAwareContentOptions } from "../../src/bbob/Paragraphs";
 import { paragraphAwareContent } from "../../src/bbob/Paragraphs";
 
-const toNode = TagNode.create;
+const { TagNode } = await import("@bbob/plugin-helper");
 
-type ContentFixture = NonNullable<TagNode["content"]>;
+type TagNodeType = ReturnType<typeof TagNode.create>;
 
-const p = (content: ContentFixture): TagNode => toNode("p", {}, content);
+type ContentFixture = NonNullable<TagNodeType["content"]>;
+
+const p = (content: ContentFixture): TagNodeType => TagNode.create("p", {}, content);
 /**
  * Just any inline tag-node.
  */
-const b = (content: ContentFixture): TagNode => toNode("b", {}, content);
+const b = (content: ContentFixture): TagNodeType => TagNode.create("b", {}, content);
 /**
  * Shortcut to add `quote` node.
  */
-const q = (content: ContentFixture): TagNode => toNode("quote", {}, content);
+const q = (content: ContentFixture): TagNodeType => TagNode.create("quote", {}, content);
 
 describe(`Paragraphs`, () => {
   // ==========================================================================================[ paragraphAwareContent ]
@@ -29,7 +30,7 @@ describe(`Paragraphs`, () => {
       });
 
       void test(`should return "[]" wrapped in paragraph with "requireParagraph=true"`, () => {
-        const expected = [toNode("p", {}, [])];
+        const expected = [TagNode.create("p", {}, [])];
         expect({ expected: paragraphAwareContent([], { requireParagraph: true }) }).toMatchObject({ expected });
       });
     });
@@ -43,12 +44,12 @@ describe(`Paragraphs`, () => {
 
       void test(`should wrap content into paragraph (requireParagraphs=true)`, () => {
         const input = ["lorem", "ipsum"];
-        const expected = [toNode("p", {}, input)];
+        const expected = [TagNode.create("p", {}, input)];
         expect({ expected: paragraphAwareContent(input, { requireParagraph: true }) }).toMatchObject({ expected });
       });
     });
 
-    // -----------------------------------------------------------------------------------[ content=(string|TagNode)[] ]
+    // -----------------------------------------------------------------------------------[ content=(string|TagNodeType)[] ]
     describe(`content=(string|TagNode)[]: Content only containing strings and tag-nodes without EOL characters`, () => {
       const cases: { input: ContentFixture; comment: string }[] = [
         {
@@ -76,7 +77,7 @@ describe(`Paragraphs`, () => {
         }
       });
 
-      const wrapParagraphCases: { input: (TagNode | string)[]; comment: string }[] = [
+      const wrapParagraphCases: { input: (TagNodeType | string)[]; comment: string }[] = [
         { input: [b(["lorem"]), "ipsum", "dolor"], comment: "tag-node at start" },
         { input: ["lorem", b(["ipsum"]), "dolor"], comment: "tag-node in the middle" },
         { input: ["lorem", "ipsum", b(["dolor"])], comment: "tag-node at the end" },
@@ -87,7 +88,7 @@ describe(`Paragraphs`, () => {
           await t.test(
             `[${i}] should wrap content into paragraph (requireParagraphs=default true, ${comment}): ${input}`,
             () => {
-              const expected = [toNode("p", {}, input)];
+              const expected = [TagNode.create("p", {}, input)];
               const actual = paragraphAwareContent(input, { requireParagraph: true });
               expect({ expected: actual }).toMatchObject({ expected });
             },
