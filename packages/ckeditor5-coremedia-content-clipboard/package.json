@@ -13,7 +13,7 @@
     "ckeditor5",
     "clipboard"
   ],
-  "version": "23.0.1",
+  "version": "23.0.2-rc.0",
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc --project ./tsconfig.release.json && copyfiles -u 1 theme/* theme/**/* dist/theme",
@@ -64,9 +64,9 @@
     "@coremedia/service-agent": "^1.1.5 || ^2.0.1"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "^23.0.1",
-    "@coremedia/ckeditor5-core-common": "^23.0.1",
-    "@coremedia/ckeditor5-coremedia-studio-integration": "^23.0.1",
-    "@coremedia/ckeditor5-logging": "^23.0.1"
+    "@coremedia/ckeditor5-common": "23.0.2-rc.0",
+    "@coremedia/ckeditor5-core-common": "23.0.2-rc.0",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "23.0.2-rc.0",
+    "@coremedia/ckeditor5-logging": "23.0.2-rc.0"
   }
 }
