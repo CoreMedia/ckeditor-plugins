@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-dialog-visibility",
-  "version": "25.0.4-rc.3",
+  "version": "25.0.4-rc.4",
   "description": "Handles dialog visibility when editor is not visible",
   "author": {
     "name": "CoreMedia GmbH",
