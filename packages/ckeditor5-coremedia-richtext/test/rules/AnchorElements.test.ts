@@ -161,7 +161,6 @@ void describe("AnchorElement", () => {
       describe(`[${index}] Should format xlink:show=${show} and xlink:role=${role} to target '${target}' and vice versa (if bijective? ${bijective})`, () => {
         void test("formatTarget", () => {
           // We expect some warnings and info logs. Thus, suppressing.
-          // TODO[ntr] const actual = silenced(() => aut.formatTarget({ show, role }));
           const actual = aut.formatTarget({ show, role });
           expect(actual).toStrictEqual(target);
         });

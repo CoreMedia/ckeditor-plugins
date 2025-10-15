@@ -186,7 +186,6 @@ export const applyFilter = (
   postProcessor?: DocumentPostProcessor,
 ): string => {
   const xmlDocument: Document = parseXml(input);
-  // TODO[ntr] silenced(() => filter.applyTo(xmlDocument.documentElement), silent);
   filter.applyTo(xmlDocument.documentElement);
   postProcessor?.(xmlDocument);
   return serializer.serializeToString(xmlDocument);

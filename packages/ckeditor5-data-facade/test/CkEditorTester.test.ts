@@ -5,13 +5,7 @@ import { completeToolbar, createTestEditor, prepareDocument } from "./helpers/Te
 
 void describe("CkEditor", () => {
   beforeEach(() => {
-    // TODO[ntr] we'll need to prepare a little more here, see jest.setup.cjs;
     prepareDocument(document);
-  });
-
-  afterEach(() => {
-    // restore the original func after test
-    // TODO[ntr] jest.resetModules();
   });
 
   void test("Element with id 'main' exists", () => {
