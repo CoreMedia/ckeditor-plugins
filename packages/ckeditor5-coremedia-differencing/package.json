@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-differencing",
-  "version": "25.0.4-rc.1",
+  "version": "25.0.4",
   "description": "Server-side differencing support in CoreMedia Studio.",
   "author": {
     "name": "CoreMedia GmbH",
@@ -53,12 +53,12 @@
     "ckeditor5": "45.2.1"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "25.0.4-rc.1",
-    "@coremedia/ckeditor5-core-common": "25.0.4-rc.1",
-    "@coremedia/ckeditor5-coremedia-richtext": "25.0.4-rc.1",
-    "@coremedia/ckeditor5-dom-converter": "25.0.4-rc.1",
-    "@coremedia/ckeditor5-dom-support": "25.0.4-rc.1",
-    "@coremedia/ckeditor5-logging": "25.0.4-rc.1"
+    "@coremedia/ckeditor5-common": "^25.0.4",
+    "@coremedia/ckeditor5-core-common": "^25.0.4",
+    "@coremedia/ckeditor5-coremedia-richtext": "^25.0.4",
+    "@coremedia/ckeditor5-dom-converter": "^25.0.4",
+    "@coremedia/ckeditor5-dom-support": "^25.0.4",
+    "@coremedia/ckeditor5-logging": "^25.0.4"
   },
   "scripts": {
     "clean": "pnpm clean:src && pnpm clean:dist",

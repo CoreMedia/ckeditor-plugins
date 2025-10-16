@@ -36,7 +36,7 @@
     "typescript": "5.4.5"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "25.0.4-rc.1"
+    "@coremedia/ckeditor5-common": "^25.0.4"
   },
   "scripts": {
     "build": "tsc --project ./tsconfig.release.json",
