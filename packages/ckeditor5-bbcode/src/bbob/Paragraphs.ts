@@ -176,7 +176,7 @@ export const paragraphAwareContent = (
     });
 
     if (isNonEmpty(content)) {
-      result.push(TagNode.create("p", {}, content));
+      result.push(TagNode.create("p", {}, Array.isArray(content) ? [...content] : [content]));
     } else if (requireParagraph || !skipEmpty) {
       result.push(TagNode.create("p", {}, []));
     }
@@ -348,7 +348,7 @@ export const paragraphAwareContent = (
     });
 
     if (isEOL(value)) {
-      trailingNewlineBuffer.push(N);
+      trailingNewlineBuffer.push(value as typeof N);
     } else {
       flushOnParagraph();
       buffer.push(value);
