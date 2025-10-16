@@ -29,43 +29,74 @@ const url = {
 };
 
 void describe("html2bbcode", () => {
-  // noinspection HtmlDeprecatedTag,XmlDeprecatedElement
-  describe.each`
-    tag               | openElement                                        | closeElement   | openTag                      | closeTag
-    ${`[b] (style)`}  | ${`<span style="font-weight: bold;">`}             | ${`</span>`}   | ${`[b]`}                     | ${`[/b]`}
-    ${`[b] (strong)`} | ${`<strong>`}                                      | ${`</strong>`} | ${`[b]`}                     | ${`[/b]`}
-    ${`[b] (b)`}      | ${`<b>`}                                           | ${`</b>`}      | ${`[b]`}                     | ${`[/b]`}
-    ${`[color]`}      | ${`<span style="color: red;">`}                    | ${`</span>`}   | ${`[color=red]`}             | ${`[/color]`}
-    ${`[size]`}       | ${`<span class="text-small">`}                     | ${`</span>`}   | ${`[size=85]`}               | ${`[/size]`}
-    ${`[h1]`}         | ${`<h1>`}                                          | ${`</h1>`}     | ${`[h1]`}                    | ${`[/h1]`}
-    ${`[h2]`}         | ${`<h2>`}                                          | ${`</h2>`}     | ${`[h2]`}                    | ${`[/h2]`}
-    ${`[h3]`}         | ${`<h3>`}                                          | ${`</h3>`}     | ${`[h3]`}                    | ${`[/h3]`}
-    ${`[h4]`}         | ${`<h4>`}                                          | ${`</h4>`}     | ${`[h4]`}                    | ${`[/h4]`}
-    ${`[h5]`}         | ${`<h5>`}                                          | ${`</h5>`}     | ${`[h5]`}                    | ${`[/h5]`}
-    ${`[h6]`}         | ${`<h6>`}                                          | ${`</h6>`}     | ${`[h6]`}                    | ${`[/h6]`}
-    ${`[i] (style)`}  | ${`<span style="font-style: italic;">`}            | ${`</span>`}   | ${`[i]`}                     | ${`[/i]`}
-    ${`[i] (i)`}      | ${`<i>`}                                           | ${`</i>`}      | ${`[i]`}                     | ${`[/i]`}
-    ${`[i] (em)`}     | ${`<em>`}                                          | ${`</em>`}     | ${`[i]`}                     | ${`[/i]`}
-    ${`[s] (style)`}  | ${`<span style="text-decoration: line-through;">`} | ${`</span>`}   | ${`[s]`}                     | ${`[/s]`}
-    ${`[s] (del)`}    | ${`<del>`}                                         | ${`</del>`}    | ${`[s]`}                     | ${`[/s]`}
-    ${`[s] (strike)`} | ${`<strike>`}                                      | ${`</strike>`} | ${`[s]`}                     | ${`[/s]`}
-    ${`[u] (style)`}  | ${`<span style="text-decoration: underline;">`}    | ${`</span>`}   | ${`[u]`}                     | ${`[/u]`}
-    ${`[u] (u)`}      | ${`<u>`}                                           | ${`</u>`}      | ${`[u]`}                     | ${`[/u]`}
-    ${`[u] (ins)`}    | ${`<ins>`}                                         | ${`</ins>`}    | ${`[u]`}                     | ${`[/u]`}
-    ${`[url]`}        | ${`<a href="${url.absolute}">`}                    | ${`</a>`}      | ${`[url="${url.absolute}"]`} | ${`[/url]`}
-  `(
-    "$tag (Standard Behaviors)",
-    ({
-      openElement,
-      closeElement,
-      openTag,
-      closeTag,
-    }: {
-      openElement: string;
-      closeElement: string;
-      openTag: string;
-      closeTag: string;
-    }) => {
+  const bbcodeCases = [
+    {
+      tag: "[b] (style)",
+      openElement: '<span style="font-weight: bold;">',
+      closeElement: "</span>",
+      openTag: "[b]",
+      closeTag: "[/b]",
+    },
+    { tag: "[b] (strong)", openElement: "<strong>", closeElement: "</strong>", openTag: "[b]", closeTag: "[/b]" },
+    { tag: "[b] (b)", openElement: "<b>", closeElement: "</b>", openTag: "[b]", closeTag: "[/b]" },
+    {
+      tag: "[color]",
+      openElement: '<span style="color: red;">',
+      closeElement: "</span>",
+      openTag: "[color=red]",
+      closeTag: "[/color]",
+    },
+    {
+      tag: "[size]",
+      openElement: '<span class="text-small">',
+      closeElement: "</span>",
+      openTag: "[size=85]",
+      closeTag: "[/size]",
+    },
+    { tag: "[h1]", openElement: "<h1>", closeElement: "</h1>", openTag: "[h1]", closeTag: "[/h1]" },
+    { tag: "[h2]", openElement: "<h2>", closeElement: "</h2>", openTag: "[h2]", closeTag: "[/h2]" },
+    { tag: "[h3]", openElement: "<h3>", closeElement: "</h3>", openTag: "[h3]", closeTag: "[/h3]" },
+    { tag: "[h4]", openElement: "<h4>", closeElement: "</h4>", openTag: "[h4]", closeTag: "[/h4]" },
+    { tag: "[h5]", openElement: "<h5>", closeElement: "</h5>", openTag: "[h5]", closeTag: "[/h5]" },
+    { tag: "[h6]", openElement: "<h6>", closeElement: "</h6>", openTag: "[h6]", closeTag: "[/h6]" },
+    {
+      tag: "[i] (style)",
+      openElement: '<span style="font-style: italic;">',
+      closeElement: "</span>",
+      openTag: "[i]",
+      closeTag: "[/i]",
+    },
+    { tag: "[i] (i)", openElement: "<i>", closeElement: "</i>", openTag: "[i]", closeTag: "[/i]" },
+    { tag: "[i] (em)", openElement: "<em>", closeElement: "</em>", openTag: "[i]", closeTag: "[/i]" },
+    {
+      tag: "[s] (style)",
+      openElement: '<span style="text-decoration: line-through;">',
+      closeElement: "</span>",
+      openTag: "[s]",
+      closeTag: "[/s]",
+    },
+    { tag: "[s] (del)", openElement: "<del>", closeElement: "</del>", openTag: "[s]", closeTag: "[/s]" },
+    { tag: "[s] (strike)", openElement: "<strike>", closeElement: "</strike>", openTag: "[s]", closeTag: "[/s]" },
+    {
+      tag: "[u] (style)",
+      openElement: '<span style="text-decoration: underline;">',
+      closeElement: "</span>",
+      openTag: "[u]",
+      closeTag: "[/u]",
+    },
+    { tag: "[u] (u)", openElement: "<u>", closeElement: "</u>", openTag: "[u]", closeTag: "[/u]" },
+    { tag: "[u] (ins)", openElement: "<ins>", closeElement: "</ins>", openTag: "[u]", closeTag: "[/u]" },
+    {
+      tag: "[url]",
+      openElement: `<a href="${url.absolute}">`,
+      closeElement: "</a>",
+      openTag: `[url="${url.absolute}"]`,
+      closeTag: "[/url]",
+    },
+  ] as const;
+
+  for (const { tag, openTag, closeTag, openElement, closeElement } of bbcodeCases) {
+    describe(`${tag} (Standard Behaviors)`, () => {
       const cases = [
         {
           dataView: `${openElement}T${closeElement}`,
@@ -81,8 +112,8 @@ void describe("html2bbcode", () => {
           });
         }
       });
-    },
-  );
+    });
+  }
 
   void describe("[url]", () => {
     const cases = [

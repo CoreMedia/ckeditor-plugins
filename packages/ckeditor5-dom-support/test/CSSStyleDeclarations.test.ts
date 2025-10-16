@@ -34,7 +34,7 @@ void describe("CSSStyleDeclarations", () => {
       { style: "font-weight: bold;", expected: undefined, comment: `no color information for only other styles set` },
       { style: "color: #010203;", expected: rgb(1, 2, 3), comment: `` },
       { style: "color: #01020300;", expected: rgb(1, 2, 3, 0), comment: `` },
-      { style: "color: #010203FF;", expected: rgb(1, 2, 3, 1), comment: `` }, //TODO
+      { style: "color: #010203FF;", expected: rgb(1, 2, 3), comment: `` },
       { style: "color: #010203A0;", expected: rgb(1, 2, 3, 0.627), comment: `` },
       { style: "color: rgb(1, 2, 3);", expected: rgb(1, 2, 3), comment: `` },
       { style: "color: rgba(1, 2, 3, 0.5);", expected: rgb(1, 2, 3, 0.5), comment: `` },
@@ -44,12 +44,12 @@ void describe("CSSStyleDeclarations", () => {
       { style: "color: fuchsia;", expected: "fuchsia", comment: `Color names are not resolved but returned as is.` },
       {
         style: "color: hsl(30, 82%, 43%);",
-        expected: rgb(20, 20, 20),
+        expected: rgb(200, 110, 20),
         comment: `CssStyle: rgb(20,20,20); Chrome: rgb(200,110,20)`,
       },
       {
         style: "color: hsla(237, 74%, 33%, 0.5);",
-        expected: rgb(22, 22, 22, 0.5),
+        expected: rgb(22, 28, 146, 0.5),
         comment: `CssStyle: rgba(22,22,22,0.5); Chrome: rgba(22, 28, 146, 0.5)`,
       },
       { style: "color: currentcolor;", expected: "currentcolor", comment: `handled similar to color name` },

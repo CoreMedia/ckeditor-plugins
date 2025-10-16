@@ -203,35 +203,75 @@ void describe("bbcode2html", () => {
   });
 
   void describe("By Tag", () => {
+    type BbcodeCase = {
+      tag: string;
+      openTag: string;
+      closeTag: string;
+      openElement: string;
+      closeElement: string;
+    };
+
     // Some standard behaviors bundled.
-    describe.each`
-      tag          | openTag                   | closeTag      | openElement                                        | closeElement
-      ${`[b]`}     | ${`[b]`}                  | ${`[/b]`}     | ${`<span style="font-weight: bold;">`}             | ${`</span>`}
-      ${`[color]`} | ${`[color=red]`}          | ${`[/color]`} | ${`<span style="color: red;">`}                    | ${`</span>`}
-      ${`[size]`}  | ${`[size=85]`}            | ${`[/size]`}  | ${`<span class="text-small">`}                     | ${`</span>`}
-      ${`[h1]`}    | ${`[h1]`}                 | ${`[/h1]`}    | ${`<h1>`}                                          | ${`</h1>`}
-      ${`[h2]`}    | ${`[h2]`}                 | ${`[/h2]`}    | ${`<h2>`}                                          | ${`</h2>`}
-      ${`[h3]`}    | ${`[h3]`}                 | ${`[/h3]`}    | ${`<h3>`}                                          | ${`</h3>`}
-      ${`[h4]`}    | ${`[h4]`}                 | ${`[/h4]`}    | ${`<h4>`}                                          | ${`</h4>`}
-      ${`[h5]`}    | ${`[h5]`}                 | ${`[/h5]`}    | ${`<h5>`}                                          | ${`</h5>`}
-      ${`[h6]`}    | ${`[h6]`}                 | ${`[/h6]`}    | ${`<h6>`}                                          | ${`</h6>`}
-      ${`[i]`}     | ${`[i]`}                  | ${`[/i]`}     | ${`<span style="font-style: italic;">`}            | ${`</span>`}
-      ${`[s]`}     | ${`[s]`}                  | ${`[/s]`}     | ${`<span style="text-decoration: line-through;">`} | ${`</span>`}
-      ${`[u]`}     | ${`[u]`}                  | ${`[/u]`}     | ${`<span style="text-decoration: underline;">`}    | ${`</span>`}
-      ${`[url]`}   | ${`[url=https://e.org/]`} | ${`[/url]`}   | ${`<a href="https://e.org/">`}                     | ${`</a>`}
-    `(
-      "$tag (Standard Behaviors)",
-      ({
-        openTag,
-        closeTag,
-        openElement,
-        closeElement,
-      }: {
-        openTag: string;
-        closeTag: string;
-        openElement: string;
-        closeElement: string;
-      }) => {
+    const bbcodeCases: BbcodeCase[] = [
+      {
+        tag: "[b]",
+        openTag: "[b]",
+        closeTag: "[/b]",
+        openElement: '<span style="font-weight: bold;">',
+        closeElement: "</span>",
+      },
+      {
+        tag: "[color]",
+        openTag: "[color=red]",
+        closeTag: "[/color]",
+        openElement: '<span style="color: red;">',
+        closeElement: "</span>",
+      },
+      {
+        tag: "[size]",
+        openTag: "[size=85]",
+        closeTag: "[/size]",
+        openElement: '<span class="text-small">',
+        closeElement: "</span>",
+      },
+      { tag: "[h1]", openTag: "[h1]", closeTag: "[/h1]", openElement: "<h1>", closeElement: "</h1>" },
+      { tag: "[h2]", openTag: "[h2]", closeTag: "[/h2]", openElement: "<h2>", closeElement: "</h2>" },
+      { tag: "[h3]", openTag: "[h3]", closeTag: "[/h3]", openElement: "<h3>", closeElement: "</h3>" },
+      { tag: "[h4]", openTag: "[h4]", closeTag: "[/h4]", openElement: "<h4>", closeElement: "</h4>" },
+      { tag: "[h5]", openTag: "[h5]", closeTag: "[/h5]", openElement: "<h5>", closeElement: "</h5>" },
+      { tag: "[h6]", openTag: "[h6]", closeTag: "[/h6]", openElement: "<h6>", closeElement: "</h6>" },
+      {
+        tag: "[i]",
+        openTag: "[i]",
+        closeTag: "[/i]",
+        openElement: '<span style="font-style: italic;">',
+        closeElement: "</span>",
+      },
+      {
+        tag: "[s]",
+        openTag: "[s]",
+        closeTag: "[/s]",
+        openElement: '<span style="text-decoration: line-through;">',
+        closeElement: "</span>",
+      },
+      {
+        tag: "[u]",
+        openTag: "[u]",
+        closeTag: "[/u]",
+        openElement: '<span style="text-decoration: underline;">',
+        closeElement: "</span>",
+      },
+      {
+        tag: "[url]",
+        openTag: "[url=https://e.org/]",
+        closeTag: "[/url]",
+        openElement: '<a href="https://e.org/">',
+        closeElement: "</a>",
+      },
+    ];
+
+    for (const { tag, openTag, closeTag, openElement, closeElement } of bbcodeCases) {
+      describe(`${tag} (Standard Behaviors)`, () => {
         const cases = [
           {
             data: `${openTag}T${closeTag}`,
@@ -272,8 +312,8 @@ void describe("bbcode2html", () => {
             });
           }
         });
-      },
-    );
+      });
+    }
 
     void describe("[code]", () => {
       const cases = [
