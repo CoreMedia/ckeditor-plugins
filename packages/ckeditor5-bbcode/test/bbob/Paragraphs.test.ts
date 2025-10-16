@@ -26,7 +26,7 @@ describe(`Paragraphs`, () => {
     // ---------------------------------------------------------------------------------------------------[ content=[] ]
     describe(`content=[]`, () => {
       void test(`should return "[]" with default options`, () => {
-        expect({ expected: paragraphAwareContent([]) }).toMatchObject([]);
+        expect({ expected: paragraphAwareContent([]) }).toMatchObject({ expected: [] });
       });
 
       void test(`should return "[]" wrapped in paragraph with "requireParagraph=true"`, () => {
