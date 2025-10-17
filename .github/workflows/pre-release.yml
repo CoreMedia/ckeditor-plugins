@@ -18,6 +18,7 @@ env:
   NODE_OPTIONS: "--max_old_space_size=4096"
   PNPM_VERSION: ^10.9
   NPM_CONFIG_@coremedia:registry: 'https://npm.coremedia.io'
+  NPM_CONFIG_@coremedia-internal:registry: 'https://npm.coremedia.io'
 
 jobs:
   build:
