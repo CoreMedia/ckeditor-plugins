@@ -73,7 +73,6 @@ void describe("BBob Known Issues", () => {
       for (const [i, { bbCode, expectedActual, expected, issue, comment }] of cases.entries()) {
         await t.test(`[${i}] ${comment}: ${bbCode} -> ${expectedActual} (${issue}; expected: ${expected})`, () => {
           const result = aut.toJSONRaw(bbCode);
-          // TODO: important! result.html is the expected result, so this is a big change
           expect(result.html).toBe(expectedActual);
         });
       }
