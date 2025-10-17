@@ -1,5 +1,5 @@
 import "./setup.mjs";
-import test, { describe, beforeEach, afterEach } from "node:test";
+import test, { describe, beforeEach } from "node:test";
 import expect from "expect";
 import { completeToolbar, createTestEditor, prepareDocument } from "./helpers/TestEditor";
 
