@@ -1,5 +1,7 @@
-import type { TagNode } from "@bbob/plugin-helper/es";
-import { isStringNode, isTagNode } from "@bbob/plugin-helper/es";
+import type { TagNode } from "@bbob/plugin-helper";
+import type { TagNodeTree } from "@bbob/types";
+
+const { isStringNode, isTagNode } = await import("@bbob/plugin-helper");
 
 /**
  * Renders a tag node to its raw content.
@@ -7,20 +9,20 @@ import { isStringNode, isTagNode } from "@bbob/plugin-helper/es";
  * @param node - node to render
  */
 export const renderRaw = (node: TagNode): string => {
-  const render = (currentNode: NonNullable<TagNode["content"]>[number] | TagNode["content"]): string => {
-    if (!currentNode) {
-      return "";
-    }
-
+  const render = (currentNode: TagNodeTree): string => {
     if (isStringNode(currentNode)) {
-      return currentNode;
+      return typeof currentNode === "string" ? currentNode : String(currentNode);
     }
 
     if (isTagNode(currentNode)) {
       return render(currentNode.content);
     }
 
-    return currentNode.map((entry) => render(entry)).join("");
+    if (Array.isArray(currentNode)) {
+      return currentNode.map((entry) => render(entry)).join("");
+    }
+
+    return "";
   };
 
   return render(node.content);

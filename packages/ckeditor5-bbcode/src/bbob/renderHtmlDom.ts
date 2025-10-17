@@ -1,10 +1,11 @@
-import { render as htmlRender } from "@bbob/html/es";
-import type { CoreRenderable, CoreRenderer, CoreRenderNode } from "@bbob/core/es";
-import { isStringNode, isTagNode } from "@bbob/plugin-helper/es";
+import type { ParseOptions, TagNodeTree } from "@bbob/types";
 import { bbCodeLogger } from "../BBCodeLogger";
 import { setAttributesFromTagAttrs } from "./Attributes";
 
-const renderDomNode = (node: CoreRenderable, options: Required<HtmlDomRendererOptions>): Node => {
+const { isStringNode, isTagNode } = await import("@bbob/plugin-helper");
+const { render } = await import("@bbob/html");
+
+const renderDomNode = (node: null | string | number | TagNodeTree, options: Required<HtmlDomRendererOptions>): Node => {
   if (typeof node === "number") {
     return document.createTextNode(String(node));
   }
@@ -36,10 +37,10 @@ const renderDomNode = (node: CoreRenderable, options: Required<HtmlDomRendererOp
   return element;
 };
 
-const renderDomNodes = (node: CoreRenderable[], options: Required<HtmlDomRendererOptions>): Node[] =>
-  node.map((n) => renderDomNode(n, options));
+const renderDomNodes = (node: TagNodeTree, options: Required<HtmlDomRendererOptions>): Node[] =>
+  (Array.isArray(node) ? node : [node]).map((n) => renderDomNode(n, options));
 
-const renderTree = (node: CoreRenderable[], options: Required<HtmlDomRendererOptions>): string => {
+const renderTree = (node: TagNodeTree, options: Required<HtmlDomRendererOptions>): string => {
   const logger = bbCodeLogger;
 
   if (logger.isDebugEnabled()) {
@@ -69,15 +70,15 @@ const defaultHtmlDomRendererOptions: Required<HtmlDomRendererOptions> = {
   stripTags: false,
 };
 
-export const htmlDomRenderer = (defaultOptions: HtmlDomRendererOptions = {}): CoreRenderer => {
+export const htmlDomRenderer = (defaultOptions: HtmlDomRendererOptions = {}) => {
   const configuredDefaultOptions: Required<HtmlDomRendererOptions> = {
     ...defaultHtmlDomRendererOptions,
     ...defaultOptions,
   };
-  return (node: CoreRenderNode, options: object & HtmlDomRendererOptions = {}): string => {
+  return (node?: TagNodeTree, options?: ParseOptions): string => {
     const optionsWithDefaults: Required<HtmlDomRendererOptions> = {
       ...configuredDefaultOptions,
-      ...options,
+      ...(options ?? {}),
     };
     let result: string;
     if (Array.isArray(node)) {
@@ -87,10 +88,10 @@ export const htmlDomRenderer = (defaultOptions: HtmlDomRendererOptions = {}): Co
     } else {
       // Some defensive approach to fall back to an alternative rendering for
       // in-between processing.
-      result = htmlRender(node, optionsWithDefaults);
+      result = render(node, optionsWithDefaults);
     }
     return result;
   };
 };
 
-export const renderHtmlDom: CoreRenderer = htmlDomRenderer();
+export const renderHtmlDom = htmlDomRenderer();

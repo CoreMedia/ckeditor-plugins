@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@bbob/preset-html5':
+    hash: 0dae2d5dc287682d2ca0ed37bae03d499acfddba1d00cb30ad6d7f4bad6c0f47
+    path: patches/@bbob__preset-html5.patch
+
 importers:
 
   .:
@@ -308,6 +313,9 @@ importers:
         specifier: ^4.2.0
         version: 4.2.0
       '@bbob/preset-html5':
+        specifier: ^4.2.0
+        version: 4.2.0(patch_hash=0dae2d5dc287682d2ca0ed37bae03d499acfddba1d00cb30ad6d7f4bad6c0f47)
+      '@bbob/types':
         specifier: ^4.2.0
         version: 4.2.0
       '@coremedia/ckeditor5-common':
@@ -8426,7 +8434,7 @@ snapshots:
     dependencies:
       '@bbob/types': 4.2.0
 
-  '@bbob/preset-html5@4.2.0':
+  '@bbob/preset-html5@4.2.0(patch_hash=0dae2d5dc287682d2ca0ed37bae03d499acfddba1d00cb30ad6d7f4bad6c0f47)':
     dependencies:
       '@bbob/plugin-helper': 4.2.0
       '@bbob/preset': 4.2.0
@@ -9084,6 +9092,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 46.1.1
       '@ckeditor/ckeditor5-widget': 46.1.1
       ckeditor5: 46.1.1
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-html-support@45.2.1':
     dependencies:
@@ -9173,6 +9183,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-inspector@4.1.0': {}
 
@@ -9189,6 +9201,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-link@45.2.1':
     dependencies:
@@ -9217,6 +9231,8 @@ snapshots:
       '@ckeditor/ckeditor5-widget': 46.1.1
       ckeditor5: 46.1.1
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-list@45.2.1':
     dependencies:
@@ -9242,6 +9258,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-markdown-gfm@45.2.1':
     dependencies:

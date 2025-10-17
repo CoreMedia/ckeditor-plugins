@@ -4,3 +4,5 @@ packages:
   - app
 onlyBuiltDependencies:
   - esbuild
+patchedDependencies:
+  '@bbob/preset-html5': patches/@bbob__preset-html5.patch

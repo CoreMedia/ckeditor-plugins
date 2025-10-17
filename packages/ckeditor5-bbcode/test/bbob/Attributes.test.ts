@@ -1,8 +1,6 @@
-import "global-jsdom/register";
 import type { TestContext } from "node:test";
 import test, { describe } from "node:test";
 import expect from "expect";
-import type { TagAttrs } from "@bbob/plugin-helper/es";
 import {
   forEachAttribute,
   setAttributesFromTagAttrs,
@@ -19,13 +17,13 @@ void describe("Attributes", () => {
     });
 
     void test("should process expected entries", () => {
-      const probe: TagAttrs = {
+      const probe: Record<string, unknown> = {
         src: "SRC",
         otherSrc: "SRC",
         lorem: "LOREM",
         empty: "",
       };
-      const processedEntries: [string, string][] = [];
+      const processedEntries: [string, unknown][] = [];
       forEachAttribute(probe, (name, value) => processedEntries.push([name, value]));
       expect(Object.fromEntries(processedEntries)).toMatchObject(probe);
     });
@@ -41,7 +39,7 @@ void describe("Attributes", () => {
 
     void test("should set normal attributes as given", () => {
       const el = document.createElement("div");
-      const attrs: TagAttrs = {
+      const attrs: Record<string, unknown> = {
         class: "CLASS",
         style: "STYLE",
         title: "",
@@ -55,7 +53,7 @@ void describe("Attributes", () => {
     void test("should ignore invalid attributes, but process others", () => {
       const el = document.createElement("div");
       const invalidKey = "[invalid key]";
-      const attrs: TagAttrs = {
+      const attrs: Record<string, unknown> = {
         class: "CLASS",
         [invalidKey]: "INVALID",
         style: "STYLE",
@@ -123,14 +121,19 @@ void describe("Attributes", () => {
   });
 
   void describe("uniqueAttrToAttr", () => {
-    type AutCall = (uniqueAttrName: string, attrs: TagAttrs, uniqueDefault: string) => TagAttrs;
+    type AutCall = (
+      uniqueAttrName: string,
+      attrs: Record<string, unknown>,
+      uniqueDefault: string,
+    ) => Record<string, unknown>;
     const aut = {
-      callWithDefaults: (uniqueAttrName: string, attrs: TagAttrs) => uniqueAttrToAttr(uniqueAttrName, attrs),
-      callWithOverrideEnabled: (uniqueAttrName: string, attrs: TagAttrs) =>
+      callWithDefaults: (uniqueAttrName: string, attrs: Record<string, unknown>) =>
+        uniqueAttrToAttr(uniqueAttrName, attrs),
+      callWithOverrideEnabled: (uniqueAttrName: string, attrs: Record<string, unknown>) =>
         uniqueAttrToAttr(uniqueAttrName, attrs, true),
-      callWithOverrideDisabled: (uniqueAttrName: string, attrs: TagAttrs) =>
+      callWithOverrideDisabled: (uniqueAttrName: string, attrs: Record<string, unknown>) =>
         uniqueAttrToAttr(uniqueAttrName, attrs, false),
-      callWithDefaultSupplied: (uniqueAttrName: string, attrs: TagAttrs, uniqueDefault: string) =>
+      callWithDefaultSupplied: (uniqueAttrName: string, attrs: Record<string, unknown>, uniqueDefault: string) =>
         uniqueAttrToAttr(uniqueAttrName, attrs, true, () => uniqueDefault),
     };
 

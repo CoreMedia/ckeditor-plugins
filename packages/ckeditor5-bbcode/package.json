@@ -23,7 +23,7 @@
     "clean": "pnpm clean:src && pnpm clean:dist",
     "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
     "clean:dist": "rimraf ./dist",
-    "test-TODO": "test-runner-react",
+    "test": "test-runner-react",
     "lint": "eslint \"**/*.{ts,tsx}\"",
     "npm-check-updates": "npm-check-updates --upgrade"
   },
@@ -57,6 +57,7 @@
     "@bbob/plugin-helper": "^4.2.0",
     "@bbob/preset": "^4.2.0",
     "@bbob/preset-html5": "^4.2.0",
+    "@bbob/types": "^4.2.0",
     "@coremedia/ckeditor5-common": "25.0.4-rc.2",
     "@coremedia/ckeditor5-core-common": "25.0.4-rc.2",
     "@coremedia/ckeditor5-dom-support": "25.0.4-rc.2",

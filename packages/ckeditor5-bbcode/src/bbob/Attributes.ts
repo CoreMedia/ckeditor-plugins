@@ -1,11 +1,11 @@
-import type { TagAttrs } from "@bbob/plugin-helper/es";
-import { getUniqAttr } from "@bbob/plugin-helper/es";
 import { bbCodeLogger } from "../BBCodeLogger";
+
+const { getUniqAttr } = await import("@bbob/plugin-helper");
 
 /**
  * Consumer for an attribute name and its value.
  */
-export type AttributeConsumer = (attrName: string, attrValue: string) => void;
+export type AttributeConsumer = (attrName: string, attrValue: unknown) => void;
 
 /**
  * Iterates over each attribute (key, value pair) and passes it to the
@@ -14,7 +14,7 @@ export type AttributeConsumer = (attrName: string, attrValue: string) => void;
  * @param attrs - attributes to process
  * @param consumer - consumer to work an attribute's key/value pair
  */
-export const forEachAttribute = (attrs: TagAttrs, consumer: AttributeConsumer): void => {
+export const forEachAttribute = (attrs: Record<string, unknown>, consumer: AttributeConsumer): void => {
   Object.entries(attrs).forEach(([attrName, attrValue]) => consumer(attrName, attrValue));
 };
 
@@ -27,9 +27,10 @@ export const forEachAttribute = (attrs: TagAttrs, consumer: AttributeConsumer): 
  * @param element - element to set attributes at
  * @param attrs - attributes to set
  */
-export const setAttributesFromTagAttrs = (element: HTMLElement, attrs: TagAttrs): void => {
+export const setAttributesFromTagAttrs = (element: HTMLElement, attrs: Record<string, unknown>): void => {
   const trySetAttribute: AttributeConsumer = (name, value): void => {
     try {
+      // @ts-expect-error TODO must be a string here, but TagAttrs allows unknown values
       element.setAttribute(name, value);
     } catch (e) {
       bbCodeLogger.debug(
@@ -55,7 +56,12 @@ export const setAttributesFromTagAttrs = (element: HTMLElement, attrs: TagAttrs)
  * @param attrs - attributes to parse
  */
 // see https://github.com/JiLiZART/BBob/issues/202
-export const stripUniqueAttr = (attrs: TagAttrs): { uniqueAttrValue?: TagAttrs[string]; otherAttrs: TagAttrs } => {
+export const stripUniqueAttr = (
+  attrs: Record<string, unknown>,
+): {
+  uniqueAttrValue?: Record<string, unknown>[string];
+  otherAttrs: Record<string, unknown>;
+} => {
   const uniqueAttrValue = getUniqAttr(attrs);
 
   // Contract for _no unique attribute set_.
@@ -85,14 +91,14 @@ export const stripUniqueAttr = (attrs: TagAttrs): { uniqueAttrValue?: TagAttrs[s
  */
 export const uniqueAttrToAttr = (
   uniqueAttrName: string,
-  attrs: TagAttrs,
+  attrs: Record<string, unknown>,
   override = true,
   defaultValueSupplier?: () => string,
-): TagAttrs => {
+): Record<string, unknown> => {
   const { uniqueAttrValue = defaultValueSupplier?.(), otherAttrs } = stripUniqueAttr(attrs);
-  const valueFromOtherAttrs: string | undefined = otherAttrs[uniqueAttrName];
+  const valueFromOtherAttrs: unknown | undefined = otherAttrs[uniqueAttrName];
 
-  const result: TagAttrs = otherAttrs;
+  const result: Record<string, unknown> = otherAttrs;
 
   if (uniqueAttrValue !== undefined && (override || valueFromOtherAttrs === undefined)) {
     result[uniqueAttrName] = uniqueAttrValue;

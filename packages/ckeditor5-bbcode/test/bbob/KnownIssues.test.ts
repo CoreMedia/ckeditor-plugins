@@ -1,18 +1,22 @@
-import "global-jsdom/register";
 import type { TestContext } from "node:test";
 import test, { describe } from "node:test";
+import type { TagNodeTree } from "@bbob/types";
 import expect from "expect";
-import type { CoreRenderer } from "@bbob/core/es";
-import bbob from "@bbob/core/es";
 
-const render: CoreRenderer = (node) => JSON.stringify(node);
+const { default: bbob } = await import("@bbob/core");
+
+const render = (node: TagNodeTree | undefined) => {
+  return JSON.stringify(node);
+};
 
 const aut = {
   /**
    * Uses `JSON.stringify` as renderer and no plugins, thus, we process the
    * raw tree to plain JSON.
    */
-  toJSONRaw: (input: string) => bbob().process(input, { render }).html,
+  toJSONRaw: (input: string) => {
+    return bbob().process(input, { render });
+  },
 };
 
 /**
@@ -68,7 +72,8 @@ void describe("BBob Known Issues", () => {
     void test("cases", async (t: TestContext) => {
       for (const [i, { bbCode, expectedActual, expected, issue, comment }] of cases.entries()) {
         await t.test(`[${i}] ${comment}: ${bbCode} -> ${expectedActual} (${issue}; expected: ${expected})`, () => {
-          expect(aut.toJSONRaw(bbCode)).toBe(expectedActual);
+          const result = aut.toJSONRaw(bbCode);
+          expect(result.html).toBe(expectedActual);
         });
       }
     });

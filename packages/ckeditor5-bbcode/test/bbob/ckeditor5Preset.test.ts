@@ -1,11 +1,11 @@
 // noinspection HtmlRequiredAltAttribute,HttpUrlsUsage
 
-import "global-jsdom/register";
 import type { TestContext } from "node:test";
 import test, { describe } from "node:test";
 import expect from "expect";
-import html from "@bbob/html/es";
 import { ckeditor5Preset as preset } from "../../src/bbob/ckeditor5Preset";
+
+const { default: html } = await import("@bbob/html");
 
 type HtmlInput = Parameters<typeof html>[0];
 type HtmlResult = ReturnType<typeof html>;

@@ -2,30 +2,12 @@
   "extends": "../../tsconfig.json",
   "include": [
     "./test",
-    "./src",
-    "./types"
+    "./src"
   ],
   "compilerOptions": {
     "outDir": "./dist",
     "types": [
       "node"
-    ],
-    "paths": {
-      "@bbob/core/*": [
-        "./types/@bbob/core/*"
-      ],
-      "@bbob/html/*": [
-        "./types/@bbob/html/*"
-      ],
-      "@bbob/plugin-helper/*": [
-        "./types/@bbob/plugin-helper/*"
-      ],
-      "@bbob/preset/*": [
-        "./types/@bbob/preset/*"
-      ],
-      "@bbob/preset-html5/*": [
-        "./types/@bbob/preset-html5/*"
-      ]
-    }
+    ]
   }
 }

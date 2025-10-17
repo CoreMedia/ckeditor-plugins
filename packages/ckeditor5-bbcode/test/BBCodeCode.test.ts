@@ -102,14 +102,14 @@ void describe("BBCodeCode", () => {
 
     const fromClassCases = [
       {
-        dataView: `<pre><code class="language-css">TEXT</code></pre>`,
+        dataView: `<pre><code class="css">TEXT</code></pre>`,
         expected: `[code=css]\nTEXT\n[/code]\n`,
-        comment: `respect language`,
+        comment: `respect language by custom extractor`,
       },
       {
-        dataView: `<pre><code class="language-ignored">TEXT</code></pre>`,
+        dataView: `<pre><code class="plaintext">TEXT</code></pre>`,
         expected: `[code]\nTEXT\n[/code]\n`,
-        comment: `strip irrelevant language by custom config`,
+        comment: `strip irrelevant plaintext language`,
       },
     ] as const;
 
