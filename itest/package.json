@@ -18,6 +18,8 @@
   },
   "license": "Apache-2.0",
   "devDependencies": {
+    "@babel/core": "^7.24.4",
+    "@coremedia-internal/ckeditor5-babel-config": "^1.0.0",
     "@coremedia-internal/ckeditor5-coremedia-example-data": "^1.0.0",
     "@coremedia/ckeditor5-coremedia-link": "25.0.4-rc.4",
     "@coremedia/ckeditor5-coremedia-richtext": "25.0.4-rc.4",
@@ -27,13 +29,16 @@
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.14.10",
+    "babel-jest": "^29.7.0",
     "ckeditor5": "46.1.1",
+    "enhanced-resolve": "^5.16.0",
     "expect-playwright": "^0.8.0",
     "express": "^5.1.0",
     "get-port": "^7.1.0",
     "jest": "^29.7.0",
     "jest-circus": "^29.7.0",
     "jest-config": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "jest-environment-node": "^29.7.0",
     "jest-playwright-preset": "4.0.0",
     "jest-runner": "^29.7.0",
@@ -41,6 +46,7 @@
     "playwright": "^1.45.1",
     "playwright-core": "^1.45.1",
     "rimraf": "^6.0.1",
+    "ts-jest": "^29.1.2",
     "tslib": "^2.6.3",
     "typescript": "5.4.5",
     "wait-for-expect": "^3.0.2"
@@ -54,8 +60,6 @@
     "preplaywright": "npx playwright install chromium",
     "playwright": "jest",
     "playwright-local": "jest --config ./jest.local.js",
-    "jest": "exit 0",
-    "jest:coverage": "exit 0",
     "npm-check-updates": "npm-check-updates --upgrade"
   }
 }
