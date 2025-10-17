@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-bbcode",
-  "version": "25.0.4-rc.2",
+  "version": "25.0.4-rc.4",
   "type": "module",
   "description": "BBCode Data-Processor",
   "author": {
@@ -58,10 +58,10 @@
     "@bbob/preset": "^4.2.0",
     "@bbob/preset-html5": "^4.2.0",
     "@bbob/types": "^4.2.0",
-    "@coremedia/ckeditor5-common": "25.0.4-rc.2",
-    "@coremedia/ckeditor5-core-common": "25.0.4-rc.2",
-    "@coremedia/ckeditor5-dom-support": "25.0.4-rc.2",
-    "@coremedia/ckeditor5-logging": "25.0.4-rc.2"
+    "@coremedia/ckeditor5-common": "25.0.4-rc.4",
+    "@coremedia/ckeditor5-core-common": "25.0.4-rc.4",
+    "@coremedia/ckeditor5-dom-support": "25.0.4-rc.4",
+    "@coremedia/ckeditor5-logging": "25.0.4-rc.4"
   },
   "devDependencies": {
     "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.050b44a",
