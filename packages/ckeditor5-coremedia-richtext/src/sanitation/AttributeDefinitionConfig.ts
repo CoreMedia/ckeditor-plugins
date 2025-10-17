@@ -1,6 +1,7 @@
-import { ActiveStrictness } from "../Strictness";
+import type { ActiveStrictness } from "../Strictness";
 import { isKnownNamespacePrefix, namespaces } from "../Namespaces";
-import { acAny, AttributeContent } from "./AttributeContent";
+import type { AttributeContent } from "./AttributeContent";
+import { acAny } from "./AttributeContent";
 
 /**
  * Definition of an attribute, closely related to DTD definition.

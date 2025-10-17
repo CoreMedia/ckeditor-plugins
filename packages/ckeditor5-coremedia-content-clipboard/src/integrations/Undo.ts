@@ -1,6 +1,6 @@
 import { Plugin, UndoEditing } from "ckeditor5";
+import type { CommandHandler } from "@coremedia/ckeditor5-core-common";
 import {
-  CommandHandler,
   disableCommand,
   enableCommand,
   ifCommand,

@@ -1,4 +1,4 @@
-import ClipboardItemRepresentation from "./ClipboardItemRepresentation";
+import type ClipboardItemRepresentation from "./ClipboardItemRepresentation";
 
 /**
  * Extracts content uris from the given ClipboardItemRepresentations.

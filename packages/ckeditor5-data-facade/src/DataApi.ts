@@ -1,5 +1,5 @@
-import { GetDataOptions, SetDataData, SetDataOptions } from "./DataControllerApi";
-import { DataContextOptions } from "./DataContextOptions";
+import type { GetDataOptions, SetDataData, SetDataOptions } from "./DataControllerApi";
+import type { DataContextOptions } from "./DataContextOptions";
 
 /**
  * Data API to control in- and output to an instance of CKEditor 5.

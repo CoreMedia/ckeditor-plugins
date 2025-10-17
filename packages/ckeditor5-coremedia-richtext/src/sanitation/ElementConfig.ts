@@ -5,11 +5,12 @@ import {
   isHasNamespaceUri,
   lookupNamespaceURI,
 } from "@coremedia/ckeditor5-dom-support";
-import { ActiveStrictness } from "../Strictness";
+import type { ActiveStrictness } from "../Strictness";
 import { isKnownNamespacePrefix, namespaces } from "../Namespaces";
-import { ParsedAttributeDefinitionConfig } from "./AttributeDefinitionConfig";
-import { allowEmpty, ElementContent, pcdata } from "./ElementContent";
-import { SanitationListener } from "./SanitationListener";
+import type { ParsedAttributeDefinitionConfig } from "./AttributeDefinitionConfig";
+import type { ElementContent } from "./ElementContent";
+import { allowEmpty, pcdata } from "./ElementContent";
+import type { SanitationListener } from "./SanitationListener";
 
 const defaultPrefix = Symbol("default");
 type DefaultPrefix = typeof defaultPrefix;

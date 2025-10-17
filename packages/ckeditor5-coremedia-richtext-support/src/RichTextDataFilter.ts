@@ -1,11 +1,10 @@
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { DataFilter, Plugin } from "ckeditor5";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
-import ReducedMatcherPattern, {
-  InheritingMatcherPattern,
-  resolveInheritance,
-  toLookupStrategy,
-} from "./ReducedMatcherPattern";
+import type { InheritingMatcherPattern } from "./ReducedMatcherPattern";
+import type ReducedMatcherPattern from "./ReducedMatcherPattern";
+import { resolveInheritance, toLookupStrategy } from "./ReducedMatcherPattern";
 import { COREMEDIA_RICHTEXT_1_0_CONFIG } from "./CoreMediaRichText10Dtd";
 import { getConfig } from "./CoreMediaRichTextSupportConfig";
 

@@ -1,5 +1,5 @@
 import type { ContextualBalloon } from "ckeditor5";
-import { ClassicEditorWrapper } from "../../ClassicEditorWrapper";
+import type { ClassicEditorWrapper } from "../../ClassicEditorWrapper";
 import { JSWrapper } from "../../JSWrapper";
 import ViewWrapper from "./../ViewWrapper";
 

@@ -1,4 +1,4 @@
-import { ContextualBalloon } from "ckeditor5";
+import type { ContextualBalloon } from "ckeditor5";
 import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common";
 
 /**

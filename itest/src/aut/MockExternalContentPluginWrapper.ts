@@ -3,7 +3,7 @@ import type {
   MockExternalContent,
 } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
 import { JSWrapper } from "./JSWrapper";
-import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
+import type { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 
 const PLUGIN_NAME = "MockExternalContent";
 

@@ -1,5 +1,6 @@
-import { Plugin, Element as ModelElement, Writer, DiffItemInsert } from "ckeditor5";
-import { Subscription } from "rxjs";
+import type { ModelElement, ModelWriter, DifferItemInsert } from "ckeditor5";
+import { Plugin } from "ckeditor5";
+import type { Subscription } from "rxjs";
 import SubscriptionCache from "./SubscriptionCache";
 
 /**
@@ -91,7 +92,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
       });
       const insertsOnGraveyard = changes
         .filter((change) => change.type === "insert") // an insert on the graveyard means a removal on the root document
-        .map((value) => value as DiffItemInsert)
+        .map((value) => value as DifferItemInsert)
         .filter(ModelBoundSubscriptionPlugin.#isOnGraveyard);
       const allRemovedElementsWithSubscriptions: ModelElement[] = [];
       for (const entry of insertsOnGraveyard) {
@@ -124,7 +125,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
       //find all elements, which have been inserted in the current change set.
       const insertions = changes
         .filter((diffItem) => diffItem.type === "insert")
-        .map((diffItem) => diffItem as DiffItemInsert)
+        .map((diffItem) => diffItem as DifferItemInsert)
         .map((diffItem) => diffItem.position.nodeAfter)
         .filter((value) => value?.is("element"))
         .map((value) => value as ModelElement);
@@ -136,7 +137,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
         {
           isUndoable: false,
         },
-        (writer: Writer) => {
+        (writer: ModelWriter) => {
           for (const insertedElement of insertedRegisteredElements) {
             writer.setAttribute(ModelBoundSubscriptionPlugin.ID_MODEL_ATTRIBUTE_NAME, Math.random(), insertedElement);
           }
@@ -150,7 +151,7 @@ export default class ModelBoundSubscriptionPlugin extends Plugin {
    *
    * @param insert - the insert change.
    */
-  static #isOnGraveyard(insert: DiffItemInsert): boolean {
+  static #isOnGraveyard(insert: DifferItemInsert): boolean {
     const rootElement = insert.position.root;
     if (rootElement.is("rootElement")) {
       return rootElement.rootName === "$graveyard";

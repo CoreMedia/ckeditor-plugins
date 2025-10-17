@@ -55,4 +55,5 @@ type AtomicOrArray<T> = T | T[];
  */
 const capitalize = (str: string): string => str.slice(0, 1).toUpperCase() + str.slice(1);
 
-export { capitalize, increaseUpToAndRestart, isObject, AtomicOrArray, IncreaseUpToAndRestartResponse };
+export type { AtomicOrArray, IncreaseUpToAndRestartResponse };
+export { capitalize, increaseUpToAndRestart, isObject };

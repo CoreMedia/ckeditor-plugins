@@ -1,4 +1,5 @@
-import { ApplicationToolbarConfig, requireApplicationToolbar } from "./ApplicationToolbar";
+import type { ApplicationToolbarConfig } from "./ApplicationToolbar";
+import { requireApplicationToolbar } from "./ApplicationToolbar";
 
 export interface SwitchButtonConfig<T extends string = string> extends ApplicationToolbarConfig {
   id?: string;

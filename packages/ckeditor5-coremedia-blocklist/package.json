@@ -1,6 +1,7 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-blocklist",
   "version": "25.0.4-rc.4",
+  "type": "module",
   "description": "Lets users add and remove words to a list in the editor and highlights them in the text.",
   "author": {
     "name": "CoreMedia GmbH",
@@ -22,9 +23,7 @@
     "clean": "pnpm clean:src && pnpm clean:dist",
     "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
     "clean:dist": "rimraf ./dist",
-    "jest": "jest --passWithNoTests",
-    "jest:coverage": "jest --collect-coverage --passWithNoTests",
-    "lint": "eslint \"**/*.{js,cjs,mjs,ts,tsx}\"",
+    "lint": "eslint \"**/*.{ts,tsx}\"",
     "npm-check-updates": "npm-check-updates --upgrade"
   },
   "exports": {
@@ -49,19 +48,18 @@
     "/theme"
   ],
   "devDependencies": {
-    "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
-    "@coremedia/service-agent": "^1.1.5",
-    "@types/jest": "^29.5.12",
-    "ckeditor5": "45.2.1",
+    "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.050b44a",
+    "@coremedia/service-agent": "^2.1.2",
+    "@types/node": "^22.0.0",
+    "ckeditor5": "46.1.1",
     "copyfiles": "^2.4.1",
-    "jest": "^29.7.0",
     "rimraf": "^6.0.1",
     "rxjs": "^7.8.1",
     "typescript": "5.4.5"
   },
   "peerDependencies": {
-    "@coremedia/service-agent": "^1.1.5 || ^2.0.1",
-    "ckeditor5": "45.2.1"
+    "@coremedia/service-agent": "^2.1.2",
+    "ckeditor5": "46.1.1"
   },
   "dependencies": {
     "@coremedia/ckeditor5-core-common": "25.0.4-rc.4",

@@ -5,7 +5,7 @@
  * @packageDocumentation
  * @category Virtual
  */
-export { default as Logger } from "./Logger";
+export type { default as Logger } from "./Logger";
 
 export { default as LogLevel } from "./LogLevel";
 

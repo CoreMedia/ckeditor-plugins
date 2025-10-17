@@ -1,14 +1,11 @@
 /* async: Methods require to be asynchronous in production scenario. */
 
-import {
-  createContentReferenceServiceDescriptor,
-  isUriPath,
-  RichtextConfigurationService,
-  UriPath,
-} from "@coremedia/ckeditor5-coremedia-studio-integration";
+import type { RichtextConfigurationService, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { createContentReferenceServiceDescriptor, isUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { serviceAgent } from "@coremedia/service-agent";
-import { Editor } from "ckeditor5";
-import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
+import type { Editor } from "ckeditor5";
+import type { MockContentProvider } from "./MockContentPlugin";
+import { defaultMockContentProvider } from "./MockContentPlugin";
 import MockExternalContentPlugin from "./MockExternalContentPlugin";
 
 class MockRichtextConfigurationService implements RichtextConfigurationService {

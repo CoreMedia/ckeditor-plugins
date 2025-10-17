@@ -5,5 +5,5 @@
  * @category Virtual
  */
 
-export * as contentlink from "./contentlink";
-export * as linktarget from "./linktarget";
+export type * as contentlink from "./contentlink";
+export type * as linktarget from "./linktarget";

@@ -1,6 +1,6 @@
 import { Plugin } from "ckeditor5";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
-import { MockContentConfig } from "./MockContent";
+import type { MockContentConfig } from "./MockContent";
 import MockContentPlugin from "./MockContentPlugin";
 
 const PLUGIN_NAME = "MockExternalContent";

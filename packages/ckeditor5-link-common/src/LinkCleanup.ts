@@ -1,6 +1,7 @@
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
-import { DiffItem, DiffItemAttribute, Editor, LinkEditing, Plugin, Range, Writer } from "ckeditor5";
+import type { DifferItem, DifferItemAttribute, Editor, ModelRange, ModelWriter } from "ckeditor5";
+import { LinkEditing, Plugin } from "ckeditor5";
 import { LINK_HREF_MODEL } from "./Constants";
 
 /**
@@ -78,7 +79,7 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
    * @returns `true` if changes got applied, and the post-fix chain shall be
    * re-triggered; `false` on no changes
    */
-  readonly #fixOrphanedAttributes = (writer: Writer): boolean => {
+  readonly #fixOrphanedAttributes = (writer: ModelWriter): boolean => {
     const todoAttributes = [...this.#watchedAttributes];
     const getLinkHrefRemovalRanges = LinkCleanup.#getLinkHrefRemovalRanges;
     const fixOrphanedAttribute = LinkCleanup.#fixOrphanedAttribute;
@@ -106,14 +107,14 @@ class LinkCleanup extends Plugin implements LinkCleanupRegistry {
    *
    * @param writer - writer to get relevant diff-items from
    */
-  static readonly #getLinkHrefRemovalRanges = (writer: Writer): Iterable<Range> => {
+  static readonly #getLinkHrefRemovalRanges = (writer: ModelWriter): Iterable<ModelRange> => {
     const { differ } = writer.model.document;
     const changes = differ.getChanges();
-    return changes.filter(isRemoveLinkHrefAttribute).map((c) => (c as DiffItemAttribute).range);
+    return changes.filter(isRemoveLinkHrefAttribute).map((c) => (c as DifferItemAttribute).range);
   };
   static readonly #fixOrphanedAttribute = (
-    writer: Writer,
-    relevantRanges: Iterable<Range>,
+    writer: ModelWriter,
+    relevantRanges: Iterable<ModelRange>,
     modelAttributeName: string,
   ): void => {
     const model = writer.model;
@@ -145,7 +146,7 @@ const getLinkCleanup = (editor: Editor): LinkCleanupRegistry | undefined => edit
  *
  * @param diffItem - item to check
  */
-const isRemoveLinkHrefAttribute = (diffItem: DiffItem): boolean => {
+const isRemoveLinkHrefAttribute = (diffItem: DifferItem): boolean => {
   if (diffItem.type !== "attribute") {
     return false;
   }
@@ -157,5 +158,6 @@ const isRemoveLinkHrefAttribute = (diffItem: DiffItem): boolean => {
   const isDeleteAttribute = attributeNewValue === null || attributeNewValue === undefined;
   return isDeleteAttribute && attributeKey === LINK_HREF_MODEL;
 };
-export { getLinkCleanup, LinkCleanupRegistry };
+export type { LinkCleanupRegistry };
+export { getLinkCleanup };
 export default LinkCleanup;

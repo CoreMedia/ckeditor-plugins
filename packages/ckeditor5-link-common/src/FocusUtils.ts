@@ -1,5 +1,6 @@
-import { View } from "ckeditor5";
-import { HasFocusables, HasFocusTracker, hasRequiredInternalFocusablesProperty } from "./HasFocusables";
+import type { View } from "ckeditor5";
+import type { HasFocusables, HasFocusTracker } from "./HasFocusables";
+import { hasRequiredInternalFocusablesProperty } from "./HasFocusables";
 
 /**
  * Utility function to handle focus tracking for extended linkViews.

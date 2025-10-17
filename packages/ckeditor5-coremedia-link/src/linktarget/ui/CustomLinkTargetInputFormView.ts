@@ -1,23 +1,21 @@
 import "../../../theme/customlinktargetform.css";
+import type { InputTextView, FocusableView, Locale, Emitter, Command } from "ckeditor5";
 import {
   View,
   LabeledFieldView,
   ButtonView,
+  CssTransitionDisablerMixin,
   ViewCollection,
   FocusCycler,
-  injectCssTransitionDisabler,
   submitHandler,
-  InputTextView,
-  FocusableView,
   createLabeledInputText,
-  Locale,
   FocusTracker,
   KeystrokeHandler,
-  Emitter,
   IconCheck,
-  Command,
   IconCancel,
 } from "ckeditor5";
+
+const CssTransitionDisabledView = CssTransitionDisablerMixin(View);
 
 /**
  * The CustomLinkTargetInputFormView class is a basic view with a few child items.
@@ -25,7 +23,7 @@ import {
  * It consists of a basic input field (with label) and two buttons (save & cancel)
  * Keystrokes and focus are handled accordingly.
  */
-export default class CustomLinkTargetInputFormView extends View {
+export default class CustomLinkTargetInputFormView extends CssTransitionDisabledView {
   readonly focusTracker: FocusTracker;
   readonly keystrokes: KeystrokeHandler;
   readonly labeledInput: LabeledFieldView<InputTextView>;
@@ -109,9 +107,6 @@ export default class CustomLinkTargetInputFormView extends View {
       },
       children: [this.labeledInput, this.saveButtonView, this.cancelButtonView],
     });
-
-    // TODO[cke] Address Deprecation
-    injectCssTransitionDisabler(this);
   }
 
   /**

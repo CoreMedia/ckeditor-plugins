@@ -1,20 +1,10 @@
 import { ifCommand } from "@coremedia/ckeditor5-core-common";
-import {
-  Plugin,
-  Command,
-  ButtonView,
-  ContextualBalloon,
-  clickOutsideHandler,
-  Locale,
-  Config,
-  PositionOptions,
-  LinkUI,
-  EditorConfig,
-} from "ckeditor5";
+import type { Command, Locale, Config, DomOptimalPositionOptions, EditorConfig } from "ckeditor5";
+import { Plugin, ButtonView, ContextualBalloon, clickOutsideHandler, LinkUI } from "ckeditor5";
 import { IncompatibleInternalApiUsageError } from "@coremedia/ckeditor5-common";
 import { parseLinkTargetConfig } from "../config/LinkTargetConfig";
 import { OTHER_TARGET_NAME, requireDefaultTargetDefinition } from "../config/DefaultTarget";
-import LinkTargetOptionDefinition from "../config/LinkTargetOptionDefinition";
+import type LinkTargetOptionDefinition from "../config/LinkTargetOptionDefinition";
 import CustomLinkTargetInputFormView from "./CustomLinkTargetInputFormView";
 
 /**
@@ -251,7 +241,7 @@ export default class CustomLinkTargetUI extends Plugin {
 
   // we are relying on internal API here, this is kind of error-prone, but also the best shot we have
   // without reinventing the whole positioning logic of CKE balloons
-  #getBalloonPositionData(): Partial<PositionOptions> {
+  #getBalloonPositionData(): Partial<DomOptimalPositionOptions> {
     const { linkUI } = this;
     return asHasGetBalloonPositionData(linkUI)._getBalloonPositionData();
   }
@@ -261,7 +251,7 @@ export default class CustomLinkTargetUI extends Plugin {
  * Exposes private API of LinkUI.
  */
 interface HasGetBalloonPositionData {
-  _getBalloonPositionData(): Partial<PositionOptions>;
+  _getBalloonPositionData(): Partial<DomOptimalPositionOptions>;
 }
 
 const isHasGetBalloonPositionData = (value: unknown): value is HasGetBalloonPositionData =>

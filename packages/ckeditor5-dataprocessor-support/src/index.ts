@@ -1,8 +1,8 @@
 /**
  * @module ckeditor5-dataprocessor-support
  */
+export type { AttributeMapper } from "./Attributes";
 export {
-  AttributeMapper,
   renameAttribute,
   preserveAttributeAs,
   allAttributeMappers,
@@ -10,32 +10,19 @@ export {
   asViewFilterRule,
 } from "./Attributes";
 
-export {
-  ElementProxy,
-  AttributeValue,
-  AttributeMap,
-  ElementFilterParams,
-  ElementFilterRule,
-  allFilterRules,
-} from "./ElementProxy";
+export type { AttributeValue, AttributeMap, ElementFilterParams, ElementFilterRule } from "./ElementProxy";
+export { ElementProxy, allFilterRules } from "./ElementProxy";
 
-export {
-  AFTER_ELEMENT,
-  AFTER_ELEMENT_AND_CHILDREN,
-  BEFORE_ELEMENT,
-  ElementFilterRulesByName,
-  ElementFilterRuleSet,
-  FilterMode,
-  FilterRuleSet,
-  HtmlFilter,
-  TextFilterRuleSet,
-} from "./HtmlFilter";
+export type { ElementFilterRulesByName, ElementFilterRuleSet, FilterRuleSet, TextFilterRuleSet } from "./HtmlFilter";
+export { AFTER_ELEMENT, AFTER_ELEMENT_AND_CHILDREN, BEFORE_ELEMENT, FilterMode, HtmlFilter } from "./HtmlFilter";
 
-export { DEFAULT_NAMESPACE_PREFIX, DEFAULT_NAMESPACES, Namespaces, Namespace } from "./Namespace";
+export type { Namespaces, Namespace } from "./Namespace";
+export { DEFAULT_NAMESPACE_PREFIX, DEFAULT_NAMESPACES } from "./Namespace";
 
-export { ChildPredicate, NodeProxy, NodeState, PersistResponse, RESPONSE_ABORT, RESPONSE_CONTINUE } from "./NodeProxy";
+export type { ChildPredicate, PersistResponse } from "./NodeProxy";
+export { NodeProxy, NodeState, RESPONSE_ABORT, RESPONSE_CONTINUE } from "./NodeProxy";
 
-export {
+export type {
   ElementsFilterRuleSetConfiguration,
   ElementsFilterRuleSetConfigurationValueType,
   FilterRuleSetConfiguration,
@@ -46,12 +33,12 @@ export {
   TextFilterRuleSetConfigurationValueType,
   ToDataAndViewElementConfiguration,
   ToDataAndViewTextConfiguration,
-  mergePreParsedToViews,
-  parseFilterRuleSetConfigurations,
 } from "./Rules";
+export { mergePreParsedToViews, parseFilterRuleSetConfigurations } from "./Rules";
 
 export { rulesLogger } from "./RulesLogger";
 
-export { TextFilterParams, TextFilterRule, TextProxy } from "./TextProxy";
+export type { TextFilterParams, TextFilterRule } from "./TextProxy";
+export { TextProxy } from "./TextProxy";
 
 export { warnOnAmbiguousElementState } from "./RulesLogger";

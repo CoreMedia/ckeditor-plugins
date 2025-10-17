@@ -1,5 +1,5 @@
-import { SetDataData, SetDataOptions } from "./DataControllerApi";
-import { DataContextOptions } from "./DataContextOptions";
+import type { SetDataData, SetDataOptions } from "./DataControllerApi";
+import type { DataContextOptions } from "./DataContextOptions";
 
 /**
  * Represents cached data. In the context of the data facade feature, these

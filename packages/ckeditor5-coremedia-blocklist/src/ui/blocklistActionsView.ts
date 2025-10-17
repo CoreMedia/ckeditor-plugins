@@ -2,17 +2,8 @@
  * @module blocklist/ui/blocklistactionsview
  */
 
-import {
-  View,
-  ViewCollection,
-  FocusCycler,
-  ListView,
-  FocusableView,
-  FocusTracker,
-  KeystrokeHandler,
-  Locale,
-  Editor,
-} from "ckeditor5";
+import type { FocusableView, Locale, Editor } from "ckeditor5";
+import { View, ViewCollection, FocusCycler, ListView, FocusTracker, KeystrokeHandler } from "ckeditor5";
 import BlocklistInputView from "./blocklistInputView";
 import BlockedWordView from "./blockedWordView";
 

@@ -1,7 +1,8 @@
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
-import { PriorityString } from "ckeditor5";
+import type { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
+import type { PriorityString } from "ckeditor5";
 import { copyAttributesFrom, isHTMLTableElement, removeClass } from "@coremedia/ckeditor5-dom-support";
-import { Direction, resolveDirectionToConfig } from "./Direction";
+import type { Direction } from "./Direction";
+import { resolveDirectionToConfig } from "./Direction";
 
 export interface MergeTableSectionsToTableBodyConfig {
   headerRowClass?: string;

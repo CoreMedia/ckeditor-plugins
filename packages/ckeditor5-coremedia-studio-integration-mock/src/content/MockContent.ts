@@ -1,12 +1,13 @@
-import {
-  MockContentTypeSpecificProperties,
-  MockContentTypeSpecificPropertiesConfig,
-  withTypeDefaults,
-} from "./MockContentType";
-import Delayed, { DelayedConfig, withDelayDefaults } from "./Delayed";
-import { MutableProperties, MutablePropertiesConfig, withPropertiesDefaults } from "./MutableProperties";
+import type { MockContentTypeSpecificProperties, MockContentTypeSpecificPropertiesConfig } from "./MockContentType";
+import { withTypeDefaults } from "./MockContentType";
+import type { DelayedConfig } from "./Delayed";
+import type Delayed from "./Delayed";
+import { withDelayDefaults } from "./Delayed";
+import type { MutableProperties, MutablePropertiesConfig } from "./MutableProperties";
+import { withPropertiesDefaults } from "./MutableProperties";
 import { capitalize, isObject } from "./MockContentUtils";
-import MockContentObject, { isMockContentObject } from "./MockContentObject";
+import type MockContentObject from "./MockContentObject";
+import { isMockContentObject } from "./MockContentObject";
 
 interface MockContent extends MockContentObject, Delayed, MockContentTypeSpecificProperties, MutableProperties {}
 
@@ -104,4 +105,5 @@ const asStaticContent = (id: number): MockContent => {
 };
 
 export default MockContent;
-export { withContentDefaults, asStaticContent, isMockContentConfig, isMockContentConfigs, MockContentConfig };
+export type { MockContentConfig };
+export { withContentDefaults, asStaticContent, isMockContentConfig, isMockContentConfigs };

@@ -1,4 +1,4 @@
-import { ToDataAndViewElementConfiguration, ElementProxy } from "@coremedia/ckeditor5-dataprocessor-support";
+import type { ToDataAndViewElementConfiguration, ElementProxy } from "@coremedia/ckeditor5-dataprocessor-support";
 import { INLINE_IMG } from "../../../rules/ImageElements";
 import {
   xLinkActuateMapper,

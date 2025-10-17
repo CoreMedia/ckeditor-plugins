@@ -1,8 +1,8 @@
-import Differencing from "./Differencing";
-import { HtmlImageElementSupport } from "./integrations/HtmlSupportImage";
-import { ImageElementSupport } from "./integrations/Image";
-import { RichTextDataProcessorIntegration } from "./integrations/RichTextDataProcessorIntegration";
-import { PluginIntegrationHook } from "./PluginIntegrationHook";
+import type Differencing from "./Differencing";
+import type { HtmlImageElementSupport } from "./integrations/HtmlSupportImage";
+import type { ImageElementSupport } from "./integrations/Image";
+import type { RichTextDataProcessorIntegration } from "./integrations/RichTextDataProcessorIntegration";
+import type { PluginIntegrationHook } from "./PluginIntegrationHook";
 
 declare module "ckeditor5" {
   interface PluginsMap {

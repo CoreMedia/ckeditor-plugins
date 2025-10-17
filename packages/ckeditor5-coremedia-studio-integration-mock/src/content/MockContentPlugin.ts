@@ -1,14 +1,13 @@
 import { Plugin } from "ckeditor5";
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { numericId, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { numericId } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
-import MockContent, {
-  asStaticContent,
-  isMockContentConfigs,
-  MockContentConfig,
-  withContentDefaults,
-} from "./MockContent";
-import Delayed from "./Delayed";
+import type { MockContentConfig } from "./MockContent";
+import type MockContent from "./MockContent";
+import { asStaticContent, isMockContentConfigs, withContentDefaults } from "./MockContent";
+import type Delayed from "./Delayed";
 import { isObject } from "./MockContentUtils";
 import { PREDEFINED_MOCK_CONTENTS } from "./PredefinedMockContents";
 
@@ -252,4 +251,5 @@ class MockContentPlugin extends Plugin {
 }
 
 export default MockContentPlugin;
-export { CONFIG_KEY as COREMEDIA_MOCK_CONTENT_PLUGIN, MockContentProvider, defaultMockContentProvider };
+export type { MockContentProvider };
+export { CONFIG_KEY as COREMEDIA_MOCK_CONTENT_PLUGIN, defaultMockContentProvider };

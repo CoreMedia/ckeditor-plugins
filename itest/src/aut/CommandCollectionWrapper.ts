@@ -2,7 +2,7 @@
 import type { Editor } from "ckeditor5";
 import { JSWrapper } from "./JSWrapper";
 import { CommandWrapper } from "./CommandWrapper";
-import { EditorWrapper } from "./EditorWrapper";
+import type { EditorWrapper } from "./EditorWrapper";
 
 /**
  * Wrapper for the command collection.

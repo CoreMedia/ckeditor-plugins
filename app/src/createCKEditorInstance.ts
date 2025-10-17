@@ -1,7 +1,7 @@
-import { ClassicEditor, Command, Editor } from "ckeditor5";
+import type { ClassicEditor, Command, Editor } from "ckeditor5";
 import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing";
-import { ApplicationState } from "./ApplicationState";
-import { CKEditorInstanceFactory } from "./CKEditorInstanceFactory";
+import type { ApplicationState } from "./ApplicationState";
+import type { CKEditorInstanceFactory } from "./CKEditorInstanceFactory";
 import { initReadOnlyToggle } from "./ReadOnlySwitch";
 import { initPreview, updatePreview } from "./preview";
 import { createRichTextEditor } from "./editors/richtext";

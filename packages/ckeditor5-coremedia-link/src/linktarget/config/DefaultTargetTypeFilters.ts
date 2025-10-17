@@ -1,4 +1,4 @@
-import { DefaultLinkType } from "./LinkTargetDefaultRuleDefinition";
+import type { DefaultLinkType } from "./LinkTargetDefaultRuleDefinition";
 
 /**
  * Checks if a given url is an external link.

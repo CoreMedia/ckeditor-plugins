@@ -1,8 +1,6 @@
 import { replaceElementByElement } from "./ReplaceElementByElement";
-import {
-  replaceElementByElementAndClass,
-  ReplaceElementByElementAndClassConfig,
-} from "./ReplaceElementByElementAndClass";
+import type { ReplaceElementByElementAndClassConfig } from "./ReplaceElementByElementAndClass";
+import { replaceElementByElementAndClass } from "./ReplaceElementByElementAndClass";
 
 /**
  * Failsafe approach. CKEditor 5 uses <strong> by default, thus no need to

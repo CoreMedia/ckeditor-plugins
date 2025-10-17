@@ -1,5 +1,5 @@
-import { LinkActionsView } from "@coremedia/ckeditor5-coremedia-link";
-import ViewWrapper from "../ViewWrapper";
+import type { LinkActionsView } from "@coremedia/ckeditor5-coremedia-link";
+import type ViewWrapper from "../ViewWrapper";
 import { JSWrapper } from "../../JSWrapper";
 import ContentLinkViewWrapper from "./ContentLinkViewWrapper";
 

@@ -5,4 +5,4 @@
  * @category Virtual
  */
 
-export * as contentlink from "./paste";
+export type * as contentlink from "./paste";

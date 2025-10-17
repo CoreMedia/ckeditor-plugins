@@ -5,8 +5,7 @@
   "entryPoints": ["./packages/*"],
   "exclude": [
     "**/ckeditor5-babel-config",
-    "**/ckeditor5-coremedia-example-data",
-    "**/ckeditor5-jest-test-helpers"
+    "**/ckeditor5-coremedia-example-data"
   ],
   "name": "CoreMedia CKEditor 5 Plugins",
   "out": "./docs/api",

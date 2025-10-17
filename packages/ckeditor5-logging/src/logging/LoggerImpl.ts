@@ -1,5 +1,5 @@
 import LogLevel from "./LogLevel";
-import Logger from "./Logger";
+import type Logger from "./Logger";
 
 /**
  * Implementation of Logger.

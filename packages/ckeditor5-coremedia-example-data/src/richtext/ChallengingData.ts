@@ -1,4 +1,4 @@
-import { ExampleData } from "../ExampleData";
+import type { ExampleData } from "../ExampleData";
 import { h1, p, em, strong, richtext, h2, code } from "../RichText";
 
 const introduction = `${p(`\

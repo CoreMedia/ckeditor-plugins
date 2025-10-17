@@ -1,6 +1,7 @@
 // For now, this is only a DOM related wrapper.
-import { Locator } from "playwright";
-import { Locatable, visible } from "./Locatable";
+import type { Locator } from "playwright";
+import type { Locatable } from "./Locatable";
+import { visible } from "./Locatable";
 import { LinkToolbarViewWrapper } from "./LinkToolbarViewWrapper";
 import { LinkFormViewWrapper } from "./LinkFormViewWrapper";
 import { BlocklistActionsViewWrapper } from "./BlocklistActionsViewWrapper";

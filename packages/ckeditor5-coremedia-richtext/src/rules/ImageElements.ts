@@ -1,4 +1,4 @@
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
+import type { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
 import { isHTMLImageElement, isElement } from "@coremedia/ckeditor5-dom-support";
 import { namespaces } from "../Namespaces";
 import {

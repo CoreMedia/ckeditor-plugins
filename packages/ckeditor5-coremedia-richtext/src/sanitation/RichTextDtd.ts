@@ -1,7 +1,11 @@
-import { ActiveStrictness, Strictness } from "../Strictness";
-import { acCData, acEnum, acNmToken, AttributeContent } from "./AttributeContent";
-import { allowEmpty, ElementContent, pcdata } from "./ElementContent";
-import { parseAttributeDefinitionConfig, ParsedAttributeDefinitionConfig } from "./AttributeDefinitionConfig";
+import type { ActiveStrictness } from "../Strictness";
+import { Strictness } from "../Strictness";
+import type { AttributeContent } from "./AttributeContent";
+import { acCData, acEnum, acNmToken } from "./AttributeContent";
+import type { ElementContent } from "./ElementContent";
+import { allowEmpty, pcdata } from "./ElementContent";
+import type { ParsedAttributeDefinitionConfig } from "./AttributeDefinitionConfig";
+import { parseAttributeDefinitionConfig } from "./AttributeDefinitionConfig";
 import { ElementConfig } from "./ElementConfig";
 
 /**

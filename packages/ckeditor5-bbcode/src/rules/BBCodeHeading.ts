@@ -1,4 +1,4 @@
-import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
+import type { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 
 /**
  * Regular expression to match heading levels 1 to 6.

@@ -1,4 +1,4 @@
-import { RequireSelected } from "@coremedia/ckeditor5-common";
+import type { RequireSelected } from "@coremedia/ckeditor5-common";
 import { RgbColor } from "./RgbColor";
 
 /**

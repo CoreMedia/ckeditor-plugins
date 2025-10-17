@@ -1,12 +1,11 @@
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { serviceAgent } from "@coremedia/service-agent";
-import {
-  createRichtextConfigurationServiceDescriptor,
-  RichtextConfigurationService,
-} from "@coremedia/ckeditor5-coremedia-studio-integration";
-import type { Editor, Model, Range as ModelRange, Writer } from "ckeditor5";
+import type { RichtextConfigurationService } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { createRichtextConfigurationServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import type { Editor, Model, ModelRange, ModelWriter } from "ckeditor5";
+import ContentInputDataCache from "./ContentInputDataCache";
+import type { ContentInputData, InsertionContext } from "./ContentInputDataCache";
 import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUtils";
-import ContentInputDataCache, { ContentInputData, InsertionContext } from "./ContentInputDataCache";
 
 const logger = LoggerProvider.getLogger("ContentMarkers");
 
@@ -30,7 +29,7 @@ export const insertContentMarkers = (editor: Editor, targetRange: ModelRange, co
     {
       isUndoable: false,
     },
-    (writer: Writer) => {
+    (writer: ModelWriter) => {
       writer.setSelection(targetRange);
     },
   );
@@ -93,7 +92,7 @@ const handleExpandedRange = (model: Model, range: ModelRange): ModelRange => {
     {
       isUndoable: false,
     },
-    (writer: Writer) => {
+    (writer: ModelWriter) => {
       writer.remove(range);
     },
   );
@@ -142,7 +141,7 @@ const addContentInputMarker = (editor: Editor, markerRange: ModelRange, contentI
     {
       isUndoable: false,
     },
-    (writer: Writer) => {
+    (writer: ModelWriter) => {
       writer.addMarker(markerName, {
         usingOperation: true,
         range: markerRange,

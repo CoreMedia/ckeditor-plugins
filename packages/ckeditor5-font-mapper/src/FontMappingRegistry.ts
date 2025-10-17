@@ -1,7 +1,7 @@
 import { configToMap } from "./ConfigToMapUtil";
 import { FontMapping } from "./FontMapping";
 import { symbolFontMap } from "./SymbolFontMap";
-import { FontMapperConfigEntry } from "./FontMapperConfig";
+import type { FontMapperConfigEntry } from "./FontMapperConfig";
 
 /**
  * A global registry for `FontMappings`.

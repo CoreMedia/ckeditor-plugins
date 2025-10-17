@@ -1,11 +1,9 @@
-import {
-  ModelUri,
-  requireContentCkeModelUri,
-  ROOT_NAME,
-  UriPath,
-} from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { DiffItem, DiffItemInsert, Item as ModelItem, LinkEditing, Plugin, Range, TextProxy, Writer } from "ckeditor5";
+import type { ModelUri, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { requireContentCkeModelUri, ROOT_NAME } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type { DifferItem, DifferItemInsert, ModelItem, ModelRange, ModelTextProxy, ModelWriter } from "ckeditor5";
+import { LinkEditing, Plugin } from "ckeditor5";
 import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common";
 import {
   ifCommand,
@@ -59,7 +57,7 @@ class TrackingData {
    *
    * @param diffItem - diff item to compare
    */
-  matches(diffItem: DiffItemInsert): boolean {
+  matches(diffItem: DifferItemInsert): boolean {
     // The length should match, we are not interested in it otherwise,
     // as not the URI has been written to the text.
     return !!this.#replacement && diffItem.length === this.#replacement.modelUri.length;
@@ -87,7 +85,7 @@ class TrackingData {
  *
  * @param range - range to get included items for
  */
-const getItems = (range: Range): ModelItem[] => [
+const getItems = (range: ModelRange): ModelItem[] => [
   ...range.getItems({
     shallow: true,
   }),
@@ -230,7 +228,7 @@ class ContentLinkCommandHook extends Plugin {
    *
    * @param value - DiffItem to validate
    */
-  static #isTextNodeInsertion(value: DiffItem): boolean {
+  static #isTextNodeInsertion(value: DifferItem): boolean {
     if (value.type === "insert") {
       // Unfortunately, insertion.position.textNode does not (yet) represent
       // the now added text node, but the text node the inserted one
@@ -246,8 +244,8 @@ class ContentLinkCommandHook extends Plugin {
    *
    * @param value - value to cast
    */
-  static #asDiffItemInsert(value: DiffItem): DiffItemInsert {
-    return value as DiffItemInsert;
+  static #asDiffItemInsert(value: DifferItem): DifferItemInsert {
+    return value as DifferItemInsert;
   }
 
   /**
@@ -259,7 +257,7 @@ class ContentLinkCommandHook extends Plugin {
    * @param range - range for the text
    * @returns `true` iff. the text node has been replaced; `false` otherwise
    */
-  #replaceRawLink(writer: Writer, textProxy: TextProxy, range: Range): boolean {
+  #replaceRawLink(writer: ModelWriter, textProxy: ModelTextProxy, range: ModelRange): boolean {
     const logger = ContentLinkCommandHook.#logger;
     const replacement: Replacement | undefined = this.#trackingData.clear();
     if (!replacement) {
@@ -307,7 +305,7 @@ class ContentLinkCommandHook extends Plugin {
    *
    * @param writer - writer to possibly apply changes
    */
-  #postFix(writer: Writer): boolean {
+  #postFix(writer: ModelWriter): boolean {
     if (this.#trackingData.empty()) {
       // We don't have all required data yet, thus, we don't know how to possibly
       // adjust raw content-links. Nothing to do.
@@ -319,7 +317,7 @@ class ContentLinkCommandHook extends Plugin {
     const document = model.document;
     const differ = document.differ;
     const changes = differ.getChanges();
-    const textInsertions: DiffItemInsert[] = changes.filter(isTextNodeInsertion).map(asDiffItemInsert);
+    const textInsertions: DifferItemInsert[] = changes.filter(isTextNodeInsertion).map(asDiffItemInsert);
     // For the given scenario, we expect at most one matched diff item.
     const matchedDiffItem = textInsertions.find((diffItem) => this.#trackingData.matches(diffItem));
     if (matchedDiffItem) {
@@ -336,13 +334,13 @@ class ContentLinkCommandHook extends Plugin {
    * @param writer - writer to apply changes
    * @param matchedDiffItem - diff item, which represents the link insertion
    */
-  #postFixMatchedItem(writer: Writer, matchedDiffItem: DiffItemInsert): boolean {
-    const toRange = (diffItem: DiffItemInsert): Range => {
+  #postFixMatchedItem(writer: ModelWriter, matchedDiffItem: DifferItemInsert): boolean {
+    const toRange = (diffItem: DifferItemInsert): ModelRange => {
       const { position: start } = diffItem;
       const end = start.getShiftedBy(diffItem.length);
       return writer.createRange(start, end);
     };
-    const range: Range = toRange(matchedDiffItem);
+    const range: ModelRange = toRange(matchedDiffItem);
     const itemsInRange = getItems(range);
     if (itemsInRange.length !== 1) {
       /*
@@ -361,7 +359,7 @@ class ContentLinkCommandHook extends Plugin {
        */
       return false;
     }
-    const textProxy = onlyItem as unknown as TextProxy;
+    const textProxy = onlyItem as unknown as ModelTextProxy;
     return this.#replaceRawLink(writer, textProxy, range);
   }
 }

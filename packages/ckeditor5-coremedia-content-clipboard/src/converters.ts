@@ -1,6 +1,7 @@
-import { EventInfo, DowncastConversionApi, Item as ModelItem, Range as ModelRange } from "ckeditor5";
+import type { EventInfo, DowncastConversionApi, ModelItem, ModelRange } from "ckeditor5";
 import ContentInputDataCache from "./ContentInputDataCache";
-import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
+import type { MarkerData } from "./ContentClipboardMarkerDataUtils";
+import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUtils";
 
 export interface AddMarkerEventData {
   markerName: string;

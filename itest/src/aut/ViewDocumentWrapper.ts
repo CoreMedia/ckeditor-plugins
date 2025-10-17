@@ -1,6 +1,6 @@
-import { ViewDocument } from "ckeditor5";
+import type { ViewDocument } from "ckeditor5";
 import { JSWrapper } from "./JSWrapper";
-import { ViewWrapper } from "./ViewWrapper";
+import type { ViewWrapper } from "./ViewWrapper";
 
 export class ViewDocumentWrapper extends JSWrapper<ViewDocument> {
   static fromView(wrapper: ViewWrapper): ViewDocumentWrapper {

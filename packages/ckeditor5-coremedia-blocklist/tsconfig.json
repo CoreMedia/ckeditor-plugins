@@ -1,11 +1,14 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "types": [
+      "node"
+    ]
   },
   "include": [
     "./__mocks__",
-    "./__tests__",
+    "./test",
     "./src",
     "../../typings"
   ]

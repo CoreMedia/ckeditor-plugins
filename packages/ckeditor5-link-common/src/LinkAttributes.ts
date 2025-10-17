@@ -1,16 +1,9 @@
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
-import {
-  Plugin,
-  Editor,
-  DowncastConversionApi,
-  AttributeElement,
-  ViewElement,
-  TwoStepCaretMovement,
-  LinkEditing,
-} from "ckeditor5";
+import type { Editor, DowncastConversionApi, ViewAttributeElement, ViewElement } from "ckeditor5";
+import { Plugin, TwoStepCaretMovement, LinkEditing } from "ckeditor5";
 import LinkCleanup, { getLinkCleanup } from "./LinkCleanup";
-import { RegisterAttributeConfig } from "./RegisterAttributeConfig";
+import type { RegisterAttributeConfig } from "./RegisterAttributeConfig";
 import { parseAttributesConfig } from "./LinkAttributesConfig";
 
 /**
@@ -182,7 +175,7 @@ export class LinkAttributes extends Plugin {
 /**
  * Required type for downcast function.
  */
-type DowncastFunction = (value: string, api: DowncastConversionApi) => AttributeElement;
+type DowncastFunction = (value: string, api: DowncastConversionApi) => ViewAttributeElement;
 
 /**
  * Provides downcast method for given attribute.
@@ -195,7 +188,7 @@ type DowncastFunction = (value: string, api: DowncastConversionApi) => Attribute
  */
 const provideDowncastFunction =
   (view: string): DowncastFunction =>
-  (modelAttributeValue: string, { writer }: DowncastConversionApi): AttributeElement => {
+  (modelAttributeValue: string, { writer }: DowncastConversionApi): ViewAttributeElement => {
     const element = writer.createAttributeElement(
       "a",
       {

@@ -1,4 +1,5 @@
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 
 /**
  * Prefix for issues triggered by Data Processor.

@@ -1,5 +1,5 @@
 import { extendingWaitForExpect } from "../ExpectationsBase";
-import { HasToggleable } from "./HasToggleable";
+import type { HasToggleable } from "./HasToggleable";
 
 expect.extend({
   async waitToBeOn(hasToggleable: HasToggleable): Promise<jest.CustomMatcherResult> {

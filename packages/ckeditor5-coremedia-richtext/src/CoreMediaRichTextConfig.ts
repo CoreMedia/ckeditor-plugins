@@ -1,7 +1,8 @@
-import { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support";
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
-import { Config as CKEditorConfig, EditorConfig } from "ckeditor5";
-import { defaultStrictness, Strictness } from "./Strictness";
+import type { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support";
+import type { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
+import type { Config as CKEditorConfig, EditorConfig } from "ckeditor5";
+import type { Strictness } from "./Strictness";
+import { defaultStrictness } from "./Strictness";
 
 export const COREMEDIA_RICHTEXT_CONFIG_KEY = "coremedia:richtext";
 

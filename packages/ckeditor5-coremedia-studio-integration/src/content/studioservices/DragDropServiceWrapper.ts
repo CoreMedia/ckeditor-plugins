@@ -1,5 +1,5 @@
 import { serviceAgent } from "@coremedia/service-agent";
-import DragDropService from "./DragDropService";
+import type DragDropService from "./DragDropService";
 
 export const receiveDraggedItemsFromService = (): string[] | undefined => {
   const dragDropService = serviceAgent.getService<DragDropService>("dragDropService");

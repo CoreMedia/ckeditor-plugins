@@ -1,19 +1,19 @@
-import ContentLinkClipboardPlugin from "./contentlink/ContentLinkClipboardPlugin";
-import ContentLinkCommandHook from "./contentlink/ContentLinkCommandHook";
-import ContentLinks from "./contentlink/ContentLinks";
-import { COREMEDIA_CONTEXT_KEY, CoremediaContextConfig } from "./contentlink/ContextConfig";
-import LinkUserActionsPlugin from "./contentlink/LinkUserActionsPlugin";
-import { OpenContentInTabCommand } from "./contentlink/OpenContentInTabCommand";
-import ContentLinkActionsViewExtension from "./contentlink/ui/ContentLinkActionsViewExtension";
-import ContentLinkFormViewExtension from "./contentlink/ui/ContentLinkFormViewExtension";
-import LinkTargetCommand from "./linktarget/command/LinkTargetCommand";
-import { DefaultTarget } from "./linktarget/config/DefaultTarget";
-import { TargetDefaultRuleDefinition } from "./linktarget/config/LinkTargetDefaultRuleDefinition";
-import LinkTargetOptionDefinition from "./linktarget/config/LinkTargetOptionDefinition";
-import LinkTarget from "./linktarget/LinkTarget";
-import LinkTargetActionsViewExtension from "./linktarget/LinkTargetActionsViewExtension";
-import LinkTargetModelView from "./linktarget/LinkTargetModelView";
-import CustomLinkTargetUI from "./linktarget/ui/CustomLinkTargetUI";
+import type ContentLinkClipboardPlugin from "./contentlink/ContentLinkClipboardPlugin";
+import type ContentLinkCommandHook from "./contentlink/ContentLinkCommandHook";
+import type ContentLinks from "./contentlink/ContentLinks";
+import type { COREMEDIA_CONTEXT_KEY, CoremediaContextConfig } from "./contentlink/ContextConfig";
+import type LinkUserActionsPlugin from "./contentlink/LinkUserActionsPlugin";
+import type { OpenContentInTabCommand } from "./contentlink/OpenContentInTabCommand";
+import type ContentLinkActionsViewExtension from "./contentlink/ui/ContentLinkActionsViewExtension";
+import type ContentLinkFormViewExtension from "./contentlink/ui/ContentLinkFormViewExtension";
+import type LinkTargetCommand from "./linktarget/command/LinkTargetCommand";
+import type { DefaultTarget } from "./linktarget/config/DefaultTarget";
+import type { TargetDefaultRuleDefinition } from "./linktarget/config/LinkTargetDefaultRuleDefinition";
+import type LinkTargetOptionDefinition from "./linktarget/config/LinkTargetOptionDefinition";
+import type LinkTarget from "./linktarget/LinkTarget";
+import type LinkTargetActionsViewExtension from "./linktarget/LinkTargetActionsViewExtension";
+import type LinkTargetModelView from "./linktarget/LinkTargetModelView";
+import type CustomLinkTargetUI from "./linktarget/ui/CustomLinkTargetUI";
 
 declare module "ckeditor5" {
   interface PluginsMap {

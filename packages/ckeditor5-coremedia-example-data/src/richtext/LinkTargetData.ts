@@ -1,7 +1,7 @@
 import { lorem } from "../LoremIpsum";
 import { em, h1, richtext } from "../RichText";
 import { richTextDocument } from "../RichTextDOM";
-import { ExampleData } from "../ExampleData";
+import type { ExampleData } from "../ExampleData";
 
 const SOME_TARGET = "somewhere";
 const EVIL_TARGET = `<iframe src="javascript:alert('Boo 👻')" width="1px" height="1px">`;

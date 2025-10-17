@@ -1,16 +1,15 @@
-import { Node, Plugin, Writer } from "ckeditor5";
+import type { ModelNode, ModelWriter } from "ckeditor5";
+import { Plugin } from "ckeditor5";
 import {
   createContentDisplayServiceDescriptor,
   requireContentCkeModelUri,
   ROOT_NAME,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { serviceAgent } from "@coremedia/service-agent";
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import {
-  ContentClipboardEditing,
-  CreateModelFunction,
-  CreateModelFunctionCreator,
-} from "@coremedia/ckeditor5-coremedia-content-clipboard";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type { CreateModelFunction, CreateModelFunctionCreator } from "@coremedia/ckeditor5-coremedia-content-clipboard";
+import { ContentClipboardEditing } from "@coremedia/ckeditor5-coremedia-content-clipboard";
 import { getOptionalPlugin, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 
 type CreateLinkModelFunction = (contentUri: string, name: string) => CreateModelFunction;
@@ -23,7 +22,7 @@ const createLinkModelFunctionCreator: CreateModelFunctionCreator = async (
 };
 const createLinkModelFunction: CreateLinkModelFunction = (contentUri: string, name: string): CreateModelFunction => {
   const nameToPass = name ? name : ROOT_NAME;
-  return (writer: Writer): Node =>
+  return (writer: ModelWriter): ModelNode =>
     writer.createText(nameToPass, {
       linkHref: requireContentCkeModelUri(contentUri),
     });

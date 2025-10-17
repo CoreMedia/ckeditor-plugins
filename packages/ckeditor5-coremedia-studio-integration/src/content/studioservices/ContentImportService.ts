@@ -1,4 +1,5 @@
-import { serviceDescriptorFactory, ServiceDescriptorWithProps } from "@coremedia/service-agent";
+import type { ServiceDescriptorWithProps } from "@coremedia/service-agent";
+import { serviceDescriptorFactory } from "@coremedia/service-agent";
 
 export abstract class ContentImportService {
   abstract import(uri: string, options?: { contextUriPath?: string }): Promise<string>;

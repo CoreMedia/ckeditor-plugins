@@ -1,4 +1,4 @@
-import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
+import type { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 
 /**
  * Possible HTML tags that denote content rendered in italic.

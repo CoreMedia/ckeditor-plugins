@@ -1,4 +1,5 @@
-import { ActiveStrictness, Strictness } from "../Strictness";
+import type { ActiveStrictness } from "../Strictness";
+import { Strictness } from "../Strictness";
 
 /**
  * Definition details of some attribute.

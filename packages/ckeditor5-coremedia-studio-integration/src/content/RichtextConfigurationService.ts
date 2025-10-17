@@ -1,4 +1,4 @@
-import { UriPath } from "./UriPath";
+import type { UriPath } from "./UriPath";
 
 /**
  * Provides access to configuration options for Richtext behavior within

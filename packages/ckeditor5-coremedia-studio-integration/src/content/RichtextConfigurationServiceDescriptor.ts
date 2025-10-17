@@ -1,5 +1,6 @@
-import { serviceDescriptorFactory, ServiceDescriptorWithProps } from "@coremedia/service-agent";
-import RichtextConfigurationService from "./RichtextConfigurationService";
+import type { ServiceDescriptorWithProps } from "@coremedia/service-agent";
+import { serviceDescriptorFactory } from "@coremedia/service-agent";
+import type RichtextConfigurationService from "./RichtextConfigurationService";
 
 /**
  * Descriptor used to fetch service from service agent.

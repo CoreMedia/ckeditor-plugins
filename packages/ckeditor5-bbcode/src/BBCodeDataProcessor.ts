@@ -1,14 +1,8 @@
-import {
-  DataProcessor,
-  DomConverter,
-  HtmlDataProcessor,
-  MatcherPattern,
-  ViewDocument,
-  ViewDocumentFragment,
-} from "ckeditor5";
+import type { DataProcessor, ViewDomConverter, MatcherPattern, ViewDocument, ViewDocumentFragment } from "ckeditor5";
+import { HtmlDataProcessor } from "ckeditor5";
 import { bbcode2html } from "./bbcode2html";
 import { html2bbcode } from "./html2bbcode";
-import { BBCodeProcessingRule } from "./rules/BBCodeProcessingRule";
+import type { BBCodeProcessingRule } from "./rules/BBCodeProcessingRule";
 import { bbCodeDefaultRules } from "./rules/bbCodeDefaultRules";
 import { bbCodeLogger } from "./BBCodeLogger";
 
@@ -33,7 +27,7 @@ export class BBCodeDataProcessor implements DataProcessor {
    * DOM-Converter used to prepare incoming data view in `toData` processing
    * prior to transforming HTML to BBCode.
    */
-  readonly #domConverter: DomConverter;
+  readonly #domConverter: ViewDomConverter;
 
   /**
    * Rules to apply in data processing. Note that, as we use a third party

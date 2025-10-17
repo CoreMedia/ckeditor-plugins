@@ -1,12 +1,10 @@
-import { Command, Editor } from "ckeditor5";
-import {
-  isModelUriPath,
-  isUriPath,
-  requireContentUriPath,
-  UriPath,
-} from "@coremedia/ckeditor5-coremedia-studio-integration";
+import type { Editor } from "ckeditor5";
+import { Command } from "ckeditor5";
+import type { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { isModelUriPath, isUriPath, requireContentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { canBeOpenedInTab, openEntityInTab, OpenEntityInTabResult } from "../OpenInTab";
+import type { OpenEntityInTabResult } from "../OpenInTab";
+import { canBeOpenedInTab, openEntityInTab } from "../OpenInTab";
 
 // noinspection JSConstantReassignment
 

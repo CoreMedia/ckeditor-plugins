@@ -1,4 +1,5 @@
-import { Editor, Plugin, Dialog } from "ckeditor5";
+import type { Editor } from "ckeditor5";
+import { Plugin, Dialog } from "ckeditor5";
 
 export default class DialogVisibility extends Plugin {
   public static readonly pluginName = "DialogVisibility" as const;

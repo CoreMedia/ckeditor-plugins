@@ -35,8 +35,8 @@ import {
   ImageBlockEditing,
 } from "ckeditor5";
 import { updatePreview } from "../preview";
-import { ApplicationState } from "../ApplicationState";
-import { CKEditorInstanceFactory } from "../CKEditorInstanceFactory";
+import type { ApplicationState } from "../ApplicationState";
+import type { CKEditorInstanceFactory } from "../CKEditorInstanceFactory";
 
 const licenseKeyErrorMessage =
   "Please provide a valid license key for your CKEditor5 instance. Please create a .env file in the workspace root and make your license as CKEDITOR_LICENSE_KEY variable. Please use 'GPL' if you want to use the GNU General Public License.";

@@ -1,5 +1,6 @@
-import { serviceDescriptorFactory, ServiceDescriptorWithProps } from "@coremedia/service-agent";
-import { CollectionViewLinkService } from "./CollectionViewLinkService";
+import type { ServiceDescriptorWithProps } from "@coremedia/service-agent";
+import { serviceDescriptorFactory } from "@coremedia/service-agent";
+import type { CollectionViewLinkService } from "./CollectionViewLinkService";
 
 /**
  * Descriptor used to fetch service from service agent.

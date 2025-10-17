@@ -142,12 +142,5 @@ const resolveInheritance = (
 };
 
 export default ReducedMatcherPattern;
-export {
-  AttributesType,
-  InheritingMatcherPattern,
-  MatcherPatternLookup,
-  findFirstPattern,
-  mergePatterns,
-  resolveInheritance,
-  toLookupStrategy,
-};
+export type { AttributesType, InheritingMatcherPattern, MatcherPatternLookup };
+export { findFirstPattern, mergePatterns, resolveInheritance, toLookupStrategy };

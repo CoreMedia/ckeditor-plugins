@@ -1,5 +1,5 @@
 import { extendingWaitForExpect } from "../ExpectationsBase";
-import { HasContentName } from "./HasContentName";
+import type { HasContentName } from "./HasContentName";
 
 expect.extend({
   async waitToHaveContentName(hasContentName: HasContentName, expectedName: string): Promise<jest.CustomMatcherResult> {

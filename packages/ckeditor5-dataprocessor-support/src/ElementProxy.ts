@@ -1,6 +1,8 @@
-import { Editor } from "ckeditor5";
-import { DEFAULT_NAMESPACES, Namespaces } from "./Namespace";
-import { NodeProxy, PersistResponse, RESPONSE_CONTINUE } from "./NodeProxy";
+import type { Editor } from "ckeditor5";
+import type { Namespaces } from "./Namespace";
+import { DEFAULT_NAMESPACES } from "./Namespace";
+import type { PersistResponse } from "./NodeProxy";
+import { NodeProxy, RESPONSE_CONTINUE } from "./NodeProxy";
 
 /**
  * Simulates a DOMTokenList to access the `class` attribute.
@@ -798,4 +800,5 @@ const allFilterRules =
   (params) =>
     rules.forEach((r) => r(params));
 
-export { AttributeValue, AttributeMap, ElementFilterParams, ElementFilterRule, ElementProxy, allFilterRules };
+export type { AttributeValue, AttributeMap, ElementFilterParams, ElementFilterRule };
+export { ElementProxy, allFilterRules };

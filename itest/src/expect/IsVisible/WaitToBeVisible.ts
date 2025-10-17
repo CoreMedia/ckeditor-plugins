@@ -1,5 +1,5 @@
 import { extendingWaitForExpect } from "../ExpectationsBase";
-import { HasVisible } from "./HasVisible";
+import type { HasVisible } from "./HasVisible";
 
 expect.extend({
   async waitToBeVisible(hasVisible: HasVisible): Promise<jest.CustomMatcherResult> {

@@ -2,13 +2,15 @@ import type { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration"
 import { isModelUriPath, requireContentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { ifCommand, reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { LINK_COMMAND_NAME } from "@coremedia/ckeditor5-link-common";
-import { Command, ContextualBalloon, LinkUI, Plugin, ToolbarView } from "ckeditor5";
+import type { Command, ToolbarView } from "ckeditor5";
+import { ContextualBalloon, LinkUI, Plugin } from "ckeditor5";
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { showContentLinkField } from "../ContentLinkViewUtils";
 import { executeOpenContentInTabCommand } from "../OpenContentInTabCommand";
 import { hasContentUriPath } from "./ViewExtensions";
-import { asAugmentedLinkUI, AugmentedLinkUI } from "./AugmentedLinkUI";
-import { AugmentedLinkActionsView } from "./AugmentedLinkActionsView";
+import type { AugmentedLinkUI } from "./AugmentedLinkUI";
+import { asAugmentedLinkUI } from "./AugmentedLinkUI";
+import type { AugmentedLinkActionsView } from "./AugmentedLinkActionsView";
 import ContentLinkView from "./ContentLinkView";
 
 export const CONTENT_LINK_VIEW_COMPONENT_NAME = "contentLinkView";

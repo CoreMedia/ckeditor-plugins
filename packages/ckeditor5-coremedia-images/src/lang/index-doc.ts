@@ -5,4 +5,4 @@
  * @category Virtual
  */
 
-export * as contentimage from "./contentimage";
+export type * as contentimage from "./contentimage";

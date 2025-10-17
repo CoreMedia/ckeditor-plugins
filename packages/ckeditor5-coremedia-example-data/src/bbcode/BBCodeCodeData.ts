@@ -1,4 +1,4 @@
-import { ExampleData } from "../ExampleData";
+import type { ExampleData } from "../ExampleData";
 
 const text = `\
 [h1]\\[code\\]: CKEditor 5 Code Blocks in BBCode[/h1]

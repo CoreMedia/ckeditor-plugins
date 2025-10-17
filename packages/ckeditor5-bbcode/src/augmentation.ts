@@ -1,4 +1,4 @@
-import { BBCode } from "./BBCode";
+import type { BBCode } from "./BBCode";
 
 declare module "ckeditor5" {
   interface PluginsMap {

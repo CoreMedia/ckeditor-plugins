@@ -18,7 +18,7 @@ export * from "./Constants";
 export { default as CoreMediaRichText } from "./CoreMediaRichText";
 
 export * from "./CoreMediaRichTextConfig";
-export { default as CoreMediaRichTextConfig } from "./CoreMediaRichTextConfig";
+export type { default as CoreMediaRichTextConfig } from "./CoreMediaRichTextConfig";
 
 export * from "./Namespaces";
 

@@ -1,7 +1,8 @@
 import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content";
-import { Editor, ImageUtils } from "ckeditor5";
+import type { Editor } from "ckeditor5";
+import { ImageUtils } from "ckeditor5";
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import type { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 /**
  * Default command name used to register at editor instance.

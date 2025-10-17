@@ -1,4 +1,4 @@
-import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
+import type { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 
 /**
  * HTML Elements that may denote a "underline" state.

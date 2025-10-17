@@ -1,4 +1,4 @@
-import { ExampleData } from "../ExampleData";
+import type { ExampleData } from "../ExampleData";
 
 const rainbow = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
 const bbCodeRainbow = Array.from("rainbow")

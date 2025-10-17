@@ -1,11 +1,11 @@
-import {
+import type {
   ElementFilterParams,
   TextFilterParams,
   ElementsFilterRuleSetConfiguration,
 } from "@coremedia/ckeditor5-dataprocessor-support";
-import { DataProcessor } from "ckeditor5";
+import type { DataProcessor } from "ckeditor5";
 import RichTextSchema from "../RichTextSchema";
-import V10RichTextDataProcessor from "../V10RichTextDataProcessor";
+import type V10RichTextDataProcessor from "../V10RichTextDataProcessor";
 import { Strictness } from "../../../Strictness";
 
 export const defaultSchema = new RichTextSchema(Strictness.STRICT);

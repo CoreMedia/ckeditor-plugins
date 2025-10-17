@@ -1,13 +1,11 @@
+import type { ViewCollection, InputTextView, Locale } from "ckeditor5";
 import {
   ButtonView,
   LabeledFieldView,
   View,
-  ViewCollection,
   createLabeledInputText,
   submitHandler,
-  InputTextView,
   KeystrokeHandler,
-  Locale,
   IconCheck,
 } from "ckeditor5";
 import "../lang/blocklist";

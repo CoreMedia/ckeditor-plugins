@@ -1,5 +1,5 @@
-import { Observable } from "rxjs";
-import ClipboardItemRepresentation from "./ClipboardItemRepresentation";
+import type { Observable } from "rxjs";
+import type ClipboardItemRepresentation from "./ClipboardItemRepresentation";
 
 /**
  * Service for base Studio Clipboard functionality to be registered with the

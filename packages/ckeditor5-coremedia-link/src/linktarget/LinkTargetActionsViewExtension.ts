@@ -1,10 +1,11 @@
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { ButtonView, Command, LinkUI, Plugin } from "ckeditor5";
+import type { Command } from "ckeditor5";
+import { ButtonView, LinkUI, Plugin } from "ckeditor5";
 import { OTHER_TARGET_NAME } from "./config/DefaultTarget";
 import "../../theme/linktargetactionsviewextension.css";
 import { parseLinkTargetConfig } from "./config/LinkTargetConfig";
-import LinkTargetOptionDefinition from "./config/LinkTargetOptionDefinition";
+import type LinkTargetOptionDefinition from "./config/LinkTargetOptionDefinition";
 import CustomLinkTargetUI from "./ui/CustomLinkTargetUI";
 
 /**

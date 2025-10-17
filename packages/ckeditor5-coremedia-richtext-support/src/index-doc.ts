@@ -15,11 +15,11 @@ export * from "./CoreMediaRichText10Dtd";
 export { default as CoreMediaRichText10Dtd } from "./CoreMediaRichText10Dtd";
 
 export * from "./CoreMediaRichTextSupportConfig";
-export { default as CoreMediaRichTextSupportConfig } from "./CoreMediaRichTextSupportConfig";
+export type { default as CoreMediaRichTextSupportConfig } from "./CoreMediaRichTextSupportConfig";
 
 export { default as GeneralRichTextSupport } from "./GeneralRichTextSupport";
 
 export * from "./ReducedMatcherPattern";
-export { default as ReducedMatcherPattern } from "./ReducedMatcherPattern";
+export type { default as ReducedMatcherPattern } from "./ReducedMatcherPattern";
 
 export { default as RichTextDataFilter } from "./RichTextDataFilter";

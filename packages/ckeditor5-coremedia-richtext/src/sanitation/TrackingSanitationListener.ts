@@ -1,5 +1,6 @@
 import { isHasNamespaceUri } from "@coremedia/ckeditor5-dom-support";
-import { AttributeCause, ElementCause, severeElementCauses } from "./Causes";
+import type { AttributeCause, ElementCause } from "./Causes";
+import { severeElementCauses } from "./Causes";
 import { SanitationListener } from "./SanitationListener";
 
 class TrackingState {

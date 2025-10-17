@@ -7,15 +7,15 @@ import {
   richtext,
 } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import type { MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
-import { ElementHandle } from "playwright-core";
+import type { ElementHandle } from "playwright-core";
 import waitForExpect from "wait-for-expect";
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
-import { ClassicEditorWrapper } from "./aut/ClassicEditorWrapper";
-import ContentLinkViewWrapper from "./aut/components/balloon/ContentLinkViewWrapper";
+import type { ClassicEditorWrapper } from "./aut/ClassicEditorWrapper";
+import type ContentLinkViewWrapper from "./aut/components/balloon/ContentLinkViewWrapper";
 import ImageContextualBalloonToolbar from "./aut/components/balloon/ImageContextualBalloonToolbar";
 import LinkActionsViewWrapper from "./aut/components/balloon/LinkActionsViewWrapper";
 import ToolbarViewWrapper from "./aut/components/ToolbarViewWrapper";
-import { MockServiceAgentPluginWrapper } from "./aut/services/MockServiceAgentPluginWrapper";
+import type { MockServiceAgentPluginWrapper } from "./aut/services/MockServiceAgentPluginWrapper";
 import { PNG_EMPTY_24x24, PNG_LOCK_24x24, PNG_RED_240x135 } from "./MockFixtures";
 import "./expect/Expectations";
 

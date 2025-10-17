@@ -1,9 +1,6 @@
-import {
-  MockContentPlugin,
-  MockInputExamplePlugin,
-  InputExampleElement,
-} from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
-import { ClassicEditor } from "ckeditor5";
+import type { InputExampleElement } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
+import { MockContentPlugin, MockInputExamplePlugin } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
+import type { ClassicEditor } from "ckeditor5";
 
 const INPUT_EXAMPLE_CONTENT_DIV_CLASS = "inputExampleContentDiv";
 const initInputExampleContent = (editor: ClassicEditor) => {

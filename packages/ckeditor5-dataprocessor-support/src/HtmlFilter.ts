@@ -1,7 +1,10 @@
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { Editor } from "ckeditor5";
-import { ElementFilterRule, ElementProxy } from "./ElementProxy";
-import { TextProxy, TextFilterRule } from "./TextProxy";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type { Editor } from "ckeditor5";
+import type { ElementFilterRule } from "./ElementProxy";
+import { ElementProxy } from "./ElementProxy";
+import type { TextFilterRule } from "./TextProxy";
+import { TextProxy } from "./TextProxy";
 
 enum FilterMode {
   toData,
@@ -154,14 +157,5 @@ class HtmlFilter {
   }
 }
 
-export {
-  AFTER_ELEMENT,
-  AFTER_ELEMENT_AND_CHILDREN,
-  BEFORE_ELEMENT,
-  ElementFilterRulesByName,
-  ElementFilterRuleSet,
-  FilterMode,
-  FilterRuleSet,
-  HtmlFilter,
-  TextFilterRuleSet,
-};
+export type { ElementFilterRulesByName, ElementFilterRuleSet, FilterRuleSet, TextFilterRuleSet };
+export { AFTER_ELEMENT, AFTER_ELEMENT_AND_CHILDREN, BEFORE_ELEMENT, FilterMode, HtmlFilter };

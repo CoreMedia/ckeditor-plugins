@@ -1,7 +1,8 @@
-import bbob from "@bbob/core/es";
 import { bbCodeLogger } from "./BBCodeLogger";
 import { ckeditor5Preset } from "./bbob/ckeditor5Preset";
 import { renderHtmlDom } from "./bbob/renderHtmlDom";
+
+const { default: bbob } = await import("@bbob/core");
 
 const bbobProcessor = bbob(ckeditor5Preset());
 
@@ -20,7 +21,7 @@ export const processBBCode = (bbcode: string, allowedTags?: string[]): ReturnTyp
     onlyAllowTags: allowedTags,
     onError: (error) =>
       bbCodeLogger.error(
-        `Failure while processing BBCode (${error.tagName} at ${error.lineNumber}:${error.columnNumber}): ${error.message}`,
+        `Failure while processing BBCode (${error.tagName} at ${error.lineNumber}:${error.columnNumber}): ${error.toString()}`,
       ),
   });
 

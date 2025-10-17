@@ -1,4 +1,4 @@
-import { ExampleData } from "../ExampleData";
+import type { ExampleData } from "../ExampleData";
 
 export const simpleData: ExampleData = {
   Empty: "",

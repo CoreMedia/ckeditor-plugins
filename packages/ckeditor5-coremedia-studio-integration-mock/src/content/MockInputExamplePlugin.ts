@@ -1,14 +1,17 @@
 import { Plugin } from "ckeditor5";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { serviceAgent } from "@coremedia/service-agent";
+import type {
+  IsDroppableEvaluationResult,
+  IsLinkableEvaluationResult,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 import {
   createClipboardServiceDescriptor,
-  IsDroppableEvaluationResult,
   isDroppableUris,
-  IsLinkableEvaluationResult,
   isLinkableUris,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import MockDragDropService from "./MockDragDropService";
 
 /**

@@ -1,4 +1,4 @@
-import { ExampleData } from "../ExampleData";
+import type { ExampleData } from "../ExampleData";
 import { pngBlue10x10, pngGreen10x10, pngRed10x10 } from "../media/Base64Images";
 
 const text = `\

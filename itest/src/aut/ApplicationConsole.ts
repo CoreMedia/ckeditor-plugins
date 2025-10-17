@@ -1,5 +1,5 @@
-import { ConsoleMessage } from "playwright-core";
-import { Page } from "playwright";
+import type { ConsoleMessage } from "playwright-core";
+import type { Page } from "playwright";
 
 type ConsoleMessageType =
   | "log"

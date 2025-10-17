@@ -11,11 +11,5 @@ export {
   type OnMissingPlugin,
 } from "./Plugins";
 export { addTranslations, openLink } from "./utils";
-export {
-  CommandHandler,
-  disableCommand,
-  enableCommand,
-  ifCommand,
-  optionalCommandNotFound,
-  recommendCommand,
-} from "./Commands";
+export type { CommandHandler } from "./Commands";
+export { disableCommand, enableCommand, ifCommand, optionalCommandNotFound, recommendCommand } from "./Commands";

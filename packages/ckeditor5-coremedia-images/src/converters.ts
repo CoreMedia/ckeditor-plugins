@@ -1,17 +1,17 @@
 import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common";
+import type { InlinePreview, UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import {
   createBlobDisplayServiceDescriptor,
-  InlinePreview,
   requireContentUriPath,
-  UriPath,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { serviceAgent } from "@coremedia/service-agent";
-import {
+import type {
   DowncastDispatcher,
-  DowncastWriter,
+  ViewDowncastWriter,
   Editor,
-  Element as ModelElement,
+  ModelElement,
   EventInfo,
   UpcastConversionApi,
   UpcastDispatcher,
@@ -166,7 +166,7 @@ const writeImageToView = (
   imgTag: ViewElement,
   withSpinnerClass: boolean,
 ): void => {
-  editor.editing.view.change((writer: DowncastWriter) => {
+  editor.editing.view.change((writer: ViewDowncastWriter) => {
     writer.setAttribute("src", inlinePreview.thumbnailSrc, imgTag);
     writer.setAttribute("title", inlinePreview.thumbnailTitle, imgTag);
 

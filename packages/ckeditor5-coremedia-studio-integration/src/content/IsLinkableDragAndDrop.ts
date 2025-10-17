@@ -1,7 +1,7 @@
 import { serviceAgent } from "@coremedia/service-agent";
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { receiveDraggedItemsFromService } from "./studioservices/DragDropServiceWrapper";
-import RichtextConfigurationService from "./RichtextConfigurationService";
+import type RichtextConfigurationService from "./RichtextConfigurationService";
 import { createRichtextConfigurationServiceDescriptor } from "./RichtextConfigurationServiceDescriptor";
 
 export type IsLinkableEvaluationResult = { uris: string[] | undefined; isLinkable: boolean } | "PENDING";

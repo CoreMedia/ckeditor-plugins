@@ -1,5 +1,5 @@
 import { type Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { Editor, Plugin, PluginCollection, PluginConstructor, PluginsMap } from "ckeditor5";
+import type { Editor, Plugin, PluginCollection, PluginConstructor, PluginsMap } from "ckeditor5";
 
 const pluginsLogger: Logger = LoggerProvider.getLogger("Plugins");
 

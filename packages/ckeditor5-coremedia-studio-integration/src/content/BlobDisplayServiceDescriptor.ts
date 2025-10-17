@@ -1,5 +1,6 @@
-import { serviceDescriptorFactory, ServiceDescriptorWithProps } from "@coremedia/service-agent";
-import BlobDisplayService from "./BlobDisplayService";
+import type { ServiceDescriptorWithProps } from "@coremedia/service-agent";
+import { serviceDescriptorFactory } from "@coremedia/service-agent";
+import type BlobDisplayService from "./BlobDisplayService";
 
 /**
  * Descriptor used to fetch service from service agent.

@@ -1,6 +1,8 @@
-import { ContentSearchService } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { Observable, of } from "rxjs";
-import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
+import type { ContentSearchService } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import type { Observable } from "rxjs";
+import { of } from "rxjs";
+import type { MockContentProvider } from "./MockContentPlugin";
+import { defaultMockContentProvider } from "./MockContentPlugin";
 
 const uriPaths: string[] = [];
 for (let i = 0; i < 100; i++) {

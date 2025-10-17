@@ -1,4 +1,4 @@
-import { ExampleData } from "../ExampleData";
+import type { ExampleData } from "../ExampleData";
 
 const introduction = `\
 When it comes to detecting, if data need to be updated within an external

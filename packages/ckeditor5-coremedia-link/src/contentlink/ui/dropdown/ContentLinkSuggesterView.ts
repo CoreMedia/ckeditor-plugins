@@ -1,17 +1,14 @@
+import type { DropdownView, Editor, InputTextView, LinkFormView, View } from "ckeditor5";
 import {
   addToolbarToDropdown,
   ButtonView,
   createDropdown,
   createLabeledInputText,
-  DropdownView,
-  Editor,
-  InputTextView,
   LabeledFieldView,
-  LinkFormView,
-  View,
   ViewCollection,
 } from "ckeditor5";
-import { BehaviorSubject, combineLatest, debounce, interval, Observable, of, switchMap } from "rxjs";
+import type { Observable } from "rxjs";
+import { BehaviorSubject, combineLatest, debounce, interval, of, switchMap } from "rxjs";
 import LibraryButtonView from "../LibraryButtonView";
 import { createContentLinkSuggestion } from "./createContentLinkSuggestion";
 

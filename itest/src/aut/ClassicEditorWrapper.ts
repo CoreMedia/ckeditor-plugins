@@ -1,10 +1,11 @@
-import { JSHandle, Locator, Page } from "playwright";
-import { ClassicEditor } from "ckeditor5";
+import type { JSHandle, Locator, Page } from "playwright";
+import type { ClassicEditor } from "ckeditor5";
 import type { RichTextDataProcessor } from "@coremedia/ckeditor5-coremedia-richtext";
 import { EditorWrapper } from "./EditorWrapper";
 import { CommandCollectionWrapper } from "./CommandCollectionWrapper";
 import { EditorUIWrapper } from "./EditorUIWrapper";
-import { Locatable, visible } from "./Locatable";
+import type { Locatable } from "./Locatable";
+import { visible } from "./Locatable";
 import ContextualBalloonWrapper from "./components/balloon/ContextualBalloonWrapper";
 
 /**

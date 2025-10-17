@@ -1,4 +1,4 @@
-import { AttributeCause, ElementCause } from "./Causes";
+import type { AttributeCause, ElementCause } from "./Causes";
 
 export class SanitationListener {
   started(): void {}

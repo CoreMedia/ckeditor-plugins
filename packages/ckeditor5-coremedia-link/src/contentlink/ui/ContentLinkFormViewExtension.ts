@@ -1,4 +1,9 @@
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type {
+  IsDroppableEvaluationResult,
+  IsLinkableEvaluationResult,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 import {
   CONTENT_CKE_MODEL_URI_REGEXP,
   createCollectionViewLinkServiceDescriptor,
@@ -6,13 +11,12 @@ import {
   createContentReferenceServiceDescriptor,
   createContentSearchServiceDescriptor,
   getOrEvaluateIsDroppableResult,
-  IsDroppableEvaluationResult,
   isLinkable,
-  IsLinkableEvaluationResult,
   receiveDraggedItemsFromDataTransfer,
   requireContentCkeModelUri,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { Command, ContextualBalloon, LabeledFieldView, LinkUI, Plugin, View } from "ckeditor5";
+import type { Command, LabeledFieldView, View } from "ckeditor5";
+import { ContextualBalloon, LinkUI, Plugin } from "ckeditor5";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { serviceAgent } from "@coremedia/service-agent";
 import { handleFocusManagement, hasRequiredInternalFocusablesProperty } from "@coremedia/ckeditor5-link-common";
@@ -22,8 +26,8 @@ import ContentLinkCommandHook from "../ContentLinkCommandHook";
 import { addClassToTemplate } from "../../utils";
 import { COREMEDIA_CONTEXT_KEY } from "../ContextConfig";
 import { hasContentUriPath, hasContentUriPathAndName } from "./ViewExtensions";
-import ContentLinkView from "./ContentLinkView";
-import { AugmentedLinkFormView, LinkFormView } from "./AugmentedLinkFormView";
+import type ContentLinkView from "./ContentLinkView";
+import type { AugmentedLinkFormView, LinkFormView } from "./AugmentedLinkFormView";
 import { requireNonNullsAugmentedLinkUI } from "./AugmentedLinkUI";
 import { ContentLinkSuggesterView } from "./dropdown/ContentLinkSuggesterView";
 import createContentLinkView from "./ContentLinkViewFactory";
