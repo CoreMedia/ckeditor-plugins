@@ -52,12 +52,12 @@
     "ckeditor5": "46.1.1"
   },
   "dependencies": {
-    "@bbob/core": "4.3.1",
-    "@bbob/html": "4.3.1",
-    "@bbob/plugin-helper": "4.3.1",
-    "@bbob/preset": "4.3.1",
-    "@bbob/preset-html5": "4.3.1",
-    "@bbob/types": "4.3.1",
+    "@bbob/core": "^4.2.0",
+    "@bbob/html": "^4.2.0",
+    "@bbob/plugin-helper": "^4.2.0",
+    "@bbob/preset": "^4.2.0",
+    "@bbob/preset-html5": "^4.2.0",
+    "@bbob/types": "^4.2.0",
     "@coremedia/ckeditor5-common": "25.0.4-rc.4",
     "@coremedia/ckeditor5-core-common": "25.0.4-rc.4",
     "@coremedia/ckeditor5-dom-support": "25.0.4-rc.4",
