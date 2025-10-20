@@ -1,7 +1,6 @@
 import type { TagNode } from "@bbob/plugin-helper";
 import type { TagNodeTree } from "@bbob/types";
-
-const { isStringNode, isTagNode } = await import("@bbob/plugin-helper");
+import { isStringNode, isTagNode } from "@bbob/plugin-helper";
 
 /**
  * Renders a tag node to its raw content.

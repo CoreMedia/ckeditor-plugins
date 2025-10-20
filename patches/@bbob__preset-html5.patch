@@ -1,21 +1,23 @@
 diff --git a/package.json b/package.json
-index e793c850597a85fa2ad9569781e2c948e867ed26..690cb45543ac986061ea526ff108b4c418d15139 100644
+index c323bc01bbbb85f50f182307a4c33bd87f5f71de..9412e69e483e9383fb28a054941132f2cdfa79ec 100644
 --- a/package.json
 +++ b/package.json
-@@ -29,8 +29,16 @@
-       "require": "./lib/index.js",
+@@ -34,6 +34,18 @@
+       },
        "browser": "./dist/index.min.js",
        "umd": "./dist/index.min.js"
 +    },
 +    "./defaultTags": {
-+      "types": "./types/defaultTags.d.ts",
-+      "import": "./es/defaultTags.js",
-+      "require": "./lib/defaultTags.js",
++      "import": {
++        "types": "./types/defaultTags.d.mts",
++        "default": "./es/defaultTags.mjs"
++      },
++      "require": {
++        "types": "./types/defaultTags.d.ts",
++        "default": "./lib/defaultTags.js"
++      },
 +      "browser": "./dist/defaultTags.min.js",
 +      "umd": "./dist/defaultTags.min.js"
      }
    },
-+
    "homepage": "https://github.com/JiLiZART/bbob",
-   "author": "Nikolay Kostyurin <jilizart@gmail.com>",
-   "license": "MIT",

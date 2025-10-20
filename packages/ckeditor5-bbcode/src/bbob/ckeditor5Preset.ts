@@ -1,4 +1,7 @@
 import type { BBobCoreTagNodeTree, ProcessorFunction } from "@bbob/types";
+import { getUniqAttr, isTagNode, TagNode } from "@bbob/plugin-helper";
+import { createPreset } from "@bbob/preset";
+import { defaultTags } from "@bbob/preset-html5/defaultTags";
 import { bbCodeLogger } from "../BBCodeLogger";
 import { fontSizes, normalSize } from "../utils/FontSizes";
 import { stripUniqueAttr, uniqueAttrToAttr } from "./Attributes";
@@ -6,10 +9,6 @@ import { paragraphAwareContent } from "./Paragraphs";
 import { renderRaw } from "./renderRaw";
 import { trimEOL } from "./TagNodes";
 import type { DefaultTags } from "./types";
-
-const { getUniqAttr, isTagNode, TagNode } = await import("@bbob/plugin-helper");
-const { createPreset } = await import("@bbob/preset");
-const { defaultTags } = await import("@bbob/preset-html5/defaultTags");
 
 type TagNodeType = ReturnType<typeof TagNode.create>;
 

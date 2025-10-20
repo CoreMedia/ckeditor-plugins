@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   '@bbob/preset-html5':
-    hash: 0dae2d5dc287682d2ca0ed37bae03d499acfddba1d00cb30ad6d7f4bad6c0f47
+    hash: 896f563a2db8281dd04f86ab48e757d7728380f10832ffae381bc0c9ed766d3a
     path: patches/@bbob__preset-html5.patch
 
 importers:
@@ -322,23 +322,26 @@ importers:
   packages/ckeditor5-bbcode:
     dependencies:
       '@bbob/core':
-        specifier: 4.2.0
-        version: 4.2.0
+        specifier: 4.3.1
+        version: 4.3.1
       '@bbob/html':
-        specifier: 4.2.0
-        version: 4.2.0
+        specifier: 4.3.1
+        version: 4.3.1
+      '@bbob/parser':
+        specifier: 4.3.1
+        version: 4.3.1
       '@bbob/plugin-helper':
-        specifier: 4.2.0
-        version: 4.2.0
+        specifier: 4.3.1
+        version: 4.3.1
       '@bbob/preset':
-        specifier: 4.2.0
-        version: 4.2.0
+        specifier: 4.3.1
+        version: 4.3.1
       '@bbob/preset-html5':
-        specifier: 4.2.0
-        version: 4.2.0(patch_hash=0dae2d5dc287682d2ca0ed37bae03d499acfddba1d00cb30ad6d7f4bad6c0f47)
+        specifier: 4.3.1
+        version: 4.3.1(patch_hash=896f563a2db8281dd04f86ab48e757d7728380f10832ffae381bc0c9ed766d3a)
       '@bbob/types':
-        specifier: 4.2.0
-        version: 4.2.0
+        specifier: 4.3.1
+        version: 4.3.1
       '@coremedia/ckeditor5-common':
         specifier: 25.0.4-rc.4
         version: link:../ckeditor5-common
@@ -1956,29 +1959,26 @@ packages:
     resolution: {integrity: sha512-/l42B1qxpG6RdfYf343Uw1vmDjeNhneUXtzhojE7pDgfpEypmRhI6j1kr17XCVv4Cgl9HdAiQY2x0GwKm7rWCw==}
     engines: {node: '>=6.9.0'}
 
-  '@bbob/core@4.2.0':
-    resolution: {integrity: sha512-i5VUIO6xx+TCrBE8plQF9KpW1z+0QcCh9GawCCWYG9KcZrEsyRy57my5/kem0a2lFxXjh0o+tgjQY9sCP5b3bw==}
+  '@bbob/core@4.3.1':
+    resolution: {integrity: sha512-qNS5wNY2oJROV5CQ2e29e9dBz4ZuSO7JcciBXM2yDHvKFUYl+J4o8DxOsugce6z2cFpGz6F4J7vJN7X+6ujWiQ==}
 
-  '@bbob/html@4.2.0':
-    resolution: {integrity: sha512-mZG7MmE/YluH1/FNCr2Jv/Vz3Mq5stZ5tFAjBmYpVVN6Ndus4+FA84vKoHFdUHDiuU1p/e2/o/VUrwsWwLdoIA==}
+  '@bbob/html@4.3.1':
+    resolution: {integrity: sha512-W1qFvBZwhpGkZBNfeRpUFsoF492BlfNmgdh5iczg7B/PDULdOPH5lPLtT/6ZNpyx/xo6/DBssl9YtEO/bm15hw==}
 
-  '@bbob/parser@3.0.2':
-    resolution: {integrity: sha512-3emLznDJWFJky+06AaTMpJ0IjY/mVpPN5+cnzwDKQgZ3wSFPbeEmdJhfh+gbiR30/UCWgwI1Ts+WUNJtUx1eaw==}
+  '@bbob/parser@4.3.1':
+    resolution: {integrity: sha512-BqDo8PDLcVLhFvOMdLmeaWk5qqD8E1bEdvzSJQuJC/U1XFs1tMC4lwZ4oPBFmZCeCLNsYFawqjP/S5MDdr7/Tg==}
 
-  '@bbob/plugin-helper@3.0.2':
-    resolution: {integrity: sha512-t1wFB3hbUg3pKq7TXk+mnnMcKjX6D29HxTAxU/+2mIbsWXaqgHLfH9FFxhZ8s/sGaLH4qgOSH+lgynpF3zy62Q==}
+  '@bbob/plugin-helper@4.3.1':
+    resolution: {integrity: sha512-0gyhW5sU270iCBvaRO1jYDTs1oGHu913yB9tqxPO9zT5OIDhu47PwensdJ7EuZwgYKEyQ4zZZ+1jvDzkubjdyQ==}
 
-  '@bbob/plugin-helper@4.2.0':
-    resolution: {integrity: sha512-Uxs/UJROnkpcq5EJfz/8NCEYAcme8l6oAgMeWLX1nxWeieUhRgpY8BWQ9eQwUOXEKa0tsKVPnlmbUAjFhppVPw==}
+  '@bbob/preset-html5@4.3.1':
+    resolution: {integrity: sha512-6Yn8kOrBWt/2u4ZUt7nSTzWP+xvTaH4TlAds6p+BcBRbs4Ov2f1zkRgCh1JlckMXwhH9q9CGF0wn6w8bkUYcFA==}
 
-  '@bbob/preset-html5@4.2.0':
-    resolution: {integrity: sha512-X2EIeb2vqTz/n34KWQXEL5IC0SuB6i2/ltRpEaMTyK7IoDEs0XGIWcqVpenb7Z2d4eNA3gTWhkoUUkKlZmfQRQ==}
+  '@bbob/preset@4.3.1':
+    resolution: {integrity: sha512-we6ITgrwciNIdpZRRJl4y3OOEbXEEVA21895JUInvYXevZBrIgIAvO502qlEYQtqhJqQ1HxY5xyhDjZ9rEYQHg==}
 
-  '@bbob/preset@4.2.0':
-    resolution: {integrity: sha512-IA+kxlrRcYBXE634B8W6uU2DO7VvrxeOqWUzIDKV2CgzTMpmCG875ihGp+Q3T+QxGwzG5S0L4GdmCIULTbzC4A==}
-
-  '@bbob/types@4.2.0':
-    resolution: {integrity: sha512-bSCZnNg0VrPosBBUVkjBDYVKNEqwT0jTNuzvAuNrZkuILgUKtLYI9GHuT8rY4lZecCb7UqGDsHsYt0YJO36eJg==}
+  '@bbob/types@4.3.1':
+    resolution: {integrity: sha512-TXxFPfKvZVH/sR0mfn5I99bEFmbnAzIoqFBxG1htRiKyJUx7Yb/ZNS/OsQD1mIsR6+srDqXFDaWbDgVudTTjvQ==}
 
   '@bcoe/v8-coverage@0.2.3':
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
@@ -4580,6 +4580,7 @@ packages:
 
   expect-playwright@0.8.0:
     resolution: {integrity: sha512-+kn8561vHAY+dt+0gMqqj1oY+g5xWrsuGMk4QGxotT2WS545nVqqjs37z6hrYfIuucwqthzwJfCJUEYqixyljg==}
+    deprecated: ⚠️ The 'expect-playwright' package is deprecated. The Playwright core assertions (via @playwright/test) now cover the same functionality. Please migrate to built-in expect. See https://playwright.dev/docs/test-assertions for migration.
 
   expect@29.7.0:
     resolution: {integrity: sha512-2Zks0hf1VLFYI1kbh0I5jP3KHHyCHpkfyHBzsSXRFgl/Bg9mWYfMW8oD+PdMPlEwy5HNsR9JutYy6pMeOh61nw==}
@@ -5450,6 +5451,7 @@ packages:
 
   jest-playwright-preset@4.0.0:
     resolution: {integrity: sha512-+dGZ1X2KqtwXaabVjTGxy0a3VzYfvYsWaRcuO8vMhyclHSOpGSI1+5cmlqzzCwQ3+fv0EjkTc7I5aV9lo08dYw==}
+    deprecated: ⚠️ The 'jest-playwright-preset' package is deprecated. Please migrate to Playwright's built-in test runner (@playwright/test) which now includes full Jest-style features and parallel testing. See https://playwright.dev/docs/intro for details.
     peerDependencies:
       jest: ^29.3.1
       jest-circus: ^29.3.1
@@ -8595,40 +8597,39 @@ snapshots:
       '@babel/helper-validator-identifier': 7.24.7
       to-fast-properties: 2.0.0
 
-  '@bbob/core@4.2.0':
+  '@bbob/core@4.3.1':
     dependencies:
-      '@bbob/parser': 3.0.2
-      '@bbob/plugin-helper': 4.2.0
-      '@bbob/types': 4.2.0
+      '@bbob/parser': 4.3.1
+      '@bbob/plugin-helper': 4.3.1
+      '@bbob/types': 4.3.1
 
-  '@bbob/html@4.2.0':
+  '@bbob/html@4.3.1':
     dependencies:
-      '@bbob/core': 4.2.0
-      '@bbob/plugin-helper': 4.2.0
-      '@bbob/types': 4.2.0
+      '@bbob/core': 4.3.1
+      '@bbob/plugin-helper': 4.3.1
+      '@bbob/types': 4.3.1
 
-  '@bbob/parser@3.0.2':
+  '@bbob/parser@4.3.1':
     dependencies:
-      '@bbob/plugin-helper': 3.0.2
+      '@bbob/plugin-helper': 4.3.1
+      '@bbob/types': 4.3.1
 
-  '@bbob/plugin-helper@3.0.2': {}
-
-  '@bbob/plugin-helper@4.2.0':
+  '@bbob/plugin-helper@4.3.1':
     dependencies:
-      '@bbob/types': 4.2.0
+      '@bbob/types': 4.3.1
 
-  '@bbob/preset-html5@4.2.0(patch_hash=0dae2d5dc287682d2ca0ed37bae03d499acfddba1d00cb30ad6d7f4bad6c0f47)':
+  '@bbob/preset-html5@4.3.1(patch_hash=896f563a2db8281dd04f86ab48e757d7728380f10832ffae381bc0c9ed766d3a)':
     dependencies:
-      '@bbob/plugin-helper': 4.2.0
-      '@bbob/preset': 4.2.0
-      '@bbob/types': 4.2.0
+      '@bbob/plugin-helper': 4.3.1
+      '@bbob/preset': 4.3.1
+      '@bbob/types': 4.3.1
 
-  '@bbob/preset@4.2.0':
+  '@bbob/preset@4.3.1':
     dependencies:
-      '@bbob/plugin-helper': 4.2.0
-      '@bbob/types': 4.2.0
+      '@bbob/plugin-helper': 4.3.1
+      '@bbob/types': 4.3.1
 
-  '@bbob/types@4.2.0': {}
+  '@bbob/types@4.3.1': {}
 
   '@bcoe/v8-coverage@0.2.3': {}
 
@@ -9384,6 +9385,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-link@45.2.1':
     dependencies:
@@ -9412,6 +9415,8 @@ snapshots:
       '@ckeditor/ckeditor5-widget': 46.1.1
       ckeditor5: 46.1.1
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-list@45.2.1':
     dependencies:
@@ -9601,8 +9606,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-restricted-editing@45.2.1':
     dependencies:

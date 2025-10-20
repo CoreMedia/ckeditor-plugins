@@ -1,9 +1,8 @@
+import { render } from "@bbob/html";
 import type { ParseOptions, TagNodeTree } from "@bbob/types";
+import { isStringNode, isTagNode } from "@bbob/plugin-helper";
 import { bbCodeLogger } from "../BBCodeLogger";
 import { setAttributesFromTagAttrs } from "./Attributes";
-
-const { isStringNode, isTagNode } = await import("@bbob/plugin-helper");
-const { render } = await import("@bbob/html");
 
 const renderDomNode = (node: null | string | number | TagNodeTree, options: Required<HtmlDomRendererOptions>): Node => {
   if (typeof node === "number") {

@@ -1,6 +1,5 @@
+import { getUniqAttr } from "@bbob/plugin-helper";
 import { bbCodeLogger } from "../BBCodeLogger";
-
-const { getUniqAttr } = await import("@bbob/plugin-helper");
 
 /**
  * Consumer for an attribute name and its value.

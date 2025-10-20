@@ -1,8 +1,7 @@
 import type { TagNodeTree } from "@bbob/types";
+import { TagNode, isEOL, N, isTagNode } from "@bbob/plugin-helper";
 import { bbCodeLogger } from "../BBCodeLogger";
 import type { Tag } from "./types";
-
-const { TagNode, isEOL, N, isTagNode } = await import("@bbob/plugin-helper");
 
 type TagNodeType = ReturnType<typeof TagNode.create>;
 

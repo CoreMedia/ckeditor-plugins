@@ -1,10 +1,9 @@
 import type { TestContext } from "node:test";
 import test, { describe } from "node:test";
 import expect from "expect";
+import { TagNode } from "@bbob/plugin-helper";
 import type { ParagraphAwareContentOptions } from "../../src/bbob/Paragraphs";
 import { paragraphAwareContent } from "../../src/bbob/Paragraphs";
-
-const { TagNode } = await import("@bbob/plugin-helper");
 
 type TagNodeType = ReturnType<typeof TagNode.create>;
 

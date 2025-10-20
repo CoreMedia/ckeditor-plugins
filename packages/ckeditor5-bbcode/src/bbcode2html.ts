@@ -1,8 +1,7 @@
+import bbob from "@bbob/core";
 import { bbCodeLogger } from "./BBCodeLogger";
 import { ckeditor5Preset } from "./bbob/ckeditor5Preset";
 import { renderHtmlDom } from "./bbob/renderHtmlDom";
-
-const { default: bbob } = await import("@bbob/core");
 
 const bbobProcessor = bbob(ckeditor5Preset());
 

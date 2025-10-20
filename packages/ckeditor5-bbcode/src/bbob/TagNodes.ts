@@ -1,7 +1,6 @@
 import type { TagNode } from "@bbob/plugin-helper";
 import type { TagNodeTree } from "@bbob/types";
-
-const { isEOL, N } = await import("@bbob/plugin-helper");
+import { isEOL, N } from "@bbob/plugin-helper";
 
 /**
  * Removes EOLs at the beginning and end, that may be a result of
