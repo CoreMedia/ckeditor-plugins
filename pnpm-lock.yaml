@@ -322,22 +322,22 @@ importers:
   packages/ckeditor5-bbcode:
     dependencies:
       '@bbob/core':
-        specifier: ^4.2.0
+        specifier: 4.2.0
         version: 4.2.0
       '@bbob/html':
-        specifier: ^4.2.0
+        specifier: 4.2.0
         version: 4.2.0
       '@bbob/plugin-helper':
-        specifier: ^4.2.0
+        specifier: 4.2.0
         version: 4.2.0
       '@bbob/preset':
-        specifier: ^4.2.0
+        specifier: 4.2.0
         version: 4.2.0
       '@bbob/preset-html5':
-        specifier: ^4.2.0
+        specifier: 4.2.0
         version: 4.2.0(patch_hash=0dae2d5dc287682d2ca0ed37bae03d499acfddba1d00cb30ad6d7f4bad6c0f47)
       '@bbob/types':
-        specifier: ^4.2.0
+        specifier: 4.2.0
         version: 4.2.0
       '@coremedia/ckeditor5-common':
         specifier: 25.0.4-rc.4
@@ -9255,6 +9255,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 46.1.1
       '@ckeditor/ckeditor5-widget': 46.1.1
       ckeditor5: 46.1.1
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-html-embed@45.2.1':
     dependencies:
@@ -9273,6 +9275,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 46.1.1
       '@ckeditor/ckeditor5-widget': 46.1.1
       ckeditor5: 46.1.1
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-html-support@45.2.1':
     dependencies:
@@ -9302,6 +9306,8 @@ snapshots:
       '@ckeditor/ckeditor5-widget': 46.1.1
       ckeditor5: 46.1.1
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-icons@45.2.1': {}
 
@@ -9360,6 +9366,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-inspector@4.1.0': {}
 
@@ -9376,8 +9384,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-link@45.2.1':
     dependencies:
@@ -9406,8 +9412,6 @@ snapshots:
       '@ckeditor/ckeditor5-widget': 46.1.1
       ckeditor5: 46.1.1
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-list@45.2.1':
     dependencies:
@@ -9597,6 +9601,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-restricted-editing@45.2.1':
     dependencies:
