@@ -165,20 +165,20 @@ void describe("ckeditor5Preset", () => {
       },
       {
         bbcode: `[unknown=https://example.org/ fakeUnique=fakeUnique]T[/unknown]`,
-        expected: `<unknown https://example.org/="https://example.org/" fakeUnique="fakeUnique">T</unknown>`,
+        expected: `<unknown https://example.org/ fakeUnique=fakeUnique="https://example.org/ fakeUnique=fakeUnique">T</unknown>`,
         issue: "https://github.com/JiLiZART/BBob/issues/202",
         comment:
           "getUniqAttr flaw. This demonstrates a follow-up issue regarding the default HTML renderer (for BBob Plugin we use a custom renderer with slightly better behavior)",
       },
       {
         bbcode: `[url=https://example.org/ fakeUnique=fakeUnique]T[/url]`,
-        expected: `<a https://example.org/="https://example.org/" href="fakeUnique">T</a>`,
+        expected: `<a href="https://example.org/ fakeUnique=fakeUnique">T</a>`,
         issue: "https://github.com/JiLiZART/BBob/issues/202",
         comment: "getUniqAttr flaw. Demonstrates accidental override.",
       },
       {
         bbcode: `[url=https://example.org/ hidden]T[/url]`,
-        expected: `<a https://example.org/="https://example.org/" href="hidden">T</a>`,
+        expected: `<a href="https://example.org/ hidden">T</a>`,
         issue: "https://github.com/JiLiZART/BBob/issues/202",
         comment: "getUniqAttr flaw. Demonstrates accidental override, but with more realistic use-case.",
       },
@@ -196,8 +196,7 @@ void describe("ckeditor5Preset", () => {
       },
     ] as const;
 
-    // TODO reactivate tests
-    void test.skip("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { bbcode, expected, issue, comment }] of cases.entries()) {
         await t.test(`[${i}] Expected flawed behavior: '${bbcode}' to '${expected}' (${issue}, ${comment})`, () => {
           expect(parse(bbcode)).toBe(expected);

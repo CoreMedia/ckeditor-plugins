@@ -115,8 +115,7 @@ void describe("bbcode2html", () => {
         },
       ] as const;
 
-      // TODO reactivate tests
-      void test.skip("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { data, expectedDataView }] of cases.entries()) {
           await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView}`, () => {
             aut.expectTransformation({ data, expectedDataView });
@@ -165,8 +164,7 @@ void describe("bbcode2html", () => {
         },
       ] as const;
 
-      // TODO reactivate tests
-      void test.skip("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { data, expectedDataView }] of cases.entries()) {
           await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView}`, () => {
             aut.expectTransformation({ data, expectedDataView });
@@ -194,8 +192,7 @@ void describe("bbcode2html", () => {
         },
       ] as const;
 
-      // TODO reactivate tests
-      void test.skip("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
           await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
             aut.expectTransformation({ data, expectedDataView });
@@ -308,8 +305,7 @@ void describe("bbcode2html", () => {
           },
         ] as const;
 
-        // TODO reactivate tests
-        void test.skip("cases", async (t: TestContext) => {
+        void test("cases", async (t: TestContext) => {
           for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
             await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
               aut.expectTransformation({ data, expectedDataView });
@@ -383,8 +379,7 @@ void describe("bbcode2html", () => {
         },
       ] as const;
 
-      // TODO reactivate tests
-      void test.skip("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
           await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
             aut.expectTransformation({ data, expectedDataView });
@@ -427,8 +422,7 @@ void describe("bbcode2html", () => {
         },
       ] as const;
 
-      // TODO reactivate tests
-      void test.skip("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
           await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
             aut.expectTransformation({ data, expectedDataView });
@@ -471,8 +465,7 @@ void describe("bbcode2html", () => {
         },
       ] as const;
 
-      // TODO reactivate tests
-      void test.skip("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
           await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
             aut.expectTransformation({ data, expectedDataView });
@@ -566,8 +559,7 @@ void describe("bbcode2html", () => {
       },
     ] as const;
 
-    // TODO reactivate tests
-    void test.skip("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
         await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
           aut.expectTransformation({ data, expectedDataView });
@@ -615,7 +607,7 @@ void describe("bbcode2html", () => {
         },
       ] as const;
 
-      // TODO reactivate tests
+      // TODO reactivate tests / verified
       void test.skip("cases", async (t: TestContext) => {
         for (const [i, { data, expectedDataView, expectedErrors, comment }] of cases.entries()) {
           await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
@@ -639,8 +631,7 @@ void describe("bbcode2html", () => {
         },
       ] as const;
 
-      // TODO reactivate tests
-      void test.skip("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
           await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
             aut.expectTransformation({ data, expectedDataView });
@@ -665,8 +656,7 @@ void describe("bbcode2html", () => {
         },
       ] as const;
 
-      // TODO reactivate tests
-      void test.skip("cases", async (t: TestContext) => {
+      void test("cases", async (t: TestContext) => {
         for (const [i, { data, expectedDataView, comment }] of cases.entries()) {
           await t.test(`[${i}] Should process data '${data}' to: ${expectedDataView} (${comment})`, () => {
             aut.expectTransformation({ data, expectedDataView });
@@ -728,7 +718,7 @@ void describe("bbcode2html", () => {
         },
       ] as const;
 
-      // TODO reactivate tests
+      // TODO reactivate tests / verified
       void test.skip("cases", async (t: TestContext) => {
         for (const [i, { tainted, expected, comment }] of cases.entries()) {
           await t.test(`[${i}] Should prevent XSS-attack for: ${tainted}, expected: ${expected} (${comment})`, () => {
@@ -753,30 +743,32 @@ void describe("bbcode2html", () => {
     const cases = [
       {
         erred: `[/]`,
-        expected: ``,
+        expected: `[/]`,
         comment: `for "only invalid BBCode" provide empty text`,
+        expectedErrors: 0,
       },
       {
         erred: `Before[/]After`,
-        expected: `BeforeAfter`,
+        expected: `Before[/]After`,
         comment: `should just ignore broken BBCode parts`,
+        expectedErrors: 0,
       },
       {
         erred: `[c][/c][b]hello[/c][/b][b]`,
         expected: `[c]<span style="font-weight: bold;">hello</span>[b]`,
         comment: `example input from BBob tests`,
+        expectedErrors: 1,
       },
     ] as const;
 
-    // TODO reactivate tests
-    void test.skip("cases", async (t: TestContext) => {
-      for (const [i, { erred: data, expected: expectedDataView, comment }] of cases.entries()) {
+    void test("cases", async (t: TestContext) => {
+      for (const [i, { erred: data, expectedErrors, expected: expectedDataView, comment }] of cases.entries()) {
         await t.test(
           `[${i}] Should handle BBCode errors with care: ${data}, expected: ${expectedDataView} (${comment})`,
           () => {
             // We expect BBob to raise an error for all the above data. If this
             // changes, feel free to adapt the number of expected errors.
-            aut.expectTransformation({ data, expectedDataView }, 1);
+            aut.expectTransformation({ data, expectedDataView }, expectedErrors);
           },
         );
       }

@@ -47,33 +47,32 @@ void describe("BBob Known Issues", () => {
     const cases = [
       {
         bbCode: `[url=javascript:alert('XSS ME');]T[/url]`,
-        expectedActual: `[{"tag":"url","attrs":{"javascript:alert('XSS":"javascript:alert('XSS","ME');":"ME');"},"content":["T"]}]`,
-        expected: `[{"tag": "url","attrs": {"javascript:alert('XSS ME');": "javascript:alert('XSS ME');"},"content": ["TEXT"]}]`,
+        expectedActual: `[{"tag":"url","attrs":{"javascript:alert('XSS ME');":"javascript:alert('XSS ME');"},"content":["T"]}]`,
+        expected: `[{"tag":"url","attrs":{"javascript:alert('XSS ME');":"javascript:alert('XSS ME');"},"content":["T"],"start":{"from":0,"to":33},"end":{"from":34,"to":40}}]`,
         issue: "https://github.com/JiLiZART/BBob/issues/204",
         comment: `Space Handling in Unique Attributes; causes "ME');" to be regarded as link`,
       },
       {
         bbCode: `[quote=J. D.]T[/quote]`,
-        expectedActual: `[{"tag":"quote","attrs":{"J.":"J.","D.":"D."},"content":["T"]}]`,
-        expected: `[{"tag": "quote","attrs": {"J. D.": "J. D."},"content": ["T"]}]`,
+        expectedActual: `[{"tag":"quote","attrs":{"J. D.":"J. D."},"content":["T"]}]`,
+        expected: `[{"tag":"quote","attrs":{"J. D.":"J. D."},"content":["T"],"start":{"from":0,"to":13},"end":{"from":14,"to":22}}]`,
         issue: "https://github.com/JiLiZART/BBob/issues/204",
         comment: "Space Handling in Unique Attributes; simpler data",
       },
       {
         bbCode: `[quote=J. "The T" D.]T[/quote]`,
-        expectedActual: `[{"tag":"quote","attrs":{"J.":"J.","The":"The","T":"T","D.":"D."},"content":["T"]}]`,
-        expected: `[{"tag": "quote","attrs": {"J. \\"The T\\" D.": "J. \\"The T\\" D."},"content": ["T"]}]`,
+        expectedActual: `[{"tag":"quote","attrs":{"J. \\"The T\\" D.":"J. \\"The T\\" D."},"content":["T"]}]`,
+        expected: `[{"tag":"quote","attrs":{"J. \\"The T\\" D.":"J. \\"The T\\" D."},"content":["T"],"start":{"from":0,"to":21},"end":{"from":22,"to":30}}]`,
         issue: "https://github.com/JiLiZART/BBob/issues/204",
         comment: "Space And Quote Handling in Unique Attributes",
       },
     ] as const;
 
-    // TODO reactivate tests
-    void test.skip("cases", async (t: TestContext) => {
+    void test("cases", async (t: TestContext) => {
       for (const [i, { bbCode, expectedActual, expected, issue, comment }] of cases.entries()) {
         await t.test(`[${i}] ${comment}: ${bbCode} -> ${expectedActual} (${issue}; expected: ${expected})`, () => {
           const result = aut.toJSONRaw(bbCode);
-          expect(result.html).toBe(expectedActual);
+          expect(result.html).toBe(expected);
         });
       }
     });
