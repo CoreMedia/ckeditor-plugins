@@ -30,7 +30,7 @@
 
 /* content view label -  */
 .cm-ck-link-form-view .cm-ck-content-link-view > .ck.ck-button__label {
-  width: 143px;
+  width: auto;
 }
 
 .cm-ck-form-view--loading .cm-ck-content-link-view,
