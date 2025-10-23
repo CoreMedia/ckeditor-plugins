@@ -1,6 +1,6 @@
 import type { MockContentFormService } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
 import { JSWrapper } from "../JSWrapper";
-import { MockServiceAgentPluginWrapper } from "./MockServiceAgentPluginWrapper";
+import type { MockServiceAgentPluginWrapper } from "./MockServiceAgentPluginWrapper";
 
 export class ContentFormServiceWrapper extends JSWrapper<MockContentFormService> {
   /**

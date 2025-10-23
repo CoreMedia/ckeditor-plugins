@@ -1,4 +1,4 @@
-import { ElementFilterParams, ElementFilterRule } from "./ElementProxy";
+import type { ElementFilterParams, ElementFilterRule } from "./ElementProxy";
 import { warnOnAmbiguousAttributeState } from "./RulesLogger";
 
 /**
@@ -120,11 +120,5 @@ const asViewFilterRule =
   (params) =>
     mapper.toView(params);
 
-export {
-  AttributeMapper,
-  renameAttribute,
-  preserveAttributeAs,
-  allAttributeMappers,
-  asDataFilterRule,
-  asViewFilterRule,
-};
+export type { AttributeMapper };
+export { renameAttribute, preserveAttributeAs, allAttributeMappers, asDataFilterRule, asViewFilterRule };

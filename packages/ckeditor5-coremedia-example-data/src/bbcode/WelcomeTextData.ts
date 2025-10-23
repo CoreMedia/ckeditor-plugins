@@ -1,4 +1,4 @@
-import { ExampleData } from "../ExampleData";
+import type { ExampleData } from "../ExampleData";
 
 export const welcomeText = `\
 [h1]CKEditor 5: CoreMedia BBCode Plugin Showcase[/h1]

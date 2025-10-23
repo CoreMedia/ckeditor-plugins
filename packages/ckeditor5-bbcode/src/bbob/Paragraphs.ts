@@ -1,8 +1,9 @@
-import { isEOL, isTagNode, N, TagNode } from "@bbob/plugin-helper/es";
+import type { TagNodeTree } from "@bbob/types";
+import { TagNode, isEOL, N, isTagNode } from "@bbob/plugin-helper";
 import { bbCodeLogger } from "../BBCodeLogger";
-import { Tag } from "./types";
+import type { Tag } from "./types";
 
-const toNode = TagNode.create;
+type TagNodeType = ReturnType<typeof TagNode.create>;
 
 /**
  * Options for `paragraphAwareContent`.
@@ -93,9 +94,9 @@ const debug = (msg: string, state?: Record<string, unknown>): void => {
  * @param options - options to respect
  */
 export const paragraphAwareContent = (
-  content: NonNullable<TagNode["content"]>,
+  content: NonNullable<TagNodeTree>,
   options: ParagraphAwareContentOptions = {},
-): NonNullable<TagNode["content"]> => {
+): NonNullable<TagNodeTree> => {
   const {
     requireParagraph: fromConfigRequireParagraph = false,
     skipEmpty = true,
@@ -108,11 +109,11 @@ export const paragraphAwareContent = (
     options,
   });
 
-  if (content.length === 0) {
+  if ((Array.isArray(content) || typeof content === "string") && content.length === 0) {
     if (fromConfigRequireParagraph) {
       // We were told, a paragraph is required as nested tag. Thus,
       // also add it for empty content.
-      return [toNode("p", {}, [])];
+      return [TagNode.create("p", {}, [])];
     }
     return [];
   }
@@ -125,11 +126,11 @@ export const paragraphAwareContent = (
   let requireParagraph = fromConfigRequireParagraph;
 
   // Intermediate buffer, that may need to go to a paragraph node.
-  const buffer: NonNullable<TagNode["content"]> = [];
+  const buffer: NonNullable<TagNodeTree> = [];
   // Collected EOLs. They will not make it to `buffer` until flushed.
   const trailingNewlineBuffer: (typeof N)[] = [];
   // The result to return in the end.
-  const result: NonNullable<TagNode["content"]> = [];
+  const result: NonNullable<TagNodeTree> = [];
 
   /**
    * Clear temporary buffers.
@@ -152,8 +153,9 @@ export const paragraphAwareContent = (
   /**
    * Signals, if the given content shall be considered empty or not.
    */
-  const isNonEmpty = (content: NonNullable<TagNode["content"]>): boolean =>
-    content.some((entry) => isTagNode(entry) || entry.trim() !== "");
+  const isNonEmpty = (content: NonNullable<TagNodeTree>): boolean =>
+    Array.isArray(content) &&
+    content.some((entry) => entry && (isTagNode(entry) || (typeof entry === "string" && entry.trim() !== "")));
 
   /**
    * Adds a paragraph and triggers that all subsequent contents also
@@ -164,7 +166,7 @@ export const paragraphAwareContent = (
    *
    * @param content - content to add
    */
-  const addCopyAsParagraph = (content: NonNullable<TagNode["content"]>): void => {
+  const addCopyAsParagraph = (content: NonNullable<TagNodeTree>): void => {
     debug("Start: addCopyAsParagraph", {
       content,
       result,
@@ -173,9 +175,9 @@ export const paragraphAwareContent = (
     });
 
     if (isNonEmpty(content)) {
-      result.push(toNode("p", {}, [...content]));
+      result.push(TagNode.create("p", {}, Array.isArray(content) ? [...content] : [content]));
     } else if (requireParagraph || !skipEmpty) {
-      result.push(toNode("p", {}, []));
+      result.push(TagNode.create("p", {}, []));
     }
 
     requireParagraph = true;
@@ -309,7 +311,7 @@ export const paragraphAwareContent = (
    * Handles a tag-node on current level. Respects block-tags that may enforce
    * previous buffer entries to be added as paragraph.
    */
-  const handleTagNode = (node: TagNode): void => {
+  const handleTagNode = (node: TagNodeType): void => {
     debug("Start: handleTagNode", {
       node,
       buffer,
@@ -345,7 +347,7 @@ export const paragraphAwareContent = (
     });
 
     if (isEOL(value)) {
-      trailingNewlineBuffer.push(value);
+      trailingNewlineBuffer.push(value as typeof N);
     } else {
       flushOnParagraph();
       buffer.push(value);
@@ -359,11 +361,12 @@ export const paragraphAwareContent = (
   };
 
   // Main processing of content items to possibly wrap into paragraphs.
-  for (const contentItem of content) {
+  const contentArray = Array.isArray(content) ? content : [content];
+  for (const contentItem of contentArray) {
     if (isTagNode(contentItem)) {
       handleTagNode(contentItem);
     } else {
-      handleString(contentItem);
+      typeof contentItem === "string" && handleString(contentItem);
     }
   }
 

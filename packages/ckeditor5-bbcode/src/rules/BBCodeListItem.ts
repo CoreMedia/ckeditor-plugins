@@ -1,4 +1,4 @@
-import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
+import type { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 
 /**
  * Rule that maps `<li>` to `[*]`.

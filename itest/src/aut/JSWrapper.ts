@@ -1,5 +1,5 @@
-import { JSHandle } from "playwright";
-import { PageFunctionOn, SmartHandle } from "playwright-core/types/structs";
+import type { JSHandle } from "playwright";
+import type { PageFunctionOn, SmartHandle } from "playwright-core/types/structs";
 
 /**
  * General concept for JSHandle wrappers.

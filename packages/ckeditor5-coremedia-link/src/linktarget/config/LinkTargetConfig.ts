@@ -1,14 +1,17 @@
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { Config, EditorConfig } from "ckeditor5";
-import { DEFAULT_TARGETS_ARRAY, DefaultTarget, getDefaultTargetDefinition } from "./DefaultTarget";
+import type { Config, EditorConfig } from "ckeditor5";
+import type { DefaultTarget } from "./DefaultTarget";
+import { DEFAULT_TARGETS_ARRAY, getDefaultTargetDefinition } from "./DefaultTarget";
 import { getFilterByType } from "./DefaultTargetTypeFilters";
-import {
-  isTargetDefaultRuleDefinitionWithFilter,
-  isTargetDefaultRuleDefinitionWithType,
+import type {
   TargetDefaultRuleDefinition,
   TargetDefaultRuleDefinitionWithFilter,
 } from "./LinkTargetDefaultRuleDefinition";
-import LinkTargetOptionDefinition from "./LinkTargetOptionDefinition";
+import {
+  isTargetDefaultRuleDefinitionWithFilter,
+  isTargetDefaultRuleDefinitionWithType,
+} from "./LinkTargetDefaultRuleDefinition";
+import type LinkTargetOptionDefinition from "./LinkTargetOptionDefinition";
 
 /**
  * Provides the given targets to select from and a list of rules to

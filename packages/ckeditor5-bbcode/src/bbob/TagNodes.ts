@@ -1,4 +1,6 @@
-import { isEOL, N, TagNode } from "@bbob/plugin-helper/es";
+import type { TagNode } from "@bbob/plugin-helper";
+import type { TagNodeTree } from "@bbob/types";
+import { isEOL, N } from "@bbob/plugin-helper";
 
 /**
  * Removes EOLs at the beginning and end, that may be a result of
@@ -6,14 +8,15 @@ import { isEOL, N, TagNode } from "@bbob/plugin-helper/es";
  *
  * @param contents - contents to trim
  */
-export const trimEOL = (contents: TagNode["content"]): TagNode["content"] => {
+export const trimEOL = (contents: TagNodeTree): TagNode["content"] => {
   const result: TagNode["content"] = [];
   const bufferedEOLs: (typeof N)[] = [];
-  for (const content of contents ?? []) {
-    if (isEOL(content)) {
+  const contentsArr = Array.isArray(contents) ? contents : [contents];
+  for (const content of contentsArr) {
+    if (typeof content === "string" && isEOL(content)) {
       // > 0: Ignore EOLs at the beginning
       if (result.length > 0) {
-        bufferedEOLs.push(content);
+        bufferedEOLs.push(N);
       }
     } else {
       // Push any EOLs collected up to now.

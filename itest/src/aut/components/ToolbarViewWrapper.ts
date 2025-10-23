@@ -1,6 +1,6 @@
 import type { ToolbarView } from "ckeditor5";
 import { JSWrapper } from "../JSWrapper";
-import ViewWrapper from "./ViewWrapper";
+import type ViewWrapper from "./ViewWrapper";
 
 export default class ToolbarViewWrapper extends JSWrapper<ToolbarView> {
   static fromView(viewWrapper: ViewWrapper): ToolbarViewWrapper {

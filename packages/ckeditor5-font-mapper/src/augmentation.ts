@@ -1,5 +1,5 @@
-import FontMapper from "./FontMapper";
-import { FontMapperConfig, COREMEDIA_FONT_MAPPER_CONFIG_KEY } from "./FontMapperConfig";
+import type FontMapper from "./FontMapper";
+import type { FontMapperConfig, COREMEDIA_FONT_MAPPER_CONFIG_KEY } from "./FontMapperConfig";
 
 declare module "ckeditor5" {
   interface EditorConfig {

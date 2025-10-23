@@ -1,16 +1,14 @@
 import { LINK_HREF_MODEL } from "@coremedia/ckeditor5-link-common";
-import {
-  Command,
-  Element,
-  Range,
-  Schema,
-  DocumentSelection,
-  Position,
+import type {
+  ModelElement,
+  ModelRange,
+  ModelSchema,
+  ModelDocumentSelection,
+  ModelPosition,
   Model,
-  Writer,
-  first,
-  findAttributeRange,
+  ModelWriter,
 } from "ckeditor5";
+import { Command, first, findAttributeRange } from "ckeditor5";
 import { LINK_TARGET_MODEL } from "../Constants";
 
 /**
@@ -35,7 +33,7 @@ class LinkTargetCommand extends Command {
     const model = this.editor.model;
     const document = model.document;
     const schema = model.schema;
-    const selection: DocumentSelection = document.selection;
+    const selection: ModelDocumentSelection = document.selection;
     const selectedElement = selection.getSelectedElement() ?? first(selection.getSelectedBlocks());
     const attributesAllowedFor = LinkTargetCommand.attributesAllowedFor;
     const checkAttributes = LinkTargetCommand.#checkAttributes;
@@ -71,8 +69,8 @@ class LinkTargetCommand extends Command {
    * @param otherAttributes - other attributes to check
    */
   protected static attributesAllowedFor(
-    element: Element | null | undefined,
-    schema: Schema,
+    element: ModelElement | null | undefined,
+    schema: ModelSchema,
     attribute: string,
     ...otherAttributes: string[]
   ): boolean {
@@ -92,7 +90,12 @@ class LinkTargetCommand extends Command {
    * @param attribute - first attribute to check
    * @param otherAttributes - other attributes to check
    */
-  static #checkAttributes(element: Element, schema: Schema, attribute: string, ...otherAttributes: string[]): boolean {
+  static #checkAttributes(
+    element: ModelElement,
+    schema: ModelSchema,
+    attribute: string,
+    ...otherAttributes: string[]
+  ): boolean {
     const attributes = [attribute, ...otherAttributes];
     return attributes.every((attr) => schema.checkAttribute(element, attr));
   }
@@ -106,8 +109,8 @@ class LinkTargetCommand extends Command {
    * @param otherAttributes - other attributes to check
    */
   static #checkAttributeInSelection(
-    selection: DocumentSelection,
-    schema: Schema,
+    selection: ModelDocumentSelection,
+    schema: ModelSchema,
     attribute: string,
     ...otherAttributes: string[]
   ): boolean {
@@ -142,7 +145,7 @@ class LinkTargetCommand extends Command {
    * Depending on the target if it is empty or not, the attribute is either
    * removed from the given range or set.
    */
-  static #setOrRemoveTarget(writer: Writer, target: Target, range: Range): void {
+  static #setOrRemoveTarget(writer: ModelWriter, target: Target, range: ModelRange): void {
     // If we empty the target, we just want to remove it.
     if (!target) {
       // May remove `linkTarget` attribute, where there isn't any. But
@@ -163,7 +166,7 @@ class LinkTargetCommand extends Command {
    *
    * @param model - model to retrieve ranges for
    */
-  static #findCurrentLinkHrefRanges(model: Model): Range[] {
+  static #findCurrentLinkHrefRanges(model: Model): ModelRange[] {
     const selection = model.document.selection;
     if (selection.isCollapsed) {
       const findAttributeRanges = LinkTargetCommand.#findAttributeRanges;
@@ -188,11 +191,11 @@ class LinkTargetCommand extends Command {
    * @param model - model to get range for
    */
   static #findAttributeRanges(
-    position: Position | null | undefined,
+    position: ModelPosition | null | undefined,
     attributeName: string,
     value: string,
     model: Model,
-  ): Range[] {
+  ): ModelRange[] {
     if (!position) {
       return [];
     }
@@ -201,4 +204,4 @@ class LinkTargetCommand extends Command {
 }
 
 export default LinkTargetCommand;
-export { Target, DeletedTarget };
+export type { Target, DeletedTarget };

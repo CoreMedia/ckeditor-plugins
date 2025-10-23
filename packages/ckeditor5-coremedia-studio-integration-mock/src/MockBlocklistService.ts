@@ -1,6 +1,9 @@
-import { Observable, Subject } from "rxjs";
-import { BlocklistService, createBlocklistServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { Editor, Plugin } from "ckeditor5";
+import type { Observable } from "rxjs";
+import { Subject } from "rxjs";
+import type { BlocklistService } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { createBlocklistServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import type { Editor } from "ckeditor5";
+import { Plugin } from "ckeditor5";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { serviceAgent } from "@coremedia/service-agent";
 import MockServiceAgentPlugin from "./content/MockServiceAgentPlugin";

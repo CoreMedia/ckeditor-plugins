@@ -1,20 +1,27 @@
 import { serviceAgent } from "@coremedia/service-agent";
-import { Editor, Node, PendingActions, Position, Range, Writer } from "ckeditor5";
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import {
+import type { Editor, ModelNode, ModelPosition, ModelRange, ModelWriter } from "ckeditor5";
+import { PendingActions } from "ckeditor5";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type {
   ContentImportService,
+  IContentReferenceService,
+  RichtextConfigurationService,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
+import {
   COREMEDIA_CONTEXT_KEY,
   createContentImportServiceDescriptor,
   createContentReferenceServiceDescriptor,
   createRichtextConfigurationServiceDescriptor,
-  IContentReferenceService,
-  RichtextConfigurationService,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common";
-import { ContentClipboardMarkerDataUtils, MarkerData } from "./ContentClipboardMarkerDataUtils";
-import ContentInputDataCache, { ContentInputData } from "./ContentInputDataCache";
+import type { MarkerData } from "./ContentClipboardMarkerDataUtils";
+import { ContentClipboardMarkerDataUtils } from "./ContentClipboardMarkerDataUtils";
+import type { ContentInputData } from "./ContentInputDataCache";
+import ContentInputDataCache from "./ContentInputDataCache";
 import MarkerRepositionUtil from "./MarkerRepositionUtil";
-import ContentToModelRegistry, { CreateModelFunction } from "./ContentToModelRegistry";
+import type { CreateModelFunction } from "./ContentToModelRegistry";
+import ContentToModelRegistry from "./ContentToModelRegistry";
 import { enableUndo, UndoSupport } from "./integrations/Undo";
 
 const UTILITY_NAME = "DataToModelMechanism";
@@ -223,15 +230,15 @@ export default class DataToModelMechanism {
     pendingMarkerNames: string[],
     contentInputData: ContentInputData,
     markerData: MarkerData,
-    createItemFunction: (writer: Writer) => Node,
+    createItemFunction: (writer: ModelWriter) => ModelNode,
   ): void {
-    editor.model.enqueueChange(contentInputData.insertionContext.batch, (writer: Writer): void => {
-      const item: Node = createItemFunction(writer);
+    editor.model.enqueueChange(contentInputData.insertionContext.batch, (writer: ModelWriter): void => {
+      const item: ModelNode = createItemFunction(writer);
       const marker = writer.model.markers.get(ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerData));
       if (!marker) {
         return;
       }
-      const markerPosition: Position | undefined = marker.getStart();
+      const markerPosition: ModelPosition | undefined = marker.getStart();
       if (!markerPosition) {
         ContentInputDataCache.removeData(marker.name);
         return;
@@ -257,7 +264,7 @@ export default class DataToModelMechanism {
       // Split is necessary if the link is not rendered inline, and if we are not
       // at the end of a container/document. This prevents empty paragraphs
       // after the inserted element.
-      let finalAfterInsertPosition: Position = range.end;
+      let finalAfterInsertPosition: ModelPosition = range.end;
       // Parent Check: Required precondition for split().
       if (!range.end.isAtEnd && !contentInputData.itemContext.isInline && range.end.parent?.parent) {
         finalAfterInsertPosition = writer.split(range.end).range.end;
@@ -268,7 +275,7 @@ export default class DataToModelMechanism {
       {
         isUndoable: false,
       },
-      (writer: Writer): void => {
+      (writer: ModelWriter): void => {
         writer.removeSelectionAttribute("linkHref");
       },
     );
@@ -288,7 +295,7 @@ export default class DataToModelMechanism {
       {
         isUndoable: false,
       },
-      (writer: Writer): void => {
+      (writer: ModelWriter): void => {
         const marker = writer.model.markers.get(ContentClipboardMarkerDataUtils.toMarkerNameFromData(markerData));
         if (!marker) {
           return;
@@ -310,7 +317,7 @@ export default class DataToModelMechanism {
    * @param textRanges - ranges to apply attributes to
    * @param attributes - attributes to apply
    */
-  static #applyAttributes(writer: Writer, textRanges: Range[], attributes: [string, unknown][]): void {
+  static #applyAttributes(writer: ModelWriter, textRanges: ModelRange[], attributes: [string, unknown][]): void {
     for (const attribute of attributes) {
       for (const range of textRanges) {
         writer.setAttribute(attribute[0], attribute[1], range);

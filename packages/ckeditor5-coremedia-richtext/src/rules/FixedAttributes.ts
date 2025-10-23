@@ -1,4 +1,4 @@
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
+import type { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
 
 const fixedAttributes = new Map<string, Map<string, string>>([
   ["pre", new Map([["xml:space", "preserve"]])],

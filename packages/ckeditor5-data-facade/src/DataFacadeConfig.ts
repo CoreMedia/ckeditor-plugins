@@ -1,4 +1,4 @@
-import { GetDataApi } from "./DataApi";
+import type { GetDataApi } from "./DataApi";
 
 /**
  * Save method type.

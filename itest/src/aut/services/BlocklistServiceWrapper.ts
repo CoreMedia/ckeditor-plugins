@@ -1,6 +1,6 @@
 import type { MockBlocklistService } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
 import { JSWrapper } from "../JSWrapper";
-import { MockServiceAgentPluginWrapper } from "./MockServiceAgentPluginWrapper";
+import type { MockServiceAgentPluginWrapper } from "./MockServiceAgentPluginWrapper";
 
 export class BlocklistServiceWrapper extends JSWrapper<MockBlocklistService> {
   async addWord(word: string): Promise<void> {

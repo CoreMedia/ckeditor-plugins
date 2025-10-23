@@ -84,7 +84,6 @@ workspace usage, are not published and have scope `@coremedia-internal/`.
 | [`ckeditor5-dom-converter`][]                     | Base architecture for data-processing                                      |
 | [`ckeditor5-dom-support`][]                       | Utilities for handling DOM objects                                         |
 | [`ckeditor5-font-mapper`][]                       | Replaces characters in given font to alternative representation on paste   |
-| [`ckeditor5-jest-test-helpers`][]                 | Support for JEST tests                                                     |
 | [`ckeditor5-link-common`][]                       | Assistive Utilities for `@ckeditor/ckeditor5-link`                         |
 | [`ckeditor5-logging`][]                           | Logging Facade                                                             |
 
@@ -225,8 +224,6 @@ implements the described behavior.
 [`ckeditor5-dom-support`]: <./packages/ckeditor5-dom-support> "@coremedia/ckeditor5-dom-support"
 
 [`ckeditor5-font-mapper`]: <./packages/ckeditor5-font-mapper> "@coremedia/ckeditor5-font-mapper"
-
-[`ckeditor5-jest-test-helpers`]: <./packages/ckeditor5-jest-test-helpers> "@coremedia-internal/ckeditor5-jest-test-helpers"
 
 [`ckeditor5-link-common`]: <./packages/ckeditor5-link-common> "@coremedia/ckeditor5-link-common"
 

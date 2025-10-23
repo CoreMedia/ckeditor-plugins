@@ -1,5 +1,5 @@
-import { Locator } from "playwright";
-import { HasVisible } from "../expect/IsVisible/HasVisible";
+import type { Locator } from "playwright";
+import type { HasVisible } from "../expect/IsVisible/HasVisible";
 
 export const visible = (locatable: Locatable): Promise<boolean> => locatable.locator.isVisible();
 

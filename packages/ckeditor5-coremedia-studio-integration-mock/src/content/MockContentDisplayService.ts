@@ -1,14 +1,15 @@
-import {
+import type {
   ContentAsLink,
   ContentDisplayService,
-  contentUriPath,
-  createContentDisplayServiceDescriptor,
   DisplayHint,
   UriPath,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { combineLatest, delay, Observable, OperatorFunction, Subscription } from "rxjs";
-import { first, map } from "rxjs/operators";
-import { defaultMockContentProvider, MockContentProvider } from "./MockContentPlugin";
+import { createContentDisplayServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import type { Observable, OperatorFunction } from "rxjs";
+import { combineLatest, delay, firstValueFrom } from "rxjs";
+import { map } from "rxjs/operators";
+import type { MockContentProvider } from "./MockContentPlugin";
+import { defaultMockContentProvider } from "./MockContentPlugin";
 import {
   observeEditingHint,
   observeLocaleNameHint,
@@ -49,51 +50,31 @@ class MockContentDisplayService implements ContentDisplayService {
    * Provides a one-time name, depending on the configuration in URI path.
    * For unreadable contents the promise is rejected.
    */
-  name(uriPath: UriPath): Promise<string> {
+  async name(uriPath: UriPath): Promise<string> {
     const config = this.#contentProvider(uriPath);
-    return new Promise<string>((resolve, reject) => {
-      const { id } = config;
-      const uriPath = contentUriPath(id);
-      const observableReadable = observeReadable(config);
-      const observableName = observeName(config);
+    const observableReadable = observeReadable(config);
+    const observableName = observeName(config);
 
-      const combinedObservable = combineLatest([observableName, observableReadable]).pipe(first());
-
-      let subscription: Subscription | undefined;
-
-      subscription = combinedObservable.subscribe(([receivedName, receivedReadable]): void => {
-        // We only want to receive one update. Unsure, if necessary — but it does no harm.
-        subscription?.unsubscribe();
-        subscription = undefined;
-        if (receivedReadable === undefined) {
-          reject(new Error(`Failed accessing ${uriPath} (readable state).`));
-          return;
-        }
-        if (receivedName === undefined) {
-          reject(new Error(`Failed accessing ${uriPath} (name).`));
-          return;
-        }
-        // By intention also delays rejection, as the result for unreadable
-        // may take some time.
-        if (!receivedReadable) {
-          reject(new Error(`Content ${uriPath} is unreadable.`));
-          return;
-        }
-        resolve(receivedName);
-      });
-    });
+    const [receivedName, receivedReadable] = await firstValueFrom(combineLatest([observableName, observableReadable]));
+    if (receivedReadable === undefined) {
+      return Promise.reject(new Error(`Failed accessing ${uriPath} (readable state).`));
+    }
+    if (receivedName === undefined) {
+      return Promise.reject(new Error(`Failed accessing ${uriPath} (name).`));
+    }
+    return receivedName;
   }
 
   /**
    * Combines the observables for name, type and state into one.
    */
-  observe_asLink(uriPath: UriPath): Observable<ContentAsLink> {
+  observe_asLink(uriPath: UriPath, iterations?: number): Observable<ContentAsLink> {
     const mockContent = this.#contentProvider(uriPath);
-    const nameSubscription = observeNameHint(mockContent);
-    const typeSubscription = observeTypeHint(mockContent);
-    const stateSubscription = observeEditingHint(mockContent);
-    const siteNameSubscription = observeSiteNameHint(mockContent);
-    const localeNameSubscriptrion = observeLocaleNameHint(mockContent);
+    const nameSubscription = observeNameHint(mockContent, iterations);
+    const typeSubscription = observeTypeHint(mockContent, iterations);
+    const stateSubscription = observeEditingHint(mockContent, iterations);
+    const siteNameSubscription = observeSiteNameHint(mockContent, iterations);
+    const localeNameSubscriptrion = observeLocaleNameHint(mockContent, iterations);
 
     type Hints = readonly [DisplayHint, DisplayHint, DisplayHint, DisplayHint, DisplayHint];
 
@@ -113,7 +94,7 @@ class MockContentDisplayService implements ContentDisplayService {
       localeNameSubscriptrion,
       typeSubscription,
       stateSubscription,
-    ]).pipe(delay(3000), toContentAsLink);
+    ]).pipe(delay(1), toContentAsLink);
   }
 }
 

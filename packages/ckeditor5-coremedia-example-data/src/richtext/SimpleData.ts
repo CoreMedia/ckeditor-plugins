@@ -1,4 +1,4 @@
-import { ExampleData } from "../ExampleData";
+import type { ExampleData } from "../ExampleData";
 import { richtext } from "../RichTextBase";
 
 export const simpleData: ExampleData = {

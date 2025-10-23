@@ -1,5 +1,6 @@
-import { HasChildren, isHTMLElement, isParentNode } from "@coremedia/ckeditor5-dom-support";
-import { BBCodeProcessingRule } from "./rules/BBCodeProcessingRule";
+import type { HasChildren } from "@coremedia/ckeditor5-dom-support";
+import { isHTMLElement, isParentNode } from "@coremedia/ckeditor5-dom-support";
+import type { BBCodeProcessingRule } from "./rules/BBCodeProcessingRule";
 import { bbCodeDefaultRules } from "./rules/bbCodeDefaultRules";
 
 /**

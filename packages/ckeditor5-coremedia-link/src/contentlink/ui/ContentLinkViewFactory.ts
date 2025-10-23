@@ -1,5 +1,6 @@
 import "../../../theme/contentlinkview.css";
-import { LabeledFieldView, Editor, LinkUI } from "ckeditor5";
+import type { Editor, LinkUI } from "ckeditor5";
+import { LabeledFieldView } from "ckeditor5";
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { requireContentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { executeOpenContentInTabCommand } from "../OpenContentInTabCommand";

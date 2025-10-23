@@ -1,9 +1,9 @@
-import ContentImageClipboardPlugin from "./ContentImageClipboardPlugin";
-import ContentImageEditingPlugin from "./ContentImageEditingPlugin";
-import ContentImageOpenInTabUI from "./contentImageOpenInTab/ContentImageOpenInTabUI";
-import { OpenImageInTabCommand } from "./contentImageOpenInTab/OpenImageInTabCommand";
-import ContentImagePlugin from "./ContentImagePlugin";
-import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
+import type ContentImageClipboardPlugin from "./ContentImageClipboardPlugin";
+import type ContentImageEditingPlugin from "./ContentImageEditingPlugin";
+import type ContentImageOpenInTabUI from "./contentImageOpenInTab/ContentImageOpenInTabUI";
+import type { OpenImageInTabCommand } from "./contentImageOpenInTab/OpenImageInTabCommand";
+import type ContentImagePlugin from "./ContentImagePlugin";
+import type ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 
 declare module "ckeditor5" {
   interface PluginsMap {

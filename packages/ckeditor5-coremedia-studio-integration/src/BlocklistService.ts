@@ -1,4 +1,4 @@
-import { Observable } from "rxjs";
+import type { Observable } from "rxjs";
 
 /**
  * Service, used to manage a list of blocked words within CKEditor.

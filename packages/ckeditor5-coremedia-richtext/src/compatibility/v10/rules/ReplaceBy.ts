@@ -1,10 +1,12 @@
-import {
+import type {
   ToDataAndViewElementConfiguration,
   ElementFilterRulesByName,
-  allFilterRules,
   ElementFilterRule,
-  asDataFilterRule,
   AttributeMapper,
+} from "@coremedia/ckeditor5-dataprocessor-support";
+import {
+  allFilterRules,
+  asDataFilterRule,
   warnOnAmbiguousElementState,
 } from "@coremedia/ckeditor5-dataprocessor-support";
 

@@ -1,14 +1,14 @@
-import {
-  allFilterRules,
+import type {
   FilterRuleSet,
   FilterRuleSetConfiguration,
-  parseFilterRuleSetConfigurations,
   ToDataAndViewElementConfiguration,
 } from "@coremedia/ckeditor5-dataprocessor-support";
-import { EditorConfig, Config as CKEditorConfig } from "ckeditor5";
+import { allFilterRules, parseFilterRuleSetConfigurations } from "@coremedia/ckeditor5-dataprocessor-support";
+import type { EditorConfig, Config as CKEditorConfig } from "ckeditor5";
 import { defaultStrictness, Strictness } from "../../Strictness";
 import { getV10CoreMediaRichTextConfig } from "../../CoreMediaRichTextConfig";
-import RichTextSchema, { V10Strictness } from "./RichTextSchema";
+import type { V10Strictness } from "./RichTextSchema";
+import RichTextSchema from "./RichTextSchema";
 import { replaceBy, replaceByElementAndClassBackAndForth, replaceElementAndClassBy } from "./rules/ReplaceBy";
 import { headingRules, paragraphToHeading } from "./rules/Heading";
 import { handleAnchor } from "./rules/Anchor";

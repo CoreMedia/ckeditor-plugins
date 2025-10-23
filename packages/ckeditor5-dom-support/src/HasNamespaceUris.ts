@@ -1,2 +1,2 @@
 export { isHasNamespaceUri } from "./TypeGuards";
-export { HasNamespaceUri } from "./Types";
+export type { HasNamespaceUri } from "./Types";

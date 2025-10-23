@@ -1,12 +1,12 @@
-import { ConversionApi, RuleConfig, RuleSectionConfig } from "@coremedia/ckeditor5-dom-converter";
+import type { ConversionApi, RuleConfig, RuleSectionConfig } from "@coremedia/ckeditor5-dom-converter";
 import { isHTMLAnchorElement } from "@coremedia/ckeditor5-dom-support";
-import { RequireSelected } from "@coremedia/ckeditor5-common";
+import type { RequireSelected } from "@coremedia/ckeditor5-common";
+import type { XLinkAttributes } from "./XLink";
 import {
   extractXLinkAttributes,
   extractXLinkDataSetEntries,
   setXLinkAttributes,
   setXLinkDataSetEntries,
-  XLinkAttributes,
   xLinkNamespaceUri,
 } from "./XLink";
 

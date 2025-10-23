@@ -1,6 +1,7 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-richtext",
   "version": "25.0.4-rc.4",
+  "type": "module",
   "description": "CoreMedia RichText 1.0 DTD: Data-Processor",
   "author": {
     "name": "CoreMedia GmbH",
@@ -22,24 +23,23 @@
     "clean": "pnpm clean:src && pnpm clean:dist",
     "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
     "clean:dist": "rimraf ./dist",
-    "jest": "jest --passWithNoTests",
-    "jest:coverage": "jest --collect-coverage",
-    "lint": "eslint \"**/*.{js,cjs,mjs,ts,tsx}\"",
-    "npm-check-updates": "npm-check-updates --upgrade"
+    "npm-check-updates": "npm-check-updates --upgrade",
+    "lint": "eslint \"**/*.{ts,tsx}\"",
+    "test": "test-runner-react --test-force-exit=true"
   },
   "devDependencies": {
     "@coremedia-internal/ckeditor5-coremedia-example-data": "^1.0.0",
-    "@coremedia-internal/ckeditor5-jest-test-helpers": "^1.0.0",
-    "@jest/globals": "^29.7.0",
-    "@types/jest": "^29.5.12",
-    "ckeditor5": "45.2.1",
+    "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.050b44a",
+    "@types/node": "^22.0.0",
+    "ckeditor5": "46.1.1",
     "copyfiles": "^2.4.1",
     "dotenv": "^16.4.7",
-    "jest": "^29.7.0",
-    "jest-each": "^29.7.0",
-    "jest-xml-matcher": "^1.2.0",
+    "expect": "^30.2.0",
+    "global-jsdom": "^27.0.0",
+    "jsdom": "^27.0.0",
     "rimraf": "^6.0.1",
-    "ts-jest": "^29.2.4",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.6",
     "typescript": "5.4.5"
   },
   "exports": {
@@ -64,7 +64,7 @@
     "/src"
   ],
   "peerDependencies": {
-    "ckeditor5": "45.2.1"
+    "ckeditor5": "46.1.1"
   },
   "dependencies": {
     "@coremedia/ckeditor5-common": "25.0.4-rc.4",

@@ -1,4 +1,4 @@
-import { Batch } from "ckeditor5";
+import type { Batch } from "ckeditor5";
 
 /**
  * A cache to store data about content input.

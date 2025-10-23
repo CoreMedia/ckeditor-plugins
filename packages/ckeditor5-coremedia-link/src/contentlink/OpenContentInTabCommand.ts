@@ -1,6 +1,7 @@
 import { OpenInTabCommand } from "@coremedia/ckeditor5-coremedia-content";
-import { first, Schema, Element as ModelElement, Editor } from "ckeditor5";
-import { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import type { ModelSchema, ModelElement, Editor } from "ckeditor5";
+import { first } from "ckeditor5";
+import type { UriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 /**
  * Default command name used to register at editor instance.
@@ -69,7 +70,7 @@ export const executeOpenContentInTabCommand = (
  * @param element - current model element
  * @param schema - model schema
  */
-const isLinkableElement = (element: ModelElement | null, schema: Schema): element is ModelElement => {
+const isLinkableElement = (element: ModelElement | null, schema: ModelSchema): element is ModelElement => {
   if (!element) {
     return false;
   }

@@ -1,4 +1,4 @@
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
+import type { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
 import { headingElements } from "./HeadingElements";
 import { languageAttributes } from "./LanguageAttributes";
 import { basicInlineElements } from "./BasicInlineElements";

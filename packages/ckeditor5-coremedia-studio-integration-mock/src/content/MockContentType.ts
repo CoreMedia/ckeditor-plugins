@@ -1,6 +1,7 @@
-import RequiredFrom, { withDefaults } from "./RequiredFrom";
-import MockContentObject from "./MockContentObject";
-import RequireOnly from "./RequireOnly";
+import type RequiredFrom from "./RequiredFrom";
+import { withDefaults } from "./RequiredFrom";
+import type MockContentObject from "./MockContentObject";
+import type RequireOnly from "./RequireOnly";
 
 /**
  * Content types may be anything. But for example `folder` and `document`
@@ -85,10 +86,5 @@ const withTypeDefaults = <T extends MockContentTypeSpecificPropertiesConfig>(
 ): RequiredFrom<T, MockContentTypeSpecificProperties> => withDefaults(config, getTypeDefaults(config));
 
 export default MockContentType;
-export {
-  withTypeDefaults,
-  getTypeDefaults,
-  defaultTypeById,
-  MockContentTypeSpecificPropertiesConfig,
-  MockContentTypeSpecificProperties,
-};
+export type { MockContentTypeSpecificPropertiesConfig, MockContentTypeSpecificProperties };
+export { withTypeDefaults, getTypeDefaults, defaultTypeById };

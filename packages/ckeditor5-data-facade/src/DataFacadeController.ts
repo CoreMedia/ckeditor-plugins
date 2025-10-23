@@ -1,9 +1,10 @@
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { Editor, CKEditorError } from "ckeditor5";
+import type { Editor } from "ckeditor5";
+import { CKEditorError } from "ckeditor5";
 import type { GetDataOptions, SetDataData, SetDataOptions } from "./DataControllerApi";
 import type { DataContextOptions } from "./DataContextOptions";
-import { DataApi } from "./DataApi";
-import { CachedData } from "./CachedData";
+import type { DataApi } from "./DataApi";
+import type { CachedData } from "./CachedData";
 import { ContextMismatchError } from "./ContextMismatchError";
 
 /**

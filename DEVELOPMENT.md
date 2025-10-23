@@ -27,7 +27,7 @@ CKEDITOR_LICENSE_KEY=<your-license-key>
 To run tests use:
 
 ```text
-pnpm run jest
+pnpm run test
 ```
 
 ## Update Process

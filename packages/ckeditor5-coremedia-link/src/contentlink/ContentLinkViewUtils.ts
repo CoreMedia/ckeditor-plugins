@@ -1,4 +1,4 @@
-import { View, Editor } from "ckeditor5";
+import type { View, Editor } from "ckeditor5";
 import { getOptionalPlugin } from "@coremedia/ckeditor5-core-common";
 import { addClass, addClassToTemplate, removeClass, removeClassFromTemplate } from "../utils";
 

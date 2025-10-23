@@ -1,22 +1,14 @@
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support";
-import {
-  DataProcessor,
-  DomConverter,
-  Editor,
-  global,
-  HtmlDataProcessor,
-  MatcherPattern,
-  ObservableMixin,
-  ViewDocument,
-  ViewDocumentFragment,
-} from "ckeditor5";
+import type { DataProcessor, Editor, MatcherPattern, ViewDocument, ViewDocumentFragment } from "ckeditor5";
+import { ViewDomConverter, global, HtmlDataProcessor, ObservableMixin } from "ckeditor5";
 import { COREMEDIA_RICHTEXT_PLUGIN_NAME } from "../../Constants";
 import RichTextXmlWriter from "../../RichTextXmlWriter";
 import ToDataProcessor from "../../ToDataProcessor";
 import { declareCoreMediaRichText10Entities } from "../../Entities";
 import { getConfig } from "./V10CoreMediaRichTextConfig";
-import RichTextSchema from "./RichTextSchema";
+import type RichTextSchema from "./RichTextSchema";
 
 interface HtmlWriter {
   getHtml(fragment: DocumentFragment): string;
@@ -43,7 +35,7 @@ export default class V10RichTextDataProcessor extends ObservableMixin() implemen
   static readonly #logger: Logger = LoggerProvider.getLogger(COREMEDIA_RICHTEXT_PLUGIN_NAME);
   static readonly #PARSER_ERROR_NAMESPACE = "http://www.w3.org/1999/xhtml";
   readonly #delegate: HtmlDataProcessor;
-  readonly #domConverter: DomConverter;
+  readonly #domConverter: ViewDomConverter;
   readonly #richTextXmlWriter: RichTextXmlWriter;
   readonly #htmlWriter: HtmlWriter;
   readonly #toDataProcessor: ToDataProcessor;
@@ -58,7 +50,7 @@ export default class V10RichTextDataProcessor extends ObservableMixin() implemen
     const { schema, toData, toView } = getConfig(editor.config);
     this.#delegate = new HtmlDataProcessor(document);
     // renderingMode: "data" - Fixes observed issue ckeditor/ckeditor5#11786
-    this.#domConverter = new DomConverter(document, {
+    this.#domConverter = new ViewDomConverter(document, {
       renderingMode: "data",
     });
     this.#richTextXmlWriter = new RichTextXmlWriter();

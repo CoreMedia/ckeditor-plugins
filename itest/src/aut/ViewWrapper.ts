@@ -1,7 +1,7 @@
-import { EditingView } from "ckeditor5";
+import type { EditingView } from "ckeditor5";
 import { JSWrapper } from "./JSWrapper";
 import { ViewDocumentWrapper } from "./ViewDocumentWrapper";
-import { EditingControllerWrapper } from "./EditingControllerWrapper";
+import type { EditingControllerWrapper } from "./EditingControllerWrapper";
 
 export class ViewWrapper extends JSWrapper<EditingView> {
   get document(): ViewDocumentWrapper {

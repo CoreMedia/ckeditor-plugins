@@ -1,4 +1,4 @@
-import { View, Observable, PriorityString, Emitter } from "ckeditor5";
+import type { View, Observable, PriorityString, Emitter } from "ckeditor5";
 
 /**
  * Adds a CSS class, or an array of CSS classes to a view template.

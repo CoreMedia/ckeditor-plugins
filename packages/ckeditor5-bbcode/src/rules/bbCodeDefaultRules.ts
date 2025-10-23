@@ -1,4 +1,4 @@
-import { BBCodeProcessingRule } from "./BBCodeProcessingRule";
+import type { BBCodeProcessingRule } from "./BBCodeProcessingRule";
 import { bbCodeBold } from "./BBCodeBold";
 import { bbCodeHeading } from "./BBCodeHeading";
 import { bbCodeItalic } from "./BBCodeItalic";

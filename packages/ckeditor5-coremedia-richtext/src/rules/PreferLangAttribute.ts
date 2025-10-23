@@ -1,5 +1,5 @@
-import { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
-import { PriorityString } from "ckeditor5";
+import type { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
+import type { PriorityString } from "ckeditor5";
 import { isElement } from "@coremedia/ckeditor5-dom-support";
 import { namespaces } from "../Namespaces";
 

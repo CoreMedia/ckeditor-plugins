@@ -1,7 +1,7 @@
 /* eslint no-restricted-globals: off */
 
-import { Editor } from "ckeditor5";
-import { CollectionViewLinkService, LinkSearchState } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import type { Editor } from "ckeditor5";
+import type { CollectionViewLinkService, LinkSearchState } from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 export class MockCollectionViewLinkService implements CollectionViewLinkService {
   readonly #editor: Editor;

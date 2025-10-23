@@ -1,4 +1,4 @@
-import CoreMediaStudioEssentials from "./CoreMediaStudioEssentials";
+import type CoreMediaStudioEssentials from "./CoreMediaStudioEssentials";
 
 declare module "ckeditor5" {
   interface PluginsMap {

@@ -6,8 +6,8 @@
  * @category Virtual
  */
 
-export * from "./AugmentedLinkActionsView";
-export * from "./AugmentedLinkFormView";
+export type * from "./AugmentedLinkActionsView";
+export type * from "./AugmentedLinkFormView";
 export * from "./AugmentedLinkUI";
 
 export { default as CancelButtonView } from "./CancelButtonView";

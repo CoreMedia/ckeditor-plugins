@@ -1,22 +1,20 @@
 import { ifCommand } from "@coremedia/ckeditor5-core-common";
-import {
-  Plugin,
-  ButtonView,
-  clickOutsideHandler,
-  ContextualBalloon,
-  TextProxy,
+import type {
+  ModelTextProxy,
   ViewAttributeElement,
   ViewDocumentClickEvent,
   ViewDocumentFragment,
   ViewNode,
   ViewPosition,
-  PositionOptions,
+  DomOptimalPositionOptions,
 } from "ckeditor5";
+import { Plugin, ButtonView, clickOutsideHandler, ContextualBalloon } from "ckeditor5";
 import blocklistIcon from "../theme/icons/blocklist.svg";
-import BlocklistCommand, { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
+import type BlocklistCommand from "./blocklistCommand";
+import { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
 import BlocklistActionsView from "./ui/blocklistActionsView";
 import "./lang/blocklist";
-import { UnblockEvent } from "./ui/blockedWordView";
+import type { UnblockEvent } from "./ui/blockedWordView";
 import BlocklistEditing from "./blocklistediting";
 
 const BLOCKLIST_KEYSTROKE = "Ctrl+Shift+B";
@@ -56,7 +54,10 @@ export default class Blocklistui extends Plugin {
   }
 
   #getBlocklistActionsView(): BlocklistActionsView {
-    return this.blocklistActionsView ?? (this.blocklistActionsView = this.#createBlocklistActionsView());
+    if (!this.blocklistActionsView) {
+      this.blocklistActionsView = this.#createBlocklistActionsView();
+    }
+    return this.blocklistActionsView;
   }
 
   /**
@@ -233,12 +234,12 @@ export default class Blocklistui extends Plugin {
     });
   }
 
-  #getBalloonPositionData(): Partial<PositionOptions> {
+  #getBalloonPositionData(): Partial<DomOptimalPositionOptions> {
     const view = this.editor.editing.view;
     const viewDocument = view.document;
     const selection = view.document.selection;
     const selectedElement = selection.getSelectedElement();
-    const target: PositionOptions["target"] = () => {
+    const target: DomOptimalPositionOptions["target"] = () => {
       const targetWord = selectedElement;
       if (targetWord) {
         const targetWordViewElement = view.domConverter.mapViewToDom(targetWord);
@@ -389,7 +390,7 @@ export default class Blocklistui extends Plugin {
   #getSelectedText(): string {
     const selection = this.editor.model.document.selection;
     const range = selection.getFirstRange();
-    const isTextProxy = (node: unknown): node is TextProxy =>
+    const isTextProxy = (node: unknown): node is ModelTextProxy =>
       typeof node === "object" && node !== null && "data" in node;
     if (range) {
       return Array.from(range.getItems())

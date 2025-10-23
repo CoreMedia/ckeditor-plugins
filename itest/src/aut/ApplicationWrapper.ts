@@ -1,8 +1,8 @@
 import path from "path";
-import { AddressInfo } from "net";
-import http from "http";
+import type { AddressInfo } from "net";
+import type http from "http";
 import express from "express";
-import { Response } from "playwright";
+import type { Response } from "playwright";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import { ApplicationConsole } from "./ApplicationConsole";
 import { MockContentPluginWrapper } from "./MockContentPluginWrapper";

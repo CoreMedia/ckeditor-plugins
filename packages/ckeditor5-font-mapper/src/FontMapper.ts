@@ -1,16 +1,12 @@
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import {
-  ClipboardEventData,
-  ClipboardPipeline,
-  DataTransfer as ViewDataTransfer,
-  EventInfo,
-  Plugin,
-  ViewDocumentFragment,
-} from "ckeditor5";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type { ClipboardEventData, ViewDataTransfer, EventInfo, ViewDocumentFragment } from "ckeditor5";
+import { ClipboardPipeline, Plugin } from "ckeditor5";
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { fontMappingRegistry } from "./FontMappingRegistry";
 import { replaceFontInDocumentFragment } from "./FontReplacer";
-import { COREMEDIA_FONT_MAPPER_CONFIG_KEY, FontMapperConfig, FontMapperConfigEntry } from "./FontMapperConfig";
+import type { FontMapperConfig, FontMapperConfigEntry } from "./FontMapperConfig";
+import { COREMEDIA_FONT_MAPPER_CONFIG_KEY } from "./FontMapperConfig";
 
 /**
  * This plugin maps characters of a given font-family to their alternative

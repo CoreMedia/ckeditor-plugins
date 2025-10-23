@@ -1,4 +1,5 @@
-import { Attributes, Content, p, span, strong } from "./RichTextBase";
+import type { Attributes, Content } from "./RichTextBase";
+import { p, span, strong } from "./RichTextBase";
 
 /**
  * Convenience to create a `<code>` element in view and model layer.

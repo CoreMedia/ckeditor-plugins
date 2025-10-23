@@ -1,5 +1,6 @@
-import { Locator } from "playwright";
-import { Locatable, visible } from "./Locatable";
+import type { Locator } from "playwright";
+import type { Locatable } from "./Locatable";
+import { visible } from "./Locatable";
 import { ContentLinkViewWrapper } from "./ContentLinkViewWrapper";
 
 export class LinkFormViewWrapper implements Locatable {

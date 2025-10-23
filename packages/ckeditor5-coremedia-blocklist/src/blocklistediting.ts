@@ -1,9 +1,12 @@
 import { Collection, Plugin } from "ckeditor5";
 import { serviceAgent } from "@coremedia/service-agent";
-import { Subscription } from "rxjs";
-import { BlocklistService, createBlocklistServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
-import { createSearchCallback, onDocumentChange, ResultType, updateFindResultFromRange } from "./blocklistChangesUtils";
+import type { Subscription } from "rxjs";
+import type { BlocklistService } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { createBlocklistServiceDescriptor } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type { ResultType } from "./blocklistChangesUtils";
+import { createSearchCallback, onDocumentChange, updateFindResultFromRange } from "./blocklistChangesUtils";
 import BlocklistCommand, { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
 import { getMarkerDetails, removeMarkerDetails } from "./blocklistMarkerUtils";
 

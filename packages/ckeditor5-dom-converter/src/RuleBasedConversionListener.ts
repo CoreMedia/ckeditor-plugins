@@ -1,8 +1,10 @@
-import { Logger } from "@coremedia/ckeditor5-logging";
-import { skip, Skip } from "./Signals";
-import { ConversionContext } from "./ConversionContext";
-import { byPriority, RuleSection, SortedRuleSection } from "./Rule";
-import { ConversionListener } from "./ConversionListener";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import type { Skip } from "./Signals";
+import { skip } from "./Signals";
+import type { ConversionContext } from "./ConversionContext";
+import type { RuleSection, SortedRuleSection } from "./Rule";
+import { byPriority } from "./Rule";
+import type { ConversionListener } from "./ConversionListener";
 
 /**
  * Rule based HTML DOM Converter.

@@ -1,4 +1,5 @@
-import ReducedMatcherPattern, { mergePatterns } from "./ReducedMatcherPattern";
+import type ReducedMatcherPattern from "./ReducedMatcherPattern";
+import { mergePatterns } from "./ReducedMatcherPattern";
 
 /**
  * Represents the CoreMedia RichText 1.0 DTD as required for configuration

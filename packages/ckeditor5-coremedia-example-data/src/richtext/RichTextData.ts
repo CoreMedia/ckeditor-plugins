@@ -1,4 +1,4 @@
-import { ExampleData } from "../ExampleData";
+import type { ExampleData } from "../ExampleData";
 import { contentLinkData } from "./ContentLinkData";
 import { differencingData } from "./DifferencingData";
 import { entitiesData } from "./EntitiesData";

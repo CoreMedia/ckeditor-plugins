@@ -1,7 +1,7 @@
 import "./expect/Expectations";
 import { p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { ApplicationWrapper } from "./aut/ApplicationWrapper";
-import { MockServiceAgentPluginWrapper } from "./aut/services/MockServiceAgentPluginWrapper";
+import type { MockServiceAgentPluginWrapper } from "./aut/services/MockServiceAgentPluginWrapper";
 import { ctrlOrMeta } from "./browser/UserAgent";
 
 describe("Blocklist", () => {

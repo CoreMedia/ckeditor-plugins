@@ -1,16 +1,15 @@
-import {
-  Collection,
+import type {
   Editor,
-  DiffItem,
-  DiffItemAttribute,
-  Element,
-  Item,
+  DifferItem,
+  DifferItemAttribute,
+  ModelElement,
+  ModelItem,
   Marker,
   Model,
-  Node,
-  Range,
-  FindAndReplaceUtils,
+  ModelNode,
+  ModelRange,
 } from "ckeditor5";
+import { Collection, FindAndReplaceUtils } from "ckeditor5";
 import { createMarkerNameAndStoreWord } from "./blocklistMarkerUtils";
 
 // copied from @ckeditor/ckeditor5-find-and-replace/src/findandreplace.d.ts since not exported in index.js
@@ -26,10 +25,10 @@ export interface ResultType {
  * Reacts to document changes in order to update search list.
  */
 export const onDocumentChange = (results: Collection<ResultType>, editor: Editor, blockedWordsList: string[]) => {
-  const changedNodes = new Set<Node>();
+  const changedNodes = new Set<ModelNode>();
   const removedMarkers = new Set<string>();
   const model = editor.model;
-  const changes = model.document.differ.getChanges() as Exclude<DiffItem, DiffItemAttribute>[];
+  const changes = model.document.differ.getChanges() as Exclude<DifferItem, DifferItemAttribute>[];
 
   // Get nodes in which changes happened to re-run a search callback on them.
   changes.forEach((change) => {
@@ -39,7 +38,7 @@ export const onDocumentChange = (results: Collection<ResultType>, editor: Editor
       return;
     }
     if (change.name === "$text" || (change.position.nodeAfter && model.schema.isInline(change.position.nodeAfter))) {
-      changedNodes.add(change.position.parent as Element);
+      changedNodes.add(change.position.parent as ModelElement);
       [...model.markers.getMarkersAtPosition(change.position)].forEach((markerAtChange) => {
         removedMarkers.add(markerAtChange.name);
       });
@@ -59,7 +58,7 @@ export const onDocumentChange = (results: Collection<ResultType>, editor: Editor
 
   // Get markers from the updated nodes and remove all (search will be re-run on these nodes).
   changedNodes.forEach((node) => {
-    const markersInNode = [...model.markers.getMarkersIntersectingRange(model.createRangeIn(node as Element))];
+    const markersInNode = [...model.markers.getMarkersIntersectingRange(model.createRangeIn(node as ModelElement))];
     markersInNode.forEach((marker) => removedMarkers.add(marker.name));
   });
 
@@ -114,9 +113,9 @@ export const createSearchCallback = (word: string) => {
 export const updateFindResultFromRange = (
   blockedWord: string,
   editor: Editor,
-  range: Range,
+  range: ModelRange,
   model: Model,
-  findCallback: ({ item, text }: { item: Item; text: string }) => ResultType[],
+  findCallback: ({ item, text }: { item: ModelItem; text: string }) => ResultType[],
   startResults: Collection<ResultType> | null,
 ): Collection<ResultType> => {
   const results = startResults ?? new Collection();
@@ -127,7 +126,7 @@ export const updateFindResultFromRange = (
         if (model.schema.checkChild(item, "$text")) {
           const foundItems = findCallback({
             item,
-            text: findAndReplaceUtils.rangeToText(model.createRangeIn(item as Element)),
+            text: findAndReplaceUtils.rangeToText(model.createRangeIn(item as ModelElement)),
           });
           if (!foundItems) {
             return;

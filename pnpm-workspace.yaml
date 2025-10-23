@@ -5,4 +5,4 @@ packages:
 onlyBuiltDependencies:
   - esbuild
 patchedDependencies:
-  ckeditor5: patches/ckeditor5.patch
+  '@bbob/preset-html5': patches/@bbob__preset-html5.patch

@@ -1,5 +1,5 @@
 import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import { MockContentConfig } from "./MockContent";
+import type { MockContentConfig } from "./MockContent";
 import {
   CONTENT_NAME_CHALLENGE_CHARSETS,
   CONTENT_NAME_CHALLENGE_ENTITIES,
@@ -398,4 +398,5 @@ const PREDEFINED_MOCK_LINK_DATA = wrapInRichText(
     .join(""),
 );
 
-export { PREDEFINED_MOCK_CONTENTS, PREDEFINED_MOCK_LINK_DATA, PredefinedMockContentConfig };
+export type { PredefinedMockContentConfig };
+export { PREDEFINED_MOCK_CONTENTS, PREDEFINED_MOCK_LINK_DATA };

@@ -1,4 +1,4 @@
-import { Emitter, LinkUI } from "ckeditor5";
+import type { Emitter, LinkUI } from "ckeditor5";
 import { requireNonNulls } from "@coremedia/ckeditor5-common";
 import { keepOpen } from "./LinkBalloonConfig";
 import { hasRequiredInternalLinkUI } from "./InternalLinkUI";

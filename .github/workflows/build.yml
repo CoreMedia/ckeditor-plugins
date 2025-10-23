@@ -145,7 +145,7 @@ jobs:
         env:
           CKEDITOR_LICENSE_KEY: ${{ secrets.CKEDITOR_LICENSE }}
         run: |
-          pnpm jest
+          pnpm test
       - id: itest
         if: ${{ inputs.itest }}
         name: "Integration Tests"

@@ -1,4 +1,5 @@
-import { Command, Editor } from "ckeditor5";
+import type { Editor } from "ckeditor5";
+import { Command } from "ckeditor5";
 
 export const BLOCKLIST_COMMAND_NAME = "Blocklist";
 

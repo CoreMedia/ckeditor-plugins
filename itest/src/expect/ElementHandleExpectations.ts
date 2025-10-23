@@ -1,4 +1,4 @@
-import { ElementHandle } from "playwright-core";
+import type { ElementHandle } from "playwright-core";
 import { extendingWaitForExpect } from "./ExpectationsBase";
 
 /**

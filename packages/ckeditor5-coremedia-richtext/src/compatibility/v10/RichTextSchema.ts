@@ -6,8 +6,9 @@
  * =============================================================================
  */
 
-import { ElementProxy, TextProxy } from "@coremedia/ckeditor5-dataprocessor-support";
-import { Logger, LoggerProvider } from "@coremedia/ckeditor5-logging";
+import type { ElementProxy, TextProxy } from "@coremedia/ckeditor5-dataprocessor-support";
+import type { Logger } from "@coremedia/ckeditor5-logging";
+import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { Strictness } from "../../Strictness";
 
 /**

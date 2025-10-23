@@ -1,5 +1,5 @@
-import { TagNode } from "@bbob/plugin-helper/es";
-import { createPreset } from "@bbob/preset/es";
+import type { TagNode } from "@bbob/plugin-helper";
+import type { createPreset } from "@bbob/preset";
 
 export type DefaultTags = Parameters<typeof createPreset>[0];
 export type TagMappingFn = DefaultTags[string];

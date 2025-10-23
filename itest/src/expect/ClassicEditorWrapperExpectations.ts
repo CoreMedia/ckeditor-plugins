@@ -1,4 +1,4 @@
-import { ClassicEditorWrapper } from "../aut/ClassicEditorWrapper";
+import type { ClassicEditorWrapper } from "../aut/ClassicEditorWrapper";
 import { extendingWaitForExpect } from "./ExpectationsBase";
 
 /**

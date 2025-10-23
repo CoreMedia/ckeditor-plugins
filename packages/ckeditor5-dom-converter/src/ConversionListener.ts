@@ -1,5 +1,5 @@
-import { ConversionContext } from "./ConversionContext";
-import { Skip } from "./Signals";
+import type { ConversionContext } from "./ConversionContext";
+import type { Skip } from "./Signals";
 
 /**
  * Listener regarding the import-process, which may intervene some conversion

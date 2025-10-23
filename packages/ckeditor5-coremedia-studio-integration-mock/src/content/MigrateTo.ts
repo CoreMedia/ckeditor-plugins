@@ -30,4 +30,4 @@ type MigrateTo<T extends MigrationTarget<R>, R> = Omit<T, keyof R> & R;
 type MigrationTarget<T> = Partial<Record<keyof T, unknown>>;
 
 export default MigrateTo;
-export { MigrationTarget };
+export type { MigrationTarget };

@@ -1,8 +1,9 @@
-import { Observable } from "rxjs";
-import { AtomicOrArray, isObject } from "./MockContentUtils";
-import MigrateTo from "./MigrateTo";
+import type { Observable } from "rxjs";
+import type { AtomicOrArray } from "./MockContentUtils";
+import { isObject } from "./MockContentUtils";
+import type MigrateTo from "./MigrateTo";
 import { observeMutableProperty } from "./ObservableMutableProperty";
-import Delayed from "./Delayed";
+import type Delayed from "./Delayed";
 
 /**
  * Represents BLOB data, which are stored as content-property.
@@ -234,10 +235,11 @@ const withPropertiesDefaults = <T extends MutablePropertiesConfig>(
  * especially `readable`.
  *
  * @param config - delay and value configuration
+ * @param iterations - number of iterations to emit
  */
-const observeName = (config: Delayed & Pick<MutableProperties, "name">): Observable<string> => {
+const observeName = (config: Delayed & Pick<MutableProperties, "name">, iterations?: number): Observable<string> => {
   const { name } = config;
-  return observeMutableProperty(config, name);
+  return observeMutableProperty(config, name, iterations);
 };
 
 /**
@@ -245,10 +247,14 @@ const observeName = (config: Delayed & Pick<MutableProperties, "name">): Observa
  * especially `readable`.
  *
  * @param config - delay and value configuration
+ * @param iterations - number of iterations to emit
  */
-const observeSiteName = (config: Delayed & Pick<MutableProperties, "siteName">): Observable<string> => {
+const observeSiteName = (
+  config: Delayed & Pick<MutableProperties, "siteName">,
+  iterations?: number,
+): Observable<string> => {
   const { siteName } = config;
-  return observeMutableProperty(config, siteName);
+  return observeMutableProperty(config, siteName, iterations);
 };
 
 /**
@@ -256,10 +262,14 @@ const observeSiteName = (config: Delayed & Pick<MutableProperties, "siteName">):
  * especially `readable`.
  *
  * @param config - delay and value configuration
+ * @param iterations - number of iterations to emit
  */
-const observeLocaleName = (config: Delayed & Pick<MutableProperties, "localeName">): Observable<string> => {
+const observeLocaleName = (
+  config: Delayed & Pick<MutableProperties, "localeName">,
+  iterations?: number,
+): Observable<string> => {
   const { localeName } = config;
-  return observeMutableProperty(config, localeName);
+  return observeMutableProperty(config, localeName, iterations);
 };
 
 /**
@@ -267,20 +277,28 @@ const observeLocaleName = (config: Delayed & Pick<MutableProperties, "localeName
  * especially `readable`.
  *
  * @param config - delay and value configuration
+ * @param iterations - number of iterations to emit
  */
-const observeEditing = (config: Delayed & Pick<MutableProperties, "editing">): Observable<boolean> => {
+const observeEditing = (
+  config: Delayed & Pick<MutableProperties, "editing">,
+  iterations?: number,
+): Observable<boolean> => {
   const { editing } = config;
-  return observeMutableProperty(config, editing);
+  return observeMutableProperty(config, editing, iterations);
 };
 
 /**
  * Observable for readable state.
  *
  * @param config - delay and value configuration
+ * @param iterations - number of iterations to emit
  */
-const observeReadable = (config: Delayed & Pick<MutableProperties, "readable">): Observable<boolean> => {
+const observeReadable = (
+  config: Delayed & Pick<MutableProperties, "readable">,
+  iterations?: number,
+): Observable<boolean> => {
   const { readable } = config;
-  return observeMutableProperty(config, readable);
+  return observeMutableProperty(config, readable, iterations);
 };
 
 /**
@@ -288,23 +306,26 @@ const observeReadable = (config: Delayed & Pick<MutableProperties, "readable">):
  * especially `readable`.
  *
  * @param config - delay and value configuration
+ * @param iterations - number of iterations to emit
  */
-const observeBlob = (config: Delayed & Pick<MutableProperties, "blob">): Observable<BlobType> => {
+const observeBlob = (config: Delayed & Pick<MutableProperties, "blob">, iterations?: number): Observable<BlobType> => {
   const { blob } = config;
-  return observeMutableProperty(config, blob);
+  return observeMutableProperty(config, blob, iterations);
 };
 
-export {
+export type {
   BlobTypeConfig,
   BlobData,
   BlobType,
   EditingType,
   MutableProperties,
   MutablePropertiesConfig,
-  MutablePropertiesDefaultDefaultProviders,
   MutablePropertiesDefaultProviders,
   NameType,
   ReadableType,
+};
+export {
+  MutablePropertiesDefaultDefaultProviders,
   observeBlob,
   observeEditing,
   observeName,

@@ -1,10 +1,10 @@
-import ContentClipboard from "./ContentClipboard";
-import ContentClipboardEditing from "./ContentClipboardEditing";
-import { UndoSupport } from "./integrations/Undo";
-import { PasteContentCommand } from "./paste/PasteContentCommand";
-import PasteContentEditing from "./paste/PasteContentEditing";
-import PasteContentPlugin from "./paste/PasteContentPlugin";
-import PasteContentUI from "./paste/PasteContentUI";
+import type ContentClipboard from "./ContentClipboard";
+import type ContentClipboardEditing from "./ContentClipboardEditing";
+import type { UndoSupport } from "./integrations/Undo";
+import type { PasteContentCommand } from "./paste/PasteContentCommand";
+import type PasteContentEditing from "./paste/PasteContentEditing";
+import type PasteContentPlugin from "./paste/PasteContentPlugin";
+import type PasteContentUI from "./paste/PasteContentUI";
 
 declare module "ckeditor5" {
   interface PluginsMap {

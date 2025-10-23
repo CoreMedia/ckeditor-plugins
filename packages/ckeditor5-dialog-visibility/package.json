@@ -1,6 +1,7 @@
 {
   "name": "@coremedia/ckeditor5-dialog-visibility",
   "version": "25.0.4-rc.4",
+  "type": "module",
   "description": "Handles dialog visibility when editor is not visible",
   "author": {
     "name": "CoreMedia GmbH",
@@ -22,11 +23,11 @@
     "clean": "pnpm clean:src && pnpm clean:dist",
     "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
     "clean:dist": "rimraf ./dist",
-    "lint": "eslint \"**/*.{js,cjs,mjs,ts,tsx}\"",
+    "lint": "eslint \"**/*.{ts,tsx}\"",
     "npm-check-updates": "npm-check-updates --upgrade"
   },
   "devDependencies": {
-    "ckeditor5": "45.2.1",
+    "ckeditor5": "46.1.1",
     "copyfiles": "^2.4.1",
     "rimraf": "^6.0.1",
     "typescript": "5.4.5"
@@ -52,6 +53,6 @@
     "/src"
   ],
   "peerDependencies": {
-    "ckeditor5": "45.2.1"
+    "ckeditor5": "46.1.1"
   }
 }

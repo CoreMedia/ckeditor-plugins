@@ -1,6 +1,7 @@
-import CoreMediaRichTextConfig, { COREMEDIA_RICHTEXT_CONFIG_KEY } from "./CoreMediaRichTextConfig";
-import CoreMediaRichText from "./CoreMediaRichText";
-import { LinkIntegration } from "./integrations/LinkIntegration";
+import type { COREMEDIA_RICHTEXT_CONFIG_KEY } from "./CoreMediaRichTextConfig";
+import type CoreMediaRichTextConfig from "./CoreMediaRichTextConfig";
+import type CoreMediaRichText from "./CoreMediaRichText";
+import type { LinkIntegration } from "./integrations/LinkIntegration";
 
 declare module "ckeditor5" {
   interface EditorConfig {

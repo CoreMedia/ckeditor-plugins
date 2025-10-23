@@ -1,4 +1,4 @@
-import { ExampleData } from "../ExampleData";
+import type { ExampleData } from "../ExampleData";
 import { h1, p, richtext, h2 } from "../RichText";
 
 const rawText = `${h1("CKEditor 5: CoreMedia Plugin Showcase")}\
