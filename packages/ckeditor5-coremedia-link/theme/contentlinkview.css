@@ -3,7 +3,7 @@
 
 .ck.cm-ck-link-form-view .cm-ck-content-link-view {
   display: flex;
-  width: var(--ck-input-text-width);
+  width: 100%;
   border: 1px solid var(--ck-color-input-disabled-border);
   border-radius: var(--ck-border-radius);
 }
@@ -50,6 +50,7 @@
 .ck.cm-ck-link-form-view .cm-ck-content-link-view-wrapper {
   position: relative;
   margin-left: 0 !important;
+  flex: 1;
 }
 
 .cm-ck-content-link-view-wrapper .cm-ck-content-link-view > .ck.ck-button {
