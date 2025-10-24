@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-images",
-  "version": "25.0.5-rc.0",
+  "version": "25.0.5",
   "description": "Support for CMS BLOB References like images",
   "author": {
     "name": "CoreMedia GmbH",
@@ -63,11 +63,11 @@
     "ckeditor5": "45.2.1"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-core-common": "25.0.5-rc.0",
-    "@coremedia/ckeditor5-coremedia-content": "25.0.5-rc.0",
-    "@coremedia/ckeditor5-coremedia-content-clipboard": "25.0.5-rc.0",
-    "@coremedia/ckeditor5-coremedia-studio-integration": "25.0.5-rc.0",
-    "@coremedia/ckeditor5-logging": "25.0.5-rc.0",
+    "@coremedia/ckeditor5-core-common": "^25.0.5",
+    "@coremedia/ckeditor5-coremedia-content": "^25.0.5",
+    "@coremedia/ckeditor5-coremedia-content-clipboard": "^25.0.5",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "^25.0.5",
+    "@coremedia/ckeditor5-logging": "^25.0.5",
     "rxjs": "^7.8.1"
   }
 }
