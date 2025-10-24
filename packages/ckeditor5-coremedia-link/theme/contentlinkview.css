@@ -47,6 +47,10 @@
  * FORM VIEW
  */
 
+.ck.cm-ck-link-form-view .cm-ck-content-link-view > .ck.ck-button__label {
+  width: 106px;
+}
+
 .ck.cm-ck-link-form-view .cm-ck-content-link-view-wrapper {
   position: relative;
   margin-left: 0 !important;
