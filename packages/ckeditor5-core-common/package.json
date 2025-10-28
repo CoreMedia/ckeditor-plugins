@@ -37,17 +37,17 @@
   ],
   "license": "Apache-2.0",
   "devDependencies": {
-    "ckeditor5": "46.1.1",
-    "copyfiles": "^2.4.1",
-    "rimraf": "^6.0.1",
-    "typescript": "5.4.5"
+    "ckeditor5": "catalog:",
+    "copyfiles": "catalog:",
+    "rimraf": "catalog:",
+    "typescript": "catalog:"
   },
   "peerDependencies": {
-    "ckeditor5": "46.1.1"
+    "ckeditor5": "catalog:"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "26.0.1-rc.0",
-    "@coremedia/ckeditor5-logging": "26.0.1-rc.0"
+    "@coremedia/ckeditor5-common": "workspace:*",
+    "@coremedia/ckeditor5-logging": "workspace:*"
   },
   "scripts": {
     "clean": "pnpm clean:src && pnpm clean:dist",

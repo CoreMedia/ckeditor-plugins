@@ -17,9 +17,9 @@
   "private": true,
   "license": "Apache-2.0",
   "dependencies": {
-    "@babel/core": "^7.24.4",
-    "@babel/preset-env": "^7.24.4",
-    "@babel/preset-typescript": "^7.24.1"
+    "@babel/core": "catalog:",
+    "@babel/preset-env": "catalog:",
+    "@babel/preset-typescript": "catalog:"
   },
   "exports": {
     ".": "./shared-babel.config.js"

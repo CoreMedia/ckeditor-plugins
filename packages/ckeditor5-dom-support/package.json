@@ -35,19 +35,19 @@
   ],
   "license": "Apache-2.0",
   "devDependencies": {
-    "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.050b44a",
-    "@types/node": "^22.0.0",
-    "copyfiles": "^2.4.1",
-    "expect": "^30.2.0",
-    "global-jsdom": "^27.0.0",
-    "jsdom": "^27.0.0",
-    "rimraf": "^6.0.1",
-    "ts-node": "^10.9.2",
-    "tsx": "^4.20.6",
-    "typescript": "5.4.5"
+    "@coremedia-internal/studio-client.test-runner-helper": "catalog:",
+    "@types/node": "catalog:",
+    "copyfiles": "catalog:",
+    "expect": "catalog:",
+    "global-jsdom": "catalog:",
+    "jsdom": "catalog:",
+    "rimraf": "catalog:",
+    "ts-node": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "26.0.1-rc.0"
+    "@coremedia/ckeditor5-common": "workspace:*"
   },
   "scripts": {
     "clean": "pnpm clean:src && pnpm clean:dist",

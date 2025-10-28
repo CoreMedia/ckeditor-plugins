@@ -27,10 +27,10 @@
     "npm-check-updates": "npm-check-updates --upgrade"
   },
   "devDependencies": {
-    "ckeditor5": "46.1.1",
-    "copyfiles": "^2.4.1",
-    "rimraf": "^6.0.1",
-    "typescript": "5.4.5"
+    "ckeditor5": "catalog:",
+    "copyfiles": "catalog:",
+    "rimraf": "catalog:",
+    "typescript": "catalog:"
   },
   "exports": {
     ".": {
@@ -53,6 +53,6 @@
     "/src"
   ],
   "peerDependencies": {
-    "ckeditor5": "46.1.1"
+    "ckeditor5": "catalog:"
   }
 }
