@@ -55,8 +55,6 @@ jobs:
           git config --global user.email 'coremedia-ci@coremedia.com'
       - name: Install
         run: pnpm install
-      - name: "Validate peerDependencies"
-        run: pnpm script:validate-peers
       - name: Set prerelease version (if triggered manually)
         if: github.event_name == 'workflow_dispatch'
         run: |

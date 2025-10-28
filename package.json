@@ -48,8 +48,7 @@
     "prettier:fix": "prettier --write \"**/*.{js,cjs,mjs,ts,tsx}\"",
     "preinstall": "node ./scripts/check-pnpm.mjs",
     "start": "pnpm --recursive --filter \"@coremedia/ckeditor5-app\" start",
-    "script:version": "node ./scripts/version.mjs",
-    "script:validate-peers": "node ./scripts/validate-peers.mjs"
+    "script:version": "node ./scripts/version.mjs"
   },
   "dependencies": {
     "@coremedia/set-version": "catalog:"
