@@ -56,8 +56,8 @@
   "dependencies": {
     "@coremedia/ckeditor5-common": "workspace:*",
     "@coremedia/ckeditor5-core-common": "workspace:*",
-    "@coremedia/ckeditor5-coremedia-richtext": "catalog:",
-    "@coremedia/ckeditor5-dom-converter": "catalog:",
+    "@coremedia/ckeditor5-coremedia-richtext": "workspace:*",
+    "@coremedia/ckeditor5-dom-converter": "workspace:*",
     "@coremedia/ckeditor5-dom-support": "workspace:*",
     "@coremedia/ckeditor5-logging": "workspace:*"
   },
