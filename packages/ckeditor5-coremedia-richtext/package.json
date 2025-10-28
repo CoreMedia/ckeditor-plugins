@@ -69,10 +69,10 @@
   "dependencies": {
     "@coremedia/ckeditor5-common": "workspace:*",
     "@coremedia/ckeditor5-core-common": "workspace:*",
-    "@coremedia/ckeditor5-dataprocessor-support": "catalog:",
-    "@coremedia/ckeditor5-dom-converter": "catalog:",
+    "@coremedia/ckeditor5-dataprocessor-support": "workspace:*",
+    "@coremedia/ckeditor5-dom-converter": "workspace:*",
     "@coremedia/ckeditor5-dom-support": "workspace:*",
-    "@coremedia/ckeditor5-link-common": "catalog:",
+    "@coremedia/ckeditor5-link-common": "workspace:*",
     "@coremedia/ckeditor5-logging": "workspace:*"
   }
 }
