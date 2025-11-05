@@ -8,6 +8,7 @@ export type InspectorState = "expanded" | "collapsed";
 export type CompatibilityMode = "v10" | "latest";
 export type DataType = "richtext" | "bbcode";
 export type UiLanguage = "en" | "de";
+export type ContentLanguage = "en" | string;
 export type ReadOnlyMode = "rw" | "ro";
 export type PreviewState = "hidden" | "visible";
 
@@ -16,6 +17,10 @@ export class ApplicationState {
    * Language for CKEditor 5 UI.
    */
   readonly #uiLanguage: UiLanguage;
+  /**
+   * Language for CKEditor 5 content.
+   */
+  readonly #contentLanguage: ContentLanguage;
   /**
    * Signals, if to open the inspector expanded or collapsed by default.
    */
@@ -37,6 +42,7 @@ export class ApplicationState {
 
   constructor(config?: Map<string, string | boolean>) {
     const uiLanguage = config?.get("uiLanguage") ?? "en";
+    const contentLanguage = config?.get("contentLanguage") ?? "en";
     const inspector = config?.get("inspector") ?? "collapsed";
     const compatibility = config?.get("compatibility") ?? "latest";
     const dataType = config?.get("dataType") ?? "richtext";
@@ -44,6 +50,7 @@ export class ApplicationState {
     const showPreview = config?.get("showPreview") ?? false;
 
     this.#uiLanguage = typeof uiLanguage === "string" && uiLanguage.toLowerCase() === "de" ? "de" : "en";
+    this.#contentLanguage = typeof contentLanguage === "string" ? contentLanguage : "en";
     this.#inspector =
       typeof inspector === "string" && inspector.toLowerCase() === "expanded" ? "expanded" : "collapsed";
     this.#compatibility = typeof compatibility === "string" && compatibility.toLowerCase() === "v10" ? "v10" : "latest";
@@ -59,6 +66,16 @@ export class ApplicationState {
   set uiLanguage(language: UiLanguage) {
     if (language !== this.#uiLanguage) {
       setHashParam("uiLanguage", language, true);
+    }
+  }
+
+  get contentLanguage(): ContentLanguage {
+    return this.#contentLanguage;
+  }
+
+  set contentLanguage(language: ContentLanguage) {
+    if (language !== this.#contentLanguage) {
+      setHashParam("contentLanguage", language, true);
     }
   }
 
