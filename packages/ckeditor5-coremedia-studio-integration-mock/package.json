@@ -52,7 +52,7 @@
   "devDependencies": {
     "@babel/cli": "catalog:",
     "@babel/core": "catalog:",
-    "@coremedia-internal/ckeditor5-babel-config": "catalog:",
+    "@coremedia-internal/ckeditor5-babel-config": "workspace:*",
     "@coremedia-internal/studio-client.test-runner-helper": "catalog:",
     "@coremedia/service-agent": "catalog:",
     "@types/node": "catalog:",
