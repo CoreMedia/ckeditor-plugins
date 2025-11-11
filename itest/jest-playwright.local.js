@@ -14,7 +14,7 @@
  * do so, just remove the corresponding comments.
  */
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const base = require("./jest-playwright.config.js");
+import * as base from "./jest-playwright.config.js";
 
 /**
  * Run tests in headed mode.
@@ -38,7 +38,7 @@ const headless = false;
  */
 const launchOptions = {
   ...base.launchOptions,
-  headless,
+  headless
   // devtools,
   // slowMo,
 };
@@ -55,12 +55,12 @@ const launchOptions = {
  * Remove comments for those features, you want to activate.
  */
 const contextOptions = {
-  ...base.contextOptions,
+  ...base.contextOptions
   // recordVideo,
 };
 
-module.exports = {
+export default {
   ...base,
   launchOptions,
-  contextOptions,
+  contextOptions
 };

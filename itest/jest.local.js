@@ -1,13 +1,13 @@
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const jestConfig = require("./jest.config.cjs");
+import jestConfig from "./jest.config.cjs";
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const localPlaywrightConfig = require("./jest-playwright.local.js");
+import localPlaywrightConfig from "./jest-playwright.local.js";
 
-module.exports = {
+export default {
   ...jestConfig,
   testEnvironmentOptions: {
     "jest-playwright": {
-      ...localPlaywrightConfig,
-    },
-  },
+      ...localPlaywrightConfig
+    }
+  }
 };

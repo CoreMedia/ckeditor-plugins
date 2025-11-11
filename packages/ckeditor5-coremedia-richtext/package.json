@@ -28,19 +28,19 @@
     "test": "test-runner-react --test-force-exit=true"
   },
   "devDependencies": {
-    "@coremedia-internal/ckeditor5-coremedia-example-data": "^1.0.0",
-    "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.050b44a",
-    "@types/node": "^22.0.0",
-    "ckeditor5": "46.1.1",
-    "copyfiles": "^2.4.1",
-    "dotenv": "^16.4.7",
-    "expect": "^30.2.0",
-    "global-jsdom": "^27.0.0",
-    "jsdom": "^27.0.0",
-    "rimraf": "^6.0.1",
-    "ts-node": "^10.9.2",
-    "tsx": "^4.20.6",
-    "typescript": "5.4.5"
+    "@coremedia-internal/ckeditor5-coremedia-example-data": "catalog:",
+    "@coremedia-internal/studio-client.test-runner-helper": "catalog:",
+    "@types/node": "catalog:",
+    "ckeditor5": "catalog:",
+    "copyfiles": "catalog:",
+    "dotenv": "catalog:",
+    "expect": "catalog:",
+    "global-jsdom": "catalog:",
+    "jsdom": "catalog:",
+    "rimraf": "catalog:",
+    "ts-node": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
   },
   "exports": {
     ".": {
@@ -64,15 +64,15 @@
     "/src"
   ],
   "peerDependencies": {
-    "ckeditor5": "46.1.1"
+    "ckeditor5": "catalog:"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "26.0.1-rc.0",
-    "@coremedia/ckeditor5-core-common": "26.0.1-rc.0",
-    "@coremedia/ckeditor5-dataprocessor-support": "26.0.1-rc.0",
-    "@coremedia/ckeditor5-dom-converter": "26.0.1-rc.0",
-    "@coremedia/ckeditor5-dom-support": "26.0.1-rc.0",
-    "@coremedia/ckeditor5-link-common": "26.0.1-rc.0",
-    "@coremedia/ckeditor5-logging": "26.0.1-rc.0"
+    "@coremedia/ckeditor5-common": "workspace:*",
+    "@coremedia/ckeditor5-core-common": "workspace:*",
+    "@coremedia/ckeditor5-dataprocessor-support": "workspace:*",
+    "@coremedia/ckeditor5-dom-converter": "workspace:*",
+    "@coremedia/ckeditor5-dom-support": "workspace:*",
+    "@coremedia/ckeditor5-link-common": "workspace:*",
+    "@coremedia/ckeditor5-logging": "workspace:*"
   }
 }

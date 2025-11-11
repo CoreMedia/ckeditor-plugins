@@ -12,13 +12,13 @@ const headless = true;
  * Launch options for CI run, which is running headless.
  */
 const launchOptions = {
-  headless,
+  headless
 };
 /**
  * These are meant to be possibly extended for local runs.
  */
 const contextOptions = {
-  permissions: ["clipboard-read", "clipboard-write"],
+  permissions: ["clipboard-read", "clipboard-write"]
 };
 
 /**
@@ -26,8 +26,8 @@ const contextOptions = {
  * For local run see `jest-playwright.local.js` and corresponding
  * `jest.local.js`.
  */
-module.exports = {
+export default {
   browsers,
   launchOptions,
-  contextOptions,
+  contextOptions
 };

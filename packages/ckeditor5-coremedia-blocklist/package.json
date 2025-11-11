@@ -48,22 +48,22 @@
     "/theme"
   ],
   "devDependencies": {
-    "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.050b44a",
-    "@coremedia/service-agent": "^2.1.2",
-    "@types/node": "^22.0.0",
-    "ckeditor5": "46.1.1",
-    "copyfiles": "^2.4.1",
-    "rimraf": "^6.0.1",
-    "rxjs": "^7.8.1",
-    "typescript": "5.4.5"
+    "@coremedia-internal/studio-client.test-runner-helper": "catalog:",
+    "@coremedia/service-agent": "catalog:",
+    "@types/node": "catalog:",
+    "ckeditor5": "catalog:",
+    "copyfiles": "catalog:",
+    "rimraf": "catalog:",
+    "rxjs": "catalog:",
+    "typescript": "catalog:"
   },
   "peerDependencies": {
-    "@coremedia/service-agent": "^2.1.2",
-    "ckeditor5": "46.1.1"
+    "@coremedia/service-agent": "catalog:",
+    "ckeditor5": "catalog:"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-core-common": "26.0.1-rc.0",
-    "@coremedia/ckeditor5-coremedia-studio-integration": "26.0.1-rc.0",
-    "@coremedia/ckeditor5-logging": "26.0.1-rc.0"
+    "@coremedia/ckeditor5-core-common": "workspace:*",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "workspace:*",
+    "@coremedia/ckeditor5-logging": "workspace:*"
   }
 }
