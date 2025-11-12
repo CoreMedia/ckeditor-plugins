@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-common",
-  "version": "26.0.1-rc.0",
+  "version": "26.0.1-rc.1",
   "type": "module",
   "description": "Common Utilities, independent from CKEditor",
   "author": {
@@ -50,7 +50,7 @@
     "ckeditor5": "catalog:"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-logging": "workspace:*"
+    "@coremedia/ckeditor5-logging": "26.0.1-rc.1"
   },
   "scripts": {
     "clean": "pnpm clean:src && pnpm clean:dist",
