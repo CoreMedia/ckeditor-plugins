@@ -54,6 +54,9 @@ catalogs:
     '@ckeditor/ckeditor5-theme-lark':
       specifier: 45.2.1
       version: 45.2.1
+    '@coremedia-internal/ckeditor5-babel-config':
+      specifier: ^1.0.0
+      version: 1.0.0
     '@coremedia-internal/ckeditor5-coremedia-example-data':
       specifier: ^1.0.0
       version: 1.0.0
@@ -478,10 +481,10 @@ importers:
         specifier: 'catalog:'
         version: 7.28.5
       '@coremedia-internal/ckeditor5-babel-config':
-        specifier: workspace:*
+        specifier: 'catalog:'
         version: link:../packages/ckeditor5-babel-config
       '@coremedia-internal/ckeditor5-coremedia-example-data':
-        specifier: workspace:*
+        specifier: 'catalog:'
         version: link:../packages/ckeditor5-coremedia-example-data
       '@coremedia/ckeditor5-coremedia-link':
         specifier: workspace:*
@@ -1238,7 +1241,7 @@ importers:
         specifier: 'catalog:'
         version: 7.28.5
       '@coremedia-internal/ckeditor5-babel-config':
-        specifier: workspace:*
+        specifier: 'catalog:'
         version: link:../ckeditor5-babel-config
       '@coremedia-internal/studio-client.test-runner-helper':
         specifier: 'catalog:'
@@ -9626,8 +9629,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-inspector@4.1.0': {}
 
@@ -9644,8 +9645,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-link@45.2.1':
     dependencies:
@@ -9701,8 +9700,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-markdown-gfm@45.2.1':
     dependencies:
