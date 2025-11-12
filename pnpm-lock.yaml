@@ -351,49 +351,49 @@ importers:
         specifier: 'catalog:'
         version: link:../packages/ckeditor5-coremedia-example-data
       '@coremedia/ckeditor5-bbcode':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../packages/ckeditor5-bbcode
       '@coremedia/ckeditor5-coremedia-blocklist':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../packages/ckeditor5-coremedia-blocklist
       '@coremedia/ckeditor5-coremedia-content-clipboard':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../packages/ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-differencing':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../packages/ckeditor5-coremedia-differencing
       '@coremedia/ckeditor5-coremedia-images':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../packages/ckeditor5-coremedia-images
       '@coremedia/ckeditor5-coremedia-link':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../packages/ckeditor5-coremedia-link
       '@coremedia/ckeditor5-coremedia-richtext':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../packages/ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-studio-essentials':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../packages/ckeditor5-coremedia-studio-essentials
       '@coremedia/ckeditor5-coremedia-studio-integration-mock':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../packages/ckeditor5-coremedia-studio-integration-mock
       '@coremedia/ckeditor5-data-facade':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../packages/ckeditor5-data-facade
       '@coremedia/ckeditor5-dataprocessor-support':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../packages/ckeditor5-dataprocessor-support
       '@coremedia/ckeditor5-dialog-visibility':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../packages/ckeditor5-dialog-visibility
       '@coremedia/ckeditor5-dom-converter':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../packages/ckeditor5-dom-converter
       '@coremedia/ckeditor5-font-mapper':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../packages/ckeditor5-font-mapper
       '@coremedia/ckeditor5-link-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../packages/ckeditor5-link-common
       '@coremedia/service-agent':
         specifier: 'catalog:'
@@ -487,16 +487,16 @@ importers:
         specifier: 'catalog:'
         version: link:../packages/ckeditor5-coremedia-example-data
       '@coremedia/ckeditor5-coremedia-link':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../packages/ckeditor5-coremedia-link
       '@coremedia/ckeditor5-coremedia-richtext':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../packages/ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../packages/ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-coremedia-studio-integration-mock':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../packages/ckeditor5-coremedia-studio-integration-mock
       '@jest/globals':
         specifier: 'catalog:'
@@ -610,16 +610,16 @@ importers:
         specifier: 'catalog:'
         version: 4.3.1
       '@coremedia/ckeditor5-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-dom-support':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-dom-support
       '@coremedia/ckeditor5-logging':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/studio-client.test-runner-helper':
@@ -660,7 +660,7 @@ importers:
   packages/ckeditor5-common:
     dependencies:
       '@coremedia/ckeditor5-logging':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/studio-client.test-runner-helper':
@@ -701,10 +701,10 @@ importers:
   packages/ckeditor5-core-common:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-logging':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-logging
     devDependencies:
       ckeditor5:
@@ -724,13 +724,13 @@ importers:
   packages/ckeditor5-coremedia-blocklist:
     dependencies:
       '@coremedia/ckeditor5-core-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/studio-client.test-runner-helper':
@@ -762,10 +762,10 @@ importers:
   packages/ckeditor5-coremedia-content:
     dependencies:
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/studio-client.test-runner-helper':
@@ -794,16 +794,16 @@ importers:
   packages/ckeditor5-coremedia-content-clipboard:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/studio-client.test-runner-helper':
@@ -835,22 +835,22 @@ importers:
   packages/ckeditor5-coremedia-differencing:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-richtext':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-dom-converter':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-dom-converter
       '@coremedia/ckeditor5-dom-support':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-dom-support
       '@coremedia/ckeditor5-logging':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-coremedia-example-data':
@@ -894,7 +894,7 @@ importers:
   packages/ckeditor5-coremedia-example-data:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-common
     devDependencies:
       '@coremedia-internal/studio-client.test-runner-helper':
@@ -934,19 +934,19 @@ importers:
   packages/ckeditor5-coremedia-images:
     dependencies:
       '@coremedia/ckeditor5-core-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-content':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-coremedia-content
       '@coremedia/ckeditor5-coremedia-content-clipboard':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-logging
       rxjs:
         specifier: 'catalog:'
@@ -978,25 +978,25 @@ importers:
   packages/ckeditor5-coremedia-link:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-content':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-coremedia-content
       '@coremedia/ckeditor5-coremedia-content-clipboard':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-coremedia-content-clipboard
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-link-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-link-common
       '@coremedia/ckeditor5-logging':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-logging
       rxjs:
         specifier: 'catalog:'
@@ -1043,25 +1043,25 @@ importers:
   packages/ckeditor5-coremedia-richtext:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-dataprocessor-support':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-dataprocessor-support
       '@coremedia/ckeditor5-dom-converter':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-dom-converter
       '@coremedia/ckeditor5-dom-support':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-dom-support
       '@coremedia/ckeditor5-link-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-link-common
       '@coremedia/ckeditor5-logging':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/ckeditor5-coremedia-example-data':
@@ -1108,10 +1108,10 @@ importers:
   packages/ckeditor5-coremedia-richtext-support:
     dependencies:
       '@coremedia/ckeditor5-core-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-logging':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/studio-client.test-runner-helper':
@@ -1152,10 +1152,10 @@ importers:
   packages/ckeditor5-coremedia-studio-essentials:
     dependencies:
       '@coremedia/ckeditor5-coremedia-richtext':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-richtext-support':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-coremedia-richtext-support
     devDependencies:
       ckeditor5:
@@ -1175,7 +1175,7 @@ importers:
   packages/ckeditor5-coremedia-studio-integration:
     dependencies:
       '@coremedia/ckeditor5-logging':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-logging
       node-esapi:
         specifier: 'catalog:'
@@ -1222,13 +1222,13 @@ importers:
   packages/ckeditor5-coremedia-studio-integration-mock:
     dependencies:
       '@coremedia/ckeditor5-core-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-coremedia-studio-integration':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-logging':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-logging
       rxjs:
         specifier: 'catalog:'
@@ -1284,10 +1284,10 @@ importers:
   packages/ckeditor5-data-facade:
     dependencies:
       '@coremedia/ckeditor5-core-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-logging':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/studio-client.test-runner-helper':
@@ -1331,10 +1331,10 @@ importers:
   packages/ckeditor5-dataprocessor-support:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-logging':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/studio-client.test-runner-helper':
@@ -1394,13 +1394,13 @@ importers:
   packages/ckeditor5-dom-converter:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-dom-support':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-dom-support
       '@coremedia/ckeditor5-logging':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/studio-client.test-runner-helper':
@@ -1441,7 +1441,7 @@ importers:
   packages/ckeditor5-dom-support:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-common
     devDependencies:
       '@coremedia-internal/studio-client.test-runner-helper':
@@ -1479,13 +1479,13 @@ importers:
   packages/ckeditor5-font-mapper:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-logging':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-logging
     devDependencies:
       '@coremedia-internal/studio-client.test-runner-helper':
@@ -1529,13 +1529,13 @@ importers:
   packages/ckeditor5-link-common:
     dependencies:
       '@coremedia/ckeditor5-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-common
       '@coremedia/ckeditor5-core-common':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-core-common
       '@coremedia/ckeditor5-logging':
-        specifier: workspace:*
+        specifier: 26.0.1-rc.1
         version: link:../ckeditor5-logging
     devDependencies:
       ckeditor5:
@@ -9629,6 +9629,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-inspector@4.1.0': {}
 
@@ -9645,6 +9647,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-link@45.2.1':
     dependencies:
@@ -9673,8 +9677,6 @@ snapshots:
       '@ckeditor/ckeditor5-widget': 46.1.1
       ckeditor5: 46.1.1
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-list@45.2.1':
     dependencies:
@@ -9700,6 +9702,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-markdown-gfm@45.2.1':
     dependencies:
