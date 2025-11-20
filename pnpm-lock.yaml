@@ -128,6 +128,9 @@ importers:
       '@coremedia/ckeditor5-link-common':
         specifier: 26.0.1-rc.0
         version: link:../packages/ckeditor5-link-common
+      '@coremedia/ckeditor5-text-direction':
+        specifier: workspace:*
+        version: link:../packages/ckeditor5-text-direction
       '@coremedia/service-agent':
         specifier: ^2.1.2
         version: 2.1.2
@@ -1293,6 +1296,47 @@ importers:
       '@types/node':
         specifier: ^22.0.0
         version: 22.13.14
+      copyfiles:
+        specifier: ^2.4.1
+        version: 2.4.1
+      expect:
+        specifier: ^30.2.0
+        version: 30.2.0
+      global-jsdom:
+        specifier: ^27.0.0
+        version: 27.0.0(jsdom@27.0.0(postcss@8.4.45))
+      jsdom:
+        specifier: ^27.0.0
+        version: 27.0.0(postcss@8.4.45)
+      rimraf:
+        specifier: ^6.0.1
+        version: 6.0.1
+      ts-node:
+        specifier: ^10.9.2
+        version: 10.9.2(@types/node@22.13.14)(typescript@5.4.5)
+      tsx:
+        specifier: ^4.20.6
+        version: 4.20.6
+      typescript:
+        specifier: 5.4.5
+        version: 5.4.5
+    publishDirectory: dist
+
+  packages/ckeditor5-text-direction:
+    dependencies:
+      '@coremedia/ckeditor5-logging':
+        specifier: 26.0.1-rc.0
+        version: link:../ckeditor5-logging
+    devDependencies:
+      '@coremedia-internal/studio-client.test-runner-helper':
+        specifier: 0.2.3-alpha.050b44a
+        version: 0.2.3-alpha.050b44a(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@types/node':
+        specifier: ^22.0.0
+        version: 22.13.14
+      ckeditor5:
+        specifier: 46.1.1
+        version: 46.1.1
       copyfiles:
         specifier: ^2.4.1
         version: 2.4.1
@@ -9385,8 +9429,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-link@45.2.1':
     dependencies:
@@ -9415,8 +9457,6 @@ snapshots:
       '@ckeditor/ckeditor5-widget': 46.1.1
       ckeditor5: 46.1.1
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-list@45.2.1':
     dependencies:

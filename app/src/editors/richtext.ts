@@ -2,29 +2,47 @@
 
 // ImageBlockEditing: See ckeditor/ckeditor5#12027.
 
-import { DialogVisibility } from "@coremedia/ckeditor5-dialog-visibility";
+import { Blocklist } from "@coremedia/ckeditor5-coremedia-blocklist";
+import { ContentClipboard, PasteContentPlugin } from "@coremedia/ckeditor5-coremedia-content-clipboard";
+import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing";
+import { ContentImagePlugin } from "@coremedia/ckeditor5-coremedia-images";
 import {
   ContentLinks,
   COREMEDIA_CONTEXT_KEY,
   COREMEDIA_LINK_CONFIG_KEY,
   LinkTarget,
 } from "@coremedia/ckeditor5-coremedia-link";
-import { ContentClipboard, PasteContentPlugin } from "@coremedia/ckeditor5-coremedia-content-clipboard";
-import { ContentImagePlugin } from "@coremedia/ckeditor5-coremedia-images";
-import { FontMapper as CoreMediaFontMapper } from "@coremedia/ckeditor5-font-mapper";
+import type {
+  LatestCoreMediaRichTextConfig,
+  V10CoreMediaRichTextConfig,
+} from "@coremedia/ckeditor5-coremedia-richtext";
 import {
-  COREMEDIA_MOCK_CONTENT_PLUGIN,
-  MockInputExamplePlugin,
-  MockStudioIntegration,
-} from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
+  replaceByElementAndClassBackAndForth,
+  replaceElementByElementAndClass,
+  stripFixedAttributes,
+} from "@coremedia/ckeditor5-coremedia-richtext";
+import "ckeditor5/ckeditor5.css";
 import {
   COREMEDIA_RICHTEXT_CONFIG_KEY,
   COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY,
   CoreMediaStudioEssentials,
   Strictness,
 } from "@coremedia/ckeditor5-coremedia-studio-essentials";
-import type { PluginConstructor } from "ckeditor5";
 import {
+  COREMEDIA_MOCK_CONTENT_PLUGIN,
+  MockInputExamplePlugin,
+  MockStudioIntegration,
+} from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
+import { DataFacade } from "@coremedia/ckeditor5-data-facade";
+import type { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support";
+import { DialogVisibility } from "@coremedia/ckeditor5-dialog-visibility";
+import type { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
+import { FontMapper as CoreMediaFontMapper } from "@coremedia/ckeditor5-font-mapper";
+import type { LinkAttributesConfig } from "@coremedia/ckeditor5-link-common";
+import { LinkAttributes } from "@coremedia/ckeditor5-link-common";
+import type { PluginConstructor, TextPartLanguageOption } from "ckeditor5";
+import {
+  TextPartLanguage,
   Alignment,
   Autoformat,
   AutoLink,
@@ -63,25 +81,9 @@ import {
   TableToolbar,
   Underline,
 } from "ckeditor5";
-import type { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
-import type {
-  LatestCoreMediaRichTextConfig,
-  V10CoreMediaRichTextConfig,
-} from "@coremedia/ckeditor5-coremedia-richtext";
-import {
-  replaceByElementAndClassBackAndForth,
-  replaceElementByElementAndClass,
-  stripFixedAttributes,
-} from "@coremedia/ckeditor5-coremedia-richtext";
-import "ckeditor5/ckeditor5.css";
-import type { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support";
-import type { LinkAttributesConfig } from "@coremedia/ckeditor5-link-common";
-import { LinkAttributes } from "@coremedia/ckeditor5-link-common";
-import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing";
-import { Blocklist } from "@coremedia/ckeditor5-coremedia-blocklist";
-import { DataFacade } from "@coremedia/ckeditor5-data-facade";
-import type { CKEditorInstanceFactory } from "../CKEditorInstanceFactory";
+import { TextDirection } from "@coremedia/ckeditor5-text-direction";
 import type { ApplicationState } from "../ApplicationState";
+import type { CKEditorInstanceFactory } from "../CKEditorInstanceFactory";
 import { getHashParam } from "../HashParams";
 import { initInputExampleContent } from "../inputExampleContents";
 import { updatePreview } from "../preview";
@@ -177,9 +179,15 @@ const getRichTextConfig = (
   return {
     strictness: Strictness.STRICT,
     compatibility: "latest",
-    rules: richTextRuleConfigurations,
+    rules: [...richTextRuleConfigurations],
   };
 };
+const textPartLanguage: TextPartLanguageOption[] = [
+  { title: "Arabic", languageCode: "ar" },
+  { title: "English", languageCode: "en" },
+  { title: "Español", languageCode: "es" },
+  { title: "Français", languageCode: "fr" },
+];
 export const createRichTextEditor: CKEditorInstanceFactory = async (
   sourceElement: HTMLElement,
   state: ApplicationState,
@@ -193,6 +201,13 @@ export const createRichTextEditor: CKEditorInstanceFactory = async (
     return ClassicEditor.create(sourceElement, {
       licenseKey,
       placeholder: "Type your text here...",
+      language: {
+        // Language switch only applies to editor instance.
+        ui: uiLanguage,
+        // Won't change the language of content.
+        content: "en",
+        textPartLanguage,
+      },
       plugins: [
         ...imagePlugins,
         Alignment,
@@ -231,6 +246,8 @@ export const createRichTextEditor: CKEditorInstanceFactory = async (
         Superscript,
         Table,
         TableToolbar,
+        TextDirection,
+        TextPartLanguage,
         Underline,
         CoreMediaFontMapper,
         MockInputExamplePlugin,
@@ -255,6 +272,8 @@ export const createRichTextEditor: CKEditorInstanceFactory = async (
         "|",
         "link",
         "|",
+        "textPartLanguage",
+        "textDirection",
         "alignment",
         "blockQuote",
         "codeBlock",
@@ -411,12 +430,6 @@ export const createRichTextEditor: CKEditorInstanceFactory = async (
       },
       table: {
         contentToolbar: ["tableColumn", "tableRow", "mergeTableCells"],
-      },
-      language: {
-        // Language switch only applies to editor instance.
-        ui: uiLanguage,
-        // Won't change the language of content.
-        content: "en",
       },
       autosave: {
         waitingTime: 1000, // in ms
