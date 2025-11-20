@@ -1,0 +1,65 @@
+{
+  "name": "@coremedia/ckeditor5-text-direction",
+  "version": "26.0.1-rc.0",
+  "type": "module",
+  "description": "Plugin to handle text direction in CKEditor.",
+  "author": {
+    "name": "CoreMedia GmbH",
+    "email": "info@coremedia.com",
+    "url": "https://coremedia.com/",
+    "avatar": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2OTguNjY3IiBoZWlnaHQ9IjY5OC42NjciIHZlcnNpb249IjEuMCIgdmlld0JveD0iMCAwIDUyNCA1MjQiPjxwYXRoIGQ9Ik0yODIuNS42QzI0NSA0LjUgMjE1LjEgMTIuOSAxODUgMjcuOSAxMDYuNCA2Ny4yIDUzLjUgMTQyLjEgNDIuNCAyMjkuNWMtMi4xIDE3LjItMi4yIDQ4IDAgNjQuMUM0OCAzMzYuMiA2MS4zIDM3Mi4yIDg0IDQwNi4zYzYxLjkgOTMuMSAxNzUuNCAxMzYuNCAyODUgMTA4LjcgMTkuMi00LjggMzMuNy0xMC4zIDUzLjItMjAuMSAyMS0xMC41IDQyLjUtMjUuMyA1OC4zLTQwLjJsOC03LjYtMjEuNS0yMS42Yy0yMy42LTIzLjgtMjcuMS0yNi43LTM4LjYtMzIuNC0yMi40LTExLjItNDQuNy0xMS42LTcxLjctMS41LTE4LjYgNy0zMC40IDkuNC00OC43IDEwLjEtMTMgLjQtMTcuNS4yLTI3LjgtMS42LTMwLjUtNS4yLTU1LTE3LjgtNzYuOC0zOS41LTMzLjYtMzMuNi00Ny44LTgwLjQtMzguNC0xMjYuNCAxMC4yLTUwLjUgNDYuMi05MC41IDk1LjItMTA2LjEgMzEuNy0xMC4xIDY0LjItOC44IDk2LjYgMy45IDEyLjggNC45IDIyLjcgNyAzNC4xIDcgMTYuNCAwIDMxLjItNC4yIDQ1LjEtMTIuNyA1LjUtMy40IDEzLjYtMTAuNyAzMC40LTI3LjNsMjIuOC0yMi42LTkuMy04LjRjLTM5LjgtMzUuNC04NS42LTU3LTEzOC40LTY1LjEtMTIuNS0yLTQ4LjctMy4zLTU5LTIuM3oiLz48cGF0aCBkPSJNMjk2IDIxOC4xYy0yOC4zIDQuOC00NC4zIDM1LjQtMzIuMSA2MS40IDcuOSAxNyAyNy4yIDI3LjQgNDUuNCAyNC41IDI4LjktNC42IDQ1LjEtMzUuMiAzMi43LTYxLjctOC0xNy4yLTI3LjMtMjcuMy00Ni0yNC4yeiIvPjwvc3ZnPg=="
+  },
+  "keywords": [
+    "coremedia"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./dist/src/index.js",
+      "import": "./dist/src/index.js"
+    }
+  },
+  "publishConfig": {
+    "directory": "dist",
+    "linkDirectory": false,
+    "exports": {
+      ".": {
+        "types": "./src/index.d.ts",
+        "default": "./src/index.js"
+      }
+    }
+  },
+  "files": [
+    "/src"
+  ],
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@coremedia-internal/studio-client.test-runner-helper": "0.2.3-alpha.050b44a",
+    "@types/node": "^22.0.0",
+    "ckeditor5": "46.1.1",
+    "copyfiles": "^2.4.1",
+    "expect": "^30.2.0",
+    "global-jsdom": "^27.0.0",
+    "jsdom": "^27.0.0",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.6",
+    "typescript": "5.4.5"
+  },
+  "peerDependencies": {
+    "ckeditor5": "46.1.1"
+  },
+  "dependencies": {
+    "@coremedia/ckeditor5-logging": "26.0.1-rc.0"
+  },
+  "scripts": {
+    "clean": "pnpm clean:src && pnpm clean:dist",
+    "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
+    "clean:dist": "rimraf ./dist",
+    "build": "tsc --project tsconfig.release.json && copyfiles -u 1 theme/* theme/**/* dist/theme\"",
+    "postbuild": "node prepare-package.cjs && copyfiles ./README.md dist",
+    "npm-check-updates": "npm-check-updates --upgrade",
+    "lint": "eslint \"**/*.{ts,tsx}\"",
+    "test": "test-runner-react"
+  }
+}

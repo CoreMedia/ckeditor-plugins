@@ -1,0 +1,10 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "extends": [
+    "../../typedoc.base.json"
+  ],
+  "entryPoints": [
+    "./src/index.ts"
+  ],
+  "name": "ckeditor5-direction"
+}
