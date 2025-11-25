@@ -16,7 +16,7 @@ on:
         required: false
         type: number
 
-permissions: {}
+permissions: { }
 
 jobs:
   env:
@@ -35,7 +35,7 @@ jobs:
       - id: authorize
         name: "NPM Authorization"
         run: |
-          result=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.CM_NPM_USER }}", "password": "${{ secrets.CM_NPM_PASSWORD }}"}' "${{ env.NPM_URL }}/-/user/org.couchdb.user:${{ secrets.CM_NPM_USER }}" | jq -r .token)
+          result=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.PLUGINS_NEXUS_USER }}", "password": "${{ secrets.PLUGINS_NEXUS_PASSWORD }}"}' "${{ env.NPM_URL }}/-/user/org.couchdb.user:${{ secrets.PLUGINS_NEXUS_USER }}" | jq -r .token)
           # Ensure, the token is not exposed in output.
           echo "::add-mask::${result}"
           echo "NPM_AUTH_TOKEN=${result}" >> $GITHUB_ENV
