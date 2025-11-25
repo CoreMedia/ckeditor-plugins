@@ -92,4 +92,4 @@ jobs:
         run: |
           pnpm install --production
           echo '//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
-          pnpm publishall --registry=https://repository.coremedia.com/nexus/repository/coremedia-npm --no-git-checks --tag pullrequest
+          pnpm publishall --registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/ --no-git-checks --tag pullrequest

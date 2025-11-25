@@ -145,14 +145,14 @@ jobs:
         if: github.event_name == 'push'
         run: |
           echo '//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
-          pnpm publishall --registry=https://repository.coremedia.com/nexus/repository/coremedia-npm --no-git-checks --tag next
+          pnpm publishall --registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/ --no-git-checks --tag next
           git reset --hard
       # Publishes a release with tag "latest"
       - name: Publish Release
         if: github.event_name == 'workflow_dispatch'
         run: |
           echo '//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
-          pnpm publishall --registry=https://repository.coremedia.com/nexus/repository/coremedia-npm --no-git-checks
+          pnpm publishall --registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/ --no-git-checks
           git reset --hard
       - name: Push commits
         run: git push

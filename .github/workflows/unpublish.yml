@@ -34,5 +34,5 @@ jobs:
           echo "$cmcke5packages"
           for i in $(jq -r ".[].name" <(echo "$cmcke5packages"))
           do
-            npm unpublish $i@$version --registry https://repository.coremedia.com/nexus/repository/coremedia-npm
+            npm unpublish $i@$version --registry https://repository.coremedia.com/nexus/repository/coremedia-npm/
           done
