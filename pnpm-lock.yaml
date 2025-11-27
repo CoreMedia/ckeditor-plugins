@@ -250,11 +250,11 @@ catalogs:
       specifier: ^4.20.6
       version: 4.20.6
     typedoc:
-      specifier: ^0.25.13
-      version: 0.25.13
+      specifier: ^0.28.14
+      version: 0.28.14
     typescript:
-      specifier: 5.4.5
-      version: 5.4.5
+      specifier: ^5.9.3
+      version: 5.9.3
     validate-peer-dependencies:
       specifier: ^2.2.0
       version: 2.2.0
@@ -298,10 +298,10 @@ importers:
         version: 5.4.0(eslint@9.37.0(jiti@1.21.6))
       '@typescript-eslint/eslint-plugin':
         specifier: 'catalog:'
-        version: 8.46.0(@typescript-eslint/parser@8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.4.5))(eslint@9.37.0(jiti@1.21.6))(typescript@5.4.5)
+        version: 8.46.0(@typescript-eslint/parser@8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.9.3))(eslint@9.37.0(jiti@1.21.6))(typescript@5.9.3)
       '@typescript-eslint/parser':
         specifier: 'catalog:'
-        version: 8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.4.5)
+        version: 8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.9.3)
       eslint:
         specifier: 'catalog:'
         version: 9.37.0(jiti@1.21.6)
@@ -310,7 +310,7 @@ importers:
         version: 10.1.8(eslint@9.37.0(jiti@1.21.6))
       eslint-plugin-import:
         specifier: 'catalog:'
-        version: 2.32.0(@typescript-eslint/parser@8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.4.5))(eslint@9.37.0(jiti@1.21.6))
+        version: 2.32.0(@typescript-eslint/parser@8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.9.3))(eslint@9.37.0(jiti@1.21.6))
       eslint-plugin-jsdoc:
         specifier: 'catalog:'
         version: 54.7.0(eslint@9.37.0(jiti@1.21.6))
@@ -337,10 +337,10 @@ importers:
         version: 7.7.3
       typedoc:
         specifier: 'catalog:'
-        version: 0.25.13(typescript@5.4.5)
+        version: 0.28.14(typescript@5.9.3)
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
       validate-peer-dependencies:
         specifier: 'catalog:'
         version: 2.2.0
@@ -413,10 +413,10 @@ importers:
         version: 7.25.4(@babel/core@7.28.5)
       '@ckeditor/ckeditor5-dev-translations':
         specifier: 'catalog:'
-        version: 45.0.8(typescript@5.4.5)(webpack@5.102.1)
+        version: 45.0.8(typescript@5.9.3)(webpack@5.102.1)
       '@ckeditor/ckeditor5-dev-utils':
         specifier: 'catalog:'
-        version: 45.0.8(typescript@5.4.5)(webpack@5.102.1)
+        version: 45.0.8(typescript@5.9.3)(webpack@5.102.1)
       '@ckeditor/ckeditor5-inspector':
         specifier: 'catalog:'
         version: 4.1.0
@@ -449,7 +449,7 @@ importers:
         version: 8.4.45
       postcss-loader:
         specifier: 'catalog:'
-        version: 8.1.1(postcss@8.4.45)(typescript@5.4.5)(webpack@5.102.1)
+        version: 8.1.1(postcss@8.4.45)(typescript@5.9.3)(webpack@5.102.1)
       raw-loader:
         specifier: 'catalog:'
         version: 4.0.2(webpack@5.102.1)
@@ -467,7 +467,7 @@ importers:
         version: 5.3.14(webpack@5.102.1)
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
       webpack:
         specifier: 'catalog:'
         version: 5.102.1(webpack-cli@6.0.1)
@@ -530,13 +530,13 @@ importers:
         version: 7.1.0
       jest:
         specifier: 'catalog:'
-        version: 29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.4.5))
+        version: 29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.9.3))
       jest-circus:
         specifier: 'catalog:'
         version: 29.7.0
       jest-config:
         specifier: 'catalog:'
-        version: 29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.4.5))
+        version: 29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.9.3))
       jest-environment-jsdom:
         specifier: 'catalog:'
         version: 29.7.0
@@ -545,7 +545,7 @@ importers:
         version: 29.7.0
       jest-playwright-preset:
         specifier: 'catalog:'
-        version: 4.0.0(jest-circus@29.7.0)(jest-environment-node@29.7.0)(jest-runner@29.7.0)(jest@29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.4.5)))
+        version: 4.0.0(jest-circus@29.7.0)(jest-environment-node@29.7.0)(jest-runner@29.7.0)(jest@29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.9.3)))
       jest-runner:
         specifier: 'catalog:'
         version: 29.7.0
@@ -563,13 +563,13 @@ importers:
         version: 6.0.1
       ts-jest:
         specifier: 'catalog:'
-        version: 29.4.5(@babel/core@7.28.5)(@jest/transform@29.7.0)(@jest/types@30.2.0)(babel-jest@29.7.0(@babel/core@7.28.5))(jest-util@30.2.0)(jest@29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.4.5)))(typescript@5.4.5)
+        version: 29.4.5(@babel/core@7.28.5)(@jest/transform@29.7.0)(@jest/types@30.2.0)(babel-jest@29.7.0(@babel/core@7.28.5))(jest-util@30.2.0)(jest@29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.9.3)))(typescript@5.9.3)
       tslib:
         specifier: 'catalog:'
         version: 2.7.0
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
       wait-for-expect:
         specifier: 'catalog:'
         version: 3.0.2
@@ -648,13 +648,13 @@ importers:
         version: 6.0.1
       ts-node:
         specifier: 'catalog:'
-        version: 10.9.2(@types/node@22.18.12)(typescript@5.4.5)
+        version: 10.9.2(@types/node@22.18.12)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.20.6
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
   packages/ckeditor5-common:
@@ -689,13 +689,13 @@ importers:
         version: 6.0.1
       ts-node:
         specifier: 'catalog:'
-        version: 10.9.2(@types/node@22.18.12)(typescript@5.4.5)
+        version: 10.9.2(@types/node@22.18.12)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.20.6
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
   packages/ckeditor5-core-common:
@@ -718,7 +718,7 @@ importers:
         version: 6.0.1
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
   packages/ckeditor5-coremedia-blocklist:
@@ -756,7 +756,7 @@ importers:
         version: 7.8.1
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
   packages/ckeditor5-coremedia-content:
@@ -788,7 +788,7 @@ importers:
         version: 6.0.1
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
   packages/ckeditor5-coremedia-content-clipboard:
@@ -829,7 +829,7 @@ importers:
         version: 7.8.1
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
   packages/ckeditor5-coremedia-differencing:
@@ -882,13 +882,13 @@ importers:
         version: 6.0.1
       ts-node:
         specifier: 'catalog:'
-        version: 10.9.2(@types/node@22.18.12)(typescript@5.4.5)
+        version: 10.9.2(@types/node@22.18.12)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.20.6
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
   packages/ckeditor5-coremedia-example-data:
@@ -923,13 +923,13 @@ importers:
         version: 6.0.1
       ts-node:
         specifier: 'catalog:'
-        version: 10.9.2(@types/node@22.18.12)(typescript@5.4.5)
+        version: 10.9.2(@types/node@22.18.12)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.20.6
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
 
   packages/ckeditor5-coremedia-images:
     dependencies:
@@ -972,7 +972,7 @@ importers:
         version: 6.0.1
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
   packages/ckeditor5-coremedia-link:
@@ -1031,13 +1031,13 @@ importers:
         version: 6.0.1
       ts-node:
         specifier: 'catalog:'
-        version: 10.9.2(@types/node@22.18.12)(typescript@5.4.5)
+        version: 10.9.2(@types/node@22.18.12)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.20.6
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
   packages/ckeditor5-coremedia-richtext:
@@ -1096,13 +1096,13 @@ importers:
         version: 6.0.1
       ts-node:
         specifier: 'catalog:'
-        version: 10.9.2(@types/node@22.18.12)(typescript@5.4.5)
+        version: 10.9.2(@types/node@22.18.12)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.20.6
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
   packages/ckeditor5-coremedia-richtext-support:
@@ -1140,13 +1140,13 @@ importers:
         version: 6.0.1
       ts-node:
         specifier: 'catalog:'
-        version: 10.9.2(@types/node@22.18.12)(typescript@5.4.5)
+        version: 10.9.2(@types/node@22.18.12)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.20.6
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
   packages/ckeditor5-coremedia-studio-essentials:
@@ -1169,7 +1169,7 @@ importers:
         version: 6.0.1
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
   packages/ckeditor5-coremedia-studio-integration:
@@ -1210,13 +1210,13 @@ importers:
         version: 6.0.1
       ts-node:
         specifier: 'catalog:'
-        version: 10.9.2(@types/node@22.18.12)(typescript@5.4.5)
+        version: 10.9.2(@types/node@22.18.12)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.20.6
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
   packages/ckeditor5-coremedia-studio-integration-mock:
@@ -1272,13 +1272,13 @@ importers:
         version: 6.0.1
       ts-node:
         specifier: 'catalog:'
-        version: 10.9.2(@types/node@22.18.12)(typescript@5.4.5)
+        version: 10.9.2(@types/node@22.18.12)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.20.6
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
   packages/ckeditor5-data-facade:
@@ -1319,13 +1319,13 @@ importers:
         version: 6.0.1
       ts-node:
         specifier: 'catalog:'
-        version: 10.9.2(@types/node@22.18.12)(typescript@5.4.5)
+        version: 10.9.2(@types/node@22.18.12)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.20.6
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
   packages/ckeditor5-dataprocessor-support:
@@ -1366,13 +1366,13 @@ importers:
         version: 6.0.1
       ts-node:
         specifier: 'catalog:'
-        version: 10.9.2(@types/node@22.18.12)(typescript@5.4.5)
+        version: 10.9.2(@types/node@22.18.12)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.20.6
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
   packages/ckeditor5-dialog-visibility:
@@ -1388,7 +1388,7 @@ importers:
         version: 6.0.1
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
   packages/ckeditor5-dom-converter:
@@ -1429,13 +1429,13 @@ importers:
         version: 6.0.1
       ts-node:
         specifier: 'catalog:'
-        version: 10.9.2(@types/node@22.18.12)(typescript@5.4.5)
+        version: 10.9.2(@types/node@22.18.12)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.20.6
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
   packages/ckeditor5-dom-support:
@@ -1467,13 +1467,13 @@ importers:
         version: 6.0.1
       ts-node:
         specifier: 'catalog:'
-        version: 10.9.2(@types/node@22.18.12)(typescript@5.4.5)
+        version: 10.9.2(@types/node@22.18.12)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.20.6
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
   packages/ckeditor5-font-mapper:
@@ -1517,13 +1517,13 @@ importers:
         version: 6.0.1
       ts-node:
         specifier: 'catalog:'
-        version: 10.9.2(@types/node@22.18.12)(typescript@5.4.5)
+        version: 10.9.2(@types/node@22.18.12)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.20.6
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
   packages/ckeditor5-link-common:
@@ -1549,7 +1549,7 @@ importers:
         version: 6.0.1
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
   packages/ckeditor5-logging:
@@ -1577,13 +1577,13 @@ importers:
         version: 6.0.1
       ts-node:
         specifier: 'catalog:'
-        version: 10.9.2(@types/node@22.18.12)(typescript@5.4.5)
+        version: 10.9.2(@types/node@22.18.12)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.20.6
       typescript:
         specifier: 'catalog:'
-        version: 5.4.5
+        version: 5.9.3
     publishDirectory: dist
 
 packages:
@@ -3278,6 +3278,9 @@ packages:
     resolution: {integrity: sha512-sB5uyeq+dwCWyPi31B2gQlVlo+j5brPlWx4yZBrEaRo/nhdDE8Xke1gsGgtiBdaBTxuTkceLVuVt/pclrasb0A==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
+  '@gerrit0/mini-shiki@3.15.0':
+    resolution: {integrity: sha512-L5IHdZIDa4bG4yJaOzfasOH/o22MCesY0mx+n6VATbaiCtMeR59pdRqYk4bEiQkIHfxsHPNgdi7VJlZb2FhdMQ==}
+
   '@hapi/hoek@9.3.0':
     resolution: {integrity: sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ==}
 
@@ -3469,6 +3472,21 @@ packages:
 
   '@rtsao/scc@1.1.0':
     resolution: {integrity: sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==}
+
+  '@shikijs/engine-oniguruma@3.17.0':
+    resolution: {integrity: sha512-flSbHZAiOZDNTrEbULY8DLWavu/TyVu/E7RChpLB4WvKX4iHMfj80C6Hi3TjIWaQtHOW0KC6kzMcuB5TO1hZ8Q==}
+
+  '@shikijs/langs@3.17.0':
+    resolution: {integrity: sha512-icmur2n5Ojb+HAiQu6NEcIIJ8oWDFGGEpiqSCe43539Sabpx7Y829WR3QuUW2zjTM4l6V8Sazgb3rrHO2orEAw==}
+
+  '@shikijs/themes@3.17.0':
+    resolution: {integrity: sha512-/xEizMHLBmMHwtx4JuOkRf3zwhWD2bmG5BRr0IPjpcWpaq4C3mYEuTk/USAEglN0qPrTwEHwKVpSu/y2jhferA==}
+
+  '@shikijs/types@3.17.0':
+    resolution: {integrity: sha512-wjLVfutYWVUnxAjsWEob98xgyaGv0dTEnMZDruU5mRjVN7szcGOfgO+997W2yR6odp+1PtSBNeSITRRTfUzK/g==}
+
+  '@shikijs/vscode-textmate@10.0.2':
+    resolution: {integrity: sha512-83yeghZ2xxin3Nj8z1NMd/NCuca+gsYXswywDy5bHvwlWL8tpTQmzGeUuHd9FC3E/SBEMvzJRwWEOz5gGes9Qg==}
 
   '@sideway/address@4.1.5':
     resolution: {integrity: sha512-IqO/DUQHUkPeixNQ8n0JA6102hT9CmaljNTPmQ1u8MEhBo/R4Q8eKLN/vGZxuebwOroDB4cbpjheD4+/sKFK4Q==}
@@ -3889,9 +3907,6 @@ packages:
   ansi-regex@6.0.1:
     resolution: {integrity: sha512-n5M855fKb2SsfMIiFFoVrABHJC8QtHwVx+mHWP3QcEqBHYienj5dHSgjbxtC0WEZXYt4wcD6zrQElDPhFuZgfA==}
     engines: {node: '>=12'}
-
-  ansi-sequence-parser@1.1.1:
-    resolution: {integrity: sha512-vJXt3yiaUL4UU546s3rPXlsry/RnM730G1+HkpKE012AN0sx1eOrxSu95oKDIonskeLTijMgqWZ3uDEe3NFvyg==}
 
   ansi-styles@3.2.1:
     resolution: {integrity: sha512-VT0ZI6kZRdTh8YyJw3SMbYm/u+NqfsAxEpWO0Pf9sq8/e94WxxOpPKx9FR1FlyCtOVDNOQ+8ntlqFxiRc+r5qA==}
@@ -5847,9 +5862,6 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
 
-  jsonc-parser@3.3.1:
-    resolution: {integrity: sha512-HUgH65KyejrUFPvHFPbqOY0rsFip3Bo5wb4ngvdi1EpCYWUQDC5V+Y7mZws+DLkr4M//zQJoanu1SP+87Dv1oQ==}
-
   jsonfile@6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
 
@@ -5878,6 +5890,9 @@ packages:
 
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
+
+  linkify-it@5.0.0:
+    resolution: {integrity: sha512-5aHCbzQRADcdP+ATqnDuhhJ/MRIqDkZX5pyjFHRRysS8vZ5AbqGEoFIb6pYHPZ+L/OC2Lc+xT8uHVVR5CAK/wQ==}
 
   loader-runner@4.3.0:
     resolution: {integrity: sha512-3R/1M+yS3j5ou80Me59j7F9IMs4PXs3VqRrm0TU3AbKPxlmpoY1TNscJV/oGJXo8qCatFGTfDbY6W6ipGOYXfg==}
@@ -5955,16 +5970,15 @@ packages:
   makeerror@1.0.12:
     resolution: {integrity: sha512-JmqCvUhmt43madlpFzG4BQzG2Z3m6tvQDNKdClZnO3VbIudJYmxsT0FNJMeiB2+JTSlTQTSbU8QdesVmwJcmLg==}
 
+  markdown-it@14.1.0:
+    resolution: {integrity: sha512-a54IwgWPaeBCAAsv13YgmALOF1elABB08FxO9i+r4VFk5Vl4pKokRPeX8u5TCgSsPi6ec1otfLjdOpVcgbpshg==}
+    hasBin: true
+
   markdown-table@3.0.4:
     resolution: {integrity: sha512-wiYz4+JrLyb/DqW2hkFJxP7Vd7JuTDm77fvbM8VfEQdmSMqcImWeeRbHwZjBjIFki/VaMK2BhFi7oUUZeM5bqw==}
 
   marked@4.0.12:
     resolution: {integrity: sha512-hgibXWrEDNBWgGiK18j/4lkS6ihTe9sxtV4Q1OQppb/0zzyPSzoFANBa5MfsG/zgsWklmNnhm0XACZOH/0HBiQ==}
-    engines: {node: '>= 12'}
-    hasBin: true
-
-  marked@4.3.0:
-    resolution: {integrity: sha512-PRsaiG84bK+AMvxziE/lCFss8juXjNaWzVbN5tXAm4XjeaS9NAHhop+PjQxz2A9h8Q4M/xGmzP8vqNwy6JeK0A==}
     engines: {node: '>= 12'}
     hasBin: true
 
@@ -6019,6 +6033,9 @@ packages:
 
   mdn-data@2.12.2:
     resolution: {integrity: sha512-IEn+pegP1aManZuckezWCO+XZQDplx1366JoVhTpMpBB1sPey/SbveZQUosKiKiGYjg1wH4pMlNgXbCiYgihQA==}
+
+  mdurl@2.0.0:
+    resolution: {integrity: sha512-Lf+9+2r+Tdp5wXDXC4PcIBjTDtq4UKjCPMQhKIuzpJNW0b96kVqSwW0bT7FhRSfmAiFYgP+SCRvdrDozfh0U5w==}
 
   media-typer@1.1.0:
     resolution: {integrity: sha512-aisnrDP4GNe06UcKFnV5bfMNPBUw4jsLGaWwWfnH3v02GnBuXX2MCVn5RbrWo0j3pczUilYblq7fQ7Nw2t5XKw==}
@@ -6751,6 +6768,10 @@ packages:
   psl@1.15.0:
     resolution: {integrity: sha512-JZd3gMVBAVQkSs6HdNZo9Sdo0LNcQeMNP3CozBJb3JYC/QUYZTnKxP+f8oWRX4rHP5EurWxqAHTSwUCjlNKa1w==}
 
+  punycode.js@2.3.1:
+    resolution: {integrity: sha512-uxFIHU0YlHYhDQtV4R9J6a52SLx28BCjT+4ieh7IGbgwVJWO+km431c4yRlREUAsAmt/uMjQUyQHNEPf0M39CA==}
+    engines: {node: '>=6'}
+
   punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
@@ -7079,9 +7100,6 @@ packages:
     resolution: {integrity: sha512-TiwcRcrkhHvbrZbnRcFYMLl30Dfov3HKqzp5tO5b4pt6G/SezKcYhmDg15zXVBswHmctSAQKznqNW2LO5tTDow==}
     engines: {node: '>=4'}
     hasBin: true
-
-  shiki@0.14.7:
-    resolution: {integrity: sha512-dNPAPrxSc87ua2sKJ3H5dQ/6ZaY8RNnaAqK+t0eG7p0Soi2ydiqbGOTaZCqaYvA/uZYfS1LJnemt3Q+mSfcPCg==}
 
   side-channel-list@1.0.0:
     resolution: {integrity: sha512-FCLHtRD/gnpCiCHEiJLOwdmFP+wzCmDEkc9y7NsYxeF4u7Btsn1ZuwgwJGxImImHicJArLP4R0yX4c2KCrMrTA==}
@@ -7481,17 +7499,20 @@ packages:
   typedarray-to-buffer@3.1.5:
     resolution: {integrity: sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==}
 
-  typedoc@0.25.13:
-    resolution: {integrity: sha512-pQqiwiJ+Z4pigfOnnysObszLiU3mVLWAExSPf+Mu06G/qsc3wzbuM56SZQvONhHLncLUhYzOVkjFFpFfL5AzhQ==}
-    engines: {node: '>= 16'}
+  typedoc@0.28.14:
+    resolution: {integrity: sha512-ftJYPvpVfQvFzpkoSfHLkJybdA/geDJ8BGQt/ZnkkhnBYoYW6lBgPQXu6vqLxO4X75dA55hX8Af847H5KXlEFA==}
+    engines: {node: '>= 18', pnpm: '>= 10'}
     hasBin: true
     peerDependencies:
-      typescript: 4.6.x || 4.7.x || 4.8.x || 4.9.x || 5.0.x || 5.1.x || 5.2.x || 5.3.x || 5.4.x
+      typescript: 5.0.x || 5.1.x || 5.2.x || 5.3.x || 5.4.x || 5.5.x || 5.6.x || 5.7.x || 5.8.x || 5.9.x
 
-  typescript@5.4.5:
-    resolution: {integrity: sha512-vcI4UpRgg81oIRUFwR0WSIHKt11nJ7SAVlYNIu+QpqeyXP+gpQJy/Z4+F0aGxSE4MqwjyXvW/TzgkLAx2AGHwQ==}
+  typescript@5.9.3:
+    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
     engines: {node: '>=14.17'}
     hasBin: true
+
+  uc.micro@2.1.0:
+    resolution: {integrity: sha512-ARDJmphmdvUk6Glw7y9DQ2bFkKBHwQHLi2lsaH6PPmz/Ka9sFOBsBluozhDltWmnv9u/cF6Rt87znRTPV+yp/A==}
 
   uglify-js@3.19.3:
     resolution: {integrity: sha512-v3Xu+yuwBXisp6QYTcH4UbH+xYJXqnq2m/LtQVWKWzYc1iehYnLixoQDN9FH6/j9/oybfd6W9Ghwkl8+UMKTKQ==}
@@ -7617,12 +7638,6 @@ packages:
 
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
-
-  vscode-oniguruma@1.7.0:
-    resolution: {integrity: sha512-L9WMGRfrjOhgHSdOYgCt/yRMsXzLDJSL7BPrOZt73gU0iWO4mpqzqQzOz5srxqTvMBaR0XZTSrVWo4j55Rc6cA==}
-
-  vscode-textmate@8.0.0:
-    resolution: {integrity: sha512-AFbieoL7a5LMqcnOF04ji+rpXadgOXnZsxQr//r83kLPr7biP7am3g9zbaZIaBGwBRWeSvoMD4mgPdX3e4NWBg==}
 
   w3c-xmlserializer@4.0.0:
     resolution: {integrity: sha512-d+BFHzbiCx6zGfz0HyQ6Rg69w9k19nviJspaj4yNscGjrHu94sVP+aRm75yEbCh+r2/yR+7q6hux9LVtbuTGBw==}
@@ -7832,6 +7847,11 @@ packages:
 
   yallist@3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}
+
+  yaml@2.8.1:
+    resolution: {integrity: sha512-lcYcMxX2PO9XMGvAJkJ3OsNMw+/7FKes7/hgerGUYWIoWu5j/+YQqcZr5JnPZWzOsEBgMbSbiSTn/dv/69Mkpw==}
+    engines: {node: '>= 14.6'}
+    hasBin: true
 
   yargs-parser@18.1.3:
     resolution: {integrity: sha512-o50j0JeToy/4K6OZcaQmW6lyXXKhq7csREXcDwk2omFPJEwUNOVtJKvmDr9EI1fAJZUyZcRF7kxGBWmRXudrCQ==}
@@ -9153,11 +9173,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@ckeditor/ckeditor5-dev-translations@45.0.8(typescript@5.4.5)(webpack@5.102.1)':
+  '@ckeditor/ckeditor5-dev-translations@45.0.8(typescript@5.9.3)(webpack@5.102.1)':
     dependencies:
       '@babel/parser': 7.25.6
       '@babel/traverse': 7.25.6
-      '@ckeditor/ckeditor5-dev-utils': 45.0.8(typescript@5.4.5)(webpack@5.102.1)
+      '@ckeditor/ckeditor5-dev-utils': 45.0.8(typescript@5.9.3)(webpack@5.102.1)
       chalk: 5.3.0
       fs-extra: 11.2.0
       glob: 10.4.5
@@ -9175,9 +9195,9 @@ snapshots:
       - uglify-js
       - webpack
 
-  '@ckeditor/ckeditor5-dev-utils@45.0.8(typescript@5.4.5)(webpack@5.102.1)':
+  '@ckeditor/ckeditor5-dev-utils@45.0.8(typescript@5.9.3)(webpack@5.102.1)':
     dependencies:
-      '@ckeditor/ckeditor5-dev-translations': 45.0.8(typescript@5.4.5)(webpack@5.102.1)
+      '@ckeditor/ckeditor5-dev-translations': 45.0.8(typescript@5.9.3)(webpack@5.102.1)
       chalk: 5.3.0
       cli-cursor: 5.0.0
       cli-spinners: 3.2.0
@@ -9190,7 +9210,7 @@ snapshots:
       mocha: 10.8.2
       postcss: 8.4.45
       postcss-import: 16.1.0(postcss@8.4.45)
-      postcss-loader: 8.1.1(postcss@8.4.45)(typescript@5.4.5)(webpack@5.102.1)
+      postcss-loader: 8.1.1(postcss@8.4.45)(typescript@5.9.3)(webpack@5.102.1)
       postcss-mixins: 11.0.3(postcss@8.4.45)
       postcss-nesting: 13.0.1(postcss@8.4.45)
       raw-loader: 4.0.2(webpack@5.102.1)
@@ -9647,8 +9667,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 46.1.1
       '@ckeditor/ckeditor5-utils': 46.1.1
       ckeditor5: 46.1.1
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-link@45.2.1':
     dependencies:
@@ -10487,6 +10505,14 @@ snapshots:
       '@eslint/core': 0.16.0
       levn: 0.4.1
 
+  '@gerrit0/mini-shiki@3.15.0':
+    dependencies:
+      '@shikijs/engine-oniguruma': 3.17.0
+      '@shikijs/langs': 3.17.0
+      '@shikijs/themes': 3.17.0
+      '@shikijs/types': 3.17.0
+      '@shikijs/vscode-textmate': 10.0.2
+
   '@hapi/hoek@9.3.0': {}
 
   '@hapi/topo@5.1.0':
@@ -10532,7 +10558,7 @@ snapshots:
       jest-util: 29.7.0
       slash: 3.0.0
 
-  '@jest/core@29.7.0(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.4.5))':
+  '@jest/core@29.7.0(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.9.3))':
     dependencies:
       '@jest/console': 29.7.0
       '@jest/reporters': 29.7.0
@@ -10546,7 +10572,7 @@ snapshots:
       exit: 0.1.2
       graceful-fs: 4.2.11
       jest-changed-files: 29.7.0
-      jest-config: 29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.4.5))
+      jest-config: 29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.9.3))
       jest-haste-map: 29.7.0
       jest-message-util: 29.7.0
       jest-regex-util: 29.6.3
@@ -10787,6 +10813,26 @@ snapshots:
 
   '@rtsao/scc@1.1.0': {}
 
+  '@shikijs/engine-oniguruma@3.17.0':
+    dependencies:
+      '@shikijs/types': 3.17.0
+      '@shikijs/vscode-textmate': 10.0.2
+
+  '@shikijs/langs@3.17.0':
+    dependencies:
+      '@shikijs/types': 3.17.0
+
+  '@shikijs/themes@3.17.0':
+    dependencies:
+      '@shikijs/types': 3.17.0
+
+  '@shikijs/types@3.17.0':
+    dependencies:
+      '@shikijs/vscode-textmate': 10.0.2
+      '@types/hast': 3.0.4
+
+  '@shikijs/vscode-textmate@10.0.2': {}
+
   '@sideway/address@4.1.5':
     dependencies:
       '@hapi/hoek': 9.3.0
@@ -11017,41 +11063,41 @@ snapshots:
     dependencies:
       '@types/yargs-parser': 21.0.3
 
-  '@typescript-eslint/eslint-plugin@8.46.0(@typescript-eslint/parser@8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.4.5))(eslint@9.37.0(jiti@1.21.6))(typescript@5.4.5)':
+  '@typescript-eslint/eslint-plugin@8.46.0(@typescript-eslint/parser@8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.9.3))(eslint@9.37.0(jiti@1.21.6))(typescript@5.9.3)':
     dependencies:
       '@eslint-community/regexpp': 4.12.1
-      '@typescript-eslint/parser': 8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.4.5)
+      '@typescript-eslint/parser': 8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.9.3)
       '@typescript-eslint/scope-manager': 8.46.0
-      '@typescript-eslint/type-utils': 8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.4.5)
-      '@typescript-eslint/utils': 8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.4.5)
+      '@typescript-eslint/type-utils': 8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.9.3)
+      '@typescript-eslint/utils': 8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.9.3)
       '@typescript-eslint/visitor-keys': 8.46.0
       eslint: 9.37.0(jiti@1.21.6)
       graphemer: 1.4.0
       ignore: 7.0.5
       natural-compare: 1.4.0
-      ts-api-utils: 2.1.0(typescript@5.4.5)
-      typescript: 5.4.5
+      ts-api-utils: 2.1.0(typescript@5.9.3)
+      typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/parser@8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.4.5)':
+  '@typescript-eslint/parser@8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.9.3)':
     dependencies:
       '@typescript-eslint/scope-manager': 8.46.0
       '@typescript-eslint/types': 8.46.0
-      '@typescript-eslint/typescript-estree': 8.46.0(typescript@5.4.5)
+      '@typescript-eslint/typescript-estree': 8.46.0(typescript@5.9.3)
       '@typescript-eslint/visitor-keys': 8.46.0
       debug: 4.4.1(supports-color@8.1.1)
       eslint: 9.37.0(jiti@1.21.6)
-      typescript: 5.4.5
+      typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/project-service@8.46.0(typescript@5.4.5)':
+  '@typescript-eslint/project-service@8.46.0(typescript@5.9.3)':
     dependencies:
-      '@typescript-eslint/tsconfig-utils': 8.46.0(typescript@5.4.5)
+      '@typescript-eslint/tsconfig-utils': 8.46.0(typescript@5.9.3)
       '@typescript-eslint/types': 8.46.0
       debug: 4.4.1(supports-color@8.1.1)
-      typescript: 5.4.5
+      typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
 
@@ -11060,28 +11106,28 @@ snapshots:
       '@typescript-eslint/types': 8.46.0
       '@typescript-eslint/visitor-keys': 8.46.0
 
-  '@typescript-eslint/tsconfig-utils@8.46.0(typescript@5.4.5)':
+  '@typescript-eslint/tsconfig-utils@8.46.0(typescript@5.9.3)':
     dependencies:
-      typescript: 5.4.5
+      typescript: 5.9.3
 
-  '@typescript-eslint/type-utils@8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.4.5)':
+  '@typescript-eslint/type-utils@8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.9.3)':
     dependencies:
       '@typescript-eslint/types': 8.46.0
-      '@typescript-eslint/typescript-estree': 8.46.0(typescript@5.4.5)
-      '@typescript-eslint/utils': 8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.4.5)
+      '@typescript-eslint/typescript-estree': 8.46.0(typescript@5.9.3)
+      '@typescript-eslint/utils': 8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.9.3)
       debug: 4.4.1(supports-color@8.1.1)
       eslint: 9.37.0(jiti@1.21.6)
-      ts-api-utils: 2.1.0(typescript@5.4.5)
-      typescript: 5.4.5
+      ts-api-utils: 2.1.0(typescript@5.9.3)
+      typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
 
   '@typescript-eslint/types@8.46.0': {}
 
-  '@typescript-eslint/typescript-estree@8.46.0(typescript@5.4.5)':
+  '@typescript-eslint/typescript-estree@8.46.0(typescript@5.9.3)':
     dependencies:
-      '@typescript-eslint/project-service': 8.46.0(typescript@5.4.5)
-      '@typescript-eslint/tsconfig-utils': 8.46.0(typescript@5.4.5)
+      '@typescript-eslint/project-service': 8.46.0(typescript@5.9.3)
+      '@typescript-eslint/tsconfig-utils': 8.46.0(typescript@5.9.3)
       '@typescript-eslint/types': 8.46.0
       '@typescript-eslint/visitor-keys': 8.46.0
       debug: 4.4.1(supports-color@8.1.1)
@@ -11089,19 +11135,19 @@ snapshots:
       is-glob: 4.0.3
       minimatch: 9.0.5
       semver: 7.7.3
-      ts-api-utils: 2.1.0(typescript@5.4.5)
-      typescript: 5.4.5
+      ts-api-utils: 2.1.0(typescript@5.9.3)
+      typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/utils@8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.4.5)':
+  '@typescript-eslint/utils@8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.9.3)':
     dependencies:
       '@eslint-community/eslint-utils': 4.9.0(eslint@9.37.0(jiti@1.21.6))
       '@typescript-eslint/scope-manager': 8.46.0
       '@typescript-eslint/types': 8.46.0
-      '@typescript-eslint/typescript-estree': 8.46.0(typescript@5.4.5)
+      '@typescript-eslint/typescript-estree': 8.46.0(typescript@5.9.3)
       eslint: 9.37.0(jiti@1.21.6)
-      typescript: 5.4.5
+      typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
 
@@ -11289,8 +11335,6 @@ snapshots:
   ansi-regex@5.0.1: {}
 
   ansi-regex@6.0.1: {}
-
-  ansi-sequence-parser@1.1.1: {}
 
   ansi-styles@3.2.1:
     dependencies:
@@ -11909,22 +11953,22 @@ snapshots:
 
   corser@2.0.1: {}
 
-  cosmiconfig@9.0.0(typescript@5.4.5):
+  cosmiconfig@9.0.0(typescript@5.9.3):
     dependencies:
       env-paths: 2.2.1
       import-fresh: 3.3.0
       js-yaml: 4.1.0
       parse-json: 5.2.0
     optionalDependencies:
-      typescript: 5.4.5
+      typescript: 5.9.3
 
-  create-jest@29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.4.5)):
+  create-jest@29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.9.3)):
     dependencies:
       '@jest/types': 29.6.3
       chalk: 4.1.2
       exit: 0.1.2
       graceful-fs: 4.2.11
-      jest-config: 29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.4.5))
+      jest-config: 29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.9.3))
       jest-util: 29.7.0
       prompts: 2.4.2
     transitivePeerDependencies:
@@ -12441,17 +12485,17 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.12.1(@typescript-eslint/parser@8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint@9.37.0(jiti@1.21.6)):
+  eslint-module-utils@2.12.1(@typescript-eslint/parser@8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint@9.37.0(jiti@1.21.6)):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
-      '@typescript-eslint/parser': 8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.4.5)
+      '@typescript-eslint/parser': 8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.9.3)
       eslint: 9.37.0(jiti@1.21.6)
       eslint-import-resolver-node: 0.3.9
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.4.5))(eslint@9.37.0(jiti@1.21.6)):
+  eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.9.3))(eslint@9.37.0(jiti@1.21.6)):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.9
@@ -12462,7 +12506,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 9.37.0(jiti@1.21.6)
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint@9.37.0(jiti@1.21.6))
+      eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint@9.37.0(jiti@1.21.6))
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3
@@ -12474,7 +12518,7 @@ snapshots:
       string.prototype.trimend: 1.0.9
       tsconfig-paths: 3.15.0
     optionalDependencies:
-      '@typescript-eslint/parser': 8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.4.5)
+      '@typescript-eslint/parser': 8.46.0(eslint@9.37.0(jiti@1.21.6))(typescript@5.9.3)
     transitivePeerDependencies:
       - eslint-import-resolver-typescript
       - eslint-import-resolver-webpack
@@ -13465,16 +13509,16 @@ snapshots:
       - babel-plugin-macros
       - supports-color
 
-  jest-cli@29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.4.5)):
+  jest-cli@29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.9.3)):
     dependencies:
-      '@jest/core': 29.7.0(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.4.5))
+      '@jest/core': 29.7.0(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.9.3))
       '@jest/test-result': 29.7.0
       '@jest/types': 29.6.3
       chalk: 4.1.2
-      create-jest: 29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.4.5))
+      create-jest: 29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.9.3))
       exit: 0.1.2
       import-local: 3.2.0
-      jest-config: 29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.4.5))
+      jest-config: 29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.9.3))
       jest-util: 29.7.0
       jest-validate: 29.7.0
       yargs: 17.7.2
@@ -13484,7 +13528,7 @@ snapshots:
       - supports-color
       - ts-node
 
-  jest-config@29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.4.5)):
+  jest-config@29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.9.3)):
     dependencies:
       '@babel/core': 7.28.5
       '@jest/test-sequencer': 29.7.0
@@ -13510,7 +13554,7 @@ snapshots:
       strip-json-comments: 3.1.1
     optionalDependencies:
       '@types/node': 22.18.12
-      ts-node: 10.9.2(@types/node@22.18.12)(typescript@5.4.5)
+      ts-node: 10.9.2(@types/node@22.18.12)(typescript@5.9.3)
     transitivePeerDependencies:
       - babel-plugin-macros
       - supports-color
@@ -13638,10 +13682,10 @@ snapshots:
       '@types/node': 22.18.12
       jest-util: 30.2.0
 
-  jest-playwright-preset@4.0.0(jest-circus@29.7.0)(jest-environment-node@29.7.0)(jest-runner@29.7.0)(jest@29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.4.5))):
+  jest-playwright-preset@4.0.0(jest-circus@29.7.0)(jest-environment-node@29.7.0)(jest-runner@29.7.0)(jest@29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.9.3))):
     dependencies:
       expect-playwright: 0.8.0
-      jest: 29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.4.5))
+      jest: 29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.9.3))
       jest-circus: 29.7.0
       jest-environment-node: 29.7.0
       jest-process-manager: 0.4.0
@@ -13828,12 +13872,12 @@ snapshots:
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
-  jest@29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.4.5)):
+  jest@29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.9.3)):
     dependencies:
-      '@jest/core': 29.7.0(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.4.5))
+      '@jest/core': 29.7.0(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.9.3))
       '@jest/types': 29.6.3
       import-local: 3.2.0
-      jest-cli: 29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.4.5))
+      jest-cli: 29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.9.3))
     transitivePeerDependencies:
       - '@types/node'
       - babel-plugin-macros
@@ -13948,8 +13992,6 @@ snapshots:
 
   json5@2.2.3: {}
 
-  jsonc-parser@3.3.1: {}
-
   jsonfile@6.1.0:
     dependencies:
       universalify: 2.0.1
@@ -13974,6 +14016,10 @@ snapshots:
   lilconfig@3.1.2: {}
 
   lines-and-columns@1.2.4: {}
+
+  linkify-it@5.0.0:
+    dependencies:
+      uc.micro: 2.1.0
 
   loader-runner@4.3.0: {}
 
@@ -14041,11 +14087,18 @@ snapshots:
     dependencies:
       tmpl: 1.0.5
 
+  markdown-it@14.1.0:
+    dependencies:
+      argparse: 2.0.1
+      entities: 4.5.0
+      linkify-it: 5.0.0
+      mdurl: 2.0.0
+      punycode.js: 2.3.1
+      uc.micro: 2.1.0
+
   markdown-table@3.0.4: {}
 
   marked@4.0.12: {}
-
-  marked@4.3.0: {}
 
   math-intrinsics@1.1.0: {}
 
@@ -14173,6 +14226,8 @@ snapshots:
   mdn-data@2.0.30: {}
 
   mdn-data@2.12.2: {}
+
+  mdurl@2.0.0: {}
 
   media-typer@1.1.0: {}
 
@@ -14767,9 +14822,9 @@ snapshots:
       camelcase-css: 2.0.1
       postcss: 8.4.45
 
-  postcss-loader@8.1.1(postcss@8.4.45)(typescript@5.4.5)(webpack@5.102.1):
+  postcss-loader@8.1.1(postcss@8.4.45)(typescript@5.9.3)(webpack@5.102.1):
     dependencies:
-      cosmiconfig: 9.0.0(typescript@5.4.5)
+      cosmiconfig: 9.0.0(typescript@5.9.3)
       jiti: 1.21.6
       postcss: 8.4.45
       semver: 7.7.3
@@ -14997,6 +15052,8 @@ snapshots:
   psl@1.15.0:
     dependencies:
       punycode: 2.3.1
+
+  punycode.js@2.3.1: {}
 
   punycode@2.3.1: {}
 
@@ -15408,13 +15465,6 @@ snapshots:
       interpret: 1.4.0
       rechoir: 0.6.2
 
-  shiki@0.14.7:
-    dependencies:
-      ansi-sequence-parser: 1.1.1
-      jsonc-parser: 3.3.1
-      vscode-oniguruma: 1.7.0
-      vscode-textmate: 8.0.0
-
   side-channel-list@1.0.0:
     dependencies:
       es-errors: 1.3.0
@@ -15721,22 +15771,22 @@ snapshots:
 
   trough@2.2.0: {}
 
-  ts-api-utils@2.1.0(typescript@5.4.5):
+  ts-api-utils@2.1.0(typescript@5.9.3):
     dependencies:
-      typescript: 5.4.5
+      typescript: 5.9.3
 
-  ts-jest@29.4.5(@babel/core@7.28.5)(@jest/transform@29.7.0)(@jest/types@30.2.0)(babel-jest@29.7.0(@babel/core@7.28.5))(jest-util@30.2.0)(jest@29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.4.5)))(typescript@5.4.5):
+  ts-jest@29.4.5(@babel/core@7.28.5)(@jest/transform@29.7.0)(@jest/types@30.2.0)(babel-jest@29.7.0(@babel/core@7.28.5))(jest-util@30.2.0)(jest@29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.9.3)))(typescript@5.9.3):
     dependencies:
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
       handlebars: 4.7.8
-      jest: 29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.4.5))
+      jest: 29.7.0(@types/node@22.18.12)(ts-node@10.9.2(@types/node@22.18.12)(typescript@5.9.3))
       json5: 2.2.3
       lodash.memoize: 4.1.2
       make-error: 1.3.6
       semver: 7.7.3
       type-fest: 4.41.0
-      typescript: 5.4.5
+      typescript: 5.9.3
       yargs-parser: 21.1.1
     optionalDependencies:
       '@babel/core': 7.28.5
@@ -15745,7 +15795,7 @@ snapshots:
       babel-jest: 29.7.0(@babel/core@7.28.5)
       jest-util: 30.2.0
 
-  ts-node@10.9.2(@types/node@22.18.12)(typescript@5.4.5):
+  ts-node@10.9.2(@types/node@22.18.12)(typescript@5.9.3):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
@@ -15759,7 +15809,7 @@ snapshots:
       create-require: 1.1.1
       diff: 4.0.2
       make-error: 1.3.6
-      typescript: 5.4.5
+      typescript: 5.9.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
 
@@ -15840,15 +15890,18 @@ snapshots:
     dependencies:
       is-typedarray: 1.0.0
 
-  typedoc@0.25.13(typescript@5.4.5):
+  typedoc@0.28.14(typescript@5.9.3):
     dependencies:
+      '@gerrit0/mini-shiki': 3.15.0
       lunr: 2.3.9
-      marked: 4.3.0
+      markdown-it: 14.1.0
       minimatch: 9.0.5
-      shiki: 0.14.7
-      typescript: 5.4.5
+      typescript: 5.9.3
+      yaml: 2.8.1
 
-  typescript@5.4.5: {}
+  typescript@5.9.3: {}
+
+  uc.micro@2.1.0: {}
 
   uglify-js@3.19.3:
     optional: true
@@ -15978,10 +16031,6 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
-
-  vscode-oniguruma@1.7.0: {}
-
-  vscode-textmate@8.0.0: {}
 
   w3c-xmlserializer@4.0.0:
     dependencies:
@@ -16226,6 +16275,8 @@ snapshots:
   y18n@5.0.8: {}
 
   yallist@3.1.1: {}
+
+  yaml@2.8.1: {}
 
   yargs-parser@18.1.3:
     dependencies:
