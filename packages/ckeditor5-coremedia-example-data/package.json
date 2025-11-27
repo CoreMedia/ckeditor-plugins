@@ -40,7 +40,7 @@
     "typescript": "catalog:"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "26.0.1-rc.1"
+    "@coremedia/ckeditor5-common": "26.0.1-rc.2"
   },
   "scripts": {
     "build": "tsc --project ./tsconfig.release.json",
