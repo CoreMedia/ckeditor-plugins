@@ -203,7 +203,7 @@ class ClassList implements DOMTokenList {
     return true;
   }
 
-  [Symbol.iterator](): IterableIterator<string> {
+  [Symbol.iterator]() {
     return this.#classes[Symbol.iterator]();
   }
 
@@ -217,7 +217,7 @@ class ClassList implements DOMTokenList {
   /**
    * @inheritDoc DOMTokenList.entries
    */
-  entries(): IterableIterator<[number, string]> {
+  entries() {
     return this.#classes.entries();
   }
 
@@ -244,7 +244,7 @@ class ClassList implements DOMTokenList {
   /**
    * @inheritDoc DOMTokenList.keys
    */
-  keys(): IterableIterator<number> {
+  keys() {
     return this.#classes.keys();
   }
 
@@ -266,7 +266,7 @@ class ClassList implements DOMTokenList {
   /**
    * @inheritDoc DOMTokenList.values
    */
-  values(): IterableIterator<string> {
+  values() {
     return this.#classes.values();
   }
 
