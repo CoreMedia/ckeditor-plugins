@@ -84,7 +84,7 @@
   },
   "pnpm": {
     "patchedDependencies": {
-      "ckeditor5@45.2.1": "patches/ckeditor5@45.2.1.patch"
+      "ckeditor5": "patches/ckeditor5@45.2.2.patch"
     }
   }
 }
