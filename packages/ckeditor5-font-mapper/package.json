@@ -30,7 +30,7 @@
       }
     }
   },
-  "version": "24.0.5-rc.0",
+  "version": "24.0.5-rc.1",
   "files": [
     "/src"
   ],
@@ -50,9 +50,9 @@
     "ckeditor5": "45.2.2"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "24.0.5-rc.0",
-    "@coremedia/ckeditor5-core-common": "24.0.5-rc.0",
-    "@coremedia/ckeditor5-logging": "24.0.5-rc.0"
+    "@coremedia/ckeditor5-common": "24.0.5-rc.1",
+    "@coremedia/ckeditor5-core-common": "24.0.5-rc.1",
+    "@coremedia/ckeditor5-logging": "24.0.5-rc.1"
   },
   "scripts": {
     "build": "tsc --project ./tsconfig.release.json",
