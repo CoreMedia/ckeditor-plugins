@@ -5,7 +5,7 @@
   "excludeInternal": true,
   "excludePrivate": true,
   "githubPages": false,
-  "htmlLang": "en",
+  "lang": "en",
   "includeVersion": false,
   "navigationLinks": {
     "CoreMedia": "https://coremedia.com/",
