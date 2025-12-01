@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-dataprocessor-support",
-  "version": "26.0.1-rc.2",
+  "version": "26.0.1-rc.3",
   "type": "module",
   "description": "Utilities for providing custom CKEditor 5 DataProcessors",
   "author": {
@@ -63,7 +63,7 @@
     "ckeditor5": "catalog:"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "26.0.1-rc.2",
-    "@coremedia/ckeditor5-logging": "26.0.1-rc.2"
+    "@coremedia/ckeditor5-common": "26.0.1-rc.3",
+    "@coremedia/ckeditor5-logging": "26.0.1-rc.3"
   }
 }
