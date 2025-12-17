@@ -28,8 +28,8 @@ on:
         default: true
 
 env:
-  NPM_REPOSITORY: npm.coremedia.io
-  NPM_REPOSITORY_URL: https://npm.coremedia.io
+  NPM_REPOSITORY: repository.coremedia.com/nexus/repository/coremedia-npm
+  NPM_REPOSITORY_URL: https://repository.coremedia.com/nexus/repository/coremedia-npm
   NODE_VERSION: 20
 
 jobs:
@@ -49,8 +49,8 @@ jobs:
             --header "Accept: application/json" \
             --header "Content-Type:application/json" \
             --request PUT \
-            --data '{"name": "${{ secrets.CM_NPM_USER }}", "password": "${{ secrets.CM_NPM_PASSWORD }}"}' \
-            "${{ env.NPM_REPOSITORY_URL }}/-/user/org.couchdb.user:${{ secrets.CM_NPM_USER }}" | \
+            --data '{"name": "${{ secrets.PLUGINS_NEXUS_USER }}", "password": "${{ secrets.PLUGINS_NEXUS_PASSWORD }}"}' \
+            "${{ env.NPM_REPOSITORY_URL }}/-/user/org.couchdb.user:${{ secrets.PLUGINS_NEXUS_USER }}" | \
             jq -r .token)
           echo "::add-mask::$NPM_AUTH_TOKEN"
           echo "NPM_CONFIG_//${{ env.NPM_REPOSITORY }}/:_authToken=${NPM_AUTH_TOKEN}" >> $GITHUB_ENV

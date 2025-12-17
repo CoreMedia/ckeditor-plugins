@@ -49,9 +49,9 @@ on:
         required: false
         default: false
     secrets:
-      CM_NPM_USER:
+      PLUGINS_NEXUS_USER:
         required: true
-      CM_NPM_PASSWORD:
+      PLUGINS_NEXUS_PASSWORD:
         required: true
 
 run-name: |
@@ -90,7 +90,7 @@ jobs:
       - id: authorize
         name: "NPM Authorization"
         run: |
-          result=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.CM_NPM_USER }}", "password": "${{ secrets.CM_NPM_PASSWORD }}"}' "${{ env.npmUrl }}/-/user/org.couchdb.user:${{ secrets.CM_NPM_USER }}" | jq --raw-output .token)
+          result=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.PLUGINS_NEXUS_USER }}", "password": "${{ secrets.PLUGINS_NEXUS_PASSWORD }}"}' "${{ env.npmUrl }}/-/user/org.couchdb.user:${{ secrets.PLUGINS_NEXUS_USER }}" | jq --raw-output .token)
           # Ensure, the token is not exposed in output.
           echo "::add-mask::${result}"
           echo "NODE_AUTH_TOKEN=${result}" >> $GITHUB_ENV
