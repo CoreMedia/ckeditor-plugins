@@ -40,7 +40,8 @@ $ pnpm -r build
 $ pnpm start
 ```
 
-Note, that `pnpm install` requires access to `npm.coremedia.io`.
+Note, that `pnpm install` requires access to
+`repository.coremedia.com/nexus/repository/coremedia-npm`.
 
 Since Version 44 a license key is necessary to use the CkEditor.
 Create a file named `.env` in the root of this workspace and add a line
