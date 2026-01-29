@@ -71,6 +71,12 @@ export default class ContentImageEditingPlugin extends Plugin {
       modelAttributeName,
       dataAttributeName,
     );
+    ContentImageEditingPlugin.#setupXlinkHrefConversionDowncast(
+      editor,
+      "imageBlock",
+      modelAttributeName,
+      dataAttributeName,
+    );
     editor.conversion.for("upcast").attributeToAttribute({
       model: modelAttributeName,
       view: {
@@ -78,11 +84,26 @@ export default class ContentImageEditingPlugin extends Plugin {
         key: dataAttributeName,
       },
     });
+
+    editor.conversion.for("upcast").attributeToAttribute({
+      model: "imageBlock",
+      view: {
+        name: ContentImageEditingPlugin.IMAGE_INLINE_VIEW_ELEMENT_NAME,
+        key: dataAttributeName,
+      },
+    });
+    editor.conversion.for( 'upcast' ).attributeToAttribute( {
+      view: {
+        name: 'figure',
+        key: 'data-xlink-href'
+      },
+      model: 'xlink-href'
+    } );
   }
 
   static #setupXlinkHrefConversionDowncast(
     editor: Editor,
-    modelElementName: "imageInline",
+    modelElementName: "imageInline" | "imageBlock",
     modelAttributeName: string,
     dataAttributeName: string,
   ): void {
