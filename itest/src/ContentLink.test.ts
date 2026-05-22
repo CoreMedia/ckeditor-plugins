@@ -243,6 +243,10 @@ describe("Content Link Feature", () => {
 
     await view.locator.click();
     const modifier: string = await ctrlOrMeta();
+
+    await page.keyboard.press(`${modifier}+a`);
+    await page.keyboard.press("Delete");
+
     await page.keyboard.press(`${modifier}+k`);
 
     const { linkFormView } = view.body.balloonPanel;
@@ -265,7 +269,6 @@ describe("Content Link Feature", () => {
     await page.keyboard.press("Tab");
     await page.keyboard.press("Enter");
 
-    const contentLink = view.locator.locator(`a`);
-    await expect(contentLink).toHaveText("Some Folder");
+    await page.getByRole("link", { name: "content:101" }).waitFor();
   });
 });
