@@ -48,7 +48,6 @@
     "http-server": "catalog:",
     "postcss": "catalog:",
     "postcss-loader": "catalog:",
-    "raw-loader": "catalog:",
     "rimraf": "catalog:",
     "source-map-loader": "catalog:",
     "style-loader": "catalog:",

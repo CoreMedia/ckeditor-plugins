@@ -85,7 +85,11 @@ export default {
 
   module: {
     rules: [
-      loaders.getIconsLoader({ matchExtensionOnly: true }),
+      // Replaces raw-loader (deprecated, broken with ajv@8) with webpack 5 built-in asset/source
+      {
+        test: /\.svg$/,
+        type: "asset/source",
+      },
       loaders.getStylesLoader({
         themePath: import.meta.resolve("@ckeditor/ckeditor5-theme-lark"),
         minify: true,
