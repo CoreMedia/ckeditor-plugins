@@ -2,7 +2,7 @@
 
 import path from "path";
 import webpack from "webpack";
-import { bundler, loaders } from "@ckeditor/ckeditor5-dev-utils";
+import { loaders } from "@ckeditor/ckeditor5-dev-utils";
 import { CKEditorTranslationsPlugin } from "@ckeditor/ckeditor5-dev-translations";
 import TerserPlugin from "terser-webpack-plugin";
 import CircularDependencyPlugin from "circular-dependency-plugin";
@@ -73,10 +73,6 @@ export default {
       language: "en",
       additionalLanguages: ["de"],
       sourceFilesPattern: "[/\\]ckeditor5/translations/[a-z]{2}.js",
-    }),
-    new webpack.BannerPlugin({
-      banner: bundler.getLicenseBanner(),
-      raw: true,
     }),
     new CircularDependencyPlugin({
       exclude: /node_modules/,
