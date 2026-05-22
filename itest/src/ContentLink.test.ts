@@ -269,6 +269,6 @@ describe("Content Link Feature", () => {
     await page.keyboard.press("Tab");
     await page.keyboard.press("Enter");
 
-    await page.getByRole("link", { name: "content:101" }).waitFor();
+    await page.getByRole("link", { name: "Some Folder" }).waitFor();
   });
 });
