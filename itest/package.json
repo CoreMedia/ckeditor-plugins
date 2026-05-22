@@ -12,10 +12,6 @@
   "keywords": [
     "coremedia"
   ],
-  "engines": {
-    "node": "^22.3.0",
-    "pnpm": "^10.9"
-  },
   "license": "Apache-2.0",
   "devDependencies": {
     "@babel/core": "catalog:",
