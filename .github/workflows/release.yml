@@ -22,10 +22,10 @@ on:
 permissions:
   contents: write
 env:
-  NODE_VERSION: 22
+  NODE_VERSION: 24
   # https://github.com/actions/runner-images/issues/70
   NODE_OPTIONS: "--max_old_space_size=4096"
-  PNPM_VERSION: ^10.9
+  PNPM_VERSION: ^10.24
   NPM_CONFIG_@coremedia:registry: 'https://repository.coremedia.com/nexus/repository/coremedia-npm'
   NPM_CONFIG_@coremedia-internal:registry: 'https://repository.coremedia.com/nexus/repository/coremedia-npm'
 
