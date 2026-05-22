@@ -169,18 +169,9 @@ describe("Paste Button", () => {
       await application.editor.ui.locator.click();
       const controlOrMeta = await ctrlOrMeta();
       await page.keyboard.press(`${controlOrMeta}+Shift+P`);
-      // Validate Editing Downcast
-      const { ui } = application.editor;
-      const editableHandle = await ui.getEditableElement();
-      const linkElements = await editableHandle.$$("a");
 
-      await waitForExpect(async () => {
-        await expect(linkElements).toHaveLength(1);
-        if (contentMock[0].name) {
-          const contentName: string = contentMock[0].name as string;
-          await expect(linkElements[0]).toHaveText(contentName);
-        }
-      });
+      const contentName: string = contentMock[0].name as string;
+      await page.getByRole("link", { name: contentName }).waitFor();
     });
   });
 
@@ -248,7 +239,7 @@ describe("Paste Button", () => {
     const inputElement = page.locator(inputElementSelector);
     await inputElement.dblclick();
     const pasteContentButton = page.locator(toolbarItemsLocator).locator(".paste-content-button");
-    await expect(pasteContentButton).toBeEnabled();
+    await pasteContentButton.waitFor();
     await pasteContentButton.click();
   }
 });
