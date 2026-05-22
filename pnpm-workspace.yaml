@@ -19,10 +19,10 @@ catalog:
   '@bbob/preset': 4.3.1
   '@bbob/preset-html5': 4.3.1
   '@bbob/types': 4.3.1
-  '@ckeditor/ckeditor5-dev-translations': ^45.0.8
-  '@ckeditor/ckeditor5-dev-utils': ^45.0.8
-  '@ckeditor/ckeditor5-inspector': ^4.1.0
-  '@ckeditor/ckeditor5-theme-lark': 45.2.1
+  '@ckeditor/ckeditor5-dev-translations': ^55.6.1
+  '@ckeditor/ckeditor5-dev-utils': ^55.6.1
+  '@ckeditor/ckeditor5-inspector': ^5.0.0
+  '@ckeditor/ckeditor5-theme-lark': 47.6.2
   '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
   '@coremedia-internal/ckeditor5-coremedia-example-data': ^1.0.0
   '@coremedia-internal/studio-client.test-runner-helper': 0.2.3-alpha.050b44a
@@ -58,7 +58,7 @@ catalog:
   babel-jest: ^29.7.0
   babel-loader: ^8.3.0
   circular-dependency-plugin: ^5.2.2
-  ckeditor5: 46.1.1
+  ckeditor5: 48.1.1
   copyfiles: ^2.4.1
   css-loader: ^7.1.2
   dotenv: ^16.4.7
