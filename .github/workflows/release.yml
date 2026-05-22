@@ -37,7 +37,7 @@ jobs:
     if: github.actor != 'coremedia-ci' && github.actor != 'github-action[bot]'
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
       - name: Manual workflow trigger precondition check
         if: github.event_name == 'workflow_dispatch' && (github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/heads/maintenance/'))
         run: |
@@ -57,7 +57,7 @@ jobs:
           echo "For maintenance branches only patch versions are allowed."
           exit 1
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Configure NPM

@@ -29,7 +29,7 @@ jobs:
     if: (github.event_name != 'workflow_dispatch' || github.ref != 'refs/heads/main') && !github.event.pull_request.draft
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
       - name: Allocate PR Number for manual trigger
         id: read-prnumber
         if: github.event_name == 'workflow_dispatch'
@@ -38,7 +38,7 @@ jobs:
           echo "Allocated Pull Request number ${prnumber}"
           echo "::set-output name=prnumber::${prnumber}"
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Configure NPM
