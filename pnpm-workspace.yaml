@@ -51,7 +51,7 @@ catalog:
   '@stylistic/eslint-plugin': ^5.2.3
   '@types/express': ^4.17.21
   '@types/jest': ^29.5.12
-  '@types/node': ^22.18.10
+  '@types/node': ^24.11.1
   '@types/webpack': ^5.28.5
   '@typescript-eslint/eslint-plugin': ^8.39.1
   '@typescript-eslint/parser': ^8.39.1
