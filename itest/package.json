@@ -53,7 +53,7 @@
     "clean:dist": "rimraf ./dist",
     "build": "exit 0",
     "lint": "eslint \"**/*.{ts,tsx}\"",
-    "preplaywright": "npx playwright install chromium",
+    "preplaywright": "pnpm exec playwright install chromium",
     "playwright": "jest",
     "playwright-local": "jest --config ./jest.local.js",
     "npm-check-updates": "npm-check-updates --upgrade"
