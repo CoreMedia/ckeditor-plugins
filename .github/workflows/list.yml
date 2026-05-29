@@ -41,7 +41,7 @@ jobs:
           echo "NPM_AUTH_TOKEN=${result}" >> $GITHUB_ENV
       - id: checkout
         name: 'Init: Checkout'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           fetch-tags: false
