@@ -1,0 +1,29 @@
+{
+  "name": "ckeditor.playwright-itest",
+  "version": "1.0.0-SNAPSHOT",
+  "author": "CoreMedia GmbH",
+  "license": "CoreMedia Open Source License",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@coremedia/studio-client.build-config": "catalog:",
+    "@coremedia/studio-client.eslint-config": "catalog:",
+    "@playwright/test": "catalog:",
+    "@types/eslint": "catalog:",
+    "@types/node": "catalog:",
+    "ci-info": "catalog:",
+    "eslint": "catalog:",
+    "express": "catalog:",
+    "rimraf": "catalog:",
+    "rxjs": "catalog:",
+    "typescript": "catalog:"
+  },
+  "scripts": {
+    "clean": "rimraf ./dist && rimraf ./build",
+    "prebuild": "sync-tsconfig-project-references --includeDevDependencies",
+    "build": "tsc --project .",
+    "ui-test": "playwright test",
+    "lint": "eslint",
+    "webserver": "node webserver.js"
+  }
+}
