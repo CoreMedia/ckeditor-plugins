@@ -21,3 +21,4 @@ test.afterEach(async ({ page }) => {
 });
 
 export { test };
+export { expect } from "@playwright/test";

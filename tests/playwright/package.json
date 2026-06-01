@@ -8,6 +8,7 @@
   "devDependencies": {
     "@coremedia/studio-client.build-config": "catalog:",
     "@coremedia/studio-client.eslint-config": "catalog:",
+    "@coremedia-internal/ckeditor5-coremedia-example-data": "catalog:",
     "@playwright/test": "catalog:",
     "@types/eslint": "catalog:",
     "@types/node": "catalog:",

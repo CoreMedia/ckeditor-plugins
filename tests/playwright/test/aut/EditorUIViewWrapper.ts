@@ -2,6 +2,7 @@ import type { ClassicEditor } from "ckeditor5";
 import type { Locator } from "playwright-core";
 import { JSWrapper } from "./JSWrapper";
 import type { EditorUIWrapper } from "./EditorUIWrapper";
+import { BodyCollectionWrapper } from "./BodyCollectionWrapper";
 import type { Locatable } from "./Locatable";
 import { visible } from "./Locatable";
 
@@ -20,6 +21,10 @@ export class EditorUIViewWrapper extends JSWrapper<ClassicEditor["ui"]["view"]> 
 
   get visible(): Promise<boolean> {
     return visible(this);
+  }
+
+  get body(): BodyCollectionWrapper {
+    return BodyCollectionWrapper.fromClassicEditorUIView(this);
   }
 
   static fromClassicEditorUI(wrapper: EditorUIWrapper) {
