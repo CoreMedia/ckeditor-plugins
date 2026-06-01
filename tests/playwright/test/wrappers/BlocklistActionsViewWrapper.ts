@@ -1,6 +1,6 @@
 import type { Locator } from "playwright-core";
-import type { Locatable } from "./Locatable";
-import { visible } from "./Locatable";
+import type { Locatable } from "../locators/Locatable.ts";
+import { visible } from "../locators/Locatable.ts";
 
 export class BlocklistActionsViewWrapper implements Locatable {
   readonly #parent: Locatable;

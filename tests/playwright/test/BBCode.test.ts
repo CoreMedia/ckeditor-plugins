@@ -1,4 +1,4 @@
-import { ApplicationWrapper } from "./aut/ApplicationWrapper";
+import { ApplicationWrapper } from "./wrappers/ApplicationWrapper";
 import { editor } from "./locators/editor";
 import { bbCodeUrl } from "./utils/environment";
 import { test } from "./base";

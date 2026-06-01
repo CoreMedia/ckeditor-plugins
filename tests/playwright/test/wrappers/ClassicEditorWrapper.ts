@@ -1,9 +1,9 @@
 import type { JSHandle, Locator, Page } from "playwright-core";
 import type { ClassicEditor } from "ckeditor5";
+import type { Locatable } from "../locators/Locatable.ts";
+import { visible } from "../locators/Locatable.ts";
 import { EditorWrapper } from "./EditorWrapper";
 import { EditorUIWrapper } from "./EditorUIWrapper";
-import type { Locatable } from "./Locatable";
-import { visible } from "./Locatable";
 
 /**
  * Provides access to the editor within the example application. It requires

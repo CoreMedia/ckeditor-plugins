@@ -1,7 +1,7 @@
 // For now, this is only a DOM related wrapper.
 import type { Locator } from "playwright-core";
-import type { Locatable } from "./Locatable";
-import { visible } from "./Locatable";
+import type { Locatable } from "../locators/Locatable.ts";
+import { visible } from "../locators/Locatable.ts";
 import { BlocklistActionsViewWrapper } from "./BlocklistActionsViewWrapper";
 
 export class BalloonPanelViewWrapper implements Locatable {

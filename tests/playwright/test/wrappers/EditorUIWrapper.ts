@@ -1,11 +1,11 @@
 import type { ClassicEditor } from "ckeditor5";
 import type { Locator } from "playwright-core";
+import type { Locatable } from "../locators/Locatable.ts";
+import { visible } from "../locators/Locatable.ts";
 import { JSWrapper } from "./JSWrapper";
 import type { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 // ClassicEditorUI: See ckeditor/ckeditor5#12027.
 import { EditorUIViewWrapper } from "./EditorUIViewWrapper";
-import type { Locatable } from "./Locatable";
-import { visible } from "./Locatable";
 
 /**
  * Wrapper for `EditorUI`.

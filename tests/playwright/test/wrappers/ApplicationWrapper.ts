@@ -1,4 +1,5 @@
 import type { Page } from "playwright-core";
+import { MockServiceAgentPluginWrapper } from "../services/MockServiceAgentPluginWrapper";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 
 /**
@@ -32,5 +33,12 @@ export class ApplicationWrapper {
    */
   get editor(): ClassicEditorWrapper {
     return ClassicEditorWrapper.fromPage(this.#page);
+  }
+
+  /**
+   * Provides access to the mock service agent plugin.
+   */
+  get mockServiceAgent(): MockServiceAgentPluginWrapper {
+    return MockServiceAgentPluginWrapper.fromClassicEditor(this.editor);
   }
 }

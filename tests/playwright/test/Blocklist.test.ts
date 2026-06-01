@@ -1,9 +1,9 @@
 import type { Page } from "playwright-core";
-import { richtext, p } from "@coremedia-internal/ckeditor5-coremedia-example-data";
-import { test, expect } from "./base";
+import { p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
+import { expect, test } from "./base";
 import { editor } from "./locators/editor";
 import { applicationUrl } from "./utils/environment";
-import { ApplicationWrapper } from "./aut/ApplicationWrapper";
+import { ApplicationWrapper } from "./wrappers/ApplicationWrapper";
 
 const useOpenBlocklistShortcut = async (page: Page): Promise<void> => {
   // Open Blocklist Balloon via Shortcut
