@@ -65,7 +65,7 @@ catalog:
   dotenv: ^16.4.7
   enhanced-resolve: ^5.16.0
   esbuild-loader: ^3.2.0
-  eslint: ^9.33.0
+  eslint: ^9.39.1
   eslint-config-prettier: ^10.1.8
   eslint-plugin-import: ^2.32.0
   eslint-plugin-jsdoc: ^54.0.0
@@ -119,8 +119,6 @@ overrides:
   '@eslint/eslintrc>ajv': '>=6.14.0 <7.0.0'
   '@eslint/eslintrc>minimatch': '>=3.1.4 <4.0.0'
   '@tootallnate/once@<2.0.1': '>=2.0.1'
-  ajv@>=6.0.0 <6.14.0: '>=6.14.0 <7.0.0'
-  ajv@>=7.0.0-alpha.0 <8.18.0: '>=8.18.0'
   axios@>=1.0.0 <1.12.0: '>=1.12.0'
   axios@>=1.0.0 <1.15.0: '>=1.15.0'
   axios@>=1.0.0 <1.15.1: '>=1.15.1'
