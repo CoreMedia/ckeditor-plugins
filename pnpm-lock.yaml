@@ -63,6 +63,9 @@ catalogs:
     '@coremedia-internal/studio-client.test-runner-helper':
       specifier: 0.2.3-alpha.050b44a
       version: 0.2.3-alpha.050b44a
+    '@coremedia/ckeditor5-coremedia-studio-integration-mock':
+      specifier: 26.0.1-rc.0
+      version: 26.0.1-rc.4
     '@coremedia/service-agent':
       specifier: ^2.1.2
       version: 2.1.2
@@ -1505,6 +1508,9 @@ importers:
       '@coremedia-internal/ckeditor5-coremedia-example-data':
         specifier: 'catalog:'
         version: link:../../packages/ckeditor5-coremedia-example-data
+      '@coremedia/ckeditor5-coremedia-studio-integration-mock':
+        specifier: 'catalog:'
+        version: link:../../packages/ckeditor5-coremedia-studio-integration-mock
       '@coremedia/studio-client.build-config':
         specifier: 'catalog:'
         version: 1.2.1(postcss@8.5.15)(typescript@5.9.3)(webpack@5.107.1(postcss@8.5.15))
@@ -9600,8 +9606,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.6.2
       '@ckeditor/ckeditor5-widget': 47.6.2
       ckeditor5: 47.6.2
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-html-embed@48.1.1':
     dependencies:
@@ -9689,8 +9693,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.6.2
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-indent@48.1.1':
     dependencies:
@@ -9711,8 +9713,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.6.2
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-language@48.1.1':
     dependencies:
@@ -9762,8 +9762,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-list@48.1.1':
     dependencies:
@@ -9939,8 +9937,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.6.2
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-remove-format@48.1.1':
     dependencies:
