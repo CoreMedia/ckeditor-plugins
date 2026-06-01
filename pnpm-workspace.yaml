@@ -3,10 +3,6 @@ packages:
   - itest
   - tests/*
   - app
-onlyBuiltDependencies:
-  - esbuild
-patchedDependencies:
-  "@bbob/preset-html5": patches/@bbob__preset-html5.patch
 catalog:
   '@babel/cli': ^7.25.4
   '@babel/core': ^7.25.4
@@ -94,8 +90,8 @@ catalog:
   minimist: ^1.2.8
   node-esapi: ^0.0.1
   package-directory: ^8.1.0
-  playwright: 1.55.1
-  playwright-core: 1.55.1
+  playwright: ^1.60.0
+  playwright-core: ^1.60.0
   postcss: ^8.5.10
   postcss-loader: ^8.1.1
   prettier: ^3.6.2
@@ -116,16 +112,16 @@ catalog:
   webpack: ^5.104.1
   webpack-cli: ^6.0.1
   xml-formatter: ^3.6.2
+onlyBuiltDependencies:
+  - esbuild
 overrides:
   '@babel/plugin-transform-modules-systemjs@>=7.12.0 <=7.29.3': '>=7.29.4'
   '@babel/runtime@<7.26.10': '>=7.26.10'
-  '@tootallnate/once@<2.0.1': '>=2.0.1'
-  # Keep ajv@6 consumers on a safe 6.x patch, but do NOT push them to v8.
-  ajv@>=6.0.0 <6.14.0: '>=6.14.0 <7.0.0'
-  # Force ajv@7.x pre-releases / old 8.x to a safe 8.x release.
-  ajv@>=7.0.0-alpha.0 <8.18.0: '>=8.18.0'
-  # eslintrc explicitly needs ajv@6; guard it from the generic uplifts above.
   '@eslint/eslintrc>ajv': '>=6.14.0 <7.0.0'
+  '@eslint/eslintrc>minimatch': '>=3.1.4 <4.0.0'
+  '@tootallnate/once@<2.0.1': '>=2.0.1'
+  ajv@>=6.0.0 <6.14.0: '>=6.14.0 <7.0.0'
+  ajv@>=7.0.0-alpha.0 <8.18.0: '>=8.18.0'
   axios@>=1.0.0 <1.12.0: '>=1.12.0'
   axios@>=1.0.0 <1.15.0: '>=1.15.0'
   axios@>=1.0.0 <1.15.1: '>=1.15.1'
@@ -139,6 +135,7 @@ overrides:
   brace-expansion@>=2.0.0 <=2.0.1: '>=2.0.2'
   diff@>=4.0.0 <4.0.4: '>=4.0.4'
   esbuild@<=0.24.2: '>=0.25.0'
+  eslint>minimatch: '>=9.0.4'
   fast-uri@<=3.1.0: '>=3.1.1'
   fast-uri@<=3.1.1: '>=3.1.2'
   flatted@<3.4.0: '>=3.4.0'
@@ -155,15 +152,10 @@ overrides:
   lodash@>=4.0.0 <=4.17.23: '>=4.18.0'
   markdown-it@>=13.0.0 <14.1.1: '>=14.1.1'
   mdast-util-to-hast@>=13.0.0 <13.2.1: '>=13.2.1'
-  # Keep minimatch@3 consumers on a safe 3.x patch — no upper-bound leak into v9/v10.
-  minimatch@>=3.0.0 <3.1.3: '>=3.1.3 <4.0.0'
-  minimatch@>=3.0.0 <3.1.4: '>=3.1.4 <4.0.0'
-  # eslintrc needs minimatch@3 (CJS default export); guard it from v9/v10 uplifts.
-  '@eslint/eslintrc>minimatch': '>=3.1.4 <4.0.0'
-  # ESLint 9 itself requires minimatch@^9; pin it so the broad 3.x override can't downgrade it.
-  'eslint>minimatch': '>=9.0.4'
   minimatch@>=10.0.0 <10.2.1: '>=10.2.1'
   minimatch@>=10.0.0 <10.2.3: '>=10.2.3'
+  minimatch@>=3.0.0 <3.1.3: '>=3.1.3 <4.0.0'
+  minimatch@>=3.0.0 <3.1.4: '>=3.1.4 <4.0.0'
   minimatch@>=9.0.0 <9.0.6: '>=9.0.6'
   minimatch@>=9.0.0 <9.0.7: '>=9.0.7'
   nanoid@<3.3.8: '>=3.3.8'
@@ -181,3 +173,6 @@ overrides:
   webpack@>=5.49.0 <=5.104.0: '>=5.104.1'
   ws@>=8.0.0 <8.20.1: '>=8.20.1'
   yaml@>=2.0.0 <2.8.3: '>=2.8.3'
+patchedDependencies:
+  '@bbob/preset-html5': patches/@bbob__preset-html5.patch
+  playwright-core: patches/playwright-core.patch
