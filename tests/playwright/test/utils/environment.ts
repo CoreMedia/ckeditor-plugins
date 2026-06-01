@@ -5,3 +5,5 @@ export const applicationUrl = `http://localhost:${applicationPort}/sample`;
 export const timeoutFactor = parseInt(process.env.PLAYWRIGHT_TIMEOUT_FACTOR ?? "1");
 
 export const retries = parseInt(process.env.PLAYWRIGHT_RETRIES ?? "0");
+
+export const bbCodeUrl = `${applicationUrl}#dataType=bbcode`;
