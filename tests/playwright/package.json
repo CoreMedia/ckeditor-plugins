@@ -9,6 +9,7 @@
     "@coremedia/studio-client.build-config": "catalog:",
     "@coremedia/studio-client.eslint-config": "catalog:",
     "@coremedia-internal/ckeditor5-coremedia-example-data": "catalog:",
+    "@coremedia/ckeditor5-coremedia-richtext": "catalog:",
     "@coremedia/ckeditor5-coremedia-studio-integration": "catalog:",
     "@coremedia/ckeditor5-coremedia-studio-integration-mock": "catalog:",
     "@playwright/test": "catalog:",

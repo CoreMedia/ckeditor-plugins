@@ -169,7 +169,7 @@ once it has been fully migrated and verified.
 - [x] `BlocklistExpandedKeyboard.test.ts`
 - [x] `BlocklistExpandedToolbar.test.ts`
 - [x] `ContentLink.test.ts`
-- [ ] `Differencing.test.ts`
+- [x] `Differencing.test.ts`
 - [ ] `DocumentLists.test.ts`
 - [ ] `DragDrop.test.ts`
 - [ ] `FontMapper.test.ts`

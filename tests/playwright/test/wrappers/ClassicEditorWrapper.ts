@@ -1,5 +1,6 @@
 import type { JSHandle, Locator, Page } from "playwright-core";
 import type { ClassicEditor } from "ckeditor5";
+import type { RichTextDataProcessor } from "@coremedia/ckeditor5-coremedia-richtext";
 import type { Locatable } from "../locators/Locatable.ts";
 import { visible } from "../locators/Locatable.ts";
 import { EditorWrapper } from "./EditorWrapper";
@@ -41,6 +42,46 @@ export class ClassicEditorWrapper extends EditorWrapper<ClassicEditor> implement
    */
   async setData(value: string): Promise<void> {
     return this.evaluate((editor, value) => editor.setData(value), value);
+  }
+
+  /**
+   * Sets the given data and waits for them being processed to _data view_,
+   * thus, the result of the `toView` transformation of the data processor.
+   *
+   * @param value - value to set
+   */
+  async setDataAndGetDataView(value: string): Promise<string> {
+    /*
+     * What this implementation does:
+     *
+     * * It registers a one-time listener for `richtext:toView`.
+     * * It sets the data as requested.
+     * * It waits for `richtext:toView` to provide the _data view_.
+     *
+     * It also validates, that the event matches the expected data set.
+     */
+    return this.evaluate(
+      (editor, value): Promise<string> =>
+        new Promise<string>((resolve, reject) => {
+          const processor = editor.data.processor as RichTextDataProcessor;
+          // Prior to setting data, wait for them being processed.
+          processor.once("richtext:toView", (eventInfo, eventData: { data?: unknown; dataView?: string }) => {
+            if (typeof eventData.dataView === "string" && "data" in eventData) {
+              if (eventData.data !== value) {
+                reject(
+                  new Error(
+                    `Unexpected data being processed. Concurrent changes applied?\n\tExpected: ${value}\n\tActual: ${eventData.data}`,
+                  ),
+                );
+              }
+              resolve(eventData.dataView);
+            }
+            reject(new Error("richtext:toView provided unexpected data: " + JSON.stringify(eventData)));
+          });
+          editor.setData(value);
+        }),
+      value,
+    );
   }
 
   /**

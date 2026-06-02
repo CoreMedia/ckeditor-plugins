@@ -63,6 +63,9 @@ catalogs:
     '@coremedia-internal/studio-client.test-runner-helper':
       specifier: 0.2.3-alpha.050b44a
       version: 0.2.3-alpha.050b44a
+    '@coremedia/ckeditor5-coremedia-richtext':
+      specifier: 26.0.1-rc.4
+      version: 26.0.1-rc.4
     '@coremedia/ckeditor5-coremedia-studio-integration':
       specifier: 26.0.1-rc.4
       version: 26.0.1-rc.4
@@ -1511,6 +1514,9 @@ importers:
       '@coremedia-internal/ckeditor5-coremedia-example-data':
         specifier: 'catalog:'
         version: link:../../packages/ckeditor5-coremedia-example-data
+      '@coremedia/ckeditor5-coremedia-richtext':
+        specifier: 'catalog:'
+        version: link:../../packages/ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-studio-integration':
         specifier: 'catalog:'
         version: link:../../packages/ckeditor5-coremedia-studio-integration
@@ -9592,6 +9598,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.6.2
       '@ckeditor/ckeditor5-widget': 47.6.2
       ckeditor5: 47.6.2
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-horizontal-line@48.1.1':
     dependencies:
@@ -9610,6 +9618,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.6.2
       '@ckeditor/ckeditor5-widget': 47.6.2
       ckeditor5: 47.6.2
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-html-embed@48.1.1':
     dependencies:
