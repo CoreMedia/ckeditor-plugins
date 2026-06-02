@@ -165,10 +165,10 @@ once it has been fully migrated and verified.
 
 - [x] `BBCode.test.ts`
 - [x] `Blocklist.test.ts`
-- [ ] `BlocklistCollapsed.test.ts`
-- [ ] `BlocklistExpandedKeyboard.test.ts`
-- [ ] `BlocklistExpandedToolbar.test.ts`
-- [ ] `ContentLink.test.ts`
+- [x] `BlocklistCollapsed.test.ts`
+- [x] `BlocklistExpandedKeyboard.test.ts`
+- [x] `BlocklistExpandedToolbar.test.ts`
+- [x] `ContentLink.test.ts`
 - [ ] `Differencing.test.ts`
 - [ ] `DocumentLists.test.ts`
 - [ ] `DragDrop.test.ts`

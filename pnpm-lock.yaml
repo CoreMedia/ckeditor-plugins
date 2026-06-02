@@ -63,8 +63,11 @@ catalogs:
     '@coremedia-internal/studio-client.test-runner-helper':
       specifier: 0.2.3-alpha.050b44a
       version: 0.2.3-alpha.050b44a
+    '@coremedia/ckeditor5-coremedia-studio-integration':
+      specifier: 26.0.1-rc.4
+      version: 26.0.1-rc.4
     '@coremedia/ckeditor5-coremedia-studio-integration-mock':
-      specifier: 26.0.1-rc.0
+      specifier: 26.0.1-rc.4
       version: 26.0.1-rc.4
     '@coremedia/service-agent':
       specifier: ^2.1.2
@@ -1508,6 +1511,9 @@ importers:
       '@coremedia-internal/ckeditor5-coremedia-example-data':
         specifier: 'catalog:'
         version: link:../../packages/ckeditor5-coremedia-example-data
+      '@coremedia/ckeditor5-coremedia-studio-integration':
+        specifier: 'catalog:'
+        version: link:../../packages/ckeditor5-coremedia-studio-integration
       '@coremedia/ckeditor5-coremedia-studio-integration-mock':
         specifier: 'catalog:'
         version: link:../../packages/ckeditor5-coremedia-studio-integration-mock
@@ -9586,8 +9592,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.6.2
       '@ckeditor/ckeditor5-widget': 47.6.2
       ckeditor5: 47.6.2
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-horizontal-line@48.1.1':
     dependencies:
@@ -9693,6 +9697,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.6.2
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-indent@48.1.1':
     dependencies:
@@ -9734,6 +9740,8 @@ snapshots:
       '@ckeditor/ckeditor5-widget': 47.6.2
       ckeditor5: 47.6.2
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-link@48.1.1':
     dependencies:
@@ -9762,6 +9770,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-list@48.1.1':
     dependencies:

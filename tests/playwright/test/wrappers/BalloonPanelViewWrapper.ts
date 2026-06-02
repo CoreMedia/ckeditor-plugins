@@ -3,6 +3,8 @@ import type { Locator } from "playwright-core";
 import type { Locatable } from "../locators/Locatable.ts";
 import { visible } from "../locators/Locatable.ts";
 import { BlocklistActionsViewWrapper } from "./BlocklistActionsViewWrapper";
+import { LinkToolbarViewWrapper } from "./LinkToolbarViewWrapper";
+import { LinkFormViewWrapper } from "./LinkFormViewWrapper";
 
 export class BalloonPanelViewWrapper implements Locatable {
   readonly #parent: Locatable;
@@ -19,8 +21,13 @@ export class BalloonPanelViewWrapper implements Locatable {
     return visible(this);
   }
 
-  // Note: `linkToolbarView` / `linkFormView` accessors will be added when the
-  // link-related suites are migrated.
+  get linkToolbarView(): LinkToolbarViewWrapper {
+    return LinkToolbarViewWrapper.fromParent(this);
+  }
+
+  get linkFormView(): LinkFormViewWrapper {
+    return LinkFormViewWrapper.fromParent(this);
+  }
 
   get blocklistActionsView(): BlocklistActionsViewWrapper {
     return BlocklistActionsViewWrapper.fromParent(this);
