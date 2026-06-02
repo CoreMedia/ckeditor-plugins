@@ -102,6 +102,16 @@ Define explicit mapping from Jest/jest-playwright patterns to Playwright equival
   await page.keyboard.down("ControlOrMeta");
   ```
 
+- **Formatting / lint:** Do **not** hand-tune formatting (Prettier/ESLint
+  whitespace, import wrapping, trailing newlines, etc.) while migrating. There is
+  no need to fix these style-only findings during the work — formatting is
+  applied in one go at the end via:
+
+  ```sh
+  pnpm lint --fix
+  ```
+
+  Focus on correct logic and types; let `pnpm lint --fix` normalize the style.
 
 
 
@@ -174,7 +184,7 @@ once it has been fully migrated and verified.
 - [x] `DragDrop.test.ts`
 - [x] `FontMapper.test.ts`
 - [x] `HelloEditor.test.ts`
-- [ ] `Images.test.ts`
+- [x] `Images.test.ts`
 - [ ] `LinkBalloon.test.ts`
 - [ ] `LinkUserInteraction.test.ts`
 - [ ] `PasteButton.test.ts`
