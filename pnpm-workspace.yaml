@@ -172,4 +172,3 @@ overrides:
   yaml@>=2.0.0 <2.8.3: '>=2.8.3'
 patchedDependencies:
   '@bbob/preset-html5': patches/@bbob__preset-html5.patch
-  playwright-core: patches/playwright-core.patch

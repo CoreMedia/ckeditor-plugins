@@ -297,9 +297,6 @@ patchedDependencies:
   '@bbob/preset-html5':
     hash: 896f563a2db8281dd04f86ab48e757d7728380f10832ffae381bc0c9ed766d3a
     path: patches/@bbob__preset-html5.patch
-  playwright-core:
-    hash: c2700eaa62e6715c600762ca3d3c18f24345e73bc2c71d5130cddec1f751baab
-    path: patches/playwright-core.patch
 
 importers:
 
@@ -1552,7 +1549,7 @@ importers:
         version: 5.1.0
       playwright-core:
         specifier: 'catalog:'
-        version: 1.60.0(patch_hash=c2700eaa62e6715c600762ca3d3c18f24345e73bc2c71d5130cddec1f751baab)
+        version: 1.60.0
       rimraf:
         specifier: 'catalog:'
         version: 6.1.3
@@ -9025,8 +9022,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.6.2
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-alignment@48.1.1':
     dependencies:
@@ -9044,8 +9039,6 @@ snapshots:
       '@ckeditor/ckeditor5-typing': 47.6.2
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-autoformat@48.1.1':
     dependencies:
@@ -9061,8 +9054,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-autosave@48.1.1':
     dependencies:
@@ -9080,8 +9071,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.6.2
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-basic-styles@48.1.1':
     dependencies:
@@ -9175,8 +9164,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.6.2
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-ckfinder@48.1.1':
     dependencies:
@@ -9729,6 +9716,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.6.2
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-language@48.1.1':
     dependencies:
@@ -9750,8 +9739,6 @@ snapshots:
       '@ckeditor/ckeditor5-widget': 47.6.2
       ckeditor5: 47.6.2
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-link@48.1.1':
     dependencies:
@@ -14087,11 +14074,11 @@ snapshots:
     dependencies:
       find-up: 5.0.0
 
-  playwright-core@1.60.0(patch_hash=c2700eaa62e6715c600762ca3d3c18f24345e73bc2c71d5130cddec1f751baab): {}
+  playwright-core@1.60.0: {}
 
   playwright@1.60.0:
     dependencies:
-      playwright-core: 1.60.0(patch_hash=c2700eaa62e6715c600762ca3d3c18f24345e73bc2c71d5130cddec1f751baab)
+      playwright-core: 1.60.0
     optionalDependencies:
       fsevents: 2.3.2
 

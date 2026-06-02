@@ -1,4 +1,20 @@
-import type { JSHandle, PageFunctionOn, SmartHandle } from "playwright-core";
+import type { ElementHandle, JSHandle } from "playwright-core";
+
+/**
+ * Local counterpart to Playwright's internal `PageFunctionOn` type. It is
+ * reconstructed from the `pageFunction` parameter of `JSHandle.evaluateHandle`
+ * (whose signature is
+ * `evaluateHandle<R, Arg, O extends T = T>(pageFunction: PageFunctionOn<O, Arg, R>, arg: Arg)`),
+ * so that we neither have to import it from the non-exported
+ * `playwright-core/types/structs` nor patch `playwright-core`.
+ */
+type PageFunctionOn<On, Arg, R> = string | ((on: On, arg2: Arg) => R | Promise<R>);
+
+/**
+ * Local counterpart to Playwright's internal `SmartHandle` type, i.e. the
+ * resolved return type of `JSHandle.evaluateHandle`.
+ */
+type SmartHandle<R> = [R] extends [Node] ? ElementHandle<R> : JSHandle<R>;
 
 /**
  * General concept for JSHandle wrappers.
@@ -15,10 +31,6 @@ export class JSWrapper<T> {
    */
   get instance(): Promise<JSHandle<T>> {
     return this.#instance;
-  }
-
-  exists(): Promise<boolean> {
-    return this.evaluate((w) => !!w);
   }
 
   evaluate<R, Arg, O extends T = T>(pageFunction: PageFunctionOn<O, Arg, R>, arg: Arg): Promise<R>;
