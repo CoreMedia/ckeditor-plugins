@@ -171,8 +171,8 @@ once it has been fully migrated and verified.
 - [x] `ContentLink.test.ts`
 - [x] `Differencing.test.ts`
 - [x] `DocumentLists.test.ts`
-- [ ] `DragDrop.test.ts`
-- [ ] `FontMapper.test.ts`
+- [x] `DragDrop.test.ts`
+- [x] `FontMapper.test.ts`
 - [ ] `HelloEditor.test.ts`
 - [ ] `Images.test.ts`
 - [ ] `LinkBalloon.test.ts`

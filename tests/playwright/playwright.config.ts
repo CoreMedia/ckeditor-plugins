@@ -64,6 +64,10 @@ export default defineConfig({
       width: 1920,
       height: 1080,
     },
+    // Mirrors the former jest-playwright `contextOptions.permissions`. Required,
+    // for example, by the FontMapper tests that read from / write to the
+    // clipboard (otherwise `clipboard-read` resolves to "prompt").
+    permissions: ["clipboard-read", "clipboard-write"],
     headless: isCI,
     trace: {
       mode: "retain-on-failure",
