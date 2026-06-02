@@ -186,7 +186,7 @@ once it has been fully migrated and verified.
 - [x] `HelloEditor.test.ts`
 - [x] `Images.test.ts`
 - [x] `LinkBalloon.test.ts`
-- [ ] `LinkUserInteraction.test.ts`
+- [x] `LinkUserInteraction.test.ts`
 - [ ] `PasteButton.test.ts`
 
 Total: 15 test suites.
