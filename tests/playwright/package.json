@@ -19,6 +19,7 @@
     "ckeditor5": "catalog:",
     "eslint": "catalog:",
     "express": "catalog:",
+    "playwright": "catalog:",
     "playwright-core": "catalog:",
     "rimraf": "catalog:",
     "rxjs": "catalog:",
