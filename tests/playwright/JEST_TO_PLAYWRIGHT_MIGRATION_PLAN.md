@@ -173,7 +173,7 @@ once it has been fully migrated and verified.
 - [x] `DocumentLists.test.ts`
 - [x] `DragDrop.test.ts`
 - [x] `FontMapper.test.ts`
-- [ ] `HelloEditor.test.ts`
+- [x] `HelloEditor.test.ts`
 - [ ] `Images.test.ts`
 - [ ] `LinkBalloon.test.ts`
 - [ ] `LinkUserInteraction.test.ts`
