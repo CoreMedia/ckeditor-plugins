@@ -185,7 +185,7 @@ once it has been fully migrated and verified.
 - [x] `FontMapper.test.ts`
 - [x] `HelloEditor.test.ts`
 - [x] `Images.test.ts`
-- [ ] `LinkBalloon.test.ts`
+- [x] `LinkBalloon.test.ts`
 - [ ] `LinkUserInteraction.test.ts`
 - [ ] `PasteButton.test.ts`
 
