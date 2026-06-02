@@ -2,6 +2,8 @@ import type { Page } from "playwright-core";
 import { MockServiceAgentPluginWrapper } from "../services/MockServiceAgentPluginWrapper";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import { MockContentPluginWrapper } from "./MockContentPluginWrapper";
+import { MockExternalContentPluginWrapper } from "./MockExternalContentPluginWrapper";
+import { MockInputExamplePluginWrapper } from "./MockInputExamplePluginWrapper";
 
 /**
  * Provides access to the example application.
@@ -48,5 +50,19 @@ export class ApplicationWrapper {
    */
   get mockContent(): MockContentPluginWrapper {
     return MockContentPluginWrapper.fromClassicEditor(this.editor);
+  }
+
+  /**
+   * Provides access to the mock external content plugin.
+   */
+  get mockExternalContent(): MockExternalContentPluginWrapper {
+    return MockExternalContentPluginWrapper.fromClassicEditor(this.editor);
+  }
+
+  /**
+   * Provides access to the mock input example plugin.
+   */
+  get mockInputExamplePlugin(): MockInputExamplePluginWrapper {
+    return MockInputExamplePluginWrapper.fromClassicEditor(this.editor);
   }
 }
