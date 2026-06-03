@@ -136,6 +136,18 @@ jobs:
           echo '//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
           pnpm publishall --registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/ --no-git-checks
           git reset --hard
+      # The "Create Release Version" step pinned all @coremedia/* interdependencies
+      # to concrete versions so they could be published. Now that publishing is done,
+      # restore the workspace protocol ("workspace:^<version>") in the committed
+      # sources, so ongoing development resolves against the local workspace packages.
+      - name: Restore workspace dependency versions
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          version=$(cat .release-version)
+          echo "Restoring workspace dependency versions for: ${version}"
+          pnpm run setversion ${version} --filter=coremedia/* --dependencyVersion=workspace:^${version}
+          pnpm install --no-frozen-lockfile
+          git commit -am "ci: Restore workspace dependency versions for ${version}"
       - name: Push commits
         run: git push
       - name: Create git tag

@@ -66,6 +66,8 @@ jobs:
           actual_version=$(cat .release-version)
           prnumber=${{ steps.read-prnumber.outputs.prnumber }}
           next_version=$(pnpm --silent "script:version" --pull-request ${prnumber} --run-number ${{ github.run_number }})
+          # Remember the resolved version for the later "Restore workspace dependency versions" step.
+          echo "NEXT_VERSION=${next_version}" >> $GITHUB_ENV
           pnpm run setversion ${next_version} --filter=coremedia/* --dependencyVersion=${next_version}
           git commit -am "Set next pre-release version to: ${next_version}"
           pnpm install --no-frozen-lockfile
@@ -95,3 +97,16 @@ jobs:
           pnpm install --production
           echo '//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
           pnpm publishall --registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/ --no-git-checks --tag pullrequest
+      # The "Set prerelease version" step pinned all @coremedia/* interdependencies
+      # to concrete versions so they could be published. Now that publishing is done,
+      # restore the workspace protocol ("workspace:^<version>") in the committed sources,
+      # so ongoing development resolves against the local workspace packages.
+      - name: Restore workspace dependency versions
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          # Avoid committing the auth token written to .npmrc during publishing.
+          git checkout -- .npmrc || true
+          echo "Restoring workspace dependency versions for: ${NEXT_VERSION}"
+          pnpm run setversion ${NEXT_VERSION} --filter=coremedia/* --dependencyVersion=workspace:^${NEXT_VERSION}
+          pnpm install --no-frozen-lockfile
+          git commit -am "ci: Restore workspace dependency versions for ${NEXT_VERSION}"
