@@ -37,7 +37,7 @@
     "bootstrap": "pnpm install",
     "publishall": "pnpm --recursive publish",
     "setversion": "set-version",
-    "clean": "pnpm --recursive clean",
+    "clean": "pnpm --recursive run clean",
     "clean:node_modules": "rimraf --glob \"./**/node_modules\"",
     "build": "pnpm --recursive build",
     "doc": "typedoc",
