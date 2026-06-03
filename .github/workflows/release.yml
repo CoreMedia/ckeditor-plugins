@@ -93,26 +93,6 @@ jobs:
           git commit -am "ci: Set next release version to: ${next_version}"
           pnpm install --no-frozen-lockfile
           git commit -am "ci: Update pnpm-lock.yaml for version ${next_version}"
-      # Set prerelease version.
-      # On push, we only want to provide a possible rc, which is testable and maybe already testable by our customers.
-      # Make sure to set the dependency versions to the concrete version as prerelease versions are not referenced by semver ranges.
-      - name: Create Prerelease Version
-        if: github.event_name == 'push'
-        # Make sure to not commit anything, which has been changed in one of the previous steps.
-        # Update the version, afterwards commit and push.
-        run: |
-          if [ -n "$(git status --porcelain)" ]; then
-            git status
-            echo "error:: There are unexpected changes in git!";
-            exit 1
-          fi
-          # Also updates .release-version
-          next_version=$(pnpm --silent "script:version" --release-candidate --write)
-          echo "Next version: ${next_version}"
-          pnpm run setversion ${next_version} --filter=coremedia/* --dependencyVersion=${next_version}
-          git commit -am "Set next release-candidate version to: ${next_version}"
-          pnpm install --no-frozen-lockfile
-          git commit -am "ci: Update pnpm-lock.yaml for version ${next_version}"
       - name: Create env file
         run: |
           touch .env
