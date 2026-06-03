@@ -150,7 +150,8 @@ jobs:
         if: ${{ inputs.itest }}
         name: "Integration Tests"
         run: |
-          pnpm playwright
+          pnpm exec playwright install --with-deps chromium
+          pnpm run ui-test
       - id: doc
         if: ${{ inputs.doc }}
         name: "Build Documentation"

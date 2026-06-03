@@ -25,7 +25,7 @@ env:
   NODE_VERSION: 24
   # https://github.com/actions/runner-images/issues/70
   NODE_OPTIONS: "--max_old_space_size=4096"
-  PNPM_VERSION: ^10.24
+  PNPM_VERSION: ^11.3
   NPM_CONFIG_@coremedia:registry: 'https://repository.coremedia.com/nexus/repository/coremedia-npm'
   NPM_CONFIG_@coremedia-internal:registry: 'https://repository.coremedia.com/nexus/repository/coremedia-npm'
 
@@ -127,7 +127,9 @@ jobs:
           CKEDITOR_LICENSE_KEY: ${{ secrets.CKEDITOR_LICENSE }}
         run: pnpm test
       - name: Playwright Tests
-        run: pnpm playwright
+        run: |
+          pnpm exec playwright install --with-deps chromium
+          pnpm run ui-test
       - name: TypeDoc
         run: |
           if [ -n "$(git status --porcelain)" ]; then
