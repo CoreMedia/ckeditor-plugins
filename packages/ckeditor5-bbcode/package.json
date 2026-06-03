@@ -59,10 +59,10 @@
     "@bbob/preset": "catalog:",
     "@bbob/preset-html5": "catalog:",
     "@bbob/types": "catalog:",
-    "@coremedia/ckeditor5-common": "26.0.1-rc.4",
-    "@coremedia/ckeditor5-core-common": "26.0.1-rc.4",
-    "@coremedia/ckeditor5-dom-support": "26.0.1-rc.4",
-    "@coremedia/ckeditor5-logging": "26.0.1-rc.4"
+    "@coremedia/ckeditor5-common": "workspace:^26.0.1-rc.4",
+    "@coremedia/ckeditor5-core-common": "workspace:^26.0.1-rc.4",
+    "@coremedia/ckeditor5-dom-support": "workspace:^26.0.1-rc.4",
+    "@coremedia/ckeditor5-logging": "workspace:^26.0.1-rc.4"
   },
   "devDependencies": {
     "@coremedia-internal/studio-client.test-runner-helper": "catalog:",

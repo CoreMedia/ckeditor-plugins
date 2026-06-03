@@ -50,7 +50,7 @@
     "ckeditor5": "catalog:"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-logging": "26.0.1-rc.4"
+    "@coremedia/ckeditor5-logging": "workspace:^26.0.1-rc.4"
   },
   "scripts": {
     "clean": "pnpm clean:src && pnpm clean:dist",

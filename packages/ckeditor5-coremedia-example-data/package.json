@@ -1,6 +1,6 @@
 {
   "name": "@coremedia-internal/ckeditor5-coremedia-example-data",
-  "version": "1.0.0",
+  "version": "1.0.0-SNAPSHOT",
   "type": "module",
   "private": true,
   "description": "Example Data for Testing",
@@ -40,7 +40,7 @@
     "typescript": "catalog:"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "26.0.1-rc.4"
+    "@coremedia/ckeditor5-common": "workspace:^26.0.1-rc.4"
   },
   "scripts": {
     "build": "tsc --project ./tsconfig.release.json",
