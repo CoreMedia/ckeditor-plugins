@@ -1,5 +1,5 @@
 import type { Page } from "playwright-core";
-import { MockServiceAgentPluginWrapper } from "../services/MockServiceAgentPluginWrapper";
+import { MockServiceAgentPluginWrapper } from "./MockServiceAgentPluginWrapper.ts";
 import { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 import { MockContentPluginWrapper } from "./MockContentPluginWrapper";
 import { MockExternalContentPluginWrapper } from "./MockExternalContentPluginWrapper";
