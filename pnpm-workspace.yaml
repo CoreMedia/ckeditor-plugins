@@ -2,6 +2,9 @@ packages:
   - packages/*
   - tests/*
   - app
+allowBuilds:
+  esbuild: true
+  unrs-resolver: true
 catalog:
   '@babel/cli': ^7.25.4
   '@babel/core': ^7.25.4
@@ -19,25 +22,7 @@ catalog:
   '@ckeditor/ckeditor5-dev-utils': ^55.6.1
   '@ckeditor/ckeditor5-inspector': ^5.0.0
   '@ckeditor/ckeditor5-theme-lark': 47.6.2
-  '@coremedia-internal/ckeditor5-babel-config': ^1.0.0
-  '@coremedia-internal/ckeditor5-coremedia-example-data': ^1.0.0
   '@coremedia-internal/studio-client.test-runner-helper': ^1.1.0
-  '@coremedia/ckeditor5-bbcode': 26.0.1-rc.4
-  '@coremedia/ckeditor5-coremedia-blocklist': 26.0.1-rc.4
-  '@coremedia/ckeditor5-coremedia-content-clipboard': 26.0.1-rc.4
-  '@coremedia/ckeditor5-coremedia-differencing': 26.0.1-rc.4
-  '@coremedia/ckeditor5-coremedia-images': 26.0.1-rc.4
-  '@coremedia/ckeditor5-coremedia-link': 26.0.1-rc.4
-  '@coremedia/ckeditor5-coremedia-richtext': 26.0.1-rc.4
-  '@coremedia/ckeditor5-coremedia-studio-essentials': 26.0.1-rc.4
-  '@coremedia/ckeditor5-coremedia-studio-integration': 26.0.1-rc.4
-  '@coremedia/ckeditor5-coremedia-studio-integration-mock': 26.0.1-rc.4
-  '@coremedia/ckeditor5-data-facade': 26.0.1-rc.4
-  '@coremedia/ckeditor5-dataprocessor-support': 26.0.1-rc.4
-  '@coremedia/ckeditor5-dialog-visibility': 26.0.1-rc.4
-  '@coremedia/ckeditor5-dom-converter': 26.0.1-rc.4
-  '@coremedia/ckeditor5-font-mapper': 26.0.1-rc.4
-  '@coremedia/ckeditor5-link-common': 26.0.1-rc.4
   '@coremedia/service-agent': ^2.1.2
   '@coremedia/set-version': 1.2.0
   '@coremedia/studio-client.build-config': ^1.1.0
@@ -48,7 +33,7 @@ catalog:
   '@playwright/test': ^1.59.1
   '@stylistic/eslint-plugin': ^5.2.3
   '@types/eslint': ^9.6.1
-  '@types/node': ^24.11.1
+  '@types/node': ^24.12.4
   '@types/webpack': ^5.28.5
   '@typescript-eslint/eslint-plugin': ^8.39.1
   '@typescript-eslint/parser': ^8.39.1
