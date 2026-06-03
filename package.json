@@ -42,7 +42,7 @@
     "build": "pnpm --recursive build",
     "doc": "typedoc",
     "doc:config": "typedoc --showConfig",
-    "ui-test": "pnpm --recursive --filter \"@coremedia/ckeditor5-coremedia-itest\" run ui-test",
+    "ui-test": "pnpm --recursive --filter \"@coremedia/ckeditor5-playwright-itest\" run ui-test",
     "test": "pnpm --recursive test",
     "prettier": "prettier --check \"**/*.{js,cjs,mjs,ts,tsx}\"",
     "prettier:fix": "prettier --write \"**/*.{js,cjs,mjs,ts,tsx}\"",
