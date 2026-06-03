@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-playwright-itest",
-  "version": "1.0.0-SNAPSHOT",
+  "version": "26.0.1-rc.4",
   "author": "CoreMedia GmbH",
   "license": "CoreMedia Open Source License",
   "type": "module",
