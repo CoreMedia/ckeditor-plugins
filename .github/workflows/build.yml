@@ -122,6 +122,17 @@ jobs:
         name: Install
         run: |
           pnpm install --frozen-lockfile
+      - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        id: playwright-cache
+        if: ${{ inputs.itest }}
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('node_modules/.pnpm/@playwright+test@*/node_modules/@playwright/test/package.json') }}
+
+      - name: Install playwright deps
+        if: ${{ inputs.itest && steps.playwright-cache.outputs.cache-hit != 'true' }}
+        shell: bash
+        run: pnpm exec playwright install --with-deps chromium
       - name: Create env file
         run: |
           touch .env
@@ -150,7 +161,6 @@ jobs:
         if: ${{ inputs.itest }}
         name: "Integration Tests"
         run: |
-          pnpm exec playwright install --with-deps chromium
           pnpm run ui-test
       - id: doc
         if: ${{ inputs.doc }}
