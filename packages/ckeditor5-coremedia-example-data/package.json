@@ -1,6 +1,6 @@
 {
   "name": "@coremedia-internal/ckeditor5-coremedia-example-data",
-  "version": "1.0.0",
+  "version": "1.0.0-SNAPSHOT",
   "type": "module",
   "private": true,
   "description": "Example Data for Testing",
