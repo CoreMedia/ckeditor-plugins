@@ -132,6 +132,7 @@ jobs:
       - name: Install playwright deps
         if: ${{ inputs.itest && steps.playwright-cache.outputs.cache-hit != 'true' }}
         shell: bash
+        working-directory: tests/playwright
         run: pnpm exec playwright install --with-deps chromium
       - name: Create env file
         run: |
