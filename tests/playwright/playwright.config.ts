@@ -59,7 +59,13 @@ export default defineConfig({
     ],
   ],
   use: {
+    // Spread Desktop Chrome HiDPI for deviceScaleFactor etc., but drop the
+    // hardcoded Windows user agent so the browser reports its real UA.
+    // Without this, CKEditor5's env.isMac is always false on macOS, causing
+    // Ctrl+Shift+P to not be remapped to Cmd+Shift+P and breaking keyboard
+    // shortcut tests on Mac.
     ...devices["Desktop Chrome HiDPI"],
+    userAgent: undefined,
     viewport: {
       width: 1920,
       height: 1080,
