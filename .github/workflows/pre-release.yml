@@ -86,6 +86,7 @@ jobs:
           CKEDITOR_LICENSE_KEY: ${{ secrets.CKEDITOR_LICENSE }}
         run: pnpm test
       - name: Playwright Tests
+        working-directory: tests/playwright
         run: |
           pnpm exec playwright install --with-deps chromium
           pnpm run ui-test
