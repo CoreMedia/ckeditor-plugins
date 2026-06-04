@@ -1,6 +1,6 @@
 {
   "name": "@coremedia-internal/ckeditor5-babel-config",
-  "version": "1.0.0",
+  "version": "1.0.0-SNAPSHOT",
   "description": "Shared Babel configuration",
   "author": {
     "name": "CoreMedia GmbH",
