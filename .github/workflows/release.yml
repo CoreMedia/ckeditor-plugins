@@ -146,7 +146,7 @@ jobs:
         run: |
           version=$(cat .release-version)
           echo "Restoring workspace dependency versions for: ${version}"
-          pnpm run setversion ${version} --filter=coremedia/* --dependencyVersion=workspace:^${version}
+          pnpm run setversion ${version} --filter=coremedia/* --dependencyVersion=workspace:${version}
           pnpm install --no-frozen-lockfile
           git commit -am "ci: Restore workspace dependency versions for ${version}"
       - name: Push commits

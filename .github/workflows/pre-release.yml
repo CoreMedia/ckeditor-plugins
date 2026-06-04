@@ -68,7 +68,7 @@ jobs:
           next_version=$(pnpm --silent "script:version" --pull-request ${prnumber} --run-number ${{ github.run_number }})
           # Remember the resolved version for the later "Restore workspace dependency versions" step.
           echo "NEXT_VERSION=${next_version}" >> $GITHUB_ENV
-          pnpm run setversion ${next_version} --filter=coremedia/* --dependencyVersion=${next_version}
+          pnpm run setversion ${next_version} --filter=coremedia/* --dependencyVersion=workspace:${next_version}
           git commit -am "Set next pre-release version to: ${next_version}"
           pnpm install --no-frozen-lockfile
           git commit -am "ci: Update pnpm-lock.yaml for version ${next_version}"
