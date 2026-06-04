@@ -3,7 +3,7 @@ import type {
   InputExampleElement,
   MockContentConfig,
   MockExternalContent,
-} from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
+} from "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock";
 import type { Page } from "playwright-core";
 import { expect, test } from "./base";
 import { editor } from "./locators/editor";

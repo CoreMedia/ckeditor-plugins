@@ -214,7 +214,7 @@ implements the described behavior.
 
 [`ckeditor5-coremedia-studio-integration`]: <./packages/ckeditor5-coremedia-studio-integration> "@coremedia/ckeditor5-coremedia-studio-integration"
 
-[`ckeditor5-coremedia-studio-integration-mock`]: <./packages/ckeditor5-coremedia-studio-integration-mock> "@coremedia/ckeditor5-coremedia-studio-integration-mock"
+[`ckeditor5-coremedia-studio-integration-mock`]: <./packages/ckeditor5-coremedia-studio-integration-mock> "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock"
 
 [`ckeditor5-data-facade`]: <./packages/ckeditor5-data-facade> "@coremedia/ckeditor5-data-facade"
 

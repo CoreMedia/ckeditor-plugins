@@ -13,6 +13,7 @@
   "private": true,
   "dependencies": {
     "@coremedia-internal/ckeditor5-coremedia-example-data": "workspace:^1.0.0-SNAPSHOT",
+    "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock": "workspace:^1.0.0-SNAPSHOT",
     "@coremedia/ckeditor5-bbcode": "workspace:^26.0.1-rc.4",
     "@coremedia/ckeditor5-coremedia-blocklist": "workspace:^26.0.1-rc.4",
     "@coremedia/ckeditor5-coremedia-content-clipboard": "workspace:^26.0.1-rc.4",
@@ -21,7 +22,6 @@
     "@coremedia/ckeditor5-coremedia-link": "workspace:^26.0.1-rc.4",
     "@coremedia/ckeditor5-coremedia-richtext": "workspace:^26.0.1-rc.4",
     "@coremedia/ckeditor5-coremedia-studio-essentials": "workspace:^26.0.1-rc.4",
-    "@coremedia/ckeditor5-coremedia-studio-integration-mock": "workspace:^1.0.0-SNAPSHOT",
     "@coremedia/ckeditor5-data-facade": "workspace:^26.0.1-rc.4",
     "@coremedia/ckeditor5-dataprocessor-support": "workspace:^26.0.1-rc.4",
     "@coremedia/ckeditor5-dialog-visibility": "workspace:^26.0.1-rc.4",

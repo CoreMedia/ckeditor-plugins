@@ -1,5 +1,5 @@
 // noinspection HttpUrlsUsage
-import { PREDEFINED_MOCK_LINK_DATA } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
+import { PREDEFINED_MOCK_LINK_DATA } from "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock";
 import type { ExampleData } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { bbCodeData, initExamples, richTextData } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import type { Editor } from "ckeditor5";

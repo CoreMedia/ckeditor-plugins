@@ -16,7 +16,7 @@ import {
   COREMEDIA_MOCK_CONTENT_PLUGIN,
   MockInputExamplePlugin,
   MockStudioIntegration,
-} from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
+} from "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock";
 import {
   COREMEDIA_RICHTEXT_CONFIG_KEY,
   COREMEDIA_RICHTEXT_SUPPORT_CONFIG_KEY,

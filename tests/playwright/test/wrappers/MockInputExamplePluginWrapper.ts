@@ -1,7 +1,7 @@
 import type {
   InputExampleElement,
   MockInputExamplePlugin,
-} from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
+} from "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock";
 import type {
   IsDroppableEvaluationResult,
   IsLinkableEvaluationResult,

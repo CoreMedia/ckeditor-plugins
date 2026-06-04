@@ -1,5 +1,8 @@
 import { richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
-import type { InputExampleElement, MockContentConfig } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
+import type {
+  InputExampleElement,
+  MockContentConfig,
+} from "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock";
 import type { Page } from "playwright-core";
 import { expect, test } from "./base";
 import { editor } from "./locators/editor";

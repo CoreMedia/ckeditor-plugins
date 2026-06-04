@@ -1,4 +1,4 @@
-import type { MockBlocklistService } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
+import type { MockBlocklistService } from "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock";
 import { JSWrapper } from "./JSWrapper.ts";
 import type { MockServiceAgentPluginWrapper } from "./MockServiceAgentPluginWrapper.ts";
 

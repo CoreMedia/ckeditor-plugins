@@ -1,4 +1,7 @@
-import type { MockContentConfig, MockContentPlugin } from "@coremedia/ckeditor5-coremedia-studio-integration-mock";
+import type {
+  MockContentConfig,
+  MockContentPlugin,
+} from "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock";
 import { JSWrapper } from "./JSWrapper";
 import type { ClassicEditorWrapper } from "./ClassicEditorWrapper";
 
