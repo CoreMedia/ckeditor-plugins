@@ -299,6 +299,9 @@ importers:
       '@coremedia-internal/ckeditor5-coremedia-example-data':
         specifier: workspace:^1.0.0-SNAPSHOT
         version: link:../packages/ckeditor5-coremedia-example-data
+      '@coremedia-internal/ckeditor5-coremedia-studio-integration-mock':
+        specifier: workspace:^1.0.0-SNAPSHOT
+        version: link:../packages/ckeditor5-coremedia-studio-integration-mock
       '@coremedia/ckeditor5-bbcode':
         specifier: workspace:^26.0.1-rc.4
         version: link:../packages/ckeditor5-bbcode
@@ -323,9 +326,6 @@ importers:
       '@coremedia/ckeditor5-coremedia-studio-essentials':
         specifier: workspace:^26.0.1-rc.4
         version: link:../packages/ckeditor5-coremedia-studio-essentials
-      '@coremedia/ckeditor5-coremedia-studio-integration-mock':
-        specifier: workspace:^1.0.0-SNAPSHOT
-        version: link:../packages/ckeditor5-coremedia-studio-integration-mock
       '@coremedia/ckeditor5-data-facade':
         specifier: workspace:^26.0.1-rc.4
         version: link:../packages/ckeditor5-data-facade
@@ -1438,15 +1438,15 @@ importers:
       '@coremedia-internal/ckeditor5-coremedia-example-data':
         specifier: workspace:^1.0.0-SNAPSHOT
         version: link:../../packages/ckeditor5-coremedia-example-data
+      '@coremedia-internal/ckeditor5-coremedia-studio-integration-mock':
+        specifier: workspace:^1.0.0-SNAPSHOT
+        version: link:../../packages/ckeditor5-coremedia-studio-integration-mock
       '@coremedia/ckeditor5-coremedia-richtext':
         specifier: workspace:^26.0.1-rc.4
         version: link:../../packages/ckeditor5-coremedia-richtext
       '@coremedia/ckeditor5-coremedia-studio-integration':
         specifier: workspace:^26.0.1-rc.4
         version: link:../../packages/ckeditor5-coremedia-studio-integration
-      '@coremedia/ckeditor5-coremedia-studio-integration-mock':
-        specifier: workspace:^1.0.0-SNAPSHOT
-        version: link:../../packages/ckeditor5-coremedia-studio-integration-mock
       '@coremedia/studio-client.build-config':
         specifier: 'catalog:'
         version: 1.2.1(postcss@8.5.15)(typescript@5.9.3)(webpack@5.107.1(postcss@8.5.15))
@@ -7763,6 +7763,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.6.2
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-code-block@48.1.1':
     dependencies:
@@ -8048,6 +8050,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.6.2
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-font@48.1.1':
     dependencies:
@@ -8127,6 +8131,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.6.2
       '@ckeditor/ckeditor5-widget': 47.6.2
       ckeditor5: 47.6.2
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-horizontal-line@48.1.1':
     dependencies:
@@ -8145,6 +8151,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.6.2
       '@ckeditor/ckeditor5-widget': 47.6.2
       ckeditor5: 47.6.2
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-html-embed@48.1.1':
     dependencies:
@@ -8169,6 +8177,8 @@ snapshots:
       '@ckeditor/ckeditor5-widget': 47.6.2
       ckeditor5: 47.6.2
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-html-support@48.1.1':
     dependencies:
@@ -8230,6 +8240,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.6.2
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-indent@48.1.1':
     dependencies:
@@ -8271,6 +8283,8 @@ snapshots:
       '@ckeditor/ckeditor5-widget': 47.6.2
       ckeditor5: 47.6.2
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-link@48.1.1':
     dependencies:
@@ -8299,6 +8313,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-list@48.1.1':
     dependencies:
@@ -8372,6 +8388,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.6.2
       '@ckeditor/ckeditor5-widget': 47.6.2
       ckeditor5: 47.6.2
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-media-embed@48.1.1':
     dependencies:
@@ -8412,6 +8430,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.6.2
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-minimap@48.1.1':
     dependencies:
@@ -8460,6 +8480,8 @@ snapshots:
       '@ckeditor/ckeditor5-core': 47.6.2
       '@ckeditor/ckeditor5-engine': 47.6.2
       ckeditor5: 47.6.2
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-paste-from-office@48.1.1':
     dependencies:
