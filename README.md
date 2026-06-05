@@ -64,7 +64,6 @@ workspace usage, are not published and have scope `@coremedia-internal/`.
 
 | Name                                              | Description                                                                |
 |---------------------------------------------------|----------------------------------------------------------------------------|
-| [`ckeditor5-babel-config`][]                      | Internal: Shared Babel configuration.                                      |
 | [`ckeditor5-bbcode`][]                            | BBCode: Data-Processor                                                     |
 | [`ckeditor5-common`][]                            | Common Utilities, independent from CKEditor                                |
 | [`ckeditor5-core-common`][]                       | Assistive Utilities for `@ckeditor/ckeditor5-core`                         |
@@ -183,8 +182,6 @@ implements the described behavior.
 * **[Versioning](./VERSIONING.md):** Versioning Policy
 
 <!-- ===========================================================[References] -->
-
-[`ckeditor5-babel-config`]: <./packages/ckeditor5-babel-config> "@coremedia-internal/ckeditor5-babel-config"
 
 [`ckeditor5-bbcode`]: <./packages/ckeditor5-bbcode> "@coremedia/ckeditor5-bbcode"
 
