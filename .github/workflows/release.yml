@@ -89,7 +89,7 @@ jobs:
           # Also updates .release-version
           next_version=$(pnpm --silent "script:version" --release ${{ github.event.inputs.release_type }} --write)
           echo "Next version: ${next_version}"
-          pnpm run setversion ${next_version} --filter=coremedia/* --dependencyVersion=^${next_version}
+          pnpm run setversion ${next_version} --filter=coremedia/* --dependencyVersion=workspace:${next_version}
           git commit -am "ci: Set next release version to: ${next_version}"
           pnpm install --no-frozen-lockfile
           git commit -am "ci: Update pnpm-lock.yaml for version ${next_version}"
@@ -146,7 +146,7 @@ jobs:
         run: |
           version=$(cat .release-version)
           echo "Restoring workspace dependency versions for: ${version}"
-          pnpm run setversion ${version} --filter=coremedia/* --dependencyVersion=workspace:${version}
+          pnpm run setversion ${version} --filter=coremedia/* --dependencyVersion=workspace:^${version}
           pnpm install --no-frozen-lockfile
           git commit -am "ci: Restore workspace dependency versions for ${version}"
       - name: Push commits
