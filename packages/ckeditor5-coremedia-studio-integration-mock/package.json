@@ -1,6 +1,6 @@
 {
-  "name": "@coremedia/ckeditor5-coremedia-studio-integration-mock",
-  "version": "26.0.1-rc.4",
+  "name": "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock",
+  "version": "1.0.0-SNAPSHOT",
   "type": "module",
   "description": "CoreMedia Studio: Mock Communication facade for testing",
   "author": {
@@ -52,7 +52,7 @@
   "devDependencies": {
     "@babel/cli": "catalog:",
     "@babel/core": "catalog:",
-    "@coremedia-internal/ckeditor5-babel-config": "catalog:",
+    "@coremedia-internal/ckeditor5-babel-config": "workspace:^1.0.0-SNAPSHOT",
     "@coremedia-internal/studio-client.test-runner-helper": "catalog:",
     "@coremedia/service-agent": "catalog:",
     "@types/node": "catalog:",
@@ -71,9 +71,9 @@
     "ckeditor5": "catalog:"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-core-common": "26.0.1-rc.4",
-    "@coremedia/ckeditor5-coremedia-studio-integration": "26.0.1-rc.4",
-    "@coremedia/ckeditor5-logging": "26.0.1-rc.4",
+    "@coremedia/ckeditor5-core-common": "workspace:^26.0.1-rc.4",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "workspace:^26.0.1-rc.4",
+    "@coremedia/ckeditor5-logging": "workspace:^26.0.1-rc.4",
     "rxjs": "catalog:"
   }
 }

@@ -37,7 +37,7 @@
   ],
   "license": "Apache-2.0",
   "devDependencies": {
-    "@coremedia-internal/ckeditor5-coremedia-example-data": "catalog:",
+    "@coremedia-internal/ckeditor5-coremedia-example-data": "workspace:^1.0.0-SNAPSHOT",
     "@coremedia-internal/studio-client.test-runner-helper": "catalog:",
     "@types/node": "catalog:",
     "ckeditor5": "catalog:",
@@ -54,12 +54,12 @@
     "ckeditor5": "catalog:"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "26.0.1-rc.4",
-    "@coremedia/ckeditor5-core-common": "26.0.1-rc.4",
-    "@coremedia/ckeditor5-coremedia-richtext": "26.0.1-rc.4",
-    "@coremedia/ckeditor5-dom-converter": "26.0.1-rc.4",
-    "@coremedia/ckeditor5-dom-support": "26.0.1-rc.4",
-    "@coremedia/ckeditor5-logging": "26.0.1-rc.4"
+    "@coremedia/ckeditor5-common": "workspace:^26.0.1-rc.4",
+    "@coremedia/ckeditor5-core-common": "workspace:^26.0.1-rc.4",
+    "@coremedia/ckeditor5-coremedia-richtext": "workspace:^26.0.1-rc.4",
+    "@coremedia/ckeditor5-dom-converter": "workspace:^26.0.1-rc.4",
+    "@coremedia/ckeditor5-dom-support": "workspace:^26.0.1-rc.4",
+    "@coremedia/ckeditor5-logging": "workspace:^26.0.1-rc.4"
   },
   "scripts": {
     "clean": "pnpm clean:src && pnpm clean:dist",

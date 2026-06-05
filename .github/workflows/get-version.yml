@@ -55,7 +55,7 @@ jobs:
     steps:
       - id: checkout
         name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 1
           sparse-checkout: |
@@ -64,13 +64,13 @@ jobs:
             ./scripts
       - id: installPnpm
         name: "Install: Use PNPM ${{ env.pnpmVersion }}"
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v5
         with:
           version: ${{ env.pnpmVersion }}
           run_install: false
       - id: installNodeJs
         name: "Install: Use Node.js ${{ env.nodeVersion }}"
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.nodeVersion }}
           cache: "pnpm"

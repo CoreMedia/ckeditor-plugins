@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
 
 env:
-  NODE_VERSION: 22
+  NODE_VERSION: 24
   # https://github.com/actions/runner-images/issues/70
   NODE_OPTIONS: "--max_old_space_size=4096"
   PNPM_VERSION: ^10.9
@@ -24,12 +24,12 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    timeout-minutes: 13
+    timeout-minutes: 30
     # do not run when if it is a manual trigger on the main branch as we have other CI for this. This one is only for feature branches
     if: (github.event_name != 'workflow_dispatch' || github.ref != 'refs/heads/main') && !github.event.pull_request.draft
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
       - name: Allocate PR Number for manual trigger
         id: read-prnumber
         if: github.event_name == 'workflow_dispatch'
@@ -38,7 +38,7 @@ jobs:
           echo "Allocated Pull Request number ${prnumber}"
           echo "::set-output name=prnumber::${prnumber}"
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Configure NPM
@@ -66,7 +66,9 @@ jobs:
           actual_version=$(cat .release-version)
           prnumber=${{ steps.read-prnumber.outputs.prnumber }}
           next_version=$(pnpm --silent "script:version" --pull-request ${prnumber} --run-number ${{ github.run_number }})
-          pnpm run setversion ${next_version} --filter=coremedia/* --dependencyVersion=${next_version}
+          # Remember the resolved version for the later "Restore workspace dependency versions" step.
+          echo "NEXT_VERSION=${next_version}" >> $GITHUB_ENV
+          pnpm run setversion ${next_version} --filter=coremedia/* --dependencyVersion=workspace:${next_version}
           git commit -am "Set next pre-release version to: ${next_version}"
           pnpm install --no-frozen-lockfile
           git commit -am "ci: Update pnpm-lock.yaml for version ${next_version}"
@@ -84,7 +86,10 @@ jobs:
           CKEDITOR_LICENSE_KEY: ${{ secrets.CKEDITOR_LICENSE }}
         run: pnpm test
       - name: Playwright Tests
-        run: pnpm playwright
+        working-directory: tests/playwright
+        run: |
+          pnpm exec playwright install --with-deps chromium
+          pnpm run ui-test
       - name: TypeDoc
         run: pnpm doc
       - name: Publish prerelease
@@ -93,3 +98,16 @@ jobs:
           pnpm install --production
           echo '//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
           pnpm publishall --registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/ --no-git-checks --tag pullrequest
+      # The "Set prerelease version" step pinned all @coremedia/* interdependencies
+      # to concrete versions so they could be published. Now that publishing is done,
+      # restore the workspace protocol ("workspace:^<version>") in the committed sources,
+      # so ongoing development resolves against the local workspace packages.
+      - name: Restore workspace dependency versions
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          # Avoid committing the auth token written to .npmrc during publishing.
+          git checkout -- .npmrc || true
+          echo "Restoring workspace dependency versions for: ${NEXT_VERSION}"
+          pnpm run setversion ${NEXT_VERSION} --filter=coremedia/* --dependencyVersion=workspace:^${NEXT_VERSION}
+          pnpm install --no-frozen-lockfile
+          git commit -am "ci: Restore workspace dependency versions for ${NEXT_VERSION}"
