@@ -54,12 +54,12 @@
     "ckeditor5": "catalog:"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "workspace:27.0.0",
-    "@coremedia/ckeditor5-core-common": "workspace:27.0.0",
-    "@coremedia/ckeditor5-coremedia-richtext": "workspace:27.0.0",
-    "@coremedia/ckeditor5-dom-converter": "workspace:27.0.0",
-    "@coremedia/ckeditor5-dom-support": "workspace:27.0.0",
-    "@coremedia/ckeditor5-logging": "workspace:27.0.0"
+    "@coremedia/ckeditor5-common": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-core-common": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-coremedia-richtext": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-dom-converter": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-dom-support": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-logging": "workspace:^27.0.0"
   },
   "scripts": {
     "clean": "pnpm clean:src && pnpm clean:dist",

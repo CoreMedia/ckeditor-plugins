@@ -63,7 +63,7 @@
     "@coremedia/service-agent": "catalog:"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-logging": "workspace:27.0.0",
+    "@coremedia/ckeditor5-logging": "workspace:^27.0.0",
     "node-esapi": "catalog:",
     "rxjs": "catalog:"
   }
