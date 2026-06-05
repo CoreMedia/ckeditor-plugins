@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-dom-support",
-  "version": "26.0.1-rc.4",
+  "version": "27.0.0",
   "type": "module",
   "description": "DOM Support",
   "author": {
@@ -47,7 +47,7 @@
     "typescript": "catalog:"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "workspace:^26.0.1-rc.4"
+    "@coremedia/ckeditor5-common": "workspace:27.0.0"
   },
   "scripts": {
     "clean": "pnpm clean:src && pnpm clean:dist",
