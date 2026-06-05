@@ -6,11 +6,6 @@ allowBuilds:
   esbuild: true
   unrs-resolver: true
 catalog:
-  '@babel/cli': ^7.25.4
-  '@babel/core': ^7.25.4
-  '@babel/plugin-transform-runtime': ^7.25.4
-  '@babel/preset-env': ^7.25.4
-  '@babel/preset-typescript': ^7.25.4
   '@bbob/core': 4.3.1
   '@bbob/html': 4.3.1
   '@bbob/parser': 4.3.1
@@ -37,7 +32,6 @@ catalog:
   '@types/webpack': ^5.28.5
   '@typescript-eslint/eslint-plugin': ^8.39.1
   '@typescript-eslint/parser': ^8.39.1
-  babel-loader: ^8.3.0
   ci-info: ^3.9.0
   circular-dependency-plugin: ^5.2.2
   ckeditor5: 48.1.1

@@ -2,7 +2,7 @@
   "name": "@coremedia/ckeditor5-playwright-itest",
   "version": "27.0.0",
   "author": "CoreMedia GmbH",
-  "license": "CoreMedia Open Source License",
+  "license": "Apache-2.0",
   "type": "module",
   "private": true,
   "devDependencies": {

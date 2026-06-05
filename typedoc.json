@@ -4,7 +4,6 @@
   "entryPointStrategy": "packages",
   "entryPoints": ["./packages/*"],
   "exclude": [
-    "**/ckeditor5-babel-config",
     "**/ckeditor5-coremedia-example-data"
   ],
   "name": "CoreMedia CKEditor 5 Plugins",
