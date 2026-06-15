@@ -33,14 +33,11 @@
     "xml-formatter": "catalog:"
   },
   "devDependencies": {
-    "@babel/core": "catalog:",
-    "@babel/plugin-transform-runtime": "catalog:",
     "@ckeditor/ckeditor5-dev-translations": "catalog:",
     "@ckeditor/ckeditor5-dev-utils": "catalog:",
     "@ckeditor/ckeditor5-inspector": "catalog:",
     "@ckeditor/ckeditor5-theme-lark": "catalog:",
     "@types/node": "catalog:",
-    "babel-loader": "catalog:",
     "circular-dependency-plugin": "catalog:",
     "css-loader": "catalog:",
     "dotenv": "catalog:",
