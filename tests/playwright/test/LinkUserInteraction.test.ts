@@ -2,8 +2,8 @@ import { a, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-
 import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { expect, test } from "./base";
 import { editor } from "./locators/editor";
-import { applicationUrl } from "./utils/environment";
-import { ApplicationWrapper } from "./wrappers/ApplicationWrapper";
+import { openStory } from "./storybook/mountStory";
+import { addMockContents, getLastOpenedEntities, setEditorData, setReadOnly } from "./storybook/testApi";
 
 const externalLinkUrl = "https://www.coremedia.com/";
 
@@ -18,24 +18,28 @@ const externalLinkUrl = "https://www.coremedia.com/";
  * opens the link in a new tab. For content's it has to be a new work area tab, otherwise
  * the same page would be opened in a new browser tab (as the anchor href is #).
  * Furthermore, in read write the same behavior is implemented as keyboard shortcut alt+enter.
+ *
+ * Migrated to run against the Storybook story `tests-linkuserinteraction--default`
+ * (see `tests/storybook/stories/tests/LinkUserInteraction.stories.ts`) instead
+ * of the former example application. Editor data, mock contents, read-only state
+ * and service-agent assertions go through the in-page editor test API.
  */
+const storyId = "tests-linkuserinteraction--default";
+
 test.describe("Link User Interaction", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(applicationUrl);
-    await editor(page).waitFor();
+    await openStory(page, storyId);
   });
 
   test.describe("External Link Actions", () => {
     test("Should open in new browser tab on (Ctrl | Meta) + click", async ({ page }, testInfo) => {
       const name = testInfo.title;
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper } = application;
-      const { view } = editorWrapper.ui;
+      const editable = editor(page);
 
       const data = richtext(p(a(name, { "xlink:href": externalLinkUrl })));
-      await editorWrapper.setData(data);
+      await setEditorData(page, data);
 
-      const externalLink = view.locator.locator(`a`, { hasText: name });
+      const externalLink = editable.locator(`a`, { hasText: name });
 
       const newTabPromise = page.context().waitForEvent("page");
       // `ControlOrMeta` resolves to Meta on macOS and Control elsewhere.
@@ -47,14 +51,12 @@ test.describe("Link User Interaction", () => {
 
     test("Should open in new browser tab on Alt + Enter", async ({ page }, testInfo) => {
       const name = testInfo.title;
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper } = application;
-      const { view } = editorWrapper.ui;
+      const editable = editor(page);
 
       const data = richtext(p(a(name, { "xlink:href": externalLinkUrl })));
-      await editorWrapper.setData(data);
+      await setEditorData(page, data);
 
-      const externalLink = view.locator.locator(`a`, { hasText: name });
+      const externalLink = editable.locator(`a`, { hasText: name });
 
       const newTabPromise = page.context().waitForEvent("page");
       await externalLink.click();
@@ -67,14 +69,12 @@ test.describe("Link User Interaction", () => {
 
     test("Read-Only: Should open in new browser tab on click", async ({ page }, testInfo) => {
       const name = testInfo.title;
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper } = application;
-      const { view } = editorWrapper.ui;
+      const editable = editor(page);
 
       const data = richtext(p(a(name, { "xlink:href": externalLinkUrl })));
-      await editorWrapper.setData(data);
-      await application.switchReadOnly();
-      const contentLink = view.locator.locator(`a`, { hasText: name });
+      await setEditorData(page, data);
+      await setReadOnly(page, true);
+      const contentLink = editable.locator(`a`, { hasText: name });
 
       const newTabPromise = page.context().waitForEvent("page");
       await contentLink.click();
@@ -85,14 +85,12 @@ test.describe("Link User Interaction", () => {
 
     test("Read-Only: Should open in new browser tab on (Ctrl | Meta) + click", async ({ page }, testInfo) => {
       const name = testInfo.title;
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper } = application;
-      const { view } = editorWrapper.ui;
+      const editable = editor(page);
 
       const data = richtext(p(a(name, { "xlink:href": externalLinkUrl })));
-      await editorWrapper.setData(data);
-      await application.switchReadOnly();
-      const contentLink = view.locator.locator(`a`, { hasText: name });
+      await setEditorData(page, data);
+      await setReadOnly(page, true);
+      const contentLink = editable.locator(`a`, { hasText: name });
 
       const newTabPromise = page.context().waitForEvent("page");
       // `ControlOrMeta` resolves to Meta on macOS and Control elsewhere.
@@ -106,99 +104,83 @@ test.describe("Link User Interaction", () => {
   test.describe("Content Link Actions", () => {
     test("Should open in new work area tab on (Ctrl | Meta) + click", async ({ page }, testInfo) => {
       const name = testInfo.title;
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper, mockContent } = application;
-      const { view } = editorWrapper.ui;
+      const editable = editor(page);
       const id = 42;
-      await mockContent.addContents({
+      await addMockContents(page, {
         id,
         name: `Document for test ${name}`,
       });
 
       const dataLink = contentUriPath(id);
       const data = richtext(p(a(name, { "xlink:href": dataLink })));
-      await editorWrapper.setData(data);
+      await setEditorData(page, data);
 
-      const contentLink = view.locator.locator(`a`, { hasText: name });
+      const contentLink = editable.locator(`a`, { hasText: name });
 
       // `ControlOrMeta` resolves to Meta on macOS and Control elsewhere.
       await contentLink.click({ modifiers: ["ControlOrMeta"] });
-      const serviceAgent = application.mockServiceAgent;
-      const mockContentFormService = serviceAgent.getContentFormServiceWrapper();
-      expect(await mockContentFormService.getLastOpenedEntities()).toEqual(["content/42"]);
+      expect(await getLastOpenedEntities(page)).toEqual(["content/42"]);
     });
 
     test("Should open in new work area tab on Alt+Enter", async ({ page }, testInfo) => {
       const name = testInfo.title;
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper, mockContent } = application;
-      const { view } = editorWrapper.ui;
+      const editable = editor(page);
       const id = 42;
-      await mockContent.addContents({
+      await addMockContents(page, {
         id,
         name: `Document for test ${name}`,
       });
 
       const dataLink = contentUriPath(id);
       const data = richtext(p(a(name, { "xlink:href": dataLink })));
-      await editorWrapper.setData(data);
+      await setEditorData(page, data);
 
-      const contentLink = view.locator.locator(`a`, { hasText: name });
+      const contentLink = editable.locator(`a`, { hasText: name });
 
       await contentLink.click();
       await page.keyboard.down("Alt");
       await page.keyboard.press("Enter");
 
-      const serviceAgent = application.mockServiceAgent;
-      const mockContentFormService = serviceAgent.getContentFormServiceWrapper();
-      expect(await mockContentFormService.getLastOpenedEntities()).toEqual(["content/42"]);
+      expect(await getLastOpenedEntities(page)).toEqual(["content/42"]);
     });
 
     test("Read-Only: Should open in new work area tab on click", async ({ page }, testInfo) => {
       const name = testInfo.title;
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper, mockContent } = application;
-      const { view } = editorWrapper.ui;
+      const editable = editor(page);
       const id = 42;
-      await mockContent.addContents({
+      await addMockContents(page, {
         id,
         name: `Document for test ${name}`,
       });
 
       const dataLink = contentUriPath(id);
       const data = richtext(p(a(name, { "xlink:href": dataLink })));
-      await editorWrapper.setData(data);
-      await application.switchReadOnly();
+      await setEditorData(page, data);
+      await setReadOnly(page, true);
 
-      const contentLink = view.locator.locator(`a`, { hasText: name });
+      const contentLink = editable.locator(`a`, { hasText: name });
       await contentLink.click();
-      const serviceAgent = application.mockServiceAgent;
-      const mockContentFormService = serviceAgent.getContentFormServiceWrapper();
-      expect(await mockContentFormService.getLastOpenedEntities()).toEqual(["content/42"]);
+      expect(await getLastOpenedEntities(page)).toEqual(["content/42"]);
     });
 
     test("Read-Only: Should open in new work area tab on (Ctrl | Meta) + click", async ({ page }, testInfo) => {
       const name = testInfo.title;
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper, mockContent } = application;
-      const { view } = editorWrapper.ui;
+      const editable = editor(page);
       const id = 42;
-      await mockContent.addContents({
+      await addMockContents(page, {
         id,
         name: `Document for test ${name}`,
       });
 
       const dataLink = contentUriPath(id);
       const data = richtext(p(a(name, { "xlink:href": dataLink })));
-      await editorWrapper.setData(data);
-      await application.switchReadOnly();
+      await setEditorData(page, data);
+      await setReadOnly(page, true);
 
-      const contentLink = view.locator.locator(`a`, { hasText: name });
+      const contentLink = editable.locator(`a`, { hasText: name });
       // `ControlOrMeta` resolves to Meta on macOS and Control elsewhere.
       await contentLink.click({ modifiers: ["ControlOrMeta"] });
-      const serviceAgent = application.mockServiceAgent;
-      const mockContentFormService = serviceAgent.getContentFormServiceWrapper();
-      expect(await mockContentFormService.getLastOpenedEntities()).toEqual(["content/42"]);
+      expect(await getLastOpenedEntities(page)).toEqual(["content/42"]);
     });
   });
 });

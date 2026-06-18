@@ -6,6 +6,8 @@ import type {
 import { getEditorData, setDataAndGetDataView, setEditorData, focusEditor } from "../setup/editorData";
 import { registerMockContents } from "../setup/mockContent";
 import { registerMockExternalContents } from "../setup/mockExternalContent";
+import { getLastOpenedEntities } from "../setup/serviceAgent";
+import { SCENARIO_READ_ONLY_LOCK_ID } from "../setup/applyScenario";
 
 /**
  * Name of the global property the editor test API is exposed under. Playwright
@@ -50,6 +52,16 @@ export interface EditorTestApi {
    * `MockExternalContentPluginWrapper.addContents`.
    */
   addMockExternalContents(contents: MockExternalContent[]): void;
+  /**
+   * Toggles the editor's read-only mode. Replaces
+   * `ApplicationWrapper.switchReadOnly`.
+   */
+  setReadOnly(enabled: boolean): void;
+  /**
+   * Reads the entities most recently triggered to be opened. Replaces
+   * `ContentFormServiceWrapper.getLastOpenedEntities`.
+   */
+  getLastOpenedEntities(): Promise<unknown[]>;
 }
 
 declare global {
@@ -70,6 +82,14 @@ export const createEditorTestApi = (editor: ClassicEditor): EditorTestApi => ({
   focus: () => focusEditor(editor),
   addMockContents: (contents) => registerMockContents(editor, ...contents),
   addMockExternalContents: (contents) => registerMockExternalContents(editor, contents),
+  setReadOnly: (enabled) => {
+    if (enabled) {
+      editor.enableReadOnlyMode(SCENARIO_READ_ONLY_LOCK_ID);
+    } else {
+      editor.disableReadOnlyMode(SCENARIO_READ_ONLY_LOCK_ID);
+    }
+  },
+  getLastOpenedEntities: () => getLastOpenedEntities(editor),
 });
 
 /**

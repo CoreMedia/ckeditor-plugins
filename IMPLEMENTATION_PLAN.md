@@ -42,8 +42,8 @@ This plan describes how to implement the goals defined in `GOALS.md` step by ste
 - [x] `Application.test.ts`
 - [x] `BBCode.test.ts` (bbcode base scenario)
 - [x] `ContentLink.test.ts`
-- [ ] `LinkBalloon.test.ts`
-- [ ] `LinkUserInteraction.test.ts`
+- [x] `LinkBalloon.test.ts`
+- [x] `LinkUserInteraction.test.ts`
 - [ ] `Blocklist.test.ts`
 - [ ] `BlocklistCollapsed.test.ts`
 - [ ] `BlocklistExpandedToolbar.test.ts`

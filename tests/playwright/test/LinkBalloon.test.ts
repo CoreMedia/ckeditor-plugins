@@ -3,8 +3,9 @@ import { a, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-
 import type { Page } from "playwright-core";
 import { expect, test } from "./base";
 import { editor } from "./locators/editor";
-import { applicationUrl } from "./utils/environment";
-import { ApplicationWrapper } from "./wrappers/ApplicationWrapper";
+import { balloonPanel } from "./locators/balloon";
+import { openStory } from "./storybook/mountStory";
+import { addMockContents, setEditorData } from "./storybook/testApi";
 
 /**
  * Id of a draggable element. Clicking it (or starting a drag) is used to verify
@@ -62,10 +63,16 @@ const injectKeepOpenWithClassDiv = (page: Page): Promise<void> =>
     document.body.appendChild(htmlDivElementWithClass);
   }, configuredClickKeepOpenDivClass);
 
+/**
+ * Migrated to run against the Storybook story `tests-linkballoon--default`
+ * (see `tests/storybook/stories/tests/LinkBalloon.stories.ts`) instead of the
+ * former example application.
+ */
+const storyId = "tests-linkballoon--default";
+
 test.describe("Link Balloon", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(applicationUrl);
-    await editor(page).waitFor();
+    await openStory(page, storyId);
     await injectDraggable(page);
     await injectKeepOpenWithIdDiv(page);
     await injectKeepOpenWithClassDiv(page);
@@ -74,23 +81,21 @@ test.describe("Link Balloon", () => {
   test.describe("Close behavior on click on other elements", () => {
     test("Should stay open when click on configured element id or element class", async ({ page }, testInfo) => {
       const name = testInfo.title;
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper, mockContent } = application;
-      const { view } = editorWrapper.ui;
+      const editable = editor(page);
       const id = 42;
-      await mockContent.addContents({
+      await addMockContents(page, {
         id,
         name: `Document for test ${name}`,
       });
 
       const dataLink = contentUriPath(id);
       const data = richtext(p(a(name, { "xlink:href": dataLink })));
-      await editorWrapper.setData(data);
+      await setEditorData(page, data);
       // Open the balloon
-      const contentLink = view.locator.locator(`a`, { hasText: name });
+      const contentLink = editable.locator(`a`, { hasText: name });
       await contentLink.click();
 
-      const { linkToolbarView } = view.body.balloonPanel;
+      const { linkToolbarView } = balloonPanel(page);
       // The balloon should pop up on click.
       await expect(linkToolbarView.locator).toBeVisible();
 
@@ -103,23 +108,21 @@ test.describe("Link Balloon", () => {
 
     test("Should close when click on draggable element", async ({ page }, testInfo) => {
       const name = testInfo.title;
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper, mockContent } = application;
-      const { view } = editorWrapper.ui;
+      const editable = editor(page);
       const id = 42;
-      await mockContent.addContents({
+      await addMockContents(page, {
         id,
         name: `Document for test ${name}`,
       });
 
       const dataLink = contentUriPath(id);
       const data = richtext(p(a(name, { "xlink:href": dataLink })));
-      await editorWrapper.setData(data);
+      await setEditorData(page, data);
       // Open the balloon
-      const contentLink = view.locator.locator(`a`, { hasText: name });
+      const contentLink = editable.locator(`a`, { hasText: name });
       await contentLink.click();
 
-      const { linkToolbarView } = view.body.balloonPanel;
+      const { linkToolbarView } = balloonPanel(page);
       // The balloon should pop up on click.
       await expect(linkToolbarView.locator).toBeVisible();
 
@@ -129,23 +132,21 @@ test.describe("Link Balloon", () => {
 
     test("Should stay open when mousedown on draggable element", async ({ page }, testInfo) => {
       const name = testInfo.title;
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper, mockContent } = application;
-      const { view } = editorWrapper.ui;
+      const editable = editor(page);
       const id = 42;
-      await mockContent.addContents({
+      await addMockContents(page, {
         id,
         name: `Document for test ${name}`,
       });
 
       const dataLink = contentUriPath(id);
       const data = richtext(p(a(name, { "xlink:href": dataLink })));
-      await editorWrapper.setData(data);
+      await setEditorData(page, data);
       // Open the balloon
-      const contentLink = view.locator.locator(`a`, { hasText: name });
+      const contentLink = editable.locator(`a`, { hasText: name });
       await contentLink.click();
 
-      const { linkToolbarView } = view.body.balloonPanel;
+      const { linkToolbarView } = balloonPanel(page);
       // The balloon should pop up on click.
       await expect(linkToolbarView.locator).toBeVisible();
 

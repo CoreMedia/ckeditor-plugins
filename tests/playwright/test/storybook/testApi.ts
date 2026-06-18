@@ -25,6 +25,8 @@ interface EditorTestApi {
   focus(): void;
   addMockContents(contents: MockContentConfig[]): void;
   addMockExternalContents(contents: MockExternalContent[]): void;
+  setReadOnly(enabled: boolean): void;
+  getLastOpenedEntities(): Promise<unknown[]>;
 }
 
 type WindowWithTestApi = Window & {
@@ -116,5 +118,33 @@ export const addMockExternalContents = (page: Page, contents: MockExternalConten
     },
     [EDITOR_TEST_API_GLOBAL, contents] as const,
   );
+
+/**
+ * Toggles the editor's read-only mode. Replaces `ApplicationWrapper.switchReadOnly`.
+ */
+export const setReadOnly = (page: Page, enabled: boolean): Promise<void> =>
+  page.evaluate(
+    ([apiGlobal, value]) => {
+      const api = (window as unknown as Record<string, EditorTestApi | undefined>)[apiGlobal];
+      if (!api) {
+        throw new Error(`Editor test API not available as window.${apiGlobal}. Is the scenario ready?`);
+      }
+      api.setReadOnly(value);
+    },
+    [EDITOR_TEST_API_GLOBAL, enabled] as const,
+  );
+
+/**
+ * Reads the entities most recently triggered to be opened. Replaces
+ * `ContentFormServiceWrapper.getLastOpenedEntities`.
+ */
+export const getLastOpenedEntities = (page: Page): Promise<unknown[]> =>
+  page.evaluate((apiGlobal) => {
+    const api = (window as unknown as Record<string, EditorTestApi | undefined>)[apiGlobal];
+    if (!api) {
+      throw new Error(`Editor test API not available as window.${apiGlobal}. Is the scenario ready?`);
+    }
+    return api.getLastOpenedEntities();
+  }, EDITOR_TEST_API_GLOBAL);
 
 export type { EditorTestApi, WindowWithTestApi };
