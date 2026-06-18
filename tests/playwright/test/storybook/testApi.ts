@@ -27,6 +27,7 @@ interface EditorTestApi {
   addMockExternalContents(contents: MockExternalContent[]): void;
   setReadOnly(enabled: boolean): void;
   getLastOpenedEntities(): Promise<unknown[]>;
+  addBlockedWord(word: string): Promise<void>;
 }
 
 type WindowWithTestApi = Window & {
@@ -146,5 +147,21 @@ export const getLastOpenedEntities = (page: Page): Promise<unknown[]> =>
     }
     return api.getLastOpenedEntities();
   }, EDITOR_TEST_API_GLOBAL);
+
+/**
+ * Pre-registers a blocked word with the mock blocklist service. Replaces
+ * `BlocklistServiceWrapper.addWord`.
+ */
+export const addBlockedWord = (page: Page, word: string): Promise<void> =>
+  page.evaluate(
+    ([apiGlobal, value]) => {
+      const api = (window as unknown as Record<string, EditorTestApi | undefined>)[apiGlobal];
+      if (!api) {
+        throw new Error(`Editor test API not available as window.${apiGlobal}. Is the scenario ready?`);
+      }
+      return api.addBlockedWord(value);
+    },
+    [EDITOR_TEST_API_GLOBAL, word] as const,
+  );
 
 export type { EditorTestApi, WindowWithTestApi };

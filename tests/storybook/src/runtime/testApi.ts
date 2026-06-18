@@ -6,7 +6,7 @@ import type {
 import { getEditorData, setDataAndGetDataView, setEditorData, focusEditor } from "../setup/editorData";
 import { registerMockContents } from "../setup/mockContent";
 import { registerMockExternalContents } from "../setup/mockExternalContent";
-import { getLastOpenedEntities } from "../setup/serviceAgent";
+import { addBlockedWord, getLastOpenedEntities } from "../setup/serviceAgent";
 import { SCENARIO_READ_ONLY_LOCK_ID } from "../setup/applyScenario";
 
 /**
@@ -62,6 +62,11 @@ export interface EditorTestApi {
    * `ContentFormServiceWrapper.getLastOpenedEntities`.
    */
   getLastOpenedEntities(): Promise<unknown[]>;
+  /**
+   * Pre-registers a blocked word with the mock blocklist service. Replaces
+   * `BlocklistServiceWrapper.addWord`.
+   */
+  addBlockedWord(word: string): Promise<void>;
 }
 
 declare global {
@@ -90,6 +95,7 @@ export const createEditorTestApi = (editor: ClassicEditor): EditorTestApi => ({
     }
   },
   getLastOpenedEntities: () => getLastOpenedEntities(editor),
+  addBlockedWord: (word) => addBlockedWord(editor, word),
 });
 
 /**

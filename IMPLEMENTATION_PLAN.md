@@ -44,10 +44,10 @@ This plan describes how to implement the goals defined in `GOALS.md` step by ste
 - [x] `ContentLink.test.ts`
 - [x] `LinkBalloon.test.ts`
 - [x] `LinkUserInteraction.test.ts`
-- [ ] `Blocklist.test.ts`
-- [ ] `BlocklistCollapsed.test.ts`
-- [ ] `BlocklistExpandedToolbar.test.ts`
-- [ ] `BlocklistExpandedKeyboard.test.ts`
+- [x] `Blocklist.test.ts`
+- [x] `BlocklistCollapsed.test.ts`
+- [x] `BlocklistExpandedToolbar.test.ts`
+- [x] `BlocklistExpandedKeyboard.test.ts`
 - [ ] `Differencing.test.ts`
 - [ ] `DocumentLists.test.ts`
 - [ ] `DragDrop.test.ts`
