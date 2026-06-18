@@ -24,8 +24,8 @@ This plan describes how to implement the goals defined in `GOALS.md` step by ste
 
 ## 4. Keep and align locator-based access patterns
 
-- [ ] Keep locator-based wrappers/helpers where they add clarity and value.
-- [ ] Align locator APIs with Storybook story structure and stable selectors.
+- [x] Keep locator-based wrappers/helpers where they add clarity and value.
+- [x] Align locator APIs with Storybook story structure and stable selectors.
 
 ## 5. Migrate Playwright tests one by one
 
