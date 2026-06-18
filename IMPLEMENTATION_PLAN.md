@@ -4,11 +4,11 @@ This plan describes how to implement the goals defined in `GOALS.md` step by ste
 
 ## 1. Create Storybook package skeleton
 
-- [ ] Add a new workspace package for Storybook in `tests/storybook`.
-- [ ] Register `tests/storybook` in `pnpm-workspace.yaml`.
-- [ ] Add all new Storybook dependencies via pnpm in the `tests/storybook` package and ensure workspace wiring is updated accordingly.
-- [ ] Configure Storybook build and dev scripts.
-- [ ] Ensure the package can run locally and build in CI.
+- [x] Add a new workspace package for Storybook in `tests/storybook`.
+- [x] Register `tests/storybook` in `pnpm-workspace.yaml`.
+- [x] Add all new Storybook dependencies via pnpm in the `tests/storybook` package and ensure workspace wiring is updated accordingly.
+- [x] Configure Storybook build and dev scripts.
+- [x] Ensure the package can run locally and build in CI.
 
 ## 2. Define Storybook test runtime contract
 

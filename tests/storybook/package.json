@@ -1,0 +1,30 @@
+{
+  "name": "@coremedia/ckeditor5-storybook-itest",
+  "version": "27.0.0",
+  "author": "CoreMedia GmbH",
+  "license": "Apache-2.0",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@coremedia/studio-client.build-config": "catalog:",
+    "@coremedia/studio-client.eslint-config": "catalog:",
+    "@storybook/addon-essentials": "catalog:",
+    "@storybook/addon-interactions": "catalog:",
+    "@storybook/addon-webpack5-compiler-swc": "catalog:",
+    "@storybook/html": "catalog:",
+    "@storybook/html-webpack5": "catalog:",
+    "@storybook/test": "catalog:",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "rimraf": "catalog:",
+    "storybook": "catalog:",
+    "typescript": "catalog:"
+  },
+  "scripts": {
+    "clean": "rimraf ./build",
+    "storybook": "storybook dev --ci --port 6006",
+    "build-storybook": "storybook build --output-dir ./build/storybook",
+    "lint": "eslint",
+    "test-storybook": "storybook test --ci"
+  }
+}
