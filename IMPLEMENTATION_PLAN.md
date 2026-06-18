@@ -12,9 +12,9 @@ This plan describes how to implement the goals defined in `GOALS.md` step by ste
 
 ## 2. Define Storybook test runtime contract
 
-- [ ] Define a stable story URL strategy that Playwright can target.
-- [ ] Define story args/parameters for scenario setup input.
-- [ ] Provide a shared helper module in Storybook for scenario initialization.
+- [x] Define a stable story URL strategy that Playwright can target.
+- [x] Define story args/parameters for scenario setup input.
+- [x] Provide a shared helper module in Storybook for scenario initialization.
 
 ## 3. Migrate JS-wrapper functionality into Storybook utilities
 

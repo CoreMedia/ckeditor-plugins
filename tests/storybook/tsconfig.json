@@ -6,5 +6,5 @@
     "strict": true,
     "types": ["node"]
   },
-  "include": [".storybook/**/*.ts", "stories/**/*.ts"]
+  "include": [".storybook/**/*.ts", "src/**/*.ts", "stories/**/*.ts"]
 }

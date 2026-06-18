@@ -5,6 +5,12 @@
   "license": "Apache-2.0",
   "type": "module",
   "private": true,
+  "dependencies": {
+    "@coremedia-internal/ckeditor5-coremedia-example-data": "workspace:^1.0.0-SNAPSHOT",
+    "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock": "workspace:^1.0.0-SNAPSHOT",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "workspace:^27.0.0",
+    "ckeditor5": "catalog:"
+  },
   "devDependencies": {
     "@coremedia/studio-client.build-config": "catalog:",
     "@coremedia/studio-client.eslint-config": "catalog:",
@@ -22,6 +28,7 @@
   },
   "scripts": {
     "clean": "rimraf ./build",
+    "typecheck": "tsc --noEmit",
     "storybook": "storybook dev --ci --port 6006",
     "build-storybook": "storybook build --output-dir ./build/storybook",
     "lint": "eslint",

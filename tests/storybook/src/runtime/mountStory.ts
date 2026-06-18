@@ -1,0 +1,77 @@
+import type { ClassicEditor } from "ckeditor5";
+import { defaultScenarioArgs, type ScenarioArgs } from "./scenario";
+
+/**
+ * Id of the element the editor is mounted into. Kept identical to the former
+ * application (`editor`) so existing editing-view selectors keep working.
+ */
+export const EDITOR_ELEMENT_ID = "editor";
+
+/**
+ * Class of the scenario container element rendered by a story.
+ */
+export const SCENARIO_CONTAINER_CLASS = "storybook-editor-scenario";
+
+/**
+ * Attribute set on the scenario container once the editor finished
+ * initializing. Playwright waits for this readiness signal instead of the
+ * former ad-hoc `await editor(page).waitFor()` against the application.
+ */
+export const EDITOR_READY_ATTRIBUTE = "data-editor-ready";
+
+declare global {
+  interface Window {
+    /**
+     * The editor instance is exposed globally once ready, mirroring the former
+     * application behavior so handle-based access keeps working during the
+     * migration.
+     */
+    editor?: ClassicEditor;
+  }
+}
+
+/**
+ * Initializes an editor for a scenario. Concrete initializers (richtext /
+ * bbcode), together with the migrated mock-content setup, are provided by the
+ * Storybook story-setup utilities. The signature is the contract: given a host
+ * element and the resolved scenario args, return the ready editor instance.
+ */
+export type ScenarioInitializer = (host: HTMLElement, args: ScenarioArgs) => Promise<ClassicEditor>;
+
+/**
+ * Renders a scenario container, mounts the editor host element into it and
+ * kicks off asynchronous initialization. The container is returned
+ * synchronously so it can be used directly as a Storybook `render` result.
+ *
+ * Readiness contract:
+ * - while initializing, the container has no `data-editor-ready` attribute,
+ * - on success, `window.editor` is set and `data-editor-ready="true"`,
+ * - on failure, `data-editor-ready="error"` is set and the error is logged.
+ *
+ * @param initialize - scenario initializer that creates the editor
+ * @param args - partial scenario args merged over {@link defaultScenarioArgs}
+ * @returns the scenario container element
+ */
+export const mountScenario = (initialize: ScenarioInitializer, args?: Partial<ScenarioArgs>): HTMLElement => {
+  const resolvedArgs: ScenarioArgs = { ...defaultScenarioArgs, ...args };
+
+  const container = document.createElement("div");
+  container.classList.add(SCENARIO_CONTAINER_CLASS);
+  container.removeAttribute(EDITOR_READY_ATTRIBUTE);
+
+  const host = document.createElement("div");
+  host.id = EDITOR_ELEMENT_ID;
+  container.appendChild(host);
+
+  void initialize(host, resolvedArgs)
+    .then((editor) => {
+      window.editor = editor;
+      container.setAttribute(EDITOR_READY_ATTRIBUTE, "true");
+    })
+    .catch((error: unknown) => {
+      container.setAttribute(EDITOR_READY_ATTRIBUTE, "error");
+      console.error("Failed to initialize editor scenario", error);
+    });
+
+  return container;
+};
