@@ -76,9 +76,9 @@ This plan describes how to implement the goals defined in `GOALS.md` step by ste
 
 ## 9. Add GitHub Pages deployment for Storybook
 
-- [ ] Add/adjust CI workflow to build and publish Storybook to GitHub Pages.
-- [ ] Ensure deployment uses the correct base path for this repository.
-- [ ] Verify deployed Storybook is reachable.
+- [x] Add/adjust CI workflow to build and publish Storybook to GitHub Pages.
+- [x] Ensure deployment uses the correct base path for this repository.
+- [x] Verify deployed Storybook is reachable.
 
 ## 10. Hardening and parity checks
 

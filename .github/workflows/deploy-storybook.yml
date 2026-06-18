@@ -1,0 +1,128 @@
+name: "Deploy Storybook"
+
+# Builds the Storybook integration-test package and publishes the static
+# Storybook to GitHub Pages. The deployed Storybook is the same runtime the
+# Playwright integration tests execute against (see tests/storybook and
+# tests/playwright).
+
+on:
+  # Publish on every push to the main branch.
+  push:
+    branches:
+      - main
+  # Allow manual deployment from the Actions tab.
+  workflow_dispatch:
+
+run-name: |
+  ${{ github.workflow }}: ${{ github.ref_name }}
+
+env:
+  # https://github.com/actions/runner-images/issues/70
+  NODE_OPTIONS: "--max_old_space_size=4096"
+
+# Least-privilege defaults; the deploy job opts into the permissions it needs.
+permissions: {}
+
+# Allow only one concurrent deployment, without cancelling in-progress runs, so
+# an in-flight Pages deployment is allowed to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  get-env:
+    name: "Get Environment"
+    uses: "./.github/workflows/env.yml"
+  get-engines:
+    name: "Get Engines"
+    uses: "./.github/workflows/get-engines.yml"
+    secrets: inherit
+  build:
+    name: "Build Storybook"
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs:
+      - get-env
+      - get-engines
+    env:
+      nodeVersion: ${{ needs.get-engines.outputs.nodeVersion }}
+      pnpmVersion: ${{ needs.get-engines.outputs.pnpmVersion }}
+      npmHost: ${{ needs.get-env.outputs.npm-host }}
+      npmUrl: ${{ needs.get-env.outputs.npm-url }}
+    steps:
+      - id: checkout
+        name: Checkout
+        uses: actions/checkout@v5
+      - id: authorize
+        name: "NPM Authorization"
+        run: |
+          result=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.PLUGINS_NEXUS_USER }}", "password": "${{ secrets.PLUGINS_NEXUS_PASSWORD }}"}' "${{ env.npmUrl }}/-/user/org.couchdb.user:${{ secrets.PLUGINS_NEXUS_USER }}" | jq --raw-output .token)
+          # Ensure, the token is not exposed in output.
+          echo "::add-mask::${result}"
+          echo "NODE_AUTH_TOKEN=${result}" >> $GITHUB_ENV
+      - id: initNpmConfiguration
+        name: "Initialize NPM Configuration"
+        run: |
+          npmHost="${{ env.npmHost }}"
+          npmUrl="${{ env.npmUrl }}"
+          npmAuthToken="${{ env.NODE_AUTH_TOKEN }}"
+
+          echo "//${npmHost}/:_authToken=${npmAuthToken}" >> .npmrc
+          echo "@coremedia:registry=${npmUrl}" >> .npmrc
+          echo "@coremedia-internal:registry=${npmUrl}" >> .npmrc
+          # We must not commit this change.
+          git update-index --assume-unchanged .npmrc
+      - id: installPnpm
+        name: "Install: Use PNPM ${{ env.pnpmVersion }}"
+        uses: pnpm/action-setup@v5
+        with:
+          version: ${{ env.pnpmVersion }}
+          run_install: false
+      - id: installNodeJs
+        name: "Install: Use Node.js ${{ env.nodeVersion }}"
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.nodeVersion }}
+          cache: "pnpm"
+      - id: install
+        name: Install
+        run: |
+          pnpm install --frozen-lockfile
+      - name: Create env file
+        run: |
+          touch .env
+          echo CKEDITOR_LICENSE_KEY=${{ secrets.CKEDITOR_LICENSE }}>> .env
+      - id: build
+        name: "Build Workspace"
+        run: |
+          pnpm -r build
+      - id: buildStorybook
+        name: "Build Storybook"
+        env:
+          CKEDITOR_LICENSE_KEY: ${{ secrets.CKEDITOR_LICENSE }}
+        run: |
+          pnpm --filter "@coremedia/ckeditor5-storybook-itest" run build-storybook
+      - id: configurePages
+        name: "Setup Pages"
+        uses: actions/configure-pages@v5
+      - id: uploadArtifact
+        name: "Upload Storybook Artifact"
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: tests/storybook/build/storybook
+  deploy:
+    name: "Deploy to GitHub Pages"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs:
+      - build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        name: "Deploy to GitHub Pages"
+        uses: actions/deploy-pages@v4
