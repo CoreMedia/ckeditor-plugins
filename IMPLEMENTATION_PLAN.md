@@ -88,6 +88,6 @@ This plan describes how to implement the goals defined in `GOALS.md` step by ste
 
 ## 11. Final documentation update
 
-- [ ] Update `README_STORYBOOK` at the end with finalized Storybook package usage.
-- [ ] Document how Playwright targets Storybook and how stories map to tests.
-- [ ] Document GitHub Pages URL/deployment behavior.
+- [x] Update `README_STORYBOOK` at the end with finalized Storybook package usage.
+- [x] Document how Playwright targets Storybook and how stories map to tests.
+- [x] Document GitHub Pages URL/deployment behavior.

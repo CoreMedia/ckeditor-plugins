@@ -4,6 +4,12 @@ name: "Deploy Storybook"
 # Storybook to GitHub Pages. The deployed Storybook is the same runtime the
 # Playwright integration tests execute against (see tests/storybook and
 # tests/playwright).
+#
+# To coexist with the existing GitHub Pages content (most notably the API
+# documentation served from the Pages root), the Storybook is published into a
+# dedicated `storybook/` subfolder of the `gh-pages` branch. Publishing uses
+# `keep_files: true`, so sibling content (e.g. `docs/api/`) is left untouched.
+# Resulting URL: https://coremedia.github.io/ckeditor-plugins/storybook/
 
 on:
   # Publish on every push to the main branch.
@@ -20,7 +26,7 @@ env:
   # https://github.com/actions/runner-images/issues/70
   NODE_OPTIONS: "--max_old_space_size=4096"
 
-# Least-privilege defaults; the deploy job opts into the permissions it needs.
+# Least-privilege defaults; the publish job opts into the permissions it needs.
 permissions: {}
 
 # Allow only one concurrent deployment, without cancelling in-progress runs, so
@@ -37,13 +43,16 @@ jobs:
     name: "Get Engines"
     uses: "./.github/workflows/get-engines.yml"
     secrets: inherit
-  build:
-    name: "Build Storybook"
+  deploy:
+    name: "Build and Publish Storybook"
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     needs:
       - get-env
       - get-engines
+    # Required to push the built Storybook to the `gh-pages` branch.
+    permissions:
+      contents: write
     env:
       nodeVersion: ${{ needs.get-engines.outputs.nodeVersion }}
       pnpmVersion: ${{ needs.get-engines.outputs.pnpmVersion }}
@@ -102,27 +111,16 @@ jobs:
           CKEDITOR_LICENSE_KEY: ${{ secrets.CKEDITOR_LICENSE }}
         run: |
           pnpm --filter "@coremedia/ckeditor5-storybook-itest" run build-storybook
-      - id: configurePages
-        name: "Setup Pages"
-        uses: actions/configure-pages@v5
-      - id: uploadArtifact
-        name: "Upload Storybook Artifact"
-        uses: actions/upload-pages-artifact@v3
+      - id: publish
+        name: "Publish Storybook to GitHub Pages"
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: tests/storybook/build/storybook
-  deploy:
-    name: "Deploy to GitHub Pages"
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs:
-      - build
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        name: "Deploy to GitHub Pages"
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: tests/storybook/build/storybook
+          # Publish into a subfolder so the existing Pages content (e.g. the API
+          # docs at the Pages root) is preserved.
+          destination_dir: storybook
+          keep_files: true
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_message: "docs(storybook): deploy ${{ github.sha }}"
