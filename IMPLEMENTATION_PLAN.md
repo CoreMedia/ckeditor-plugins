@@ -39,8 +39,8 @@ This plan describes how to implement the goals defined in `GOALS.md` step by ste
 ### Per-test migration checklist
 
 - [x] `HelloEditor.test.ts` (richtext base scenario)
-- [ ] `Application.test.ts`
-- [ ] `BBCode.test.ts` (bbcode base scenario)
+- [x] `Application.test.ts`
+- [x] `BBCode.test.ts` (bbcode base scenario)
 - [ ] `ContentLink.test.ts`
 - [ ] `LinkBalloon.test.ts`
 - [ ] `LinkUserInteraction.test.ts`
