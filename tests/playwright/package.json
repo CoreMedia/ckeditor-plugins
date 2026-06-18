@@ -30,6 +30,7 @@
     "build": "tsc --project .",
     "ui-test": "playwright test",
     "lint": "eslint",
-    "webserver": "node webserver.js"
+    "webserver": "node webserver.js",
+    "webserver:storybook": "pnpm --filter @coremedia/ckeditor5-storybook-itest run storybook"
   }
 }

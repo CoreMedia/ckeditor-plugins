@@ -1,5 +1,6 @@
 import type { ClassicEditor } from "ckeditor5";
 import { defaultScenarioArgs, type ScenarioArgs } from "./scenario";
+import { installEditorTestApi } from "./testApi";
 
 /**
  * Id of the element the editor is mounted into. Kept identical to the former
@@ -39,6 +40,30 @@ declare global {
 export type ScenarioInitializer = (host: HTMLElement, args: ScenarioArgs) => Promise<ClassicEditor>;
 
 /**
+ * Resolves once the given element is attached to the document. CKEditor's
+ * `create` requires the source element to be connected to the DOM, but
+ * Storybook attaches a `render` result only after it has been returned. We
+ * therefore defer editor initialization until the host is connected.
+ *
+ * @param element - element to await attachment for
+ */
+const whenAttached = (element: HTMLElement): Promise<void> =>
+  new Promise((resolve) => {
+    if (element.isConnected) {
+      resolve();
+      return;
+    }
+    const check = (): void => {
+      if (element.isConnected) {
+        resolve();
+        return;
+      }
+      requestAnimationFrame(check);
+    };
+    requestAnimationFrame(check);
+  });
+
+/**
  * Renders a scenario container, mounts the editor host element into it and
  * kicks off asynchronous initialization. The container is returned
  * synchronously so it can be used directly as a Storybook `render` result.
@@ -63,9 +88,11 @@ export const mountScenario = (initialize: ScenarioInitializer, args?: Partial<Sc
   host.id = EDITOR_ELEMENT_ID;
   container.appendChild(host);
 
-  void initialize(host, resolvedArgs)
+  void whenAttached(host)
+    .then(() => initialize(host, resolvedArgs))
     .then((editor) => {
       window.editor = editor;
+      installEditorTestApi(editor);
       container.setAttribute(EDITOR_READY_ATTRIBUTE, "true");
     })
     .catch((error: unknown) => {

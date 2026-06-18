@@ -1468,12 +1468,51 @@ importers:
       '@coremedia-internal/ckeditor5-coremedia-studio-integration-mock':
         specifier: workspace:^1.0.0-SNAPSHOT
         version: link:../../packages/ckeditor5-coremedia-studio-integration-mock
+      '@coremedia/ckeditor5-bbcode':
+        specifier: workspace:^27.0.0
+        version: link:../../packages/ckeditor5-bbcode
+      '@coremedia/ckeditor5-coremedia-blocklist':
+        specifier: workspace:^27.0.0
+        version: link:../../packages/ckeditor5-coremedia-blocklist
+      '@coremedia/ckeditor5-coremedia-content-clipboard':
+        specifier: workspace:^27.0.0
+        version: link:../../packages/ckeditor5-coremedia-content-clipboard
+      '@coremedia/ckeditor5-coremedia-differencing':
+        specifier: workspace:^27.0.0
+        version: link:../../packages/ckeditor5-coremedia-differencing
+      '@coremedia/ckeditor5-coremedia-images':
+        specifier: workspace:^27.0.0
+        version: link:../../packages/ckeditor5-coremedia-images
+      '@coremedia/ckeditor5-coremedia-link':
+        specifier: workspace:^27.0.0
+        version: link:../../packages/ckeditor5-coremedia-link
       '@coremedia/ckeditor5-coremedia-richtext':
         specifier: workspace:^27.0.0
         version: link:../../packages/ckeditor5-coremedia-richtext
+      '@coremedia/ckeditor5-coremedia-studio-essentials':
+        specifier: workspace:^27.0.0
+        version: link:../../packages/ckeditor5-coremedia-studio-essentials
       '@coremedia/ckeditor5-coremedia-studio-integration':
         specifier: workspace:^27.0.0
         version: link:../../packages/ckeditor5-coremedia-studio-integration
+      '@coremedia/ckeditor5-data-facade':
+        specifier: workspace:^27.0.0
+        version: link:../../packages/ckeditor5-data-facade
+      '@coremedia/ckeditor5-dataprocessor-support':
+        specifier: workspace:^27.0.0
+        version: link:../../packages/ckeditor5-dataprocessor-support
+      '@coremedia/ckeditor5-dialog-visibility':
+        specifier: workspace:^27.0.0
+        version: link:../../packages/ckeditor5-dialog-visibility
+      '@coremedia/ckeditor5-dom-converter':
+        specifier: workspace:^27.0.0
+        version: link:../../packages/ckeditor5-dom-converter
+      '@coremedia/ckeditor5-font-mapper':
+        specifier: workspace:^27.0.0
+        version: link:../../packages/ckeditor5-font-mapper
+      '@coremedia/ckeditor5-link-common':
+        specifier: workspace:^27.0.0
+        version: link:../../packages/ckeditor5-link-common
       ckeditor5:
         specifier: 'catalog:'
         version: 48.1.1
@@ -1505,6 +1544,9 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 24.12.4
+      dotenv:
+        specifier: 'catalog:'
+        version: 16.4.7
       eslint:
         specifier: 'catalog:'
         version: 9.39.4(jiti@1.21.6)
@@ -1517,6 +1559,9 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
+      webpack:
+        specifier: 'catalog:'
+        version: 5.107.1(@swc/core@1.15.41)(esbuild@0.25.12)(postcss@8.5.15)
 
 packages:
 
@@ -9071,6 +9116,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.6.2
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-indent@48.1.1':
     dependencies:
@@ -9140,6 +9187,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-list@48.1.1':
     dependencies:

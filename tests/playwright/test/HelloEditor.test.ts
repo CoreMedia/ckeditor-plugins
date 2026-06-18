@@ -2,23 +2,27 @@ import { a, p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-
 import { contentUriPath } from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { expect, test } from "./base";
 import { editor } from "./locators/editor";
-import { applicationUrl } from "./utils/environment";
-import { ApplicationWrapper } from "./wrappers/ApplicationWrapper";
+import { openStory } from "./storybook/mountStory";
+import { addMockContents, getEditorData, setEditorData } from "./storybook/testApi";
 
 /**
  * Provides some first test mainly for demonstration purpose of the test API.
+ *
+ * Migrated to run against the Storybook story `tests-helloeditor--default`
+ * (see `tests/storybook/stories/tests/HelloEditor.stories.ts`) instead of the
+ * former example application. Editor interaction goes through the in-page
+ * editor test API (`./storybook/testApi`) rather than handle-based wrappers.
  */
+const storyId = "tests-helloeditor--default";
+
 test.describe("Hello Editor", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(applicationUrl);
-    await editor(page).waitFor();
+    await openStory(page, storyId);
   });
 
   test("Should update data when cleared.", async ({ page }) => {
-    const application = new ApplicationWrapper(page);
-    const { editor: editorWrapper } = application;
-    await editorWrapper.setData("");
-    await expect.poll(() => editorWrapper.getData()).toBe("");
+    await setEditorData(page, "");
+    await expect.poll(() => getEditorData(page)).toBe("");
   });
 
   test("Should initially load with some welcome text rendered.", async ({ page }) => {
@@ -28,13 +32,11 @@ test.describe("Hello Editor", () => {
 
   test("Should render external links.", async ({ page }, testInfo) => {
     const name = testInfo.title;
-    const application = new ApplicationWrapper(page);
-    const { editor: editorWrapper } = application;
     const editable = editor(page);
 
     const linkTarget = "https://example.org";
     const data = richtext(p(a(name, { "xlink:href": linkTarget })));
-    await editorWrapper.setData(data);
+    await setEditorData(page, data);
 
     // Match: We cannot fully match `<a href=...>`, as CKEditor may add classes
     // for display purpose to the UI. Nevertheless, this serves as example, how
@@ -44,19 +46,17 @@ test.describe("Hello Editor", () => {
 
   test("Should render internal links.", async ({ page }, testInfo) => {
     const name = testInfo.title;
-    const application = new ApplicationWrapper(page);
-    const { editor: editorWrapper, mockContent } = application;
     const editable = editor(page);
 
     const id = 42;
-    await mockContent.addContents({
+    await addMockContents(page, {
       id,
       name: `Document for test ${name}`,
     });
 
     const dataLink = contentUriPath(id);
     const data = richtext(p(a(name, { "xlink:href": dataLink })));
-    await editorWrapper.setData(data);
+    await setEditorData(page, data);
 
     // Match: We cannot fully match `<a href=...>`, as CKEditor may add classes
     // for display purpose to the UI. Nevertheless, this serves as example, how

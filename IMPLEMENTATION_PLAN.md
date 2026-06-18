@@ -29,11 +29,31 @@ This plan describes how to implement the goals defined in `GOALS.md` step by ste
 
 ## 5. Migrate Playwright tests one by one
 
-- [ ] Create a migration checklist of all test files in `tests/playwright/test`.
-- [ ] Pick one test file, create/migrate the corresponding Storybook story setup, and switch only that test to Storybook runtime.
-- [ ] Validate that migrated test file passes before starting the next file.
+- [x] Create a migration checklist of all test files in `tests/playwright/test`.
+- [x] Build real editor factories (richtext + bbcode) in the Storybook package, ported from `app/src/editors`.
+- [x] Pick one test file, create/migrate the corresponding Storybook story setup, and switch only that test to Storybook runtime.
+- [x] Validate that migrated test file passes before starting the next file.
 - [ ] Repeat until every Playwright test file is migrated.
 - [ ] Track completion per test file by checking off each migrated item.
+
+### Per-test migration checklist
+
+- [x] `HelloEditor.test.ts` (richtext base scenario)
+- [ ] `Application.test.ts`
+- [ ] `BBCode.test.ts` (bbcode base scenario)
+- [ ] `ContentLink.test.ts`
+- [ ] `LinkBalloon.test.ts`
+- [ ] `LinkUserInteraction.test.ts`
+- [ ] `Blocklist.test.ts`
+- [ ] `BlocklistCollapsed.test.ts`
+- [ ] `BlocklistExpandedToolbar.test.ts`
+- [ ] `BlocklistExpandedKeyboard.test.ts`
+- [ ] `Differencing.test.ts`
+- [ ] `DocumentLists.test.ts`
+- [ ] `DragDrop.test.ts`
+- [ ] `FontMapper.test.ts`
+- [ ] `Images.test.ts`
+- [ ] `PasteButton.test.ts`
 
 ## 6. Create and refine stories for migrated scenarios
 

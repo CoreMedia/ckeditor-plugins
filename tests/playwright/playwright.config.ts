@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { defineConfig, devices } from "@playwright/test";
 import { isCI } from "ci-info";
 import { applicationUrl, retries, timeoutFactor } from "./test/utils/environment";
+import { storybookUrl } from "./test/storybook/environment";
 
 const testFile = /.*\.test.ts/;
 const __filename = fileURLToPath(import.meta.url);
@@ -84,10 +85,21 @@ export default defineConfig({
     screenshot: "only-on-failure",
     actionTimeout: 10000 * timeoutFactor,
   },
-  webServer: {
-    command: "pnpm run webserver",
-    url: applicationUrl,
-    reuseExistingServer: !isCI,
-  },
+  webServer: [
+    {
+      command: "pnpm run webserver",
+      url: applicationUrl,
+      reuseExistingServer: !isCI,
+    },
+    {
+      // Storybook runtime for migrated tests. Served by the Storybook package's
+      // dev server; migrated tests navigate to story preview iframes instead of
+      // the example application.
+      command: "pnpm run webserver:storybook",
+      url: storybookUrl,
+      reuseExistingServer: !isCI,
+      timeout: 180000 * timeoutFactor,
+    },
+  ],
   projects,
 });
