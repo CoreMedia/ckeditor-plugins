@@ -7,8 +7,17 @@ import type {
 import type { Page } from "playwright-core";
 import { expect, test } from "./base";
 import { editor } from "./locators/editor";
-import { applicationUrl } from "./utils/environment";
-import { ApplicationWrapper } from "./wrappers/ApplicationWrapper";
+import { balloonPanel } from "./locators/balloon";
+import { openStory } from "./storybook/mountStory";
+import {
+  addInputExampleElement,
+  addMockContents,
+  addMockExternalContents,
+  getEditorData,
+  setEditorData,
+  validateIsDroppableInLinkBalloon,
+  validateIsDroppableState,
+} from "./storybook/testApi";
 import { PNG_BLUE_240x135, PNG_GREEN_240x135, PNG_RED_240x135 } from "./MockFixtures";
 
 const oneLink: MockContentConfig[] = [
@@ -192,14 +201,19 @@ const multipleImagesSlow: MockContentConfig[] = [
 
 const dropTargetSelector = ".ck-content.ck-editor__editable";
 
+/**
+ * Migrated to run against the Storybook story `tests-dragdrop--default`
+ * (see `tests/storybook/stories/tests/DragDrop.stories.ts`) instead of the
+ * former example application.
+ */
+const storyId = "tests-dragdrop--default";
+
 test.describe("Drag and Drop", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(applicationUrl);
-    await editor(page).waitFor();
+    await openStory(page, storyId);
 
     // setup initial data
-    const application = new ApplicationWrapper(page);
-    await application.editor.setDataAndGetDataView(richtext());
+    await setEditorData(page, richtext());
   });
 
   test.describe("Links", () => {
@@ -212,13 +226,12 @@ test.describe("Drag and Drop", () => {
       test(`[${index}]: Should drag (${dragElementClass}) and drop ${contentMocks.length} non embeddable contents as links.`, async ({
         page,
       }) => {
-        const application = new ApplicationWrapper(page);
-        await setupScenario(application, dragElementClass, contentMocks);
+        await setupScenario(page, dragElementClass, contentMocks);
 
         // execute drag and drop
         const dragElementSelector = `.input-example.input-content.${dragElementClass}`;
         const uris = contentMocks.map((contentMock) => `content/${contentMock.id}`);
-        await dragAndDrop(page, application, uris, dragElementSelector, dropTargetSelector);
+        await dragAndDrop(page, uris, dragElementSelector, dropTargetSelector);
 
         // Validate Editing Downcast
         const linkElements = editor(page).locator("a");
@@ -244,13 +257,12 @@ test.describe("Drag and Drop", () => {
       test(`[${index}]: Should drag (${dragElementClass}) and drop ${contentMocks.length} non embeddable contents as links.`, async ({
         page,
       }) => {
-        const application = new ApplicationWrapper(page);
-        await setupExternalScenario(application, dragElementClass, contentMocks);
+        await setupExternalScenario(page, dragElementClass, contentMocks);
 
         // execute drag and drop
         const dragElementSelector = `.input-example.input-content.${dragElementClass}`;
         const uris = contentMocks.map((contentMock) => `externalUri/${contentMock.id}`);
-        await dragAndDrop(page, application, uris, dragElementSelector, dropTargetSelector);
+        await dragAndDrop(page, uris, dragElementSelector, dropTargetSelector);
 
         // Validate Editing Downcast
         const linkElements = editor(page).locator("a");
@@ -264,10 +276,6 @@ test.describe("Drag and Drop", () => {
 
   test.describe("ExternalLinkIntoLinkBalloon", () => {
     test("Should render dropped content-link with name in link balloon", async ({ page }) => {
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper } = application;
-      const { view } = editorWrapper.ui;
-
       const dragElementClass = "external-content";
       const contentMock = externalLink[0];
 
@@ -275,8 +283,8 @@ test.describe("Drag and Drop", () => {
       const editableElement = editor(page);
       await editableElement.click();
       await page.keyboard.press("ControlOrMeta+K");
-      const { linkFormView } = view.body.balloonPanel;
-      await setupExternalScenario(application, dragElementClass, [contentMock]);
+      const { linkFormView } = balloonPanel(page);
+      await setupExternalScenario(page, dragElementClass, [contentMock]);
 
       const inputFieldLocator = linkFormView.urlInputField;
       await inputFieldLocator.waitFor({ state: "visible" });
@@ -286,7 +294,7 @@ test.describe("Drag and Drop", () => {
       const uri = `externalUri/${contentMock.id}`;
       const dragElement = page.locator(dragElementSelector);
       await dragElement.waitFor();
-      await ensureDropInLinkBalloonAllowed(application, [uri]);
+      await ensureDropInLinkBalloonAllowed(page, [uri]);
       await dragElement.dragTo(inputFieldLocator);
 
       await linkFormView.save();
@@ -309,20 +317,18 @@ test.describe("Drag and Drop", () => {
       test(`[${index}]: Should drag and drop ${contentMocks.length} embeddable contents as images.`, async ({
         page,
       }) => {
-        const application = new ApplicationWrapper(page);
-        const { editor: editorWrapper } = application;
-        await setupScenario(application, dragElementClass, contentMocks);
+        await setupScenario(page, dragElementClass, contentMocks);
 
         // execute drag and drop
         const dragElementSelector = `.input-example.input-content.${dragElementClass}`;
         const uris = contentMocks.map((contentMock) => `content/${contentMock.id}`);
-        await dragAndDrop(page, application, uris, dragElementSelector, dropTargetSelector);
+        await dragAndDrop(page, uris, dragElementSelector, dropTargetSelector);
 
         // Validate Data-Processing
         for (const contentMock of contentMocks) {
           // noinspection HtmlUnknownAttribute
           await expect
-            .poll(() => editorWrapper.getData())
+            .poll(() => getEditorData(page))
             .toContain(`<img xlink:href="content/${contentMock.id}#properties.data" alt=""/>`);
         }
 
@@ -338,13 +344,9 @@ test.describe("Drag and Drop", () => {
   });
 });
 
-async function setupScenario(
-  application: ApplicationWrapper,
-  dragElementClass: string,
-  contentMocks: MockContentConfig[],
-): Promise<void> {
+async function setupScenario(page: Page, dragElementClass: string, contentMocks: MockContentConfig[]): Promise<void> {
   for (const contentMock of contentMocks) {
-    await application.mockContent.addContents(contentMock);
+    await addMockContents(page, contentMock);
   }
 
   const dragIds = contentMocks.map((content) => content.id);
@@ -354,21 +356,21 @@ async function setupScenario(
     items: dragIds,
     classes: ["input-content", dragElementClass],
   };
-  await application.mockInputExamplePlugin.addInputExampleElement(droppableElement);
+  await addInputExampleElement(page, droppableElement);
 }
 
 async function setupExternalScenario(
-  application: ApplicationWrapper,
+  page: Page,
   dragElementClass: string,
   externalContentMocks: MockExternalContent[],
 ): Promise<void> {
   for (const externalContentMock of externalContentMocks) {
-    await application.mockExternalContent.addContents(externalContentMock);
+    await addMockExternalContents(page, [externalContentMock]);
     if (externalContentMock.isAlreadyImported) {
       if (!externalContentMock.contentAfterImport) {
         break;
       }
-      await application.mockContent.addContents(externalContentMock.contentAfterImport);
+      await addMockContents(page, externalContentMock.contentAfterImport);
     }
   }
 
@@ -381,12 +383,11 @@ async function setupExternalScenario(
     items: dragIds,
     classes: ["input-content", dragElementClass],
   };
-  await application.mockInputExamplePlugin.addInputExampleElement(droppableElement);
+  await addInputExampleElement(page, droppableElement);
 }
 
 async function dragAndDrop(
   page: Page,
-  application: ApplicationWrapper,
   uris: string[],
   dragElementSelector: string,
   dropTargetSelector: string,
@@ -396,7 +397,7 @@ async function dragAndDrop(
   await dragElement.waitFor();
   await dropTarget.waitFor();
 
-  await ensureDropAllowed(application, uris);
+  await ensureDropAllowed(page, uris);
   await dragElement.dragTo(dropTarget);
 }
 
@@ -411,13 +412,13 @@ async function dragAndDrop(
  * While the asynchronous call is in evaluation, "PENDING" will be returned, otherwise the result.
  * In this case we wait until the asynchronous call finished evaluating and the result is droppable.
  *
- * @param application - application under test
+ * @param page - page under test
  * @param uris - the uris of the dragElement.
  */
-async function ensureDropAllowed(application: ApplicationWrapper, uris: string[]): Promise<void> {
+async function ensureDropAllowed(page: Page, uris: string[]): Promise<void> {
   await expect
     .poll(async () => {
-      const actual = await application.mockInputExamplePlugin.validateIsDroppableState(uris);
+      const actual = await validateIsDroppableState(page, uris);
       if (!actual || actual === "PENDING") {
         return false;
       }
@@ -426,10 +427,10 @@ async function ensureDropAllowed(application: ApplicationWrapper, uris: string[]
     .toBe(true);
 }
 
-async function ensureDropInLinkBalloonAllowed(application: ApplicationWrapper, uris: string[]): Promise<void> {
+async function ensureDropInLinkBalloonAllowed(page: Page, uris: string[]): Promise<void> {
   await expect
     .poll(async () => {
-      const actual = await application.mockInputExamplePlugin.validateIsDroppableInLinkBalloon(uris);
+      const actual = await validateIsDroppableInLinkBalloon(page, uris);
       if (!actual || actual === "PENDING") {
         return false;
       }

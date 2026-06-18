@@ -33,8 +33,8 @@ This plan describes how to implement the goals defined in `GOALS.md` step by ste
 - [x] Build real editor factories (richtext + bbcode) in the Storybook package, ported from `app/src/editors`.
 - [x] Pick one test file, create/migrate the corresponding Storybook story setup, and switch only that test to Storybook runtime.
 - [x] Validate that migrated test file passes before starting the next file.
-- [ ] Repeat until every Playwright test file is migrated.
-- [ ] Track completion per test file by checking off each migrated item.
+- [x] Repeat until every Playwright test file is migrated.
+- [x] Track completion per test file by checking off each migrated item.
 
 ### Per-test migration checklist
 
@@ -48,18 +48,18 @@ This plan describes how to implement the goals defined in `GOALS.md` step by ste
 - [x] `BlocklistCollapsed.test.ts`
 - [x] `BlocklistExpandedToolbar.test.ts`
 - [x] `BlocklistExpandedKeyboard.test.ts`
-- [ ] `Differencing.test.ts`
-- [ ] `DocumentLists.test.ts`
-- [ ] `DragDrop.test.ts`
-- [ ] `FontMapper.test.ts`
-- [ ] `Images.test.ts`
-- [ ] `PasteButton.test.ts`
+- [x] `Differencing.test.ts`
+- [x] `DocumentLists.test.ts`
+- [x] `DragDrop.test.ts`
+- [x] `FontMapper.test.ts`
+- [x] `Images.test.ts`
+- [x] `PasteButton.test.ts`
 
 ## 6. Create and refine stories for migrated scenarios
 
-- [ ] Ensure each migrated test has a dedicated story/scenario entry in Storybook.
-- [ ] Wire each migrated story to the Storybook setup utilities.
-- [ ] Ensure scenario behavior matches current tests.
+- [x] Ensure each migrated test has a dedicated story/scenario entry in Storybook.
+- [x] Wire each migrated story to the Storybook setup utilities.
+- [x] Ensure scenario behavior matches current tests.
 
 ## 7. Switch Playwright runtime target to Storybook
 

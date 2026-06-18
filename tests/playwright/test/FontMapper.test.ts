@@ -3,9 +3,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Page } from "playwright-core";
 import { expect, test } from "./base";
-import { editor } from "./locators/editor";
-import { applicationUrl } from "./utils/environment";
-import { ApplicationWrapper } from "./wrappers/ApplicationWrapper";
+import { openStory } from "./storybook/mountStory";
+import { focusEditor, getEditorData } from "./storybook/testApi";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -98,10 +97,16 @@ const replaceAllPaste = async (page: Page): Promise<void> => {
   await Promise.all([keyboard.down("ControlOrMeta"), press("a"), press("v"), keyboard.up("ControlOrMeta")]);
 };
 
+/**
+ * Migrated to run against the Storybook story `tests-fontmapper--default`
+ * (see `tests/storybook/stories/tests/FontMapper.stories.ts`) instead of the
+ * former example application.
+ */
+const storyId = "tests-fontmapper--default";
+
 test.describe("Font Mapper features", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(applicationUrl);
-    await editor(page).waitFor();
+    await openStory(page, storyId);
   });
 
   /**
@@ -126,12 +131,10 @@ test.describe("Font Mapper features", () => {
       const input = "$";
       const wordDocumentTemplate = fs.readFileSync(path.join(__dirname, "..", wordDocumentTemplatePath)).toString();
       const wordDocumentWithSymbol = wordDocumentTemplate.replace(CHARACTER_PLACEHOLDER, input);
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper } = application;
-      await editorWrapper.focus();
+      await focusEditor(page);
       await writeToClipboard(page, { type: "text/html", content: wordDocumentWithSymbol });
 
-      await editorWrapper.focus();
+      await focusEditor(page);
       await replaceAllPaste(page);
 
       /*
@@ -139,7 +142,7 @@ test.describe("Font Mapper features", () => {
        * Validating that the symbol is replaced by the FontMapper plugin.
        * -----------------------------------------------------------------------
        */
-      await expect.poll(() => editorWrapper.getData()).toContain(expected);
+      await expect.poll(() => getEditorData(page)).toContain(expected);
     });
   }
 });

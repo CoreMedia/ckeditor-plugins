@@ -20,8 +20,8 @@ import {
 } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { expect, test } from "./base";
 import { editor } from "./locators/editor";
-import { applicationUrl } from "./utils/environment";
-import { ApplicationWrapper } from "./wrappers/ApplicationWrapper";
+import { openStory } from "./storybook/mountStory";
+import { setEditorDataAndGetDataView } from "./storybook/testApi";
 
 type ContentElement = (content: string, attributes?: Record<string, string>) => string;
 
@@ -40,18 +40,21 @@ const listElements: ListElement[] = [
  * It does not always fit our expectations, but it is currently implemented in CKEditor 5 like that.
  *
  * On an update of CKEditor 5 those tests might signalize changes in CKEditor 5 behavior.
+ *
+ * Migrated to run against the Storybook story `tests-documentlists--default`
+ * (see `tests/storybook/stories/tests/DocumentLists.stories.ts`) instead of the
+ * former example application.
  */
+const storyId = "tests-documentlists--default";
+
 test.describe("Document List Feature", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(applicationUrl);
-    await editor(page).waitFor();
+    await openStory(page, storyId);
   });
 
   for (const { name: listElement, fn: listElementFunction } of listElements) {
     test.describe(`${listElement}: List attributes`, () => {
       test(`${listElement} contains attributes`, async ({ page }) => {
-        const application = new ApplicationWrapper(page);
-        const { editor: editorWrapper } = application;
         const editable = editor(page);
 
         const text = `Lorem Ipsum`;
@@ -63,7 +66,7 @@ test.describe("Document List Feature", () => {
             "lang": "de",
           }),
         );
-        const dataView = await editorWrapper.setDataAndGetDataView(data);
+        const dataView = await setEditorDataAndGetDataView(page, data);
 
         // Validate Data-Processing
         expect(dataView).toContain(text);
@@ -77,8 +80,6 @@ test.describe("Document List Feature", () => {
       });
 
       test(`${listElement}, li element contains attributes`, async ({ page }) => {
-        const application = new ApplicationWrapper(page);
-        const { editor: editorWrapper } = application;
         const editable = editor(page);
 
         const text = `Lorem Ipsum`;
@@ -92,7 +93,7 @@ test.describe("Document List Feature", () => {
             }),
           ),
         );
-        await editorWrapper.setDataAndGetDataView(data);
+        await setEditorDataAndGetDataView(page, data);
         const listElementEditable = editable.locator(listElement).first();
         const listItemElement = listElementEditable.locator("li").first();
         await expect(listItemElement).toBeAttached();
@@ -102,8 +103,6 @@ test.describe("Document List Feature", () => {
       });
 
       test(`${listElement} and li element contain attributes`, async ({ page }) => {
-        const application = new ApplicationWrapper(page);
-        const { editor: editorWrapper } = application;
         const editable = editor(page);
 
         const text = `Lorem Ipsum`;
@@ -123,7 +122,7 @@ test.describe("Document List Feature", () => {
             },
           ),
         );
-        await editorWrapper.setDataAndGetDataView(data);
+        await setEditorDataAndGetDataView(page, data);
         const listElementEditable = editable.locator(listElement).first();
         await expect(listElementEditable).toBeAttached();
         await expect(listElementEditable).toHaveAttribute("class", `${listElement}Class`);
@@ -160,13 +159,11 @@ test.describe("Document List Feature", () => {
       // when reading from server and removing it later on prior to writing it
       // to the server.
       test("nested p: is removed by CKEditor", async ({ page }) => {
-        const application = new ApplicationWrapper(page);
-        const { editor: editorWrapper } = application;
         const editable = editor(page);
 
         const text = `Lorem Ipsum`;
         const data = richtext(listElementFunction(li(p(text))));
-        await editorWrapper.setDataAndGetDataView(data);
+        await setEditorDataAndGetDataView(page, data);
 
         const listElementEditable = editable.locator(listElement).first();
         const listItemElement = listElementEditable.locator("li").first();
@@ -184,13 +181,11 @@ test.describe("Document List Feature", () => {
         test(`nested p: should keep if attribute is set: '${attributeKey}' (value '${attributeValue}', for example)`, async ({
           page,
         }) => {
-          const application = new ApplicationWrapper(page);
-          const { editor: editorWrapper } = application;
           const editable = editor(page);
 
           const text = `Lorem Ipsum`;
           const data = richtext(listElementFunction(li(p(text, { [attributeKey]: attributeValue }))));
-          await editorWrapper.setDataAndGetDataView(data);
+          await setEditorDataAndGetDataView(page, data);
 
           const listElementEditable = editable.locator(listElement).first();
           const listItemElement = listElementEditable.locator("li").first();
@@ -205,13 +200,11 @@ test.describe("Document List Feature", () => {
 
       for (const { name: nestedListElement, fn: nestedListElementFunction } of listElements) {
         test(`nested ${nestedListElement}`, async ({ page }) => {
-          const application = new ApplicationWrapper(page);
-          const { editor: editorWrapper } = application;
           const editable = editor(page);
 
           const text = `Lorem Ipsum`;
           const data = richtext(listElementFunction(li(nestedListElementFunction(li(text)))));
-          await editorWrapper.setDataAndGetDataView(data);
+          await setEditorDataAndGetDataView(page, data);
 
           const listElementEditable = editable.locator(listElement).first();
           const listItemElement = listElementEditable.locator("li").first();
@@ -237,13 +230,11 @@ test.describe("Document List Feature", () => {
       ];
       for (const { name: nestedElement, fn: nestedElementFunction } of nestedElements) {
         test(`nested ${nestedElement}`, async ({ page }) => {
-          const application = new ApplicationWrapper(page);
-          const { editor: editorWrapper } = application;
           const editable = editor(page);
 
           const text = `Lorem Ipsum`;
           const data = richtext(listElementFunction(li(nestedElementFunction(text))));
-          await editorWrapper.setDataAndGetDataView(data);
+          await setEditorDataAndGetDataView(page, data);
           const listElementEditable = editable.locator(listElement).first();
           const listItemElement = listElementEditable.locator("li").first();
           await expect(listItemElement).toBeAttached();
@@ -255,13 +246,11 @@ test.describe("Document List Feature", () => {
       }
 
       test("nested a", async ({ page }) => {
-        const application = new ApplicationWrapper(page);
-        const { editor: editorWrapper } = application;
         const editable = editor(page);
 
         const text = `Lorem Ipsum`;
         const data = richtext(listElementFunction(li(a(text, { "xlink:href": "content:42" }))));
-        await editorWrapper.setDataAndGetDataView(data);
+        await setEditorDataAndGetDataView(page, data);
         const listElementEditable = editable.locator(listElement).first();
         const listItemElement = listElementEditable.locator("li").first();
         await expect(listItemElement).toBeAttached();
@@ -272,8 +261,6 @@ test.describe("Document List Feature", () => {
       });
 
       test("nested img", async ({ page }) => {
-        const application = new ApplicationWrapper(page);
-        const { editor: editorWrapper } = application;
         const editable = editor(page);
 
         const text = `Lorem Ipsum`;
@@ -287,7 +274,7 @@ test.describe("Document List Feature", () => {
             ),
           ),
         );
-        await editorWrapper.setDataAndGetDataView(data);
+        await setEditorDataAndGetDataView(page, data);
         const listElementEditable = editable.locator(listElement).first();
         const listItemElement = listElementEditable.locator("li").first();
         await expect(listItemElement).toBeAttached();
@@ -298,13 +285,11 @@ test.describe("Document List Feature", () => {
       });
 
       test("nested table", async ({ page }) => {
-        const application = new ApplicationWrapper(page);
-        const { editor: editorWrapper } = application;
         const editable = editor(page);
 
         const text = `Lorem Ipsum`;
         const data = richtext(listElementFunction(li(table(tr(td(text))))));
-        await editorWrapper.setDataAndGetDataView(data);
+        await setEditorDataAndGetDataView(page, data);
         const listElementEditable = editable.locator(listElement).first();
         const listItemElement = listElementEditable.locator("li").first();
         await expect(listItemElement).toBeAttached();

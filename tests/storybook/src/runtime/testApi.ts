@@ -1,11 +1,21 @@
 import type { ClassicEditor } from "ckeditor5";
 import type {
+  InputExampleElement,
   MockContentConfig,
   MockExternalContent,
 } from "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock";
+import type {
+  IsDroppableEvaluationResult,
+  IsLinkableEvaluationResult,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 import { getEditorData, setDataAndGetDataView, setEditorData, focusEditor } from "../setup/editorData";
 import { registerMockContents } from "../setup/mockContent";
 import { registerMockExternalContents } from "../setup/mockExternalContent";
+import {
+  addInputExampleElement,
+  validateIsDroppableInLinkBalloon,
+  validateIsDroppableState,
+} from "../setup/inputExample";
 import { addBlockedWord, getLastOpenedEntities } from "../setup/serviceAgent";
 import { SCENARIO_READ_ONLY_LOCK_ID } from "../setup/applyScenario";
 
@@ -67,6 +77,22 @@ export interface EditorTestApi {
    * `BlocklistServiceWrapper.addWord`.
    */
   addBlockedWord(word: string): Promise<void>;
+  /**
+   * Creates a draggable input-example element appended to the document body, so
+   * it can serve as a drag/paste source. Replaces
+   * `MockInputExamplePluginWrapper.addInputExampleElement`.
+   */
+  addInputExampleElement(data: InputExampleElement): void;
+  /**
+   * Evaluates the droppable state of the given uris in rich text. Replaces
+   * `MockInputExamplePluginWrapper.validateIsDroppableState`.
+   */
+  validateIsDroppableState(uris: string[]): IsDroppableEvaluationResult | undefined;
+  /**
+   * Evaluates the droppable state of the given uris in the link balloon.
+   * Replaces `MockInputExamplePluginWrapper.validateIsDroppableInLinkBalloon`.
+   */
+  validateIsDroppableInLinkBalloon(uris: string[]): IsLinkableEvaluationResult | undefined;
 }
 
 declare global {
@@ -96,6 +122,9 @@ export const createEditorTestApi = (editor: ClassicEditor): EditorTestApi => ({
   },
   getLastOpenedEntities: () => getLastOpenedEntities(editor),
   addBlockedWord: (word) => addBlockedWord(editor, word),
+  addInputExampleElement: (data) => addInputExampleElement(editor, data),
+  validateIsDroppableState: (uris) => validateIsDroppableState(editor, uris),
+  validateIsDroppableInLinkBalloon: (uris) => validateIsDroppableInLinkBalloon(editor, uris),
 });
 
 /**

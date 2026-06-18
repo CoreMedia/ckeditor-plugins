@@ -6,8 +6,8 @@ import type {
 import type { Page } from "playwright-core";
 import { expect, test } from "./base";
 import { editor } from "./locators/editor";
-import { applicationUrl } from "./utils/environment";
-import { ApplicationWrapper } from "./wrappers/ApplicationWrapper";
+import { openStory } from "./storybook/mountStory";
+import { addInputExampleElement, addMockContents, getEditorData, setEditorData } from "./storybook/testApi";
 import { PNG_BLUE_240x135, PNG_GREEN_240x135, PNG_RED_240x135 } from "./MockFixtures";
 
 const oneLink: MockContentConfig[] = [
@@ -110,12 +110,12 @@ const multipleImagesSlow: MockContentConfig[] = [
 const targetSelector = ".ck-toolbar__items";
 
 const setupScenario = async (
-  application: ApplicationWrapper,
+  page: Page,
   inputElementClass: string,
   contentMocks: MockContentConfig[],
 ): Promise<void> => {
   for (const contentMock of contentMocks) {
-    await application.mockContent.addContents(contentMock);
+    await addMockContents(page, contentMock);
   }
 
   const inputIds = contentMocks.map((content: { id: number }) => content.id);
@@ -125,7 +125,7 @@ const setupScenario = async (
     items: inputIds,
     classes: ["input-content", inputElementClass],
   };
-  await application.mockInputExamplePlugin.addInputExampleElement(inputElement);
+  await addInputExampleElement(page, inputElement);
 };
 
 const copyPaste = async (page: Page, inputElementSelector: string, toolbarItemsLocator: string): Promise<void> => {
@@ -138,14 +138,19 @@ const copyPaste = async (page: Page, inputElementSelector: string, toolbarItemsL
   await pasteContentButton.click();
 };
 
+/**
+ * Migrated to run against the Storybook story `tests-pastebutton--default`
+ * (see `tests/storybook/stories/tests/PasteButton.stories.ts`) instead of the
+ * former example application.
+ */
+const storyId = "tests-pastebutton--default";
+
 test.describe("Paste Button", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(applicationUrl);
-    await editor(page).waitFor();
+    await openStory(page, storyId);
 
     // setup initial data
-    const application = new ApplicationWrapper(page);
-    await application.editor.setDataAndGetDataView(richtext());
+    await setEditorData(page, richtext());
   });
 
   test.describe("Links", () => {
@@ -157,8 +162,7 @@ test.describe("Paste Button", () => {
 
     for (const { inputElementClass, contentMocks, name } of cases) {
       test(`Should paste ${name} (non embeddable contents as links).`, async ({ page }) => {
-        const application = new ApplicationWrapper(page);
-        await setupScenario(application, inputElementClass, contentMocks);
+        await setupScenario(page, inputElementClass, contentMocks);
 
         const inputElementSelector = `.input-example.input-content.${inputElementClass}`;
         await copyPaste(page, inputElementSelector, targetSelector);
@@ -175,12 +179,11 @@ test.describe("Paste Button", () => {
     test("Should paste a link using keyboard shorcut.", async ({ page }) => {
       const inputElementClass = "paste-via-keyboard-link";
       const contentMock = oneLink;
-      const application = new ApplicationWrapper(page);
-      await setupScenario(application, inputElementClass, contentMock);
+      await setupScenario(page, inputElementClass, contentMock);
 
       const inputElementSelector = `.input-example.input-content.${inputElementClass}`;
       await page.locator(inputElementSelector).dblclick();
-      await application.editor.ui.locator.click();
+      await editor(page).click();
       // `ControlOrMeta` resolves to Meta on macOS and Control elsewhere.
       await page.keyboard.press("ControlOrMeta+Shift+P");
 
@@ -198,9 +201,7 @@ test.describe("Paste Button", () => {
 
     for (const { inputElementClass, contentMocks, name } of cases) {
       test(`Should paste ${name} (embeddable contents as images).`, async ({ page }) => {
-        const application = new ApplicationWrapper(page);
-        const { editor: editorWrapper } = application;
-        await setupScenario(application, inputElementClass, contentMocks);
+        await setupScenario(page, inputElementClass, contentMocks);
 
         // execute paste
         const inputElementSelector = `.input-example.input-content.${inputElementClass}`;
@@ -210,7 +211,7 @@ test.describe("Paste Button", () => {
         for (const contentMock of contentMocks) {
           // noinspection HtmlUnknownAttribute
           await expect
-            .poll(() => editorWrapper.getData())
+            .poll(() => getEditorData(page))
             .toContain(`<img xlink:href="content/${contentMock.id}#properties.data" alt=""/>`);
         }
 

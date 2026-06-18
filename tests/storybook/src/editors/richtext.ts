@@ -161,7 +161,7 @@ export const createRichTextEditor = async (sourceElement: HTMLElement, args: Sce
   const contextUriPath = `content/123`;
 
   try {
-    return ClassicEditor.create(sourceElement, {
+    const editor = await ClassicEditor.create(sourceElement, {
       licenseKey,
       placeholder: "Type your text here...",
       plugins: [
@@ -407,6 +407,16 @@ export const createRichTextEditor = async (sourceElement: HTMLElement, args: Sce
         ],
       },
     });
+
+    // Different to in-production use, where differencing is only active in
+    // read-only view, the test scenarios use differencing in R/W view (as the
+    // former example application did). Activate it so augmented server-side
+    // diff data passes to the editing view.
+    if (editor.plugins.has(Differencing)) {
+      editor.plugins.get(Differencing).activateDifferencing();
+    }
+
+    return editor;
   } catch (e) {
     console.error("Caught error when creating Editor.", e);
     throw Error(licenseKeyErrorMessage);

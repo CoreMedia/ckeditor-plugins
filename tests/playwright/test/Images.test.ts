@@ -10,8 +10,8 @@ import type { MockContentConfig } from "@coremedia-internal/ckeditor5-coremedia-
 import type { Locator, Page } from "playwright-core";
 import { expect, test } from "./base";
 import { editor } from "./locators/editor";
-import { applicationUrl } from "./utils/environment";
-import { ApplicationWrapper } from "./wrappers/ApplicationWrapper";
+import { openStory } from "./storybook/mountStory";
+import { addMockContents, getLastOpenedEntities, setEditorDataAndGetDataView } from "./storybook/testApi";
 import { PNG_EMPTY_24x24, PNG_LOCK_24x24, PNG_RED_240x135 } from "./MockFixtures";
 
 /**
@@ -41,10 +41,16 @@ const expectNoFloat = async (editable: Locator): Promise<void> => {
   await expect(inlineImage).not.toHaveClass(/float/);
 };
 
+/**
+ * Migrated to run against the Storybook story `tests-images--default`
+ * (see `tests/storybook/stories/tests/Images.stories.ts`) instead of the
+ * former example application.
+ */
+const storyId = "tests-images--default";
+
 test.describe("Image Features", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(applicationUrl);
-    await editor(page).waitFor();
+    await openStory(page, storyId);
   });
 
   test.describe("Media Representation", () => {
@@ -83,11 +89,9 @@ test.describe("Image Features", () => {
 
     for (const { content, expectedImage } of cases) {
       test(`Should show the expected image for content ${content.name}`, async ({ page }) => {
-        const application = new ApplicationWrapper(page);
-        const { editor: editorWrapper, mockContent } = application;
         const editable = editor(page);
 
-        await mockContent.addContents(content);
+        await addMockContents(page, content);
         const data = richtext(
           p(
             img({
@@ -97,7 +101,7 @@ test.describe("Image Features", () => {
           ),
         );
 
-        const dataView = await editorWrapper.setDataAndGetDataView(data);
+        const dataView = await setEditorDataAndGetDataView(page, data);
 
         /*
          * -----------------------------------------------------------------------
@@ -130,8 +134,6 @@ test.describe("Image Features", () => {
   test.describe("Image with invalid xlink:href", () => {
     test("Should correctly render broken image with empty src", async ({ page }, testInfo) => {
       const name = testInfo.title;
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper } = application;
       const editable = editor(page);
 
       const data = richtext(
@@ -143,7 +145,7 @@ test.describe("Image Features", () => {
         ),
       );
 
-      await editorWrapper.setDataAndGetDataView(data);
+      await setEditorDataAndGetDataView(page, data);
 
       // There is an image with an alt attribute.
       await expect(editable.locator("img[alt]")).toBeAttached();
@@ -155,12 +157,10 @@ test.describe("Image Features", () => {
   test.describe("Image Alignment", () => {
     test("Should correctly set Image Alignment", async ({ page }, testInfo) => {
       const name = testInfo.title;
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper, mockContent } = application;
       const editable = editor(page);
 
       const id = 42;
-      await mockContent.addContents({
+      await addMockContents(page, {
         id,
         blob: PNG_RED_240x135,
         name: `Document for test ${name}`,
@@ -175,7 +175,7 @@ test.describe("Image Features", () => {
         ),
       );
 
-      await editorWrapper.setDataAndGetDataView(data);
+      await setEditorDataAndGetDataView(page, data);
       // click on image
       await page.locator(".ck-editor__editable img").click();
 
@@ -199,10 +199,8 @@ test.describe("Image Features", () => {
   test.describe("Open image in tab", () => {
     test("Should trigger open in tab for image from balloon", async ({ page }, testInfo) => {
       const name = testInfo.title;
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper, mockContent } = application;
       const id = 42;
-      await mockContent.addContents({
+      await addMockContents(page, {
         id,
         blob: PNG_RED_240x135,
         name: `Document for test ${name}`,
@@ -215,24 +213,20 @@ test.describe("Image Features", () => {
           }),
         ),
       );
-      const serviceAgent = application.mockServiceAgent;
 
-      await editorWrapper.setDataAndGetDataView(data);
+      await setEditorDataAndGetDataView(page, data);
       await page.locator(".ck-editor__editable img").click();
 
       const openInTabButton = balloonButton(page, "Open in tab");
       await expect(openInTabButton).toBeEnabled();
       await openInTabButton.click();
-      const mockContentFormService = serviceAgent.getContentFormServiceWrapper();
-      expect(await mockContentFormService.getLastOpenedEntities()).toEqual(["content/42"]);
+      expect(await getLastOpenedEntities(page)).toEqual(["content/42"]);
     });
 
     test("Should not be able to trigger open in tab for image from balloon", async ({ page }, testInfo) => {
       const name = testInfo.title;
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper, mockContent } = application;
       const id = 42;
-      await mockContent.addContents({
+      await addMockContents(page, {
         id,
         blob: PNG_RED_240x135,
         name: `Document for test ${name}`,
@@ -247,7 +241,7 @@ test.describe("Image Features", () => {
         ),
       );
 
-      await editorWrapper.setDataAndGetDataView(data);
+      await setEditorDataAndGetDataView(page, data);
       await page.locator(".ck-editor__editable img").click();
       const openInTabButton = balloonButton(page, "Open in tab");
       await expect(openInTabButton).toBeVisible();
@@ -260,12 +254,9 @@ test.describe("Image Features", () => {
       page,
     }, testInfo) => {
       const name = testInfo.title;
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper, mockContent } = application;
-
       const imageId = 42;
 
-      await mockContent.addContents({
+      await addMockContents(page, {
         id: imageId,
         blob: PNG_RED_240x135,
         name: `Document for test ${name}`,
@@ -280,7 +271,7 @@ test.describe("Image Features", () => {
         ),
       );
 
-      await editorWrapper.setDataAndGetDataView(data);
+      await setEditorDataAndGetDataView(page, data);
       await page.locator(".ck-editor__editable img").click();
       const linkButton = balloonButton(page, "Link image");
       await expect(linkButton).not.toHaveClass(/ck-on/);
@@ -290,14 +281,12 @@ test.describe("Image Features", () => {
       page,
     }, testInfo) => {
       const name = testInfo.title;
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper, mockContent } = application;
-
       const imageId = 42;
       const linkedContentId = 46;
 
       const contentLinkDocumentName = `Document to link to the image for test ${name}`;
-      await mockContent.addContents(
+      await addMockContents(
+        page,
         {
           id: imageId,
           blob: PNG_RED_240x135,
@@ -321,7 +310,7 @@ test.describe("Image Features", () => {
         ),
       );
 
-      await editorWrapper.setDataAndGetDataView(data);
+      await setEditorDataAndGetDataView(page, data);
       await page.locator(".ck-editor__editable img").click();
       const linkButton = balloonButton(page, "Link image");
       await expect(linkButton).toHaveClass(/ck-on/);

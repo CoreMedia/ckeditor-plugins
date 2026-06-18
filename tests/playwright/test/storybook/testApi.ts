@@ -1,8 +1,13 @@
 import type { Page } from "playwright-core";
 import type {
+  InputExampleElement,
   MockContentConfig,
   MockExternalContent,
 } from "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock";
+import type {
+  IsDroppableEvaluationResult,
+  IsLinkableEvaluationResult,
+} from "@coremedia/ckeditor5-coremedia-studio-integration";
 
 /**
  * Name of the global the Storybook runtime exposes its in-page editor test API
@@ -28,6 +33,9 @@ interface EditorTestApi {
   setReadOnly(enabled: boolean): void;
   getLastOpenedEntities(): Promise<unknown[]>;
   addBlockedWord(word: string): Promise<void>;
+  addInputExampleElement(data: InputExampleElement): void;
+  validateIsDroppableState(uris: string[]): IsDroppableEvaluationResult | undefined;
+  validateIsDroppableInLinkBalloon(uris: string[]): IsLinkableEvaluationResult | undefined;
 }
 
 type WindowWithTestApi = Window & {
@@ -162,6 +170,61 @@ export const addBlockedWord = (page: Page, word: string): Promise<void> =>
       return api.addBlockedWord(value);
     },
     [EDITOR_TEST_API_GLOBAL, word] as const,
+  );
+
+/**
+ * Creates a draggable input-example element appended to the document body, so
+ * it can serve as a drag/paste source. Replaces
+ * `MockInputExamplePluginWrapper.addInputExampleElement`.
+ */
+export const addInputExampleElement = (page: Page, data: InputExampleElement): Promise<void> =>
+  page.evaluate(
+    ([apiGlobal, element]) => {
+      const api = (window as unknown as Record<string, EditorTestApi | undefined>)[apiGlobal];
+      if (!api) {
+        throw new Error(`Editor test API not available as window.${apiGlobal}. Is the scenario ready?`);
+      }
+      api.addInputExampleElement(element);
+    },
+    [EDITOR_TEST_API_GLOBAL, data] as const,
+  );
+
+/**
+ * Evaluates the droppable state of the given uris in rich text. Replaces
+ * `MockInputExamplePluginWrapper.validateIsDroppableState`.
+ */
+export const validateIsDroppableState = (
+  page: Page,
+  uris: string[],
+): Promise<IsDroppableEvaluationResult | undefined> =>
+  page.evaluate(
+    ([apiGlobal, data]) => {
+      const api = (window as unknown as Record<string, EditorTestApi | undefined>)[apiGlobal];
+      if (!api) {
+        throw new Error(`Editor test API not available as window.${apiGlobal}. Is the scenario ready?`);
+      }
+      return api.validateIsDroppableState(data);
+    },
+    [EDITOR_TEST_API_GLOBAL, uris] as const,
+  );
+
+/**
+ * Evaluates the droppable state of the given uris in the link balloon. Replaces
+ * `MockInputExamplePluginWrapper.validateIsDroppableInLinkBalloon`.
+ */
+export const validateIsDroppableInLinkBalloon = (
+  page: Page,
+  uris: string[],
+): Promise<IsLinkableEvaluationResult | undefined> =>
+  page.evaluate(
+    ([apiGlobal, data]) => {
+      const api = (window as unknown as Record<string, EditorTestApi | undefined>)[apiGlobal];
+      if (!api) {
+        throw new Error(`Editor test API not available as window.${apiGlobal}. Is the scenario ready?`);
+      }
+      return api.validateIsDroppableInLinkBalloon(data);
+    },
+    [EDITOR_TEST_API_GLOBAL, uris] as const,
   );
 
 export type { EditorTestApi, WindowWithTestApi };

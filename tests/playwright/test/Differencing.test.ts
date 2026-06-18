@@ -8,8 +8,8 @@ import {
 } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import { expect, test } from "./base";
 import { editor } from "./locators/editor";
-import { applicationUrl } from "./utils/environment";
-import { ApplicationWrapper } from "./wrappers/ApplicationWrapper";
+import { openStory } from "./storybook/mountStory";
+import { addMockContents, setEditorData, setEditorDataAndGetDataView } from "./storybook/testApi";
 import { PNG_BLUE_240x135 } from "./MockFixtures";
 
 const xdiff = new Differencing();
@@ -19,20 +19,24 @@ const xdiff = new Differencing();
  * data from CoreMedia Studio Server pass to Editing View, which is
  * important for later applied CSS styling (not tested here).
  *
- * The test assumes, that differencing plugin is installed to the
- * example application. Different to in-production use, where differencing
- * is only active in read-only view, the example application uses
- * differencing in R/W view. Testing editing in these cases is not
+ * The test assumes, that differencing plugin is installed. Different to
+ * in-production use, where differencing is only active in read-only view, the
+ * scenario uses differencing in R/W view. Testing editing in these cases is not
  * required and not done within this test.
  *
  * If any of these tests fail, and the behavior has to be accepted, it
  * is most likely, that CSS rules for difference highlighting have
  * to be adapted.
+ *
+ * Migrated to run against the Storybook story `tests-differencing--default`
+ * (see `tests/storybook/stories/tests/Differencing.stories.ts`) instead of the
+ * former example application.
  */
+const storyId = "tests-differencing--default";
+
 test.describe("Differencing Feature", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(applicationUrl);
-    await editor(page).waitFor();
+    await openStory(page, storyId);
   });
 
   test.afterEach(() => {
@@ -53,13 +57,11 @@ test.describe("Differencing Feature", () => {
 
     for (const { type, difference } of cases) {
       test(`XDiff Augmentation should be available in editing view: ${type}`, async ({ page }) => {
-        const application = new ApplicationWrapper(page);
-        const { editor: editorWrapper } = application;
         const editable = editor(page);
 
         const text = `Lorem${difference}Ipsum`;
         const diffData = richtext(p(text));
-        const dataView = await editorWrapper.setDataAndGetDataView(diffData);
+        const dataView = await setEditorDataAndGetDataView(page, diffData);
 
         // Validate Data-Processing
         expect(dataView).toContain(text);
@@ -72,8 +74,6 @@ test.describe("Differencing Feature", () => {
     }
 
     test("All xdiff:span Attributes should be forwarded from data to editing view", async ({ page }) => {
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper } = application;
       const editable = editor(page);
 
       const conflictChangesText = "Some conflicting changes";
@@ -87,7 +87,7 @@ test.describe("Differencing Feature", () => {
 
       const text = `Lorem${difference}Ipsum`;
       const diffData = richtext(p(text));
-      const dataView = await editorWrapper.setDataAndGetDataView(diffData);
+      const dataView = await setEditorDataAndGetDataView(page, diffData);
 
       // Validate Data-Processing
       expect(dataView).toContain(text);
@@ -141,12 +141,10 @@ test.describe("Differencing Feature", () => {
      * This is related to: ckeditor/ckeditor5#12324
      */
     test("False-Positive Newline should be prevented.", async ({ page }) => {
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper } = application;
       const editable = editor(page);
 
       // Temporarily fix this test
-      await editorWrapper.setData("");
+      await setEditorData(page, "");
 
       // EOD: We mark all diffs as EOD for simpler matching, as we don't struggle
       // with attribute order then.
@@ -164,7 +162,7 @@ test.describe("Differencing Feature", () => {
       const text = `${p(innerHtml)}`;
 
       const diffData = richtext(text);
-      const dataView = await editorWrapper.setDataAndGetDataView(diffData);
+      const dataView = await setEditorDataAndGetDataView(page, diffData);
 
       expect(dataView).toContain(text);
 
@@ -175,8 +173,6 @@ test.describe("Differencing Feature", () => {
 
     // This behavior is required to ease CSS styling of added/removed/... newlines.
     test("Added newline should pass to editing view as empty element", async ({ page }) => {
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper } = application;
       const editable = editor(page);
 
       const difference = xdiff.add("", EOD);
@@ -184,7 +180,7 @@ test.describe("Differencing Feature", () => {
       // server side differencing. Here: Added newline after `Lorem`.
       const text = `${p(`Lorem${difference}`)}${p(`Ipsum`)}`;
       const diffData = richtext(text);
-      const dataView = await editorWrapper.setDataAndGetDataView(diffData);
+      const dataView = await setEditorDataAndGetDataView(page, diffData);
 
       // To differentiate from 'added whitespace' characters, we need
       // to replace this xdiff:span from data by some other artificial element.
@@ -207,12 +203,10 @@ test.describe("Differencing Feature", () => {
       page,
     }, testInfo) => {
       const name = testInfo.title;
-      const application = new ApplicationWrapper(page);
-      const { editor: editorWrapper, mockContent } = application;
       const editable = editor(page);
 
       const id = 42;
-      await mockContent.addContents({
+      await addMockContents(page, {
         id,
         blob: PNG_BLUE_240x135,
         name: `Blue Image for test ${name}`,
@@ -234,7 +228,7 @@ test.describe("Differencing Feature", () => {
         ),
       );
 
-      await editorWrapper.setDataAndGetDataView(data);
+      await setEditorDataAndGetDataView(page, data);
 
       const xdiffSpan = editable.locator("xdiff\\:span");
       await expect(xdiffSpan).toBeAttached();
