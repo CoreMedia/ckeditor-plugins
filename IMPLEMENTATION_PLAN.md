@@ -41,7 +41,7 @@ This plan describes how to implement the goals defined in `GOALS.md` step by ste
 - [x] `HelloEditor.test.ts` (richtext base scenario)
 - [x] `Application.test.ts`
 - [x] `BBCode.test.ts` (bbcode base scenario)
-- [ ] `ContentLink.test.ts`
+- [x] `ContentLink.test.ts`
 - [ ] `LinkBalloon.test.ts`
 - [ ] `LinkUserInteraction.test.ts`
 - [ ] `Blocklist.test.ts`
