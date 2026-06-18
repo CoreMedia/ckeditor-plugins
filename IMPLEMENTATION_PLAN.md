@@ -82,9 +82,9 @@ This plan describes how to implement the goals defined in `GOALS.md` step by ste
 
 ## 10. Hardening and parity checks
 
-- [ ] Run lint/build/tests for affected packages.
-- [ ] Fix regressions in story setup and Playwright execution.
-- [ ] Confirm all success criteria from `GOALS.md` are met.
+- [x] Run lint/build/tests for affected packages.
+- [x] Fix regressions in story setup and Playwright execution.
+- [x] Confirm all success criteria from `GOALS.md` are met.
 
 ## 11. Final documentation update
 
