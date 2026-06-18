@@ -18,7 +18,6 @@
     "ci-info": "catalog:",
     "ckeditor5": "catalog:",
     "eslint": "catalog:",
-    "express": "catalog:",
     "playwright-core": "catalog:",
     "rimraf": "catalog:",
     "rxjs": "catalog:",
@@ -30,7 +29,6 @@
     "build": "tsc --project .",
     "ui-test": "playwright test",
     "lint": "eslint",
-    "webserver": "node webserver.js",
     "webserver:storybook": "pnpm --filter @coremedia/ckeditor5-storybook-itest run storybook"
   }
 }

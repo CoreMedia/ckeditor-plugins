@@ -63,16 +63,16 @@ This plan describes how to implement the goals defined in `GOALS.md` step by ste
 
 ## 7. Switch Playwright runtime target to Storybook
 
-- [ ] Update Playwright environment/config to point to Storybook URL instead of `app`.
-- [ ] Update web server startup command in Playwright config to run Storybook.
-- [ ] Keep test location under `tests/playwright` unchanged.
+- [x] Update Playwright environment/config to point to Storybook URL instead of `app`.
+- [x] Update web server startup command in Playwright config to run Storybook.
+- [x] Keep test location under `tests/playwright` unchanged.
 
 ## 8. Remove obsolete JS-handle wrappers
 
-- [ ] Remove `tests/playwright/test/wrappers/JSWrapper.ts`.
-- [ ] Remove wrappers that only exist for JS-handle access.
-- [ ] Keep locator-based wrappers that remain useful.
-- [ ] Clean imports/usages and delete dead code.
+- [x] Remove `tests/playwright/test/wrappers/JSWrapper.ts`.
+- [x] Remove wrappers that only exist for JS-handle access.
+- [x] Keep locator-based wrappers that remain useful.
+- [x] Clean imports/usages and delete dead code.
 
 ## 9. Add GitHub Pages deployment for Storybook
 

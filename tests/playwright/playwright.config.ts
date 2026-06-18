@@ -3,7 +3,7 @@ import path, { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig, devices } from "@playwright/test";
 import { isCI } from "ci-info";
-import { applicationUrl, retries, timeoutFactor } from "./test/utils/environment";
+import { retries, timeoutFactor } from "./test/utils/environment";
 import { storybookUrl } from "./test/storybook/environment";
 
 const testFile = /.*\.test.ts/;
@@ -87,14 +87,9 @@ export default defineConfig({
   },
   webServer: [
     {
-      command: "pnpm run webserver",
-      url: applicationUrl,
-      reuseExistingServer: !isCI,
-    },
-    {
-      // Storybook runtime for migrated tests. Served by the Storybook package's
-      // dev server; migrated tests navigate to story preview iframes instead of
-      // the example application.
+      // Storybook runtime for the migrated tests. Served by the Storybook
+      // package's dev server; tests navigate to story preview iframes instead
+      // of the former example application.
       command: "pnpm run webserver:storybook",
       url: storybookUrl,
       reuseExistingServer: !isCI,
