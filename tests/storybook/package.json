@@ -8,6 +8,7 @@
   "dependencies": {
     "@coremedia-internal/ckeditor5-coremedia-example-data": "workspace:^1.0.0-SNAPSHOT",
     "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock": "workspace:^1.0.0-SNAPSHOT",
+    "@coremedia/ckeditor5-coremedia-richtext": "workspace:^27.0.0",
     "@coremedia/ckeditor5-coremedia-studio-integration": "workspace:^27.0.0",
     "ckeditor5": "catalog:"
   },

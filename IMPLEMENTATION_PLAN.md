@@ -18,9 +18,9 @@ This plan describes how to implement the goals defined in `GOALS.md` step by ste
 
 ## 3. Migrate JS-wrapper functionality into Storybook utilities
 
-- [ ] Inventory all `JSWrapper`-based wrappers used by Playwright tests.
-- [ ] Move the setup logic into Storybook-side utilities (no Playwright JSHandle wrappers).
-- [ ] Replace `JSWrapper`-specific type shims/workarounds (including `PageFunctionOn`-style local types) with Storybook-side implementation.
+- [x] Inventory all `JSWrapper`-based wrappers used by Playwright tests.
+- [x] Move the setup logic into Storybook-side utilities (no Playwright JSHandle wrappers).
+- [x] Replace `JSWrapper`-specific type shims/workarounds (including `PageFunctionOn`-style local types) with Storybook-side implementation.
 
 ## 4. Keep and align locator-based access patterns
 
