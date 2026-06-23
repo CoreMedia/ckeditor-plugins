@@ -26,8 +26,6 @@ env:
   # https://github.com/actions/runner-images/issues/70
   NODE_OPTIONS: "--max_old_space_size=4096"
   PNPM_VERSION: ^11.7
-  PNPM_CONFIG_@coremedia:registry: 'https://repository.coremedia.com/nexus/repository/coremedia-npm'
-  PNPM_CONFIG_@coremedia-internal:registry: 'https://repository.coremedia.com/nexus/repository/coremedia-npm'
 
 jobs:
   build:

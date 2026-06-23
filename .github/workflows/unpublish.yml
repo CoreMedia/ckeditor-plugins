@@ -8,8 +8,6 @@ on:
 jobs:
   build:
     name: Unpublish Version
-    env:
-      PNPM_CONFIG_@coremedia:registry: 'https://repository.coremedia.com/nexus/repository/coremedia-npm'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
