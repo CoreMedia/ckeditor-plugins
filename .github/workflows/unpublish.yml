@@ -9,7 +9,7 @@ jobs:
   build:
     name: Unpublish Version
     env:
-      NPM_CONFIG_@coremedia:registry: 'https://repository.coremedia.com/nexus/repository/coremedia-npm'
+      PNPM_CONFIG_@coremedia:registry: 'https://repository.coremedia.com/nexus/repository/coremedia-npm'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -18,7 +18,7 @@ jobs:
         run: |
           NPM_AUTH_TOKEN=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.PLUGINS_NEXUS_USER }}", "password": "${{ secrets.PLUGINS_NEXUS_PASSWORD }}"}' https://repository.coremedia.com/nexus/repository/coremedia-npm/-/user/org.couchdb.user:${{ secrets.PLUGINS_NEXUS_USER }} | jq -r .token)
           echo "::add-mask::$NPM_AUTH_TOKEN"
-          echo "NPM_CONFIG_//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
+          echo "PNPM_CONFIG_//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
           echo "NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
           echo '//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
       - name: Unpublish release

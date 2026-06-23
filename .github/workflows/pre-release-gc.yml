@@ -53,9 +53,9 @@ jobs:
             "${{ env.NPM_REPOSITORY_URL }}/-/user/org.couchdb.user:${{ secrets.PLUGINS_NEXUS_USER }}" | \
             jq -r .token)
           echo "::add-mask::$NPM_AUTH_TOKEN"
-          echo "NPM_CONFIG_//${{ env.NPM_REPOSITORY }}/:_authToken=${NPM_AUTH_TOKEN}" >> $GITHUB_ENV
+          echo "PNPM_CONFIG_//${{ env.NPM_REPOSITORY }}/:_authToken=${NPM_AUTH_TOKEN}" >> $GITHUB_ENV
           echo "NPM_AUTH_TOKEN=${NPM_AUTH_TOKEN}" >> $GITHUB_ENV
-          echo "NPM_CONFIG_@coremedia:registry=${{ env.NPM_REPOSITORY_URL }}" >> $GITHUB_ENV
+          echo "PNPM_CONFIG_@coremedia:registry=${{ env.NPM_REPOSITORY_URL }}" >> $GITHUB_ENV
           echo "//${{ env.NPM_REPOSITORY }}/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
           echo "@coremedia:registry=${{ env.NPM_REPOSITORY_URL }}" >> .npmrc
       - name: "Performing Garbage Collection (retain: ${{ inputs.retain }}, dry-run: ${{ inputs.dryRun }})"
