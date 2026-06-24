@@ -1,0 +1,296 @@
+# Tests Refactoring — Implementation Plan
+
+Concrete, code-referenced execution plan for the refactoring described in
+[`TESTS_REFACTORING.md`](./TESTS_REFACTORING.md): remove every `page.evaluate` /
+`testApi` call from `tests/playwright` by serving **fully prepared stories** and
+reading all values back through **observable DOM outputs** via Playwright
+locators.
+
+This plan is the working checklist. Track progress by checking the boxes. Each
+phase ends with a verification gate that must pass before the next phase starts.
+
+## Conventions & Ground Rules
+
+- **No `page.evaluate`** may remain in `tests/playwright` at the end (neither
+  direct nor via `test/storybook/testApi.ts`).
+- **Arrange in the story, act/assert via locators.** Tests only call
+  `openStory(page, id)` and then use locators.
+- **Story id scheme unchanged:** `tests-<name>--<export-kebab>`. New per-scenario
+  exports replace the single `Default` where needed.
+- **Keep both API copies in sync** (`tests/storybook/src/runtime/testApi.ts` and
+  `tests/playwright/test/storybook/testApi.ts`) until they are removed together
+  in Phase 5. Do not partially delete one side.
+- **CRLF caveat:** the `create` tool writes CRLF and trips prettier. After
+  creating/editing files run
+  `pnpm --filter <pkg> exec eslint --fix <files>`.
+- **Verification per file:**
+  `pnpm --filter "@coremedia/ckeditor5-playwright-itest" run ui-test --project=<File>.test.ts`.
+- **Do not weaken assertions.** A scenario that previously asserted on
+  `testInfo.title`-derived text must assert on the equivalent fixed story
+  constant.
+
+## Source-of-Truth References (existing code)
+
+These already exist and are reused — the harness wraps them, it does not
+reimplement them:
+
+- `tests/storybook/src/runtime/scenario.ts` — `ScenarioArgs`,
+  `defaultScenarioArgs`. **Extend here.**
+- `tests/storybook/src/setup/applyScenario.ts` — `applyScenario(editor, args)`.
+  **Extend here.**
+- `tests/storybook/src/runtime/mountStory.ts` — `mountScenario(initialize,
+  args)`, container, `EDITOR_READY_ATTRIBUTE`, `installEditorTestApi`. **Render
+  harness here.**
+- `tests/storybook/src/setup/editorData.ts` — `getEditorData`, `setEditorData`,
+  `setDataAndGetDataView` (one-shot `richtext:toView` listener).
+- `tests/storybook/src/setup/serviceAgent.ts` — `getLastOpenedEntities`,
+  `getContentFormService`, `addBlockedWord`, `getBlocklistService`.
+- `tests/storybook/src/setup/inputExample.ts` — `addInputExampleElement`,
+  `validateIsDroppableState`, `validateIsDroppableInLinkBalloon`.
+- `tests/storybook/src/editors/index.ts` — `createEditorScenario`,
+  `editorFactories`.
+- `tests/playwright/test/locators/` — existing locator modules (`editor.ts`,
+  `balloon.ts`). **Add `outputs.ts`.**
+
+## Phase 0 — Baseline
+
+- [ ] Record the current green baseline: run the full suite with
+      `PLAYWRIGHT_RETRIES=2` and note pass/flaky counts.
+- [ ] Confirm typecheck/lint clean for both packages.
+
+**Gate:** baseline suite green (modulo known DragDrop flakiness).
+
+## Phase 1 — Scenario Contract Extension
+
+Goal: stories can declare blocked words and input-example drag sources.
+
+- [ ] `scenario.ts`: add to `ScenarioArgs`:
+  - `blockedWords: string[]`
+  - `inputExampleElements: InputExampleElement[]`
+      (import `InputExampleElement` from
+      `@coremedia-internal/ckeditor5-coremedia-studio-integration-mock`).
+- [ ] `scenario.ts`: add both to `defaultScenarioArgs` (`[]` each).
+- [ ] `applyScenario.ts`: after existing steps, apply the new args:
+  - for each `blockedWords` → `await addBlockedWord(editor, word)`
+    (note: async; make `applyScenario` async or fire a tracked promise — see
+    below).
+  - for each `inputExampleElements` → `addInputExampleElement(editor, el)`.
+- [ ] **Async ordering decision:** `addBlockedWord` is async (resolves the mock
+      blocklist service). `applyScenario` is currently sync and called inside
+      `createEditorScenario` before returning the editor. Make `applyScenario`
+      `async` and `await` it in `createEditorScenario` so the
+      `data-editor-ready` signal is only set after blocked words are registered.
+      Verify `mountScenario`'s ready wiring still holds.
+- [ ] Typecheck `tests/storybook`.
+
+**Gate:** `pnpm --filter "@coremedia/ckeditor5-storybook-itest" run typecheck`
+and `run lint` pass.
+
+## Phase 2 — Observable Outputs Harness
+
+Goal: an opt-in harness renders live editor/service values as `textContent` on
+stable `[data-test="…"]` selectors, updated reactively.
+
+### 2a. Scenario flag
+
+- [ ] `scenario.ts`: add `outputs?: ScenarioOutput[]` where
+      `ScenarioOutput = "editor-data" | "data-view" | "last-opened-entities" |
+      "is-droppable-state" | "is-droppable-in-link-balloon"`.
+- [ ] Add a companion arg for the dropability inputs the harness needs:
+      `droppableUris?: string[]` (uris evaluated for `is-droppable-*` outputs).
+- [ ] Default in `defaultScenarioArgs`: `outputs: []`, `droppableUris: []`.
+
+### 2b. Harness module
+
+- [ ] New file `tests/storybook/src/runtime/outputs.ts` exporting
+      `installOutputsHarness(container: HTMLElement, editor: ClassicEditor, args:
+      ScenarioArgs): void`. Behavior per requested output:
+  - `editor-data`: create `<pre data-test="editor-data">`; set on
+    `editor.model.document` `change:data` (and once initially) to
+    `getEditorData(editor)`.
+  - `data-view`: create `<pre data-test="data-view">`; render the processed
+    data view for the **loaded** `args.data` using the `richtext:toView`
+    mechanism from `editorData.ts` (capture once at mount; richtext only).
+  - `last-opened-entities`: create `<pre data-test="last-opened-entities">`;
+    poll/subscribe the mock content-form service and write
+    `JSON.stringify(await getLastOpenedEntities(editor))` reactively (use the
+    service's change signal if available; otherwise a short interval that
+    updates the text).
+  - `is-droppable-state` / `is-droppable-in-link-balloon`: create the matching
+    `<pre data-test="…">`; write `JSON.stringify(validateIsDroppable*(editor,
+    args.droppableUris))`. These already return reactive evaluation results;
+    update the text whenever they change.
+- [ ] Export `ScenarioOutput` and the `data-test` constant names so the
+      Playwright locators can share them by value (string copy; no build-time
+      dependency, mirroring the `EDITOR_TEST_API_GLOBAL` pattern).
+- [ ] Define a shared constants block (e.g. `OUTPUT_TEST_IDS`) in
+      `outputs.ts`.
+
+### 2c. Mount wiring
+
+- [ ] `mountStory.ts`: after the editor is ready and before/with
+      `installEditorTestApi`, if `resolvedArgs.outputs.length > 0` call
+      `installOutputsHarness(container, editor, resolvedArgs)`. Harness elements
+      live inside the scenario container but visually out of the way (they are
+      only read by tests).
+
+### 2d. Playwright locators
+
+- [ ] New file `tests/playwright/test/locators/outputs.ts` with typed readers
+      (no `page.evaluate`), e.g.:
+  - `editorData(page): Promise<string>` → read `[data-test="editor-data"]`
+    text.
+  - `dataView(page): Promise<string>`.
+  - `lastOpenedEntities(page): Promise<unknown[]>` → parse JSON text.
+  - `isDroppableState(page)` / `isDroppableInLinkBalloon(page)` → parse JSON.
+  - Provide locator getters too for `expect.poll`/`toHaveText` usage.
+- [ ] Mirror the `data-test` id constants here (string copy).
+
+**Gate:** `tests/storybook` typecheck/lint and `tests/playwright` build/lint
+pass. Harness not yet consumed.
+
+## Phase 3 — Pilot: `HelloEditor`
+
+Goal: prove the end-to-end model on the simplest read-back test before rolling
+out. Current usage: `setEditorData ×4`, `getEditorData ×2`, `addMockContents ×2`.
+
+- [ ] `HelloEditor.stories.ts`: replace single `Default` with prepared variants,
+      one per test case (welcome text, cleared, external link, internal link).
+      Each sets `data`, `mockContents`, and `outputs: ["editor-data"]` where the
+      test reads data back.
+- [ ] `HelloEditor.test.ts`: per test `openStory(page, "tests-helloeditor--<v>")`;
+      replace `setEditorData`/`getEditorData` with story data + `editorData`
+      locator (`expect.poll`); drop `addMockContents` (now in args). Remove all
+      `testApi` imports.
+- [ ] Move `testInfo.title`-derived link text to explicit story constants and
+      update assertions.
+- [ ] `eslint --fix`, then run `--project=HelloEditor.test.ts`.
+
+**Gate:** `HelloEditor.test.ts` green with **zero** `testApi` imports. Re-confirm
+the harness reactivity (data updates after the cleared case).
+
+If the pilot reveals harness gaps (e.g. reactive timing for
+`last-opened-entities`), fix Phase 2 before continuing.
+
+## Phase 4 — Rollout by Group
+
+For every test: create prepared story variant(s) → move arrange-calls into args
+→ replace read/act-calls with locators/harness → delete `testApi` imports →
+`eslint --fix` → run that file. Check the box only when the file is green with no
+`testApi` import.
+
+### 4a. Setup-only (arrange args, no harness)
+
+- [ ] `BBCode` — `data`, `dataType: "bbcode"`.
+- [ ] `Blocklist` — `data`.
+- [ ] `BlocklistCollapsed` — `data`, `blockedWords`.
+- [ ] `BlocklistExpandedKeyboard` — `data`, `blockedWords`.
+- [ ] `BlocklistExpandedToolbar` — `data`, `blockedWords`.
+- [ ] `ContentLink` — `data`, `mockContents`.
+- [ ] `LinkBalloon` — `data`, `mockContents`.
+
+### 4b. Read-back (`editor-data` harness; focus via locator)
+
+- [ ] `FontMapper` — `data`; `getEditorData` → `editorData` locator;
+      `focusEditor` → `editor(page).click()`.
+- [ ] `PasteButton` — `data`, `mockContents`, `inputExampleElements`;
+      `getEditorData` → `editorData` locator.
+- [ ] `DragDrop` — `mockContents`, `mockExternalContents`,
+      `inputExampleElements`, `data`; `getEditorData` → `editorData`;
+      `validateIsDroppable*` → `is-droppable-*` harness with per-variant
+      `droppableUris`. Keep `PLAYWRIGHT_RETRIES` behavior.
+
+### 4c. Data-view round-trips (`data-view` harness; many variants)
+
+These are heavily parametrized; build a **per-file story factory** that
+generates exports from a parameter table to avoid duplication.
+
+- [ ] `DocumentLists` — factory over (ol/ul × attribute sets); each variant sets
+      `data`, `outputs: ["data-view"]`; assert `dataView` locator + editing-view
+      locators.
+- [ ] `Differencing` — variants set `data`/`mockContents`,
+      `outputs: ["data-view"]`.
+- [ ] `Images` — variants set `data`/`mockContents`,
+      `outputs: ["data-view","last-opened-entities"]`.
+
+### 4d. Interaction + service reads
+
+- [ ] `LinkUserInteraction` — variants `ExternalLink`, `ExternalLinkReadOnly`,
+      `ContentLink`, `ContentLinkReadOnly` set `data`, `mockContents`,
+      `readOnly`, `outputs: ["last-opened-entities"]`; replace
+      `getLastOpenedEntities` with the harness locator; `setReadOnly` initial
+      state → `readOnly` arg. Move `testInfo.title` link text into story
+      constants.
+
+### 4e. Already-prepared
+
+- [ ] `Application` — verify it has no `testApi` usage; no change expected.
+
+**Gate after 4:** every `*.test.ts` is free of `testApi` imports;
+`grep` for `storybook/testApi` and `page.evaluate` in `tests/playwright/test`
+returns nothing.
+
+## Phase 5 — Retire the Runtime API
+
+- [ ] Delete `tests/playwright/test/storybook/testApi.ts`.
+- [ ] In `tests/storybook`: remove `installEditorTestApi` /
+      `createEditorTestApi` and the `window[EDITOR_TEST_API_GLOBAL]` surface from
+      `src/runtime/testApi.ts`; drop its export from `src/runtime/index.ts`.
+      Keep the underlying setup utilities (`editorData`, `serviceAgent`,
+      `inputExample`) — the harness depends on them.
+- [ ] Remove the `installEditorTestApi` call in `mountStory.ts`.
+- [ ] Remove now-dead imports/types; ensure no `EditorTestApi` references
+      remain.
+- [ ] Verify nothing else imports the removed symbols.
+
+**Gate:** both packages typecheck/lint/build; no references to
+`coremediaEditorTestApi` remain except possibly historical docs.
+
+## Phase 6 — Documentation & Final Verification
+
+- [ ] Update `tests/storybook/README.md`:
+  - story-per-scenario model (multiple exports per `Tests/<Name>`),
+  - the Observable Outputs Harness and `data-test` ids,
+  - explicit statement that tests use **locators only**, no `page.evaluate`,
+  - refresh the story↔test mapping (now many variants).
+- [ ] Update root `README.md` / any cross-links if needed.
+- [ ] Update `TESTS_REFACTORING.md` success-criteria checklist to done.
+- [ ] Full suite green with `PLAYWRIGHT_RETRIES=2`.
+- [ ] `pnpm -r` lint + build clean (at least both test packages).
+- [ ] Final `grep` audits:
+  - `tests/playwright/test` contains no `page.evaluate`,
+  - no import of `./storybook/testApi`,
+  - `tests/storybook/src` exposes no `window` test-API global.
+
+**Gate:** all success criteria in `TESTS_REFACTORING.md` met.
+
+## Tracking Table (per-file status)
+
+| File                          | Variants created | Args moved | Reads → harness/locator | `testApi` removed | Green |
+| ----------------------------- | ---------------- | ---------- | ----------------------- | ----------------- | ----- |
+| `Application`                 | n/a              | n/a        | n/a                     | n/a               | [ ]   |
+| `HelloEditor` (pilot)         | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
+| `BBCode`                      | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |
+| `Blocklist`                   | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |
+| `BlocklistCollapsed`          | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |
+| `BlocklistExpandedKeyboard`   | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |
+| `BlocklistExpandedToolbar`    | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |
+| `ContentLink`                 | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |
+| `LinkBalloon`                 | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |
+| `FontMapper`                  | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
+| `PasteButton`                 | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
+| `DragDrop`                    | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
+| `DocumentLists`               | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
+| `Differencing`                | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
+| `Images`                      | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
+| `LinkUserInteraction`         | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
+
+## Rollback / Safety
+
+- One file per commit (story + test together) keeps the suite green throughout
+  on the working branch in use; the two API copies stay until Phase 5, so
+  partially migrated states still run.
+- If a harness output proves unreliable for a given test, prefer fixing the
+  reactive binding over reintroducing `page.evaluate`; only as a last resort,
+  keep that single read on the API and document it as an open item before
+  Phase 5.
