@@ -1,4 +1,5 @@
 import type {
+  InputExampleElement,
   MockContentConfig,
   MockExternalContent,
 } from "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock";
@@ -53,6 +54,16 @@ export interface ScenarioArgs {
    * `MockExternalContentPluginWrapper.addContents`.
    */
   mockExternalContents: MockExternalContent[];
+  /**
+   * Words to pre-register with the mock blocklist service before the editor
+   * loads data. Replaces per-test `addBlockedWord` calls.
+   */
+  blockedWords: string[];
+  /**
+   * Draggable input-example elements to create as drag/paste sources when the
+   * scenario mounts. Replaces per-test `addInputExampleElement` calls.
+   */
+  inputExampleElements: InputExampleElement[];
 }
 
 /**
@@ -65,4 +76,6 @@ export const defaultScenarioArgs: ScenarioArgs = {
   readOnly: false,
   mockContents: [],
   mockExternalContents: [],
+  blockedWords: [],
+  inputExampleElements: [],
 };

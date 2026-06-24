@@ -54,37 +54,38 @@ reimplement them:
 
 ## Phase 0 — Baseline
 
-- [ ] Record the current green baseline: run the full suite with
-      `PLAYWRIGHT_RETRIES=2` and note pass/flaky counts.
-- [ ] Confirm typecheck/lint clean for both packages.
+- [x] Record the current green baseline: run the full suite with
+      `PLAYWRIGHT_RETRIES=2` and note pass/flaky counts. _(104 passed, 0 flaky.)_
+- [x] Confirm typecheck/lint clean for both packages.
 
-**Gate:** baseline suite green (modulo known DragDrop flakiness).
+**Gate:** baseline suite green (modulo known DragDrop flakiness). _(Met.)_
 
 ## Phase 1 — Scenario Contract Extension
 
 Goal: stories can declare blocked words and input-example drag sources.
 
-- [ ] `scenario.ts`: add to `ScenarioArgs`:
+- [x] `scenario.ts`: add to `ScenarioArgs`:
   - `blockedWords: string[]`
   - `inputExampleElements: InputExampleElement[]`
       (import `InputExampleElement` from
       `@coremedia-internal/ckeditor5-coremedia-studio-integration-mock`).
-- [ ] `scenario.ts`: add both to `defaultScenarioArgs` (`[]` each).
-- [ ] `applyScenario.ts`: after existing steps, apply the new args:
+- [x] `scenario.ts`: add both to `defaultScenarioArgs` (`[]` each).
+- [x] `applyScenario.ts`: after existing steps, apply the new args:
   - for each `blockedWords` → `await addBlockedWord(editor, word)`
     (note: async; make `applyScenario` async or fire a tracked promise — see
     below).
   - for each `inputExampleElements` → `addInputExampleElement(editor, el)`.
-- [ ] **Async ordering decision:** `addBlockedWord` is async (resolves the mock
+- [x] **Async ordering decision:** `addBlockedWord` is async (resolves the mock
       blocklist service). `applyScenario` is currently sync and called inside
       `createEditorScenario` before returning the editor. Make `applyScenario`
       `async` and `await` it in `createEditorScenario` so the
       `data-editor-ready` signal is only set after blocked words are registered.
-      Verify `mountScenario`'s ready wiring still holds.
-- [ ] Typecheck `tests/storybook`.
+      Verify `mountScenario`'s ready wiring still holds. _(Done: `applyScenario`
+      is now async and awaited in `createEditorScenario`.)_
+- [x] Typecheck `tests/storybook`.
 
 **Gate:** `pnpm --filter "@coremedia/ckeditor5-storybook-itest" run typecheck`
-and `run lint` pass.
+and `run lint` pass. _(Met.)_
 
 ## Phase 2 — Observable Outputs Harness
 
