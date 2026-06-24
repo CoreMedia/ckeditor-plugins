@@ -203,9 +203,9 @@ For every test: create prepared story variant(s) → move arrange-calls into arg
       bold word shared via `bbCodeScenario`; 1 passed.)_
 - [x] `Blocklist` — `data`. _(story `tests-blocklist--default`; paragraphs +
       blocked word shared via `blocklistScenario`; 1 passed.)_
-- [ ] `BlocklistCollapsed` — `data`, `blockedWords`.
-- [ ] `BlocklistExpandedKeyboard` — `data`, `blockedWords`.
-- [ ] `BlocklistExpandedToolbar` — `data`, `blockedWords`.
+- [x] `BlocklistCollapsed` — `data`, `blockedWords`. _(shared `blocklistWordsScenario`; 1 passed.)_
+- [x] `BlocklistExpandedKeyboard` — `data`, `blockedWords`. _(shared `blocklistWordsScenario`; 1 passed.)_
+- [x] `BlocklistExpandedToolbar` — `data`, `blockedWords`. _(shared `blocklistWordsScenario`; 1 passed.)_
 - [ ] `ContentLink` — `data`, `mockContents`.
 - [ ] `LinkBalloon` — `data`, `mockContents`.
 
@@ -292,9 +292,9 @@ returns nothing.
 | `HelloEditor` (pilot)         | [x]              | [x]        | [x]                     | [x]               | [x]   |
 | `BBCode`                      | [x]              | [x]        | n/a                     | [x]               | [x]   |
 | `Blocklist`                   | [x]              | [x]        | n/a                     | [x]               | [x]   |
-| `BlocklistCollapsed`          | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |
-| `BlocklistExpandedKeyboard`   | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |
-| `BlocklistExpandedToolbar`    | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |
+| `BlocklistCollapsed`          | [x]              | [x]        | n/a                     | [x]               | [x]   |
+| `BlocklistExpandedKeyboard`   | [x]              | [x]        | n/a                     | [x]               | [x]   |
+| `BlocklistExpandedToolbar`    | [x]              | [x]        | n/a                     | [x]               | [x]   |
 | `ContentLink`                 | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |
 | `LinkBalloon`                 | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |
 | `FontMapper`                  | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |

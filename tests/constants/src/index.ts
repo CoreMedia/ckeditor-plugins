@@ -9,4 +9,5 @@ export * from "./outputs";
 export * from "./testApi";
 export * from "./stories/bbCode";
 export * from "./stories/blocklist";
+export * from "./stories/blocklistWords";
 export * from "./stories/helloEditor";

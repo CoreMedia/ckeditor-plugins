@@ -1,31 +1,26 @@
-import { p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
+import { blocklistWordsScenario } from "@coremedia/ckeditor5-itest-constants";
 import { expect, test } from "./base";
 import { editor } from "./locators/editor";
 import { balloonPanel } from "./locators/balloon";
 import { openStory } from "./storybook/mountStory";
-import { addBlockedWord, setEditorData } from "./storybook/testApi";
 
 /**
  * Tests the blocklist feature with a collapsed selection.
  *
- * Migrated to run against the Storybook story `tests-blocklistcollapsed--default`
- * (see `tests/storybook/stories/tests/BlocklistCollapsed.stories.ts`) instead of
- * the former example application.
+ * Runs against the fully prepared Storybook story
+ * `tests-blocklistcollapsed--default` (see
+ * `tests/storybook/stories/tests/BlocklistCollapsed.stories.ts`): the blocked
+ * word and editor data are baked into the story, so the test only opens it and
+ * asserts through locators — no `page.evaluate`.
  */
 const storyId = "tests-blocklistcollapsed--default";
 
 test("Blocklist: Collapsed selection shows balloon", async ({ page }) => {
   await openStory(page, storyId);
 
-  const blockedWord = "thisisablockedword";
-  await addBlockedWord(page, blockedWord);
-
-  const data = richtext(`${p("Hello World!")}${p(blockedWord)}${p("This is an example text for test purposes.")}`);
-  await setEditorData(page, data);
-
   const editable = editor(page);
   const blockedWordMarker = editable.locator(`span[data-blocklist-word]`);
-  await expect(blockedWordMarker).toHaveText(blockedWord);
+  await expect(blockedWordMarker).toHaveText(blocklistWordsScenario.blockedWord);
 
   // `ControlOrMeta` resolves to Meta on macOS and Control elsewhere.
   const modifiers: "ControlOrMeta"[] = ["ControlOrMeta"];
