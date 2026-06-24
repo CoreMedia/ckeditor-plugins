@@ -1,6 +1,7 @@
 import type { ClassicEditor } from "ckeditor5";
 import { defaultScenarioArgs, type ScenarioArgs } from "./scenario";
 import { installEditorTestApi } from "./testApi";
+import { installOutputsHarness } from "./outputs";
 
 /**
  * Id of the element the editor is mounted into. Kept identical to the former
@@ -93,6 +94,7 @@ export const mountScenario = (initialize: ScenarioInitializer, args?: Partial<Sc
     .then((editor) => {
       window.editor = editor;
       installEditorTestApi(editor);
+      installOutputsHarness(container, editor, resolvedArgs);
       container.setAttribute(EDITOR_READY_ATTRIBUTE, "true");
     })
     .catch((error: unknown) => {

@@ -17,6 +17,19 @@ export type ScenarioDataType = "richtext" | "bbcode";
 export type ScenarioUiLanguage = "en" | "de";
 
 /**
+ * Observable output the scenario should render as live, locator-readable DOM
+ * (see {@link ScenarioArgs.outputs} and the outputs harness). Each value a test
+ * previously read back through `page.evaluate` is instead exposed as the text
+ * content of a stable `[data-test="…"]` element.
+ */
+export type ScenarioOutput =
+  | "editor-data"
+  | "data-view"
+  | "last-opened-entities"
+  | "is-droppable-state"
+  | "is-droppable-in-link-balloon";
+
+/**
  * Declarative description of everything a story needs to set up a test
  * scenario. This is the contract that replaces the imperative wrapper-based
  * setup previously performed inside Playwright tests (for example
@@ -64,6 +77,18 @@ export interface ScenarioArgs {
    * scenario mounts. Replaces per-test `addInputExampleElement` calls.
    */
   inputExampleElements: InputExampleElement[];
+  /**
+   * Observable outputs the scenario should render as locator-readable DOM, so
+   * tests can read live editor/service values without `page.evaluate`. Empty by
+   * default (no harness rendered).
+   */
+  outputs: ScenarioOutput[];
+  /**
+   * Content uris evaluated for the `is-droppable-state` /
+   * `is-droppable-in-link-balloon` outputs. Only relevant when those outputs are
+   * requested.
+   */
+  droppableUris: string[];
 }
 
 /**
@@ -78,4 +103,6 @@ export const defaultScenarioArgs: ScenarioArgs = {
   mockExternalContents: [],
   blockedWords: [],
   inputExampleElements: [],
+  outputs: [],
+  droppableUris: [],
 };

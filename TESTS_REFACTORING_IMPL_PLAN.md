@@ -94,16 +94,16 @@ stable `[data-test="…"]` selectors, updated reactively.
 
 ### 2a. Scenario flag
 
-- [ ] `scenario.ts`: add `outputs?: ScenarioOutput[]` where
+- [x] `scenario.ts`: add `outputs?: ScenarioOutput[]` where
       `ScenarioOutput = "editor-data" | "data-view" | "last-opened-entities" |
       "is-droppable-state" | "is-droppable-in-link-balloon"`.
-- [ ] Add a companion arg for the dropability inputs the harness needs:
+- [x] Add a companion arg for the dropability inputs the harness needs:
       `droppableUris?: string[]` (uris evaluated for `is-droppable-*` outputs).
-- [ ] Default in `defaultScenarioArgs`: `outputs: []`, `droppableUris: []`.
+- [x] Default in `defaultScenarioArgs`: `outputs: []`, `droppableUris: []`.
 
 ### 2b. Harness module
 
-- [ ] New file `tests/storybook/src/runtime/outputs.ts` exporting
+- [x] New file `tests/storybook/src/runtime/outputs.ts` exporting
       `installOutputsHarness(container: HTMLElement, editor: ClassicEditor, args:
       ScenarioArgs): void`. Behavior per requested output:
   - `editor-data`: create `<pre data-test="editor-data">`; set on
@@ -111,25 +111,22 @@ stable `[data-test="…"]` selectors, updated reactively.
     `getEditorData(editor)`.
   - `data-view`: create `<pre data-test="data-view">`; render the processed
     data view for the **loaded** `args.data` using the `richtext:toView`
-    mechanism from `editorData.ts` (capture once at mount; richtext only).
+    mechanism from `editorData.ts` (persistent listener + one re-set to
+    populate; richtext only).
   - `last-opened-entities`: create `<pre data-test="last-opened-entities">`;
-    poll/subscribe the mock content-form service and write
-    `JSON.stringify(await getLastOpenedEntities(editor))` reactively (use the
-    service's change signal if available; otherwise a short interval that
-    updates the text).
+    resolve the mock content-form service once, then poll
+    `JSON.stringify(service.getLastOpenedEntities())` reactively.
   - `is-droppable-state` / `is-droppable-in-link-balloon`: create the matching
-    `<pre data-test="…">`; write `JSON.stringify(validateIsDroppable*(editor,
-    args.droppableUris))`. These already return reactive evaluation results;
-    update the text whenever they change.
-- [ ] Export `ScenarioOutput` and the `data-test` constant names so the
+    `<pre data-test="…">`; poll `JSON.stringify(validateIsDroppable*(editor,
+    args.droppableUris) ?? null)`.
+- [x] Export `ScenarioOutput` and the `data-test` constant names so the
       Playwright locators can share them by value (string copy; no build-time
       dependency, mirroring the `EDITOR_TEST_API_GLOBAL` pattern).
-- [ ] Define a shared constants block (e.g. `OUTPUT_TEST_IDS`) in
-      `outputs.ts`.
+- [x] Define a shared constants block (`OUTPUT_TEST_IDS`) in `outputs.ts`.
 
 ### 2c. Mount wiring
 
-- [ ] `mountStory.ts`: after the editor is ready and before/with
+- [x] `mountStory.ts`: after the editor is ready and before/with
       `installEditorTestApi`, if `resolvedArgs.outputs.length > 0` call
       `installOutputsHarness(container, editor, resolvedArgs)`. Harness elements
       live inside the scenario container but visually out of the way (they are
@@ -137,18 +134,14 @@ stable `[data-test="…"]` selectors, updated reactively.
 
 ### 2d. Playwright locators
 
-- [ ] New file `tests/playwright/test/locators/outputs.ts` with typed readers
-      (no `page.evaluate`), e.g.:
-  - `editorData(page): Promise<string>` → read `[data-test="editor-data"]`
-    text.
-  - `dataView(page): Promise<string>`.
-  - `lastOpenedEntities(page): Promise<unknown[]>` → parse JSON text.
-  - `isDroppableState(page)` / `isDroppableInLinkBalloon(page)` → parse JSON.
-  - Provide locator getters too for `expect.poll`/`toHaveText` usage.
-- [ ] Mirror the `data-test` id constants here (string copy).
+- [x] New file `tests/playwright/test/locators/outputs.ts` with typed readers
+      (no `page.evaluate`): `editorData`, `dataView`, `lastOpenedEntities`,
+      `isDroppableState`, `isDroppableInLinkBalloon`, plus `*Output` locator
+      getters for `expect.poll`/`toHaveText`.
+- [x] Mirror the `data-test` id constants here (string copy).
 
 **Gate:** `tests/storybook` typecheck/lint and `tests/playwright` build/lint
-pass. Harness not yet consumed.
+pass. Harness not yet consumed. _(Met.)_
 
 ## Phase 3 — Pilot: `HelloEditor`
 
