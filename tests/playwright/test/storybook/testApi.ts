@@ -8,14 +8,7 @@ import type {
   IsDroppableEvaluationResult,
   IsLinkableEvaluationResult,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
-
-/**
- * Name of the global the Storybook runtime exposes its in-page editor test API
- * under. Must match `EDITOR_TEST_API_GLOBAL` in
- * `tests/storybook/src/runtime/testApi.ts` (independent copy to avoid a
- * build-time dependency on the Storybook package).
- */
-const EDITOR_TEST_API_GLOBAL = "coremediaEditorTestApi";
+import { EDITOR_TEST_API_GLOBAL } from "@coremedia/ckeditor5-itest-constants";
 
 /**
  * In-page editor test API shape, mirrored from the Storybook runtime. These are

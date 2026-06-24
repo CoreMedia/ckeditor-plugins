@@ -22,6 +22,7 @@
     "@coremedia/ckeditor5-dialog-visibility": "workspace:^27.0.0",
     "@coremedia/ckeditor5-dom-converter": "workspace:^27.0.0",
     "@coremedia/ckeditor5-font-mapper": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-itest-constants": "workspace:^27.0.0",
     "@coremedia/ckeditor5-link-common": "workspace:^27.0.0",
     "ckeditor5": "catalog:"
   },

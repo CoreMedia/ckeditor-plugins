@@ -1,15 +1,11 @@
 import type { Locator, Page } from "playwright-core";
+import {
+  EDITOR_ELEMENT_ID,
+  EDITOR_READY_ATTRIBUTE,
+  SCENARIO_CONTAINER_CLASS,
+} from "@coremedia/ckeditor5-itest-constants";
 
-/**
- * Stable selectors aligned with the Storybook scenario container contract.
- *
- * Source of truth: `tests/storybook/src/runtime/mountStory.ts`
- * (`SCENARIO_CONTAINER_CLASS`, `EDITOR_READY_ATTRIBUTE`, `EDITOR_ELEMENT_ID`).
- * Keep these constants in sync with that module.
- */
-export const SCENARIO_CONTAINER_CLASS = "storybook-editor-scenario";
-export const EDITOR_READY_ATTRIBUTE = "data-editor-ready";
-export const EDITOR_ELEMENT_ID = "editor";
+export { EDITOR_ELEMENT_ID, EDITOR_READY_ATTRIBUTE, SCENARIO_CONTAINER_CLASS };
 
 /**
  * Locator for the scenario container a story renders.

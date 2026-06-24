@@ -13,13 +13,31 @@ phase ends with a verification gate that must pass before the next phase starts.
 
 - **No `page.evaluate`** may remain in `tests/playwright` at the end (neither
   direct nor via `test/storybook/testApi.ts`).
+- **Story files are CSF:** every named export is treated as a story. **Do not
+  export helper constants/types** from a `*.stories.ts` file — Storybook will try
+  to render them as stories and the editor never becomes ready. Put per-story
+  fixtures in the shared constants package (see next rule) and import them into
+  both the story and its test, so neither file mirrors literals by hand.
+- **Shared constants live in `@coremedia/ckeditor5-itest-constants`**
+  (`tests/constants`). Constants that both the Storybook and Playwright packages
+  rely on — the scenario container contract (`SCENARIO_CONTAINER_CLASS`,
+  `EDITOR_READY_ATTRIBUTE`, `EDITOR_ELEMENT_ID`), the outputs harness ids
+  (`OUTPUT_TEST_IDS`, `OUTPUTS_CONTAINER_CLASS`, `ScenarioOutput`), the in-page
+  test API global (`EDITOR_TEST_API_GLOBAL`), and per-story fixtures (e.g.
+  `helloEditorScenario`) — are defined **once** there and imported by both
+  packages. This replaces the former "kept in sync by value" copies. The package
+  is consumed as TypeScript source (`main` → `src/index.ts`), so there is no
+  build step; just add a `workspace:^27.0.0` dependency where needed and
+  `pnpm install`.
 - **Arrange in the story, act/assert via locators.** Tests only call
   `openStory(page, id)` and then use locators.
 - **Story id scheme unchanged:** `tests-<name>--<export-kebab>`. New per-scenario
   exports replace the single `Default` where needed.
 - **Keep both API copies in sync** (`tests/storybook/src/runtime/testApi.ts` and
   `tests/playwright/test/storybook/testApi.ts`) until they are removed together
-  in Phase 5. Do not partially delete one side.
+  in Phase 5. Their shared `EDITOR_TEST_API_GLOBAL` now comes from
+  `@coremedia/ckeditor5-itest-constants`; remove it there once both API copies
+  are deleted. Do not partially delete one side.
 - **CRLF caveat:** the `create` tool writes CRLF and trips prettier. After
   creating/editing files run
   `pnpm --filter <pkg> exec eslint --fix <files>`.
@@ -148,20 +166,26 @@ pass. Harness not yet consumed. _(Met.)_
 Goal: prove the end-to-end model on the simplest read-back test before rolling
 out. Current usage: `setEditorData ×4`, `getEditorData ×2`, `addMockContents ×2`.
 
-- [ ] `HelloEditor.stories.ts`: replace single `Default` with prepared variants,
-      one per test case (welcome text, cleared, external link, internal link).
+- [x] `HelloEditor.stories.ts`: replace single `Default` with prepared variants,
+      one per test case (`Welcome`, `Cleared`, `ExternalLink`, `InternalLink`).
       Each sets `data`, `mockContents`, and `outputs: ["editor-data"]` where the
       test reads data back.
-- [ ] `HelloEditor.test.ts`: per test `openStory(page, "tests-helloeditor--<v>")`;
+- [x] `HelloEditor.test.ts`: per test `openStory(page, "tests-helloeditor--<v>")`;
       replace `setEditorData`/`getEditorData` with story data + `editorData`
       locator (`expect.poll`); drop `addMockContents` (now in args). Remove all
       `testApi` imports.
-- [ ] Move `testInfo.title`-derived link text to explicit story constants and
+- [x] Move `testInfo.title`-derived link text to explicit story constants and
       update assertions.
-- [ ] `eslint --fix`, then run `--project=HelloEditor.test.ts`.
+- [x] `eslint --fix`, then run `--project=HelloEditor.test.ts`. _(4 passed.)_
+- [x] Extract the constants shared between the story and its test into the new
+      `@coremedia/ckeditor5-itest-constants` package (`helloEditorScenario`), and
+      move the previously "kept in sync by value" infra constants
+      (`OUTPUT_TEST_IDS` / scenario container contract / `EDITOR_TEST_API_GLOBAL`)
+      there too. Both `tests/storybook` and `tests/playwright` now import them
+      instead of holding private copies. _(typecheck/lint/build green; 4 passed.)_
 
 **Gate:** `HelloEditor.test.ts` green with **zero** `testApi` imports. Re-confirm
-the harness reactivity (data updates after the cleared case).
+the harness reactivity (data updates after the cleared case). _(Met.)_
 
 If the pilot reveals harness gaps (e.g. reactive timing for
 `last-opened-entities`), fix Phase 2 before continuing.
@@ -263,7 +287,7 @@ returns nothing.
 | File                          | Variants created | Args moved | Reads → harness/locator | `testApi` removed | Green |
 | ----------------------------- | ---------------- | ---------- | ----------------------- | ----------------- | ----- |
 | `Application`                 | n/a              | n/a        | n/a                     | n/a               | [ ]   |
-| `HelloEditor` (pilot)         | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
+| `HelloEditor` (pilot)         | [x]              | [x]        | [x]                     | [x]               | [x]   |
 | `BBCode`                      | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |
 | `Blocklist`                   | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |
 | `BlocklistCollapsed`          | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |

@@ -1,25 +1,14 @@
 import type { ClassicEditor } from "ckeditor5";
+import {
+  EDITOR_ELEMENT_ID,
+  EDITOR_READY_ATTRIBUTE,
+  SCENARIO_CONTAINER_CLASS,
+} from "@coremedia/ckeditor5-itest-constants";
 import { defaultScenarioArgs, type ScenarioArgs } from "./scenario";
 import { installEditorTestApi } from "./testApi";
 import { installOutputsHarness } from "./outputs";
 
-/**
- * Id of the element the editor is mounted into. Kept identical to the former
- * application (`editor`) so existing editing-view selectors keep working.
- */
-export const EDITOR_ELEMENT_ID = "editor";
-
-/**
- * Class of the scenario container element rendered by a story.
- */
-export const SCENARIO_CONTAINER_CLASS = "storybook-editor-scenario";
-
-/**
- * Attribute set on the scenario container once the editor finished
- * initializing. Playwright waits for this readiness signal instead of the
- * former ad-hoc `await editor(page).waitFor()` against the application.
- */
-export const EDITOR_READY_ATTRIBUTE = "data-editor-ready";
+export { EDITOR_ELEMENT_ID, EDITOR_READY_ATTRIBUTE, SCENARIO_CONTAINER_CLASS };
 
 declare global {
   interface Window {

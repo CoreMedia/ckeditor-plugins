@@ -3,6 +3,9 @@ import type {
   MockContentConfig,
   MockExternalContent,
 } from "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock";
+import type { ScenarioOutput } from "@coremedia/ckeditor5-itest-constants";
+
+export type { ScenarioOutput };
 
 /**
  * Data type a story should initialize the editor with. Mirrors the former
@@ -15,19 +18,6 @@ export type ScenarioDataType = "richtext" | "bbcode";
  * `uiLanguage` hash parameter.
  */
 export type ScenarioUiLanguage = "en" | "de";
-
-/**
- * Observable output the scenario should render as live, locator-readable DOM
- * (see {@link ScenarioArgs.outputs} and the outputs harness). Each value a test
- * previously read back through `page.evaluate` is instead exposed as the text
- * content of a stable `[data-test="…"]` element.
- */
-export type ScenarioOutput =
-  | "editor-data"
-  | "data-view"
-  | "last-opened-entities"
-  | "is-droppable-state"
-  | "is-droppable-in-link-balloon";
 
 /**
  * Declarative description of everything a story needs to set up a test

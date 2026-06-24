@@ -8,6 +8,7 @@ import type {
   IsDroppableEvaluationResult,
   IsLinkableEvaluationResult,
 } from "@coremedia/ckeditor5-coremedia-studio-integration";
+import { EDITOR_TEST_API_GLOBAL } from "@coremedia/ckeditor5-itest-constants";
 import { getEditorData, setDataAndGetDataView, setEditorData, focusEditor } from "../setup/editorData";
 import { registerMockContents } from "../setup/mockContent";
 import { registerMockExternalContents } from "../setup/mockExternalContent";
@@ -19,16 +20,7 @@ import {
 import { addBlockedWord, getLastOpenedEntities } from "../setup/serviceAgent";
 import { SCENARIO_READ_ONLY_LOCK_ID } from "../setup/applyScenario";
 
-/**
- * Name of the global property the editor test API is exposed under. Playwright
- * tests reach the migrated, in-page scenario utilities through this object via
- * `page.evaluate`, replacing the former JS-handle wrappers (`ApplicationWrapper`,
- * `ClassicEditorWrapper`, `MockContentPluginWrapper`, ...).
- *
- * This name is part of the contract shared with the Playwright package
- * (`tests/playwright/test/storybook/testApi.ts`). Keep both in sync.
- */
-export const EDITOR_TEST_API_GLOBAL = "coremediaEditorTestApi";
+export { EDITOR_TEST_API_GLOBAL };
 
 /**
  * In-page test API exposed on `window` once a scenario's editor is ready. Each
