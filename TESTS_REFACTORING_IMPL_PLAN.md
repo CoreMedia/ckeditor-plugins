@@ -208,7 +208,10 @@ For every test: create prepared story variant(s) → move arrange-calls into arg
 - [x] `BlocklistExpandedToolbar` — `data`, `blockedWords`. _(shared `blocklistWordsScenario`; 1 passed.)_
 - [x] `ContentLink` — `data`, `mockContents`. _(6 prepared variants; shared
       `contentLinkScenario`/`contentLinkContentName`; 6 passed.)_
-- [ ] `LinkBalloon` — `data`, `mockContents`.
+- [x] `LinkBalloon` — `data`, `mockContents`. _(content link + helper fixture
+      divs baked into the story render; the test's own `page.evaluate` injectors
+      removed; shared `linkBalloonScenario` (also used by the richtext keep-open
+      config); 3 passed.)_
 
 ### 4b. Read-back (`editor-data` harness; focus via locator)
 
@@ -297,7 +300,7 @@ returns nothing.
 | `BlocklistExpandedKeyboard`   | [x]              | [x]        | n/a                     | [x]               | [x]   |
 | `BlocklistExpandedToolbar`    | [x]              | [x]        | n/a                     | [x]               | [x]   |
 | `ContentLink`                 | [x]              | [x]        | n/a                     | [x]               | [x]   |
-| `LinkBalloon`                 | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |
+| `LinkBalloon`                 | [x]              | [x]        | n/a                     | [x]               | [x]   |
 | `FontMapper`                  | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
 | `PasteButton`                 | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
 | `DragDrop`                    | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |

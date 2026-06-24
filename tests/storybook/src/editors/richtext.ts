@@ -73,6 +73,7 @@ import "ckeditor5/ckeditor5.css";
 import type { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataprocessor-support";
 import type { LinkAttributesConfig } from "@coremedia/ckeditor5-link-common";
 import { LinkAttributes } from "@coremedia/ckeditor5-link-common";
+import { linkBalloonScenario } from "@coremedia/ckeditor5-itest-constants";
 import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing";
 import { Blocklist } from "@coremedia/ckeditor5-coremedia-blocklist";
 import { DataFacade } from "@coremedia/ckeditor5-data-facade";
@@ -392,8 +393,8 @@ export const createRichTextEditor = async (sourceElement: HTMLElement, args: Sce
       [COREMEDIA_LINK_CONFIG_KEY]: {
         linkBalloon: {
           keepOpen: {
-            ids: ["example-to-keep-the-link-balloon-open-on-click", "inputExampleContentButton"],
-            classes: ["example-class-to-keep-the-link-balloon-open-on-click"],
+            ids: [linkBalloonScenario.keepOpenElementId, "inputExampleContentButton"],
+            classes: [linkBalloonScenario.keepOpenElementClass],
           },
         },
       },
