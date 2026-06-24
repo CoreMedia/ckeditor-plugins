@@ -206,7 +206,8 @@ For every test: create prepared story variant(s) → move arrange-calls into arg
 - [x] `BlocklistCollapsed` — `data`, `blockedWords`. _(shared `blocklistWordsScenario`; 1 passed.)_
 - [x] `BlocklistExpandedKeyboard` — `data`, `blockedWords`. _(shared `blocklistWordsScenario`; 1 passed.)_
 - [x] `BlocklistExpandedToolbar` — `data`, `blockedWords`. _(shared `blocklistWordsScenario`; 1 passed.)_
-- [ ] `ContentLink` — `data`, `mockContents`.
+- [x] `ContentLink` — `data`, `mockContents`. _(6 prepared variants; shared
+      `contentLinkScenario`/`contentLinkContentName`; 6 passed.)_
 - [ ] `LinkBalloon` — `data`, `mockContents`.
 
 ### 4b. Read-back (`editor-data` harness; focus via locator)
@@ -295,7 +296,7 @@ returns nothing.
 | `BlocklistCollapsed`          | [x]              | [x]        | n/a                     | [x]               | [x]   |
 | `BlocklistExpandedKeyboard`   | [x]              | [x]        | n/a                     | [x]               | [x]   |
 | `BlocklistExpandedToolbar`    | [x]              | [x]        | n/a                     | [x]               | [x]   |
-| `ContentLink`                 | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |
+| `ContentLink`                 | [x]              | [x]        | n/a                     | [x]               | [x]   |
 | `LinkBalloon`                 | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |
 | `FontMapper`                  | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
 | `PasteButton`                 | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |

@@ -10,4 +10,5 @@ export * from "./testApi";
 export * from "./stories/bbCode";
 export * from "./stories/blocklist";
 export * from "./stories/blocklistWords";
+export * from "./stories/contentLink";
 export * from "./stories/helloEditor";
