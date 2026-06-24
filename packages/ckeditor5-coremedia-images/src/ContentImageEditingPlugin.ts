@@ -6,7 +6,7 @@ import { getOptionalPlugin, reportInitEnd, reportInitStart } from "@coremedia/ck
 import type { Logger } from "@coremedia/ckeditor5-logging";
 import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
-import { editingDowncastXlinkHref, preventUpcastImageSrc } from "./converters";
+import { editingDowncastXlinkHref, preventUpcastImageSrc, upcastContentImageAsInline } from "./converters";
 import {
   openImageInTabCommandName,
   registerOpenImageInTabCommand,
@@ -62,6 +62,20 @@ export default class ContentImageEditingPlugin extends Plugin {
     // src attribute for the editing view asynchronously.
     // If not prevented, the src-attribute from GRS would be written to the model.
     this.editor.conversion.for("upcast").add(preventUpcastImageSrc());
+
+    // Force content images to become imageInline when dropped inside a
+    // paragraph (inline context). This prevents ImageBlockEditing from
+    // splitting the host paragraph. Runs at high priority, before
+    // ImageBlockEditing's normal-priority converter.
+    this.editor.conversion.for("upcast").add(upcastContentImageAsInline());
+
+    // When a content image is dragged and dropped between block elements,
+    // CKEditor's image upcasting may create imageBlock instead of imageInline
+    // (because the drop target is a block-level position). The post-fixer
+    // registered here converts any such imageBlock back to a paragraph
+    // containing an imageInline, which is the correct model representation
+    // for CoreMedia content images.
+    ContentImageEditingPlugin.#setupImageBlockToInlinePostFixer(this.editor);
   }
 
   static #setupXlinkHrefConversion(editor: Editor, modelAttributeName: string, dataAttributeName: string): void {
@@ -101,6 +115,86 @@ export default class ContentImageEditingPlugin extends Plugin {
     editor.conversion
       .for("editingDowncast")
       .add(editingDowncastXlinkHref(editor, modelElementName, ContentImageEditingPlugin.#logger));
+  }
+
+  /**
+   * Ensures that content images dropped between block elements remain as
+   * `imageInline` in the model.
+   *
+   * When dragging a content image and dropping it between two paragraphs,
+   * CKEditor's image upcast pipeline detects a block-level drop position and
+   * creates an `imageBlock` model element instead of `imageInline`.  Because
+   * `xlink-href` was not allowed on `imageBlock`, the attribute was silently
+   * dropped and GHS captured `data-xlink-href` into `htmlImgAttributes`,
+   * making the image disappear from the editing view.
+   *
+   * This method:
+   * 1. Extends the `imageBlock` schema to allow `xlink-href` so that the
+   *    existing `attributeToAttribute` upcast converter sets the attribute
+   *    correctly (and GHS no longer captures it).
+   * 2. Registers a model post-fixer that converts every `imageBlock` carrying
+   *    a `xlink-href` attribute into a `<paragraph>` containing an
+   *    `imageInline`, which is the correct CoreMedia RichText representation.
+   *
+   * @param editor - Editor instance
+   */
+  static #setupImageBlockToInlinePostFixer(editor: Editor): void {
+    const { model } = editor;
+    const { schema } = model;
+
+    if (!schema.isRegistered("imageBlock")) {
+      return;
+    }
+
+    // Allow xlink-href on imageBlock so the upcast can set the attribute
+    // (preventing GHS from capturing data-xlink-href into htmlImgAttributes).
+    schema.extend("imageBlock", {
+      allowAttributes: [ContentImageEditingPlugin.XLINK_HREF_MODEL_ATTRIBUTE_NAME],
+    });
+
+    const xlinkHrefAttr = ContentImageEditingPlugin.XLINK_HREF_MODEL_ATTRIBUTE_NAME;
+    const imageInlineName = ContentImageEditingPlugin.IMAGE_INLINE_MODEL_ELEMENT_NAME;
+
+    model.document.registerPostFixer((writer) => {
+      let changed = false;
+
+      for (const change of model.document.differ.getChanges()) {
+        if (change.type === "insert" && change.name === "imageBlock") {
+          const item = change.position.nodeAfter;
+          if (!item || !item.is("element", "imageBlock")) {
+            continue;
+          }
+
+          const xlinkHref = item.getAttribute(xlinkHrefAttr);
+          if (!xlinkHref) {
+            continue;
+          }
+
+          // Replace the imageBlock with a paragraph containing an imageInline.
+          const paragraph = writer.createElement("paragraph");
+          const imageInline = writer.createElement(imageInlineName, {
+            [xlinkHrefAttr]: xlinkHref,
+          });
+          writer.append(imageInline, paragraph);
+          writer.insert(paragraph, item, "before");
+          writer.remove(item);
+          changed = true;
+        }
+
+        // When a content image is moved (drag-and-drop) out of a paragraph
+        // that contained only that image, the source paragraph becomes empty.
+        // CKEditor does not remove it automatically, so we clean it up here.
+        if (change.type === "remove" && change.name === "imageInline") {
+          const parent = change.position.parent;
+          if (parent.is("element", "paragraph") && parent.childCount === 0 && parent.parent !== null) {
+            writer.remove(parent);
+            changed = true;
+          }
+        }
+      }
+
+      return changed;
+    });
   }
 
   /**

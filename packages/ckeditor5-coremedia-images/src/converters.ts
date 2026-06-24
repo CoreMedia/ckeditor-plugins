@@ -79,6 +79,77 @@ export const preventUpcastImageSrc =
   };
 
 /**
+ * High-priority upcast converter that creates `imageInline` for any
+ * `<img data-xlink-href="...">` when the current insertion position allows
+ * inline content (e.g. inside a paragraph).
+ *
+ * Without this, `ImageBlockEditing`'s `normal`-priority converter runs first
+ * and calls `safeInsert` for an `imageBlock`. When the drop cursor is *inside*
+ * a paragraph (between letters), `safeInsert` splits that paragraph to
+ * accommodate the block element, leaving empty paragraph fragments behind.
+ *
+ * By creating `imageInline` at high priority for inline positions, no
+ * paragraph splitting occurs. When the cursor is at a block-level position
+ * (between paragraphs) `imageInline` is not allowed there; the converter
+ * returns without consuming so that `ImageBlockEditing` can place an
+ * `imageBlock` at block level. The `imageBlock` post-fixer then converts
+ * that back to `paragraph + imageInline` without any splitting.
+ */
+export const upcastContentImageAsInline =
+  (): ((dispatcher: UpcastDispatcher) => void) =>
+  (dispatcher: UpcastDispatcher): void => {
+    dispatcher.on(
+      `element:img`,
+      (evt: EventInfo, data, conversionApi: UpcastConversionApi) => {
+        if (!data.viewItem.hasAttribute("data-xlink-href")) {
+          return;
+        }
+
+        if (!conversionApi.consumable.test(data.viewItem, { name: true })) {
+          return;
+        }
+        // Only proceed when imageInline is allowed at the current cursor
+        // position. If not (e.g. between block elements at root level), fall
+        // through to ImageBlockEditing so the post-fixer can handle it.
+
+        if (!conversionApi.schema.checkChild(data.modelCursor, "imageInline")) {
+          return;
+        }
+
+        const xlinkHref = String(data.viewItem.getAttribute("data-xlink-href"));
+        const imageInline = conversionApi.writer.createElement("imageInline", {
+          "xlink-href": xlinkHref,
+        });
+
+        if (!conversionApi.safeInsert(imageInline, data.modelCursor)) {
+          return;
+        }
+
+        // Consume the element name so that ImageBlockEditing and
+        // ImageInlineEditing (both guard with `consumable.test(viewItem,
+        // { name: true })`) skip this element — they would otherwise create
+        // a duplicate model element.
+        //
+        // Also consume `data-xlink-href` so the attributeToAttribute upcast
+        // converter does not try to set xlink-href a second time (we already
+        // set it directly in createElement above).
+        //
+        // IMPORTANT: do NOT call evt.stop() here. Other lower-priority
+        // element:img listeners include CKEditor's attributeToAttribute
+        // converters for `alt`, `width`, `height`, etc. They are guarded by
+        // their own consumable entries ({ attributes: 'alt' }), not by
+        // { name: true }, so they will still fire, find the imageInline via
+        // data.modelRange, and set the remaining attributes correctly.
+        conversionApi.consumable.consume(data.viewItem, { name: true });
+        conversionApi.consumable.consume(data.viewItem, { attributes: "data-xlink-href" });
+
+        conversionApi.updateConversionResult(imageInline, data);
+      },
+      { priority: "high" },
+    );
+  };
+
+/**
  * Conversion for `modelElementName:xlink-href` to `img:src`.
  *
  * @param editor - the editor instance
