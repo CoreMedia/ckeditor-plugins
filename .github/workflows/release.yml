@@ -123,13 +123,6 @@ jobs:
           git commit -am "doc(typedoc): Update typedoc"
       - name: Install for Production
         run: pnpm install --production
-      # Publishes a release candidate with tag "next".
-      - name: Publish RC
-        if: github.event_name == 'push'
-        run: |
-          echo '//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
-          pnpm publishall --registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/ --no-git-checks --tag next
-          git reset --hard
       # Publishes a release with tag "latest"
       - name: Publish Release
         if: github.event_name == 'workflow_dispatch'
