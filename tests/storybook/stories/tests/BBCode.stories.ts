@@ -1,10 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/html";
+import { bbCodeScenario } from "@coremedia/ckeditor5-itest-constants";
 import { defaultScenarioArgs, mountScenario, type ScenarioArgs } from "../../src/runtime";
 import { createEditorScenario } from "../../src/editors";
 
 /**
- * Dedicated scenario for `BBCode.test.ts`: an empty BBCode editor. The test
- * sets the BBCode data at runtime via the in-page editor test API.
+ * Dedicated scenario for `BBCode.test.ts`: a BBCode editor preloaded with a
+ * single bold word, so the test can assert it renders as `<strong>` through
+ * locators only — no `page.evaluate`.
  */
 const meta: Meta<ScenarioArgs> = {
   title: "Tests/BBCode",
@@ -20,6 +22,10 @@ export default meta;
 type Story = StoryObj<ScenarioArgs>;
 
 /**
- * Empty BBCode editor.
+ * BBCode editor preloaded with a single bold word.
  */
-export const Default: Story = {};
+export const BoldWord: Story = {
+  args: {
+    data: `[b]${bbCodeScenario.boldWord}[/b]`,
+  },
+};

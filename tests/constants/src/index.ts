@@ -7,4 +7,5 @@
 export * from "./scenarioContract";
 export * from "./outputs";
 export * from "./testApi";
+export * from "./stories/bbCode";
 export * from "./stories/helloEditor";
