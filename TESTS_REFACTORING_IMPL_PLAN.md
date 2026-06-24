@@ -201,7 +201,8 @@ For every test: create prepared story variant(s) → move arrange-calls into arg
 
 - [x] `BBCode` — `data`, `dataType: "bbcode"`. _(story `tests-bbcode--bold-word`;
       bold word shared via `bbCodeScenario`; 1 passed.)_
-- [ ] `Blocklist` — `data`.
+- [x] `Blocklist` — `data`. _(story `tests-blocklist--default`; paragraphs +
+      blocked word shared via `blocklistScenario`; 1 passed.)_
 - [ ] `BlocklistCollapsed` — `data`, `blockedWords`.
 - [ ] `BlocklistExpandedKeyboard` — `data`, `blockedWords`.
 - [ ] `BlocklistExpandedToolbar` — `data`, `blockedWords`.
@@ -290,7 +291,7 @@ returns nothing.
 | `Application`                 | n/a              | n/a        | n/a                     | n/a               | [ ]   |
 | `HelloEditor` (pilot)         | [x]              | [x]        | [x]                     | [x]               | [x]   |
 | `BBCode`                      | [x]              | [x]        | n/a                     | [x]               | [x]   |
-| `Blocklist`                   | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |
+| `Blocklist`                   | [x]              | [x]        | n/a                     | [x]               | [x]   |
 | `BlocklistCollapsed`          | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |
 | `BlocklistExpandedKeyboard`   | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |
 | `BlocklistExpandedToolbar`    | [ ]              | [ ]        | n/a                     | [ ]               | [ ]   |
