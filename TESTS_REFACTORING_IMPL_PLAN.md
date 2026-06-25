@@ -11,8 +11,13 @@ phase ends with a verification gate that must pass before the next phase starts.
 
 ## Conventions & Ground Rules
 
-- **No `page.evaluate`** may remain in `tests/playwright` at the end (neither
-  direct nor via `test/storybook/testApi.ts`).
+- **No editor-API `page.evaluate`** may remain in `tests/playwright` at the end
+  (neither direct nor via `test/storybook/testApi.ts`). _Accepted exception:_
+  genuine browser-platform interactions with no Playwright locator equivalent may
+  retain a `page.evaluate`. The only such case is `FontMapper.test.ts`'s
+  `writeToClipboard`, which writes a `text/html` `ClipboardItem` to the real
+  browser clipboard. The Phase 6 audit greps for editor-API usage and treats this
+  clipboard call as the single documented exception.
 - **Story files are CSF:** every named export is treated as a story. **Do not
   export helper constants/types** from a `*.stories.ts` file — Storybook will try
   to render them as stories and the editor never becomes ready. Put per-story
@@ -215,8 +220,10 @@ For every test: create prepared story variant(s) → move arrange-calls into arg
 
 ### 4b. Read-back (`editor-data` harness; focus via locator)
 
-- [ ] `FontMapper` — `data`; `getEditorData` → `editorData` locator;
-      `focusEditor` → `editor(page).click()`.
+- [x] `FontMapper` — `outputs: ["editor-data"]`; `getEditorData` → `editorData`
+      locator; `focusEditor` → `editor(page).click()`. _(Story `Default` exposes
+      `editor-data`; the `writeToClipboard` `page.evaluate` is retained as the
+      documented browser-clipboard exception — see Ground Rules; 3 passed.)_
 - [ ] `PasteButton` — `data`, `mockContents`, `inputExampleElements`;
       `getEditorData` → `editorData` locator.
 - [ ] `DragDrop` — `mockContents`, `mockExternalContents`,
@@ -301,7 +308,7 @@ returns nothing.
 | `BlocklistExpandedToolbar`    | [x]              | [x]        | n/a                     | [x]               | [x]   |
 | `ContentLink`                 | [x]              | [x]        | n/a                     | [x]               | [x]   |
 | `LinkBalloon`                 | [x]              | [x]        | n/a                     | [x]               | [x]   |
-| `FontMapper`                  | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
+| `FontMapper`                  | [x]              | [x]        | [x]                     | [x]               | [x]   |
 | `PasteButton`                 | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
 | `DragDrop`                    | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
 | `DocumentLists`               | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |

@@ -3,8 +3,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Page } from "playwright-core";
 import { expect, test } from "./base";
+import { editor } from "./locators/editor";
 import { openStory } from "./storybook/mountStory";
-import { focusEditor, getEditorData } from "./storybook/testApi";
+import { editorData } from "./locators/outputs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -98,9 +99,13 @@ const replaceAllPaste = async (page: Page): Promise<void> => {
 };
 
 /**
- * Migrated to run against the Storybook story `tests-fontmapper--default`
- * (see `tests/storybook/stories/tests/FontMapper.stories.ts`) instead of the
- * former example application.
+ * Runs against the fully prepared Storybook story `tests-fontmapper--default`
+ * (see `tests/storybook/stories/tests/FontMapper.stories.ts`): the editor
+ * exposes its live data via the `editor-data` observable output, so the test
+ * asserts the mapped content through the `editorData` locator and focuses the
+ * editor via a locator click — no editor-API `page.evaluate`. The clipboard
+ * write below still uses `page.evaluate`, as writing a `text/html` clipboard
+ * item is a browser-platform action with no Playwright locator equivalent.
  */
 const storyId = "tests-fontmapper--default";
 
@@ -131,10 +136,10 @@ test.describe("Font Mapper features", () => {
       const input = "$";
       const wordDocumentTemplate = fs.readFileSync(path.join(__dirname, "..", wordDocumentTemplatePath)).toString();
       const wordDocumentWithSymbol = wordDocumentTemplate.replace(CHARACTER_PLACEHOLDER, input);
-      await focusEditor(page);
+      await editor(page).click();
       await writeToClipboard(page, { type: "text/html", content: wordDocumentWithSymbol });
 
-      await focusEditor(page);
+      await editor(page).click();
       await replaceAllPaste(page);
 
       /*
@@ -142,7 +147,7 @@ test.describe("Font Mapper features", () => {
        * Validating that the symbol is replaced by the FontMapper plugin.
        * -----------------------------------------------------------------------
        */
-      await expect.poll(() => getEditorData(page)).toContain(expected);
+      await expect.poll(() => editorData(page)).toContain(expected);
     });
   }
 });

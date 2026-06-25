@@ -4,9 +4,10 @@ import { createEditorScenario } from "../../src/editors";
 
 /**
  * Dedicated scenario for `FontMapper.test.ts`: an empty CoreMedia RichText
- * editor (the richtext factory loads the FontMapper plugin). Pasting from a
- * Word HTML document is driven per test via the clipboard and the in-page
- * editor test API.
+ * editor (the richtext factory loads the FontMapper plugin) that exposes the
+ * `editor-data` observable output, so the test can assert the pasted/mapped
+ * content through a locator instead of `page.evaluate`. The paste itself is
+ * driven by the test via the browser clipboard.
  */
 const meta: Meta<ScenarioArgs> = {
   title: "Tests/FontMapper",
@@ -22,6 +23,10 @@ export default meta;
 type Story = StoryObj<ScenarioArgs>;
 
 /**
- * Empty RichText editor.
+ * Empty RichText editor exposing its live editor data.
  */
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    outputs: ["editor-data"],
+  },
+};
