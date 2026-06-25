@@ -230,10 +230,14 @@ For every test: create prepared story variant(s) → move arrange-calls into arg
       PNG/content-name fixtures moved into the constants package
       (`mockFixtures.ts`, re-exported by playwright's `MockFixtures.ts`); image
       variants expose `editor-data`; 7 passed.)_
-- [ ] `DragDrop` — `mockContents`, `mockExternalContents`,
+- [x] `DragDrop` — `mockContents`, `mockExternalContents`,
       `inputExampleElements`, `data`; `getEditorData` → `editorData`;
       `validateIsDroppable*` → `is-droppable-*` harness with per-variant
-      `droppableUris`. Keep `PLAYWRIGHT_RETRIES` behavior.
+      `droppableUris`. Keep `PLAYWRIGHT_RETRIES` behavior. _(11 prepared per-test
+      stories built by `contentDragStory`/`externalDragStory` factories; shared
+      `dragDropScenario`; dropability polled via the `isDroppableState` /
+      `isDroppableInLinkBalloon` output locators; image variants expose
+      `editor-data`; 11 passed.)_
 
 ### 4c. Data-view round-trips (`data-view` harness; many variants)
 
@@ -314,7 +318,7 @@ returns nothing.
 | `LinkBalloon`                 | [x]              | [x]        | n/a                     | [x]               | [x]   |
 | `FontMapper`                  | [x]              | [x]        | [x]                     | [x]               | [x]   |
 | `PasteButton`                 | [x]              | [x]        | [x]                     | [x]               | [x]   |
-| `DragDrop`                    | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
+| `DragDrop`                    | [x]              | [x]        | [x]                     | [x]               | [x]   |
 | `DocumentLists`               | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
 | `Differencing`                | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
 | `Images`                      | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
