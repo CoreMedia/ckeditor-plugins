@@ -92,7 +92,6 @@ jobs:
         name: "Initialize NPM Configuration"
         run: |
           npmAuthToken="${{ env.NODE_AUTH_TOKEN }}"
-
           echo "//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=${npmAuthToken}" >> .npmrc
           echo "@coremedia:registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/" >> .npmrc
           echo "@coremedia-internal:registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/" >> .npmrc
@@ -120,7 +119,6 @@ jobs:
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('node_modules/.pnpm/@playwright+test@*/node_modules/@playwright/test/package.json') }}
-
       - name: Install playwright deps
         if: ${{ inputs.itest && steps.playwright-cache.outputs.cache-hit != 'true' }}
         shell: bash
