@@ -1,9 +1,9 @@
 import type { Page } from "playwright-core";
-import { p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
+import { blocklistScenario } from "@coremedia/ckeditor5-itest-constants";
 import { expect, test } from "./base";
 import { editor } from "./locators/editor";
-import { applicationUrl } from "./utils/environment";
-import { ApplicationWrapper } from "./wrappers/ApplicationWrapper";
+import { balloonPanel } from "./locators/balloon";
+import { openStory } from "./storybook/mountStory";
 
 const useOpenBlocklistShortcut = async (page: Page): Promise<void> => {
   // Open Blocklist Balloon via Shortcut
@@ -18,23 +18,23 @@ const useOpenBlocklistShortcut = async (page: Page): Promise<void> => {
  * In this test, a word gets added and removed again.
  * During these steps, the ui in the blocklist balloon
  * and the markers in the editor text are validated.
+ *
+ * Runs against the fully prepared Storybook story `tests-blocklist--default`
+ * (see `tests/storybook/stories/tests/Blocklist.stories.ts`): the editor data is
+ * baked into the story, so the test only opens the story and drives the
+ * blocklist balloon through locators — no `page.evaluate`.
  */
+const storyId = "tests-blocklist--default";
+
 test("AddToBlocklist and RemoveFromBlocklist adds and removes markers", async ({ page }) => {
-  await page.goto(applicationUrl);
-  await editor(page).waitFor();
+  await openStory(page, storyId);
 
-  const application = new ApplicationWrapper(page);
-  const { editor: editorWrapper } = application;
-  const { ui } = editorWrapper;
-  const { view } = ui;
+  const editable = editor(page);
 
-  // Initialize editor
-  const data = richtext(`(${p("Hello World!")}${p("Content")}${p("This is an example text for test purposes.")}`);
-  await editorWrapper.setData(data);
-  const helloWorldText = view.locator.locator(`p`, { hasText: "Hello World!" });
+  const helloWorldText = editable.locator(`p`, { hasText: blocklistScenario.helloWorldText });
 
   // Click into editor
-  const contentText = view.locator.locator(`p`, { hasText: "Content" });
+  const contentText = editable.locator(`p`, { hasText: blocklistScenario.contentText });
   // `ControlOrMeta` resolves to Meta on macOS and Control elsewhere.
   const modifiers: "ControlOrMeta"[] = ["ControlOrMeta"];
   await contentText.click({ modifiers });
@@ -43,12 +43,12 @@ test("AddToBlocklist and RemoveFromBlocklist adds and removes markers", async ({
   await useOpenBlocklistShortcut(page);
 
   // Make sure balloon and input are visible
-  const { input, submitButton } = view.body.balloonPanel.blocklistActionsView;
+  const { input, submitButton } = balloonPanel(page).blocklistActionsView;
   await expect(input.locator).toBeVisible();
   await expect(submitButton.locator).toBeDisabled();
 
   // Add "content" to list of blocked words
-  await input.locator.fill("content");
+  await input.locator.fill(blocklistScenario.blockedWord);
   await expect(submitButton.locator).toBeEnabled();
   await submitButton.locator.click();
 
@@ -59,14 +59,14 @@ test("AddToBlocklist and RemoveFromBlocklist adds and removes markers", async ({
   // Hide balloon
   await helloWorldText.click({ modifiers });
 
-  const highlightMarker = view.locator.locator(`span[data-blocklist-word]`);
-  await expect(highlightMarker).toHaveText("Content");
+  const highlightMarker = editable.locator(`span[data-blocklist-word]`);
+  await expect(highlightMarker).toHaveText(blocklistScenario.contentText);
 
   // Balloon opens when user clicks on highlighted word
   await highlightMarker.click({ modifiers });
   await expect(input.locator).toBeVisible();
 
-  const { removeButton, blockedWordLabel } = view.body.balloonPanel.blocklistActionsView;
+  const { removeButton, blockedWordLabel } = balloonPanel(page).blocklistActionsView;
 
   // Highlighted word is visible
   await expect(blockedWordLabel.locator).toBeVisible();

@@ -1,0 +1,10 @@
+{
+  "extends": "@coremedia/studio-client.build-config/tsconfig-shared.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "noEmit": true,
+    "strict": true,
+    "types": ["node"]
+  },
+  "include": [".storybook/**/*.ts", "src/**/*.ts", "stories/**/*.ts", "../../typings"]
+}

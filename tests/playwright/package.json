@@ -12,13 +12,13 @@
     "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock": "workspace:^1.0.0-SNAPSHOT",
     "@coremedia/ckeditor5-coremedia-richtext": "workspace:^27.0.0",
     "@coremedia/ckeditor5-coremedia-studio-integration": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-itest-constants": "workspace:^27.0.0",
     "@playwright/test": "catalog:",
     "@types/eslint": "catalog:",
     "@types/node": "catalog:",
     "ci-info": "catalog:",
     "ckeditor5": "catalog:",
     "eslint": "catalog:",
-    "express": "catalog:",
     "playwright-core": "catalog:",
     "rimraf": "catalog:",
     "rxjs": "catalog:",
@@ -30,6 +30,6 @@
     "build": "tsc --project .",
     "ui-test": "playwright test",
     "lint": "eslint",
-    "webserver": "node webserver.js"
+    "webserver:storybook": "pnpm --filter @coremedia/ckeditor5-storybook-itest run storybook"
   }
 }

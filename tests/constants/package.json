@@ -1,0 +1,27 @@
+{
+  "name": "@coremedia/ckeditor5-itest-constants",
+  "version": "27.0.0",
+  "author": "CoreMedia GmbH",
+  "license": "Apache-2.0",
+  "type": "module",
+  "private": true,
+  "description": "Constants shared between the Storybook and Playwright integration-test packages.",
+  "main": "./src/index.ts",
+  "files": [
+    "/src"
+  ],
+  "dependencies": {
+    "@coremedia-internal/ckeditor5-coremedia-example-data": "workspace:^1.0.0-SNAPSHOT"
+  },
+  "devDependencies": {
+    "@coremedia/studio-client.build-config": "catalog:",
+    "@coremedia/studio-client.eslint-config": "catalog:",
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "typescript": "catalog:"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint"
+  }
+}
