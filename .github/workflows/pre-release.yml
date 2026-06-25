@@ -16,9 +16,7 @@ env:
   NODE_VERSION: 24
   # https://github.com/actions/runner-images/issues/70
   NODE_OPTIONS: "--max_old_space_size=4096"
-  PNPM_VERSION: ^10.9
-  NPM_CONFIG_@coremedia:registry: 'https://repository.coremedia.com/nexus/repository/coremedia-npm'
-  NPM_CONFIG_@coremedia-internal:registry: 'https://repository.coremedia.com/nexus/repository/coremedia-npm'
+  PNPM_VERSION: ^11.7
 
 jobs:
   build:
@@ -46,8 +44,9 @@ jobs:
           NPM_AUTH_TOKEN=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.PLUGINS_NEXUS_USER }}", "password": "${{ secrets.PLUGINS_NEXUS_PASSWORD }}"}' https://repository.coremedia.com/nexus/repository/coremedia-npm/-/user/org.couchdb.user:${{ secrets.PLUGINS_NEXUS_USER }} | jq -r .token)
           echo "::add-mask::$NPM_AUTH_TOKEN"
           echo "NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
-          echo "NPM_CONFIG_//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
-
+          echo "PNPM_CONFIG_//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
+          echo "@coremedia:registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/" >> .npmrc
+          echo "@coremedia-internal:registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/" >> .npmrc
           npm install -g pnpm@${{ env.PNPM_VERSION }}
       - name: Setup Git
         run: |

@@ -64,9 +64,6 @@ env:
 permissions: { }
 
 jobs:
-  get-env:
-    name: "Get Environment"
-    uses: "./.github/workflows/env.yml"
   get-engines:
     name: "Get Engines"
     uses: "./.github/workflows/get-engines.yml"
@@ -76,13 +73,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs:
-      - get-env
       - get-engines
     env:
       nodeVersion: ${{ needs.get-engines.outputs.nodeVersion }}
       pnpmVersion: ${{ needs.get-engines.outputs.pnpmVersion }}
-      npmHost: ${{ needs.get-env.outputs.npm-host }}
-      npmUrl: ${{ needs.get-env.outputs.npm-url }}
     steps:
       - id: checkout
         name: Checkout
@@ -90,20 +84,17 @@ jobs:
       - id: authorize
         name: "NPM Authorization"
         run: |
-          result=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.PLUGINS_NEXUS_USER }}", "password": "${{ secrets.PLUGINS_NEXUS_PASSWORD }}"}' "${{ env.npmUrl }}/-/user/org.couchdb.user:${{ secrets.PLUGINS_NEXUS_USER }}" | jq --raw-output .token)
+          result=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.PLUGINS_NEXUS_USER }}", "password": "${{ secrets.PLUGINS_NEXUS_PASSWORD }}"}' "https://repository.coremedia.com/nexus/repository/coremedia-npm/-/user/org.couchdb.user:${{ secrets.PLUGINS_NEXUS_USER }}" | jq --raw-output .token)
           # Ensure, the token is not exposed in output.
           echo "::add-mask::${result}"
           echo "NODE_AUTH_TOKEN=${result}" >> $GITHUB_ENV
       - id: initNpmConfiguration
         name: "Initialize NPM Configuration"
         run: |
-          npmHost="${{ env.npmHost }}"
-          npmUrl="${{ env.npmUrl }}"
           npmAuthToken="${{ env.NODE_AUTH_TOKEN }}"
-
-          echo "//${npmHost}/:_authToken=${npmAuthToken}" >> .npmrc
-          echo "@coremedia:registry=${npmUrl}" >> .npmrc
-          echo "@coremedia-internal:registry=${npmUrl}" >> .npmrc
+          echo "//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=${npmAuthToken}" >> .npmrc
+          echo "@coremedia:registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/" >> .npmrc
+          echo "@coremedia-internal:registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/" >> .npmrc
           # We must not commit this change.
           git update-index --assume-unchanged .npmrc
       - id: installPnpm
@@ -128,7 +119,6 @@ jobs:
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('node_modules/.pnpm/@playwright+test@*/node_modules/@playwright/test/package.json') }}
-
       - name: Install playwright deps
         if: ${{ inputs.itest && steps.playwright-cache.outputs.cache-hit != 'true' }}
         shell: bash
