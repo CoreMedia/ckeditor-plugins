@@ -261,8 +261,17 @@ generates exports from a parameter table to avoid duplication.
       editing-only augmentations like `<xdiff:span>` are stripped from `getData()`
       but must be visible in the data view; DocumentLists re-verified (38 passed).
       8 passed.)_
-- [ ] `Images` — variants set `data`/`mockContents`,
-      `outputs: ["data-view","last-opened-entities"]`.
+- [x] `Images` — variants set `data`/`mockContents`,
+      `outputs: ["data-view","last-opened-entities"]`. _(10 prepared per-test
+      stories — 4 media-representation cases (shared `imageMediaCases` table,
+      `data-view`), invalid-href, alignment, open-in-tab enabled/disabled
+      (enabled exposes `last-opened-entities`), image-links no-link/with-link.
+      Literals shared via `imagesScenario`/`imageMediaCases`. Two latent bugs
+      surfaced and fixed: (1) the `last-opened-entities` harness output stringified
+      the Promise returned by `service.getLastOpenedEntities()` without awaiting it
+      (Images is its first consumer) → now awaited; (2) `PNG_EMPTY_24x24` in the
+      shared `mockFixtures` had a two-character base64 corruption introduced during
+      the constants-package move → restored to the original value. 10 passed.)_
 
 ### 4d. Interaction + service reads
 
@@ -333,7 +342,7 @@ returns nothing.
 | `DragDrop`                    | [x]              | [x]        | [x]                     | [x]               | [x]   |
 | `DocumentLists`               | [x]              | [x]        | [x]                     | [x]               | [x]   |
 | `Differencing`                | [x]              | [x]        | [x]                     | [x]               | [x]   |
-| `Images`                      | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
+| `Images`                      | [x]              | [x]        | [x]                     | [x]               | [x]   |
 | `LinkUserInteraction`         | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
 
 ## Rollback / Safety

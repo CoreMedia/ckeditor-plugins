@@ -16,5 +16,6 @@ export * from "./stories/differencing";
 export * from "./stories/documentLists";
 export * from "./stories/dragDrop";
 export * from "./stories/helloEditor";
+export * from "./stories/images";
 export * from "./stories/linkBalloon";
 export * from "./stories/pasteButton";

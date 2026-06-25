@@ -46,11 +46,11 @@ const installDataView = (editor: ClassicEditor, element: HTMLElement, data: stri
 
 const installLastOpenedEntities = (editor: ClassicEditor, element: HTMLElement): void => {
   void getContentFormService(editor).then((service) => {
-    const update = (): void => {
-      element.textContent = JSON.stringify(service.getLastOpenedEntities());
+    const update = async (): Promise<void> => {
+      element.textContent = JSON.stringify(await service.getLastOpenedEntities());
     };
-    update();
-    window.setInterval(update, POLL_INTERVAL_MS);
+    void update();
+    window.setInterval(() => void update(), POLL_INTERVAL_MS);
   });
 };
 
