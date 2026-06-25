@@ -28,7 +28,7 @@ const installEditorData = (editor: ClassicEditor, element: HTMLElement): void =>
   editor.model.document.on("change:data", update);
 };
 
-const installDataView = (editor: ClassicEditor, element: HTMLElement): void => {
+const installDataView = (editor: ClassicEditor, element: HTMLElement, data: string): void => {
   const processor = editor.data.processor as RichTextDataProcessor;
   processor.on("richtext:toView", (_eventInfo, eventData: { dataView?: string }) => {
     if (typeof eventData.dataView === "string") {
@@ -36,9 +36,12 @@ const installDataView = (editor: ClassicEditor, element: HTMLElement): void => {
     }
   });
   // The scenario data was already set before the harness was installed, so the
-  // initial `richtext:toView` fired before we subscribed. Re-set the current
-  // data once to populate the output.
-  editor.setData(getEditorData(editor));
+  // initial `richtext:toView` fired before we subscribed. Re-set the original
+  // scenario data once to populate the output. We deliberately re-set the
+  // loaded `data` (not `editor.getData()`): editing-only augmentations such as
+  // server-side differencing's `<xdiff:span>` are stripped from `getData()`,
+  // but must be visible in the data view.
+  editor.setData(data);
 };
 
 const installLastOpenedEntities = (editor: ClassicEditor, element: HTMLElement): void => {
@@ -95,7 +98,7 @@ export const installOutputsHarness = (container: HTMLElement, editor: ClassicEdi
         installEditorData(editor, element);
         break;
       case "data-view":
-        installDataView(editor, element);
+        installDataView(editor, element, args.data);
         break;
       case "last-opened-entities":
         installLastOpenedEntities(editor, element);

@@ -1404,6 +1404,10 @@ importers:
     publishDirectory: dist
 
   tests/constants:
+    dependencies:
+      '@coremedia-internal/ckeditor5-coremedia-example-data':
+        specifier: workspace:^1.0.0-SNAPSHOT
+        version: link:../../packages/ckeditor5-coremedia-example-data
     devDependencies:
       '@coremedia/studio-client.build-config':
         specifier: 'catalog:'
@@ -8906,8 +8910,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.6.2
       '@ckeditor/ckeditor5-widget': 47.6.2
       ckeditor5: 47.6.2
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-html-embed@48.1.1':
     dependencies:
@@ -8995,6 +8997,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.6.2
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-indent@48.1.1':
     dependencies:
@@ -9015,6 +9019,8 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.6.2
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-language@48.1.1':
     dependencies:
@@ -9066,6 +9072,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
       es-toolkit: 1.39.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-list@48.1.1':
     dependencies:
@@ -9628,7 +9636,7 @@ snapshots:
       '@typescript-eslint/parser': 8.60.0(eslint@9.39.4(jiti@1.21.6))(typescript@5.9.3)
       eslint: 9.39.4(jiti@1.21.6)
       eslint-config-prettier: 10.1.8(eslint@9.39.4(jiti@1.21.6))
-      eslint-import-resolver-typescript: 4.4.5(eslint-plugin-import@2.32.0)(eslint@9.39.4(jiti@1.21.6))
+      eslint-import-resolver-typescript: 4.4.5(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.44.0(eslint@9.39.4(jiti@1.21.6))(typescript@5.9.3))(eslint@9.39.4(jiti@1.21.6)))(eslint@9.39.4(jiti@1.21.6))
       eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.60.0(eslint@9.39.4(jiti@1.21.6))(typescript@5.9.3))(eslint-import-resolver-typescript@4.4.5)(eslint@9.39.4(jiti@1.21.6))
       eslint-plugin-prettier: 5.5.6(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8(eslint@9.39.4(jiti@1.21.6)))(eslint@9.39.4(jiti@1.21.6))(prettier@3.8.3)
       pkg-dir: 5.0.0
@@ -12315,7 +12323,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript@4.4.5(eslint-plugin-import@2.32.0)(eslint@9.39.4(jiti@1.21.6)):
+  eslint-import-resolver-typescript@4.4.5(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.44.0(eslint@9.39.4(jiti@1.21.6))(typescript@5.9.3))(eslint@9.39.4(jiti@1.21.6)))(eslint@9.39.4(jiti@1.21.6)):
     dependencies:
       debug: 4.4.3
       eslint: 9.39.4(jiti@1.21.6)
@@ -12326,18 +12334,18 @@ snapshots:
       tinyglobby: 0.2.16
       unrs-resolver: 1.12.2
     optionalDependencies:
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.60.0(eslint@9.39.4(jiti@1.21.6))(typescript@5.9.3))(eslint@9.39.4(jiti@1.21.6))
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.60.0(eslint@9.39.4(jiti@1.21.6))(typescript@5.9.3))(eslint-import-resolver-typescript@4.4.5)(eslint@9.39.4(jiti@1.21.6))
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.12.1(@typescript-eslint/parser@8.60.0(eslint@9.39.4(jiti@1.21.6))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.5)(eslint@9.39.4(jiti@1.21.6)):
+  eslint-module-utils@2.12.1(@typescript-eslint/parser@8.60.0(eslint@9.39.4(jiti@1.21.6))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.5(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.44.0(eslint@9.39.4(jiti@1.21.6))(typescript@5.9.3))(eslint@9.39.4(jiti@1.21.6)))(eslint@9.39.4(jiti@1.21.6)))(eslint@9.39.4(jiti@1.21.6)):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
       '@typescript-eslint/parser': 8.60.0(eslint@9.39.4(jiti@1.21.6))(typescript@5.9.3)
       eslint: 9.39.4(jiti@1.21.6)
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 4.4.5(eslint-plugin-import@2.32.0)(eslint@9.39.4(jiti@1.21.6))
+      eslint-import-resolver-typescript: 4.4.5(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.44.0(eslint@9.39.4(jiti@1.21.6))(typescript@5.9.3))(eslint@9.39.4(jiti@1.21.6)))(eslint@9.39.4(jiti@1.21.6))
     transitivePeerDependencies:
       - supports-color
 
@@ -12362,7 +12370,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 9.39.4(jiti@1.21.6)
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.60.0(eslint@9.39.4(jiti@1.21.6))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.5)(eslint@9.39.4(jiti@1.21.6))
+      eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.60.0(eslint@9.39.4(jiti@1.21.6))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.5(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.44.0(eslint@9.39.4(jiti@1.21.6))(typescript@5.9.3))(eslint@9.39.4(jiti@1.21.6)))(eslint@9.39.4(jiti@1.21.6)))(eslint@9.39.4(jiti@1.21.6))
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3

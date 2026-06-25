@@ -10,6 +10,9 @@
   "files": [
     "/src"
   ],
+  "dependencies": {
+    "@coremedia-internal/ckeditor5-coremedia-example-data": "workspace:^1.0.0-SNAPSHOT"
+  },
   "devDependencies": {
     "@coremedia/studio-client.build-config": "catalog:",
     "@coremedia/studio-client.eslint-config": "catalog:",

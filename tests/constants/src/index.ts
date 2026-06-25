@@ -12,6 +12,7 @@ export * from "./stories/bbCode";
 export * from "./stories/blocklist";
 export * from "./stories/blocklistWords";
 export * from "./stories/contentLink";
+export * from "./stories/differencing";
 export * from "./stories/documentLists";
 export * from "./stories/dragDrop";
 export * from "./stories/helloEditor";
