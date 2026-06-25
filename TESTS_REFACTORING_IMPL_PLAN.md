@@ -224,8 +224,12 @@ For every test: create prepared story variant(s) → move arrange-calls into arg
       locator; `focusEditor` → `editor(page).click()`. _(Story `Default` exposes
       `editor-data`; the `writeToClipboard` `page.evaluate` is retained as the
       documented browser-clipboard exception — see Ground Rules; 3 passed.)_
-- [ ] `PasteButton` — `data`, `mockContents`, `inputExampleElements`;
-      `getEditorData` → `editorData` locator.
+- [x] `PasteButton` — `data`, `mockContents`, `inputExampleElements`;
+      `getEditorData` → `editorData` locator. _(7 prepared per-test stories
+      built by a `pasteButtonStory` factory; shared `pasteButtonScenario`; the
+      PNG/content-name fixtures moved into the constants package
+      (`mockFixtures.ts`, re-exported by playwright's `MockFixtures.ts`); image
+      variants expose `editor-data`; 7 passed.)_
 - [ ] `DragDrop` — `mockContents`, `mockExternalContents`,
       `inputExampleElements`, `data`; `getEditorData` → `editorData`;
       `validateIsDroppable*` → `is-droppable-*` harness with per-variant
@@ -309,7 +313,7 @@ returns nothing.
 | `ContentLink`                 | [x]              | [x]        | n/a                     | [x]               | [x]   |
 | `LinkBalloon`                 | [x]              | [x]        | n/a                     | [x]               | [x]   |
 | `FontMapper`                  | [x]              | [x]        | [x]                     | [x]               | [x]   |
-| `PasteButton`                 | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
+| `PasteButton`                 | [x]              | [x]        | [x]                     | [x]               | [x]   |
 | `DragDrop`                    | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
 | `DocumentLists`               | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
 | `Differencing`                | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
