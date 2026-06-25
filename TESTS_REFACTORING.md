@@ -220,8 +220,8 @@ imports.
 ## Success Criteria
 
 - [x] No `page.evaluate` (directly or via `testApi`) remains in
-  `tests/playwright` — the sole, documented exception is the `FontMapper`
-  browser-clipboard write.
+  `tests/playwright` — the former `FontMapper` browser-clipboard write is now a
+  prepared-story clipboard payload, so even that test runs with locators only.
 - [x] `tests/playwright/test/storybook/testApi.ts` is removed.
 - [x] Every test opens a story that is fully prepared for it; arrange happens in
   the story, not the test.

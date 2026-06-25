@@ -36,8 +36,8 @@ type workarounds for non-exported Playwright internals. The Storybook approach:
 - moves scenario setup into **reusable Storybook-side utilities**
   (`src/setup`, `src/runtime`) instead of Playwright wrapper classes;
 - **bakes every scenario into the story** declaratively via `ScenarioArgs`
-  (data, mock contents, read-only state, blocked words, drag sources), so tests
-  no longer arrange state at runtime;
+  (data, mock contents, read-only state, blocked words, drag sources, and even a
+  prepared clipboard payload), so tests no longer arrange state at runtime;
 - exposes live editor/service values a test must read back through an
   [Observable Outputs Harness](#observable-outputs-harness) — stable
   `[data-test="…"]` DOM elements read with locators — so tests run with
@@ -45,10 +45,6 @@ type workarounds for non-exported Playwright internals. The Storybook approach:
 - shares the literals baked into each story (and asserted by its test) through
   the `@coremedia/ckeditor5-itest-constants` package, so story and test never
   drift.
-
-> The single, documented exception to the "no `page.evaluate`" rule is
-> `FontMapper.test.ts`, which writes a `text/html` payload to the browser
-> clipboard — a genuine browser-clipboard operation with no locator equivalent.
 
 ## Getting Started
 
@@ -157,7 +153,7 @@ prepared export via `openStory(page, storyId)`. The story id of an export is
 | `Differencing.test.ts`              | `Differencing`              | `Addition`, `Removal`, `Change`, `Conflict`, `AllAttributes`, `FalsePositiveNewline`, `AddedNewline`, `ImageChangetype`                        |
 | `DocumentLists.test.ts`             | `DocumentLists`             | one export per `ol-*`/`ul-*` case (e.g. `OlContainsAttributes` → `tests-documentlists--ol-contains-attributes`)                                |
 | `DragDrop.test.ts`                  | `DragDrop`                  | `OneLink`, `SlowLinks`, `MultipleLinks`, `ExternalLink`, `AlreadyImportedExternalLink`, …, `OneImage`, `MultipleImages`, `SlowImages`          |
-| `FontMapper.test.ts`                | `FontMapper`                | `Default`                                                                                                                                      |
+| `FontMapper.test.ts`                | `FontMapper`                | `WordTemplate`, `WordTemplateTable`, `WordTemplateTableInheritFont`                                                                            |
 | `Images.test.ts`                    | `Images`                    | `NormalFast`, `SlowLoading`, `Unreadable`, `NoData`, `InvalidHref`, `Alignment`, `OpenInTabEnabled`, `OpenInTabDisabled`, `LinksNoLink`, `LinksWithLink` |
 | `PasteButton.test.ts`               | `PasteButton`               | `OneLink`, `SlowLinks`, `MultipleLinks`, `PasteViaKeyboardLink`, `OneImage`, `MultipleImages`, `SlowImages`                                    |
 
@@ -190,10 +186,13 @@ elements addressed by `data-test` ids, which Playwright reads with a locator.
   matching locator readers (`editorData`, `dataView`, `lastOpenedEntities`,
   `isDroppableState`, `isDroppableInLinkBalloon`).
 
-> **The one exception** to the locators-only rule is `FontMapper.test.ts`, which
-> uses a single `page.evaluate` to write a `text/html` payload to the browser
-> clipboard (`ClipboardItem`) — a genuine browser-clipboard operation that has
-> no locator equivalent.
+Stories can also bake in a **prepared clipboard** payload: when a scenario's
+`clipboard` arg is set, the runtime writes that `text/html` (or other) item to
+the browser clipboard while mounting (`src/setup/clipboard.ts`). This lets the
+clipboard-driven `FontMapper` test paste a fully prepared Word document and
+assert through the `editor-data` output — so it, too, runs with **locators
+only, no `page.evaluate`** (the browser context grants `clipboard-write` via the
+Playwright config).
 
 ## How Playwright Targets Storybook
 

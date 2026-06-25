@@ -8,6 +8,22 @@ import type { ScenarioOutput } from "@coremedia/ckeditor5-itest-constants";
 export type { ScenarioOutput };
 
 /**
+ * A single item a scenario writes to the browser clipboard while mounting, so a
+ * test can paste a fully prepared payload without itself calling
+ * `page.evaluate`.
+ */
+export interface ClipboardScenarioItem {
+  /**
+   * MIME type of the clipboard payload, e.g. `"text/html"`.
+   */
+  type: string;
+  /**
+   * The payload written to the clipboard under {@link type}.
+   */
+  content: string;
+}
+
+/**
  * Data type a story should initialize the editor with. Mirrors the former
  * application `dataType` hash parameter.
  */
@@ -79,6 +95,14 @@ export interface ScenarioArgs {
    * requested.
    */
   droppableUris: string[];
+  /**
+   * When set, the scenario writes this item to the browser clipboard while
+   * mounting, so a test can paste a fully prepared payload (e.g. a Word HTML
+   * document) without itself calling `page.evaluate`. Requires the browser
+   * context to grant the `clipboard-write` permission (the Playwright config
+   * does). Defaults to `null` (no clipboard write).
+   */
+  clipboard: ClipboardScenarioItem | null;
 }
 
 /**
@@ -95,4 +119,5 @@ export const defaultScenarioArgs: ScenarioArgs = {
   inputExampleElements: [],
   outputs: [],
   droppableUris: [],
+  clipboard: null,
 };

@@ -5,6 +5,7 @@ import { registerMockExternalContents } from "./mockExternalContent";
 import { setEditorData } from "./editorData";
 import { addBlockedWord } from "./serviceAgent";
 import { addInputExampleElement } from "./inputExample";
+import { writeClipboard } from "./clipboard";
 
 /**
  * Reason id used when enabling read-only mode for a scenario.
@@ -41,5 +42,8 @@ export const applyScenario = async (editor: ClassicEditor, args: ScenarioArgs): 
   }
   if (args.data) {
     setEditorData(editor, args.data);
+  }
+  if (args.clipboard) {
+    await writeClipboard(args.clipboard);
   }
 };

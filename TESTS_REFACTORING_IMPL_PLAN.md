@@ -11,13 +11,14 @@ phase ends with a verification gate that must pass before the next phase starts.
 
 ## Conventions & Ground Rules
 
-- **No editor-API `page.evaluate`** may remain in `tests/playwright` at the end
-  (neither direct nor via `test/storybook/testApi.ts`). _Accepted exception:_
-  genuine browser-platform interactions with no Playwright locator equivalent may
-  retain a `page.evaluate`. The only such case is `FontMapper.test.ts`'s
-  `writeToClipboard`, which writes a `text/html` `ClipboardItem` to the real
-  browser clipboard. The Phase 6 audit greps for editor-API usage and treats this
-  clipboard call as the single documented exception.
+- **No `page.evaluate` at all** may remain in `tests/playwright` at the end
+  (neither direct nor via `test/storybook/testApi.ts`). The former
+  browser-clipboard exception in `FontMapper.test.ts` was also removed: the Word
+  HTML now lives in the Storybook package and each prepared FontMapper story
+  writes it to the browser clipboard while mounting (`clipboard` scenario arg →
+  `src/setup/clipboard.ts`), so the test only pastes and asserts through the
+  `editor-data` output. The Phase 6 audit greps confirm no `page.evaluate`
+  remains.
 - **Story files are CSF:** every named export is treated as a story. **Do not
   export helper constants/types** from a `*.stories.ts` file — Storybook will try
   to render them as stories and the editor never becomes ready. Put per-story
@@ -343,8 +344,7 @@ returns nothing.
 - [x] `pnpm -r` lint + build clean (at least both test packages).
       _(constants + storybook typecheck/lint clean; playwright lint/build clean.)_
 - [x] Final `grep` audits:
-  - `tests/playwright/test` contains no `page.evaluate`
-    _(except the documented FontMapper clipboard write)_,
+  - `tests/playwright/test` contains no `page.evaluate`,
   - no import of `./storybook/testApi`,
   - `tests/storybook/src` exposes no `window` test-API global.
 
