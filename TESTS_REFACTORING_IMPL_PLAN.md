@@ -289,7 +289,12 @@ generates exports from a parameter table to avoid duplication.
 
 ### 4e. Already-prepared
 
-- [ ] `Application` — verify it has no `testApi` usage; no change expected.
+- [x] `Application` — verify it has no `testApi` usage; no change expected.
+      _(Verified: `Application.test.ts` only opens `tests-application--default` and
+      waits for the editor locator — no `testApi`, no `page.evaluate`. No change
+      needed; 1 passed. A repo-wide grep over `tests/playwright/test/*.test.ts`
+      confirms no remaining `testApi` imports, and the only `page.evaluate` is the
+      documented FontMapper clipboard-write exception.)_
 
 **Gate after 4:** every `*.test.ts` is free of `testApi` imports;
 `grep` for `storybook/testApi` and `page.evaluate` in `tests/playwright/test`
@@ -297,16 +302,27 @@ returns nothing.
 
 ## Phase 5 — Retire the Runtime API
 
-- [ ] Delete `tests/playwright/test/storybook/testApi.ts`.
-- [ ] In `tests/storybook`: remove `installEditorTestApi` /
+- [x] Delete `tests/playwright/test/storybook/testApi.ts`.
+- [x] In `tests/storybook`: remove `installEditorTestApi` /
       `createEditorTestApi` and the `window[EDITOR_TEST_API_GLOBAL]` surface from
       `src/runtime/testApi.ts`; drop its export from `src/runtime/index.ts`.
       Keep the underlying setup utilities (`editorData`, `serviceAgent`,
-      `inputExample`) — the harness depends on them.
-- [ ] Remove the `installEditorTestApi` call in `mountStory.ts`.
-- [ ] Remove now-dead imports/types; ensure no `EditorTestApi` references
+      `inputExample`) — the harness depends on them. _(The whole
+      `src/runtime/testApi.ts` was deleted — it only held the test-API surface;
+      the kept setup utilities live in `src/setup/*`. `setDataAndGetDataView`
+      remains exported as an unused-but-kept setup helper.)_
+- [x] Remove the `installEditorTestApi` call in `mountStory.ts`. _(Import +
+      call removed; `window.editor` instance global is left as-is — it is not the
+      test-API global and is not used by any test.)_
+- [x] Remove now-dead imports/types; ensure no `EditorTestApi` references
       remain.
-- [ ] Verify nothing else imports the removed symbols.
+- [x] Verify nothing else imports the removed symbols. _(Also deleted
+      `tests/constants/src/testApi.ts` (`EDITOR_TEST_API_GLOBAL`) and its barrel
+      export, as both API copies are gone. A repo-wide grep for
+      `installEditorTestApi` / `createEditorTestApi` / `EditorTestApi` /
+      `EDITOR_TEST_API_GLOBAL` / `coremediaEditorTestApi` / `storybook/testApi`
+      returns nothing. All three packages typecheck/lint/build clean; smoke test
+      24 passed.)_
 
 **Gate:** both packages typecheck/lint/build; no references to
 `coremediaEditorTestApi` remain except possibly historical docs.
@@ -333,7 +349,7 @@ returns nothing.
 
 | File                          | Variants created | Args moved | Reads → harness/locator | `testApi` removed | Green |
 | ----------------------------- | ---------------- | ---------- | ----------------------- | ----------------- | ----- |
-| `Application`                 | n/a              | n/a        | n/a                     | n/a               | [ ]   |
+| `Application`                 | n/a              | n/a        | n/a                     | n/a               | [x]   |
 | `HelloEditor` (pilot)         | [x]              | [x]        | [x]                     | [x]               | [x]   |
 | `BBCode`                      | [x]              | [x]        | n/a                     | [x]               | [x]   |
 | `Blocklist`                   | [x]              | [x]        | n/a                     | [x]               | [x]   |

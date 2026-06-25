@@ -6,7 +6,6 @@
  */
 export * from "./scenarioContract";
 export * from "./outputs";
-export * from "./testApi";
 export * from "./mockFixtures";
 export * from "./stories/bbCode";
 export * from "./stories/blocklist";

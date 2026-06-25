@@ -5,7 +5,6 @@ import {
   SCENARIO_CONTAINER_CLASS,
 } from "@coremedia/ckeditor5-itest-constants";
 import { defaultScenarioArgs, type ScenarioArgs } from "./scenario";
-import { installEditorTestApi } from "./testApi";
 import { installOutputsHarness } from "./outputs";
 
 export { EDITOR_ELEMENT_ID, EDITOR_READY_ATTRIBUTE, SCENARIO_CONTAINER_CLASS };
@@ -82,7 +81,6 @@ export const mountScenario = (initialize: ScenarioInitializer, args?: Partial<Sc
     .then(() => initialize(host, resolvedArgs))
     .then((editor) => {
       window.editor = editor;
-      installEditorTestApi(editor);
       installOutputsHarness(container, editor, resolvedArgs);
       container.setAttribute(EDITOR_READY_ATTRIBUTE, "true");
     })
