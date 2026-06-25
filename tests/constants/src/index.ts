@@ -18,4 +18,5 @@ export * from "./stories/dragDrop";
 export * from "./stories/helloEditor";
 export * from "./stories/images";
 export * from "./stories/linkBalloon";
+export * from "./stories/linkUserInteraction";
 export * from "./stories/pasteButton";

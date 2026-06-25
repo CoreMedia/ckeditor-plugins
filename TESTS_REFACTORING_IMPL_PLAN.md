@@ -275,12 +275,17 @@ generates exports from a parameter table to avoid duplication.
 
 ### 4d. Interaction + service reads
 
-- [ ] `LinkUserInteraction` — variants `ExternalLink`, `ExternalLinkReadOnly`,
+- [x] `LinkUserInteraction` — variants `ExternalLink`, `ExternalLinkReadOnly`,
       `ContentLink`, `ContentLinkReadOnly` set `data`, `mockContents`,
       `readOnly`, `outputs: ["last-opened-entities"]`; replace
       `getLastOpenedEntities` with the harness locator; `setReadOnly` initial
       state → `readOnly` arg. Move `testInfo.title` link text into story
-      constants.
+      constants. _(4 prepared stories, each backing a mouse + keyboard test pair
+      (8 tests total): external-link / external-link-read-only drive the new
+      browser-tab assertions; content-link / content-link-read-only expose
+      `last-opened-entities` for the work-area-tab assertions. Link texts and the
+      `["content/42"]` expectation shared via `linkUserInteractionScenario`.
+      8 passed.)_
 
 ### 4e. Already-prepared
 
@@ -343,7 +348,7 @@ returns nothing.
 | `DocumentLists`               | [x]              | [x]        | [x]                     | [x]               | [x]   |
 | `Differencing`                | [x]              | [x]        | [x]                     | [x]               | [x]   |
 | `Images`                      | [x]              | [x]        | [x]                     | [x]               | [x]   |
-| `LinkUserInteraction`         | [ ]              | [ ]        | [ ]                     | [ ]               | [ ]   |
+| `LinkUserInteraction`         | [x]              | [x]        | [x]                     | [x]               | [x]   |
 
 ## Rollback / Safety
 
