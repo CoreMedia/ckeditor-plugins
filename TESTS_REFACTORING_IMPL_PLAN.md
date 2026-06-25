@@ -329,17 +329,22 @@ returns nothing.
 
 ## Phase 6 — Documentation & Final Verification
 
-- [ ] Update `tests/storybook/README.md`:
+- [x] Update `tests/storybook/README.md`:
   - story-per-scenario model (multiple exports per `Tests/<Name>`),
   - the Observable Outputs Harness and `data-test` ids,
   - explicit statement that tests use **locators only**, no `page.evaluate`,
   - refresh the story↔test mapping (now many variants).
-- [ ] Update root `README.md` / any cross-links if needed.
-- [ ] Update `TESTS_REFACTORING.md` success-criteria checklist to done.
-- [ ] Full suite green with `PLAYWRIGHT_RETRIES=2`.
-- [ ] `pnpm -r` lint + build clean (at least both test packages).
-- [ ] Final `grep` audits:
-  - `tests/playwright/test` contains no `page.evaluate`,
+- [x] Update root `README.md` / any cross-links if needed. _(No root-README
+      references to the retired API; updated `tests/constants/README.md` to drop
+      the deleted `testApi.ts` entry and note `mockFixtures.ts` +
+      the `stories/differencing.ts` example-data exception.)_
+- [x] Update `TESTS_REFACTORING.md` success-criteria checklist to done.
+- [x] Full suite green with `PLAYWRIGHT_RETRIES=2`. _(104 passed, 1.9m.)_
+- [x] `pnpm -r` lint + build clean (at least both test packages).
+      _(constants + storybook typecheck/lint clean; playwright lint/build clean.)_
+- [x] Final `grep` audits:
+  - `tests/playwright/test` contains no `page.evaluate`
+    _(except the documented FontMapper clipboard write)_,
   - no import of `./storybook/testApi`,
   - `tests/storybook/src` exposes no `window` test-API global.
 

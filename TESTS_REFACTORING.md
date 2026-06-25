@@ -192,42 +192,45 @@ imports.
 ## Step-by-Step Execution Plan
 
 1. **Contract & harness foundation**
-   - [ ] Extend `ScenarioArgs` with `blockedWords` and `inputExampleElements`;
+   - [x] Extend `ScenarioArgs` with `blockedWords` and `inputExampleElements`;
          wire them in `applyScenario.ts` and `defaultScenarioArgs`.
-   - [ ] Implement the Observable Outputs Harness in `tests/storybook/src`
+   - [x] Implement the Observable Outputs Harness in `tests/storybook/src`
          (reactive bindings for editor data, data view, last opened entities,
          dropability) behind an opt-in `outputs` arg.
-   - [ ] Add `tests/playwright/test/locators/outputs.ts` typed readers.
-   - [ ] Verify with one pilot (e.g. `HelloEditor`) before rolling out.
+   - [x] Add `tests/playwright/test/locators/outputs.ts` typed readers.
+   - [x] Verify with one pilot (e.g. `HelloEditor`) before rolling out.
 2. **Pilot migration (`HelloEditor`)**
-   - [ ] Create prepared story variants, refactor the test to locators only,
+   - [x] Create prepared story variants, refactor the test to locators only,
          remove its `testApi` imports. Confirm green.
 3. **Roll out by group** (small → large), running the affected file after each:
-   - [ ] Setup-only: `BBCode`, `Blocklist*`, `ContentLink`, `LinkBalloon`.
-   - [ ] Read-back: `FontMapper`, `PasteButton`, `DragDrop`.
-   - [ ] Data-view round-trips: `DocumentLists`, `Differencing`, `Images`.
-   - [ ] Interaction + service reads: `LinkUserInteraction`.
+   - [x] Setup-only: `BBCode`, `Blocklist*`, `ContentLink`, `LinkBalloon`.
+   - [x] Read-back: `FontMapper`, `PasteButton`, `DragDrop`.
+   - [x] Data-view round-trips: `DocumentLists`, `Differencing`, `Images`.
+   - [x] Interaction + service reads: `LinkUserInteraction`.
 4. **Retire the runtime API**
-   - [ ] Delete `test/storybook/testApi.ts` and the Storybook
+   - [x] Delete `test/storybook/testApi.ts` and the Storybook
          `installEditorTestApi` window surface once unused.
-   - [ ] Remove now-dead helpers/imports; keep harness-backing setup utilities.
+   - [x] Remove now-dead helpers/imports; keep harness-backing setup utilities.
 5. **Docs & verification**
-   - [ ] Update `tests/storybook/README.md` (story-per-scenario model, harness,
+   - [x] Update `tests/storybook/README.md` (story-per-scenario model, harness,
          no `page.evaluate`) and the story↔test mapping.
-   - [ ] Full suite green (`PLAYWRIGHT_RETRIES=2`), lint + typecheck for both
+   - [x] Full suite green (`PLAYWRIGHT_RETRIES=2`), lint + typecheck for both
          packages.
 
 ## Success Criteria
 
-- No `page.evaluate` (directly or via `testApi`) remains in `tests/playwright`.
-- `tests/playwright/test/storybook/testApi.ts` is removed.
-- Every test opens a story that is fully prepared for it; arrange happens in the
-  story, not the test.
-- All values previously read via the API are exposed as observable DOM outputs
-  and read through locators.
-- Each test scenario maps to a dedicated story (id `tests-<name>--<variant>`).
-- Full Playwright suite passes; lint/typecheck/build pass for both packages.
-- `tests/storybook/README.md` reflects the new model.
+- [x] No `page.evaluate` (directly or via `testApi`) remains in
+  `tests/playwright` — the sole, documented exception is the `FontMapper`
+  browser-clipboard write.
+- [x] `tests/playwright/test/storybook/testApi.ts` is removed.
+- [x] Every test opens a story that is fully prepared for it; arrange happens in
+  the story, not the test.
+- [x] All values previously read via the API are exposed as observable DOM
+  outputs and read through locators.
+- [x] Each test scenario maps to a dedicated story (id
+  `tests-<name>--<variant>`).
+- [x] Full Playwright suite passes; lint/typecheck/build pass for both packages.
+- [x] `tests/storybook/README.md` reflects the new model.
 
 ## Risks & Open Questions
 

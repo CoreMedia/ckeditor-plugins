@@ -3,8 +3,13 @@
 `@coremedia/ckeditor5-storybook-itest` is the [Storybook][] runtime that the
 [Playwright integration tests][playwright] in `tests/playwright` execute
 against. It replaces the former example application (`app`) as the test target:
-every Playwright test renders a dedicated, isolated [story](#stories) and drives
-the editor through an in-page test API instead of handle-based wrappers.
+every Playwright test opens a dedicated, **fully prepared** [story](#stories)
+(data, mock contents, read-only state, blocked words and drag sources all baked
+in) and interacts with and asserts against the editor purely through
+**Playwright locators** — no `page.evaluate`. Any value a test needs to read
+back from the running editor is exposed by the story as an
+[observable DOM output](#observable-outputs-harness) that Playwright reads with a
+locator.
 
 The same Storybook is also published to [GitHub Pages](#github-pages-deployment),
 so the test scenarios can be browsed interactively.
@@ -16,7 +21,7 @@ so the test scenarios can be browsed interactively.
 - [Package Layout](#package-layout)
 - [Stories](#stories)
 - [Story ↔ Test Mapping](#story--test-mapping)
-- [In-Page Editor Test API](#in-page-editor-test-api)
+- [Observable Outputs Harness](#observable-outputs-harness)
 - [How Playwright Targets Storybook](#how-playwright-targets-storybook)
 - [CKEditor License (`.env`)](#ckeditor-license-env)
 - [GitHub Pages Deployment](#github-pages-deployment)
@@ -30,11 +35,20 @@ type workarounds for non-exported Playwright internals. The Storybook approach:
 - gives **each test a dedicated, isolated story** (no shared application state);
 - moves scenario setup into **reusable Storybook-side utilities**
   (`src/setup`, `src/runtime`) instead of Playwright wrapper classes;
-- exposes editor interactions through a single **in-page test API**
-  (`window.coremediaEditorTestApi`), removing the JS-handle wrappers and their
-  type shims;
-- keeps the **locator-based wrappers** that still add value
-  (see `tests/playwright/test/wrappers`).
+- **bakes every scenario into the story** declaratively via `ScenarioArgs`
+  (data, mock contents, read-only state, blocked words, drag sources), so tests
+  no longer arrange state at runtime;
+- exposes live editor/service values a test must read back through an
+  [Observable Outputs Harness](#observable-outputs-harness) — stable
+  `[data-test="…"]` DOM elements read with locators — so tests run with
+  **locators only, no `page.evaluate`**;
+- shares the literals baked into each story (and asserted by its test) through
+  the `@coremedia/ckeditor5-itest-constants` package, so story and test never
+  drift.
+
+> The single, documented exception to the "no `page.evaluate`" rule is
+> `FontMapper.test.ts`, which writes a `text/html` payload to the browser
+> clipboard — a genuine browser-clipboard operation with no locator equivalent.
 
 ## Getting Started
 
@@ -67,9 +81,9 @@ tests/storybook/
 │  ├─ editors/            Editor factories (richtext, bbCode) + license helper
 │  ├─ runtime/            Story runtime contract:
 │  │  ├─ mountStory.ts    Mounts a scenario into the story canvas
-│  │  ├─ scenario.ts      Scenario args + ready signalling
-│  │  ├─ environment.ts   Storybook URL / story-id helpers
-│  │  └─ testApi.ts       In-page editor test API (source of truth)
+│  │  ├─ scenario.ts      Scenario args (`ScenarioArgs`) + ready signalling
+│  │  ├─ outputs.ts       Observable Outputs Harness (`installOutputsHarness`)
+│  │  └─ environment.ts   Storybook URL / story-id helpers
 │  └─ setup/              Reusable scenario setup utilities (migrated from the
 │                         former JS-handle wrappers)
 └─ stories/
@@ -84,20 +98,35 @@ tests/storybook/
 Test stories live under `stories/tests/` and follow a single convention:
 
 - **Title:** `Tests/<Name>` (e.g. `Tests/HelloEditor`).
-- **Export:** `Default`.
+- **Exports:** **one named export per Playwright test case.** Each Playwright
+  test opens the prepared story for exactly that case, so a story file has as
+  many exports as its test has scenarios (e.g. `Welcome`, `Cleared`,
+  `ExternalLink`, `InternalLink` for `HelloEditor`). Story files that back a
+  single test case keep a single `Default` export.
 - **Story id:** Storybook derives a stable, kebab-cased id from title + export.
-  `Tests/HelloEditor` → `Default` becomes **`tests-helloeditor--default`**.
+  `Tests/HelloEditor` → `Welcome` becomes **`tests-helloeditor--welcome`**;
+  `Tests/Images` → `OpenInTabEnabled` becomes
+  **`tests-images--open-in-tab-enabled`**.
 
-A minimal example (`stories/tests/HelloEditor.stories.ts`):
+Each export is **fully prepared**: its `ScenarioArgs` bake in everything the
+test needs (data, mock contents, read-only state, blocked words, drag sources,
+…). Tests never arrange editor state at runtime — they only open the story and
+read/assert through locators.
+
+Because CSF requires statically analysable named exports, parametrised story
+families keep their per-case fixtures in a shared table in
+`@coremedia/ckeditor5-itest-constants` and expose each case through a small
+factory plus an explicit one-line export, e.g.:
 
 ```ts
 const meta: Meta<ScenarioArgs> = {
-  title: "Tests/HelloEditor",
-  args: { ...defaultScenarioArgs, dataType: "richtext", data: richTextData.Welcome },
+  title: "Tests/PasteButton",
   render: (args) => mountScenario(createEditorScenario, args),
 };
 export default meta;
-export const Default: StoryObj<ScenarioArgs> = {};
+
+export const OneLink: Story = pasteButtonStory(pasteButtonScenario.oneLink);
+export const SlowLinks: Story = pasteButtonStory(pasteButtonScenario.slowLinks);
 ```
 
 The Playwright preview iframe URL for a story id is:
@@ -108,52 +137,63 @@ http://localhost:6006/iframe.html?id=<storyId>&viewMode=story
 
 ## Story ↔ Test Mapping
 
-Each `*.test.ts` in `tests/playwright/test` targets the story with the matching
-name. The test declares the story id and opens it via `openStory(page, storyId)`:
+Each `*.test.ts` in `tests/playwright/test` targets the `Tests/<Name>` story
+group with the matching name; its individual test cases open the matching
+prepared export via `openStory(page, storyId)`. The story id of an export is
+`tests-<kebab(Name)>--<kebab(Export)>`.
 
-| Playwright test                        | Story (`Tests/…`)              | Story id                                       |
-| -------------------------------------- | ------------------------------ | ---------------------------------------------- |
-| `HelloEditor.test.ts`                  | `HelloEditor`                  | `tests-helloeditor--default`                   |
-| `Application.test.ts`                  | `Application`                  | `tests-application--default`                   |
-| `BBCode.test.ts`                       | `BBCode`                       | `tests-bbcode--default`                        |
-| `ContentLink.test.ts`                  | `ContentLink`                  | `tests-contentlink--default`                   |
-| `LinkBalloon.test.ts`                  | `LinkBalloon`                  | `tests-linkballoon--default`                   |
-| `LinkUserInteraction.test.ts`          | `LinkUserInteraction`          | `tests-linkuserinteraction--default`           |
-| `Blocklist.test.ts`                    | `Blocklist`                    | `tests-blocklist--default`                     |
-| `BlocklistCollapsed.test.ts`           | `BlocklistCollapsed`           | `tests-blocklistcollapsed--default`            |
-| `BlocklistExpandedToolbar.test.ts`     | `BlocklistExpandedToolbar`     | `tests-blocklistexpandedtoolbar--default`      |
-| `BlocklistExpandedKeyboard.test.ts`    | `BlocklistExpandedKeyboard`    | `tests-blocklistexpandedkeyboard--default`     |
-| `Differencing.test.ts`                 | `Differencing`                 | `tests-differencing--default`                  |
-| `DocumentLists.test.ts`                | `DocumentLists`                | `tests-documentlists--default`                 |
-| `DragDrop.test.ts`                     | `DragDrop`                     | `tests-dragdrop--default`                      |
-| `FontMapper.test.ts`                   | `FontMapper`                   | `tests-fontmapper--default`                    |
-| `Images.test.ts`                       | `Images`                       | `tests-images--default`                        |
-| `PasteButton.test.ts`                  | `PasteButton`                  | `tests-pastebutton--default`                   |
+| Playwright test                     | Story group (`Tests/…`)     | Prepared exports (story id `…--<kebab>`)                                                                                                       |
+| ----------------------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `HelloEditor.test.ts`               | `HelloEditor`               | `Welcome`, `Cleared`, `ExternalLink`, `InternalLink`                                                                                           |
+| `Application.test.ts`               | `Application`               | `Default`                                                                                                                                      |
+| `BBCode.test.ts`                    | `BBCode`                    | `BoldWord`                                                                                                                                     |
+| `ContentLink.test.ts`               | `ContentLink`               | `RenderWithName`, `KeyboardButtons`, `EmptyUrlForm`, `EmptyUrlKeyboard`, `AddWithKeyboard`, `SelectFromSuggestions`                            |
+| `LinkBalloon.test.ts`               | `LinkBalloon`               | `Default`                                                                                                                                      |
+| `LinkUserInteraction.test.ts`       | `LinkUserInteraction`       | `ExternalLink`, `ExternalLinkReadOnly`, `ContentLink`, `ContentLinkReadOnly`                                                                   |
+| `Blocklist.test.ts`                 | `Blocklist`                 | `Default`                                                                                                                                      |
+| `BlocklistCollapsed.test.ts`        | `BlocklistCollapsed`        | `Default`                                                                                                                                      |
+| `BlocklistExpandedToolbar.test.ts`  | `BlocklistExpandedToolbar`  | `Default`                                                                                                                                      |
+| `BlocklistExpandedKeyboard.test.ts` | `BlocklistExpandedKeyboard` | `Default`                                                                                                                                      |
+| `Differencing.test.ts`              | `Differencing`              | `Addition`, `Removal`, `Change`, `Conflict`, `AllAttributes`, `FalsePositiveNewline`, `AddedNewline`, `ImageChangetype`                        |
+| `DocumentLists.test.ts`             | `DocumentLists`             | one export per `ol-*`/`ul-*` case (e.g. `OlContainsAttributes` → `tests-documentlists--ol-contains-attributes`)                                |
+| `DragDrop.test.ts`                  | `DragDrop`                  | `OneLink`, `SlowLinks`, `MultipleLinks`, `ExternalLink`, `AlreadyImportedExternalLink`, …, `OneImage`, `MultipleImages`, `SlowImages`          |
+| `FontMapper.test.ts`                | `FontMapper`                | `Default`                                                                                                                                      |
+| `Images.test.ts`                    | `Images`                    | `NormalFast`, `SlowLoading`, `Unreadable`, `NoData`, `InvalidHref`, `Alignment`, `OpenInTabEnabled`, `OpenInTabDisabled`, `LinksNoLink`, `LinksWithLink` |
+| `PasteButton.test.ts`               | `PasteButton`               | `OneLink`, `SlowLinks`, `MultipleLinks`, `PasteViaKeyboardLink`, `OneImage`, `MultipleImages`, `SlowImages`                                    |
 
-> **Adding a test:** create `stories/tests/<Name>.stories.ts` with title
-> `Tests/<Name>` and export `Default`, then reference
-> `tests-<name>--default` from the new `<Name>.test.ts`.
+> **Adding a test case:** add a named export to
+> `stories/tests/<Name>.stories.ts` (sharing its fixture via
+> `@coremedia/ckeditor5-itest-constants` when parametrised), then reference
+> `tests-<name>--<kebab(export)>` from the corresponding test case.
 
-## In-Page Editor Test API
+## Observable Outputs Harness
 
-The runtime exposes a typed API on `window.coremediaEditorTestApi`
-(`EDITOR_TEST_API_GLOBAL = "coremediaEditorTestApi"`), defined in
-`src/runtime/testApi.ts`. It is the single channel through which tests
-manipulate the editor and its mock backends — replacing the old JS-handle
-wrappers. Methods include:
+Tests run with **Playwright locators only** — no `page.evaluate`. When a test
+must read a live value back from the running editor or a mock service, the story
+publishes it through the **Observable Outputs Harness**: stable, hidden DOM
+elements addressed by `data-test` ids, which Playwright reads with a locator.
 
-- data: `setData`, `getData`, `setDataAndGetDataView`, `focus`
-- mock content: `addMockContents`, `addMockExternalContents`,
-  `getLastOpenedEntities`
-- editor state: `setReadOnly`
-- feature setup: `addBlockedWord`, `addInputExampleElement`,
-  `validateIsDroppableState`, `validateIsDroppableInLinkBalloon`
+- `installOutputsHarness(editor, element, args)` (`src/runtime/outputs.ts`)
+  wires the requested outputs into `<pre data-test="…">` elements inside the
+  outputs container (`OUTPUTS_CONTAINER_CLASS`).
+- The available outputs (`OUTPUT_TEST_IDS` in
+  `@coremedia/ckeditor5-itest-constants`) are:
+  - `editor-data` — the current `editor.getData()`.
+  - `data-view` — the rendered `richtext:toView` data view (re-set from the
+    story's original loaded `data`, since `getData()` strips editing-only
+    augmentations such as `<xdiff:span>`).
+  - `last-opened-entities` — the awaited result of the work-area service's
+    `getLastOpenedEntities()`.
+  - `is-droppable-state` / `is-droppable-in-link-balloon` — drag-and-drop
+    droppability signals.
+- On the Playwright side, `tests/playwright/test/locators/outputs.ts` exposes
+  matching locator readers (`editorData`, `dataView`, `lastOpenedEntities`,
+  `isDroppableState`, `isDroppableInLinkBalloon`).
 
-The Playwright side keeps an independent, in-sync mirror in
-`tests/playwright/test/storybook/testApi.ts`, where each helper is a thin
-`(page, …args) => page.evaluate(…)` wrapper. The two copies are intentionally
-decoupled to avoid a build-time dependency between the packages — **keep them in
-sync** when adding API methods.
+> **The one exception** to the locators-only rule is `FontMapper.test.ts`, which
+> uses a single `page.evaluate` to write a `text/html` payload to the browser
+> clipboard (`ClipboardItem`) — a genuine browser-clipboard operation that has
+> no locator equivalent.
 
 ## How Playwright Targets Storybook
 
