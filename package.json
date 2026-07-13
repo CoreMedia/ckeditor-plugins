@@ -71,7 +71,6 @@
     "rimraf": "catalog:",
     "semver": "catalog:",
     "typedoc": "catalog:",
-    "typescript": "catalog:",
-    "validate-peer-dependencies": "catalog:"
+    "typescript": "catalog:"
   }
 }
