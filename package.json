@@ -44,8 +44,6 @@
     "doc:config": "typedoc --showConfig",
     "ui-test": "pnpm --recursive --filter \"@coremedia/ckeditor5-playwright-itest\" run ui-test",
     "test": "pnpm --recursive test",
-    "prettier": "prettier --check \"**/*.{js,cjs,mjs,ts,tsx}\"",
-    "prettier:fix": "prettier --write \"**/*.{js,cjs,mjs,ts,tsx}\"",
     "preinstall": "node ./scripts/check-pnpm.mjs",
     "start": "pnpm --recursive --filter \"@coremedia/ckeditor5-app\" start",
     "script:version": "node ./scripts/version.mjs"
@@ -66,7 +64,6 @@
     "eslint-plugin-tsdoc": "catalog:",
     "minimist": "catalog:",
     "package-directory": "catalog:",
-    "prettier": "catalog:",
     "rimraf": "catalog:",
     "semver": "catalog:",
     "typedoc": "catalog:",
