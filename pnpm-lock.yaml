@@ -126,9 +126,6 @@ catalogs:
     eslint:
       specifier: ^9.39.1
       version: 9.39.4
-    eslint-config-prettier:
-      specifier: ^10.1.8
-      version: 10.1.8
     eslint-plugin-import:
       specifier: ^2.32.0
       version: 2.32.0
@@ -195,9 +192,6 @@ catalogs:
     terser-webpack-plugin:
       specifier: ^5.3.10
       version: 5.6.0
-    ts-node:
-      specifier: ^10.9.2
-      version: 10.9.2
     tsx:
       specifier: ^4.20.6
       version: 4.22.4
@@ -254,9 +248,6 @@ importers:
       eslint:
         specifier: 'catalog:'
         version: 9.39.4(jiti@1.21.6)
-      eslint-config-prettier:
-        specifier: 'catalog:'
-        version: 10.1.8(eslint@9.39.4(jiti@1.21.6))
       eslint-plugin-import:
         specifier: 'catalog:'
         version: 2.32.0(@typescript-eslint/parser@8.60.0(eslint@9.39.4(jiti@1.21.6))(typescript@5.9.3))(eslint@9.39.4(jiti@1.21.6))
@@ -472,9 +463,6 @@ importers:
       rimraf:
         specifier: 'catalog:'
         version: 6.1.3
-      ts-node:
-        specifier: 'catalog:'
-        version: 10.9.2(@swc/core@1.15.41)(@types/node@24.12.4)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.22.4
@@ -513,9 +501,6 @@ importers:
       rimraf:
         specifier: 'catalog:'
         version: 6.1.3
-      ts-node:
-        specifier: 'catalog:'
-        version: 10.9.2(@swc/core@1.15.41)(@types/node@24.12.4)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.22.4
@@ -706,9 +691,6 @@ importers:
       rimraf:
         specifier: 'catalog:'
         version: 6.1.3
-      ts-node:
-        specifier: 'catalog:'
-        version: 10.9.2(@swc/core@1.15.41)(@types/node@24.12.4)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.22.4
@@ -731,7 +713,7 @@ importers:
         version: 24.12.4
       '@types/webpack':
         specifier: 'catalog:'
-        version: 5.28.5(@swc/core@1.15.41)(postcss@8.5.15)
+        version: 5.28.5(postcss@8.5.15)
       copyfiles:
         specifier: 'catalog:'
         version: 2.4.1
@@ -747,9 +729,6 @@ importers:
       rimraf:
         specifier: 'catalog:'
         version: 6.1.3
-      ts-node:
-        specifier: 'catalog:'
-        version: 10.9.2(@swc/core@1.15.41)(@types/node@24.12.4)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.22.4
@@ -855,9 +834,6 @@ importers:
       rimraf:
         specifier: 'catalog:'
         version: 6.1.3
-      ts-node:
-        specifier: 'catalog:'
-        version: 10.9.2(@swc/core@1.15.41)(@types/node@24.12.4)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.22.4
@@ -920,9 +896,6 @@ importers:
       rimraf:
         specifier: 'catalog:'
         version: 6.1.3
-      ts-node:
-        specifier: 'catalog:'
-        version: 10.9.2(@swc/core@1.15.41)(@types/node@24.12.4)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.22.4
@@ -964,9 +937,6 @@ importers:
       rimraf:
         specifier: 'catalog:'
         version: 6.1.3
-      ts-node:
-        specifier: 'catalog:'
-        version: 10.9.2(@swc/core@1.15.41)(@types/node@24.12.4)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.22.4
@@ -1034,9 +1004,6 @@ importers:
       rimraf:
         specifier: 'catalog:'
         version: 6.1.3
-      ts-node:
-        specifier: 'catalog:'
-        version: 10.9.2(@swc/core@1.15.41)(@types/node@24.12.4)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.22.4
@@ -1087,9 +1054,6 @@ importers:
       rimraf:
         specifier: 'catalog:'
         version: 6.1.3
-      ts-node:
-        specifier: 'catalog:'
-        version: 10.9.2(@swc/core@1.15.41)(@types/node@24.12.4)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.22.4
@@ -1134,9 +1098,6 @@ importers:
       rimraf:
         specifier: 'catalog:'
         version: 6.1.3
-      ts-node:
-        specifier: 'catalog:'
-        version: 10.9.2(@swc/core@1.15.41)(@types/node@24.12.4)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.22.4
@@ -1181,9 +1142,6 @@ importers:
       rimraf:
         specifier: 'catalog:'
         version: 6.1.3
-      ts-node:
-        specifier: 'catalog:'
-        version: 10.9.2(@swc/core@1.15.41)(@types/node@24.12.4)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.22.4
@@ -1244,9 +1202,6 @@ importers:
       rimraf:
         specifier: 'catalog:'
         version: 6.1.3
-      ts-node:
-        specifier: 'catalog:'
-        version: 10.9.2(@swc/core@1.15.41)(@types/node@24.12.4)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.22.4
@@ -1282,9 +1237,6 @@ importers:
       rimraf:
         specifier: 'catalog:'
         version: 6.1.3
-      ts-node:
-        specifier: 'catalog:'
-        version: 10.9.2(@swc/core@1.15.41)(@types/node@24.12.4)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.22.4
@@ -1313,7 +1265,7 @@ importers:
         version: 24.12.4
       '@types/webpack':
         specifier: 'catalog:'
-        version: 5.28.5(@swc/core@1.15.41)(postcss@8.5.15)
+        version: 5.28.5(postcss@8.5.15)
       ckeditor5:
         specifier: 'catalog:'
         version: 48.1.1
@@ -1332,9 +1284,6 @@ importers:
       rimraf:
         specifier: 'catalog:'
         version: 6.1.3
-      ts-node:
-        specifier: 'catalog:'
-        version: 10.9.2(@swc/core@1.15.41)(@types/node@24.12.4)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.22.4
@@ -1392,9 +1341,6 @@ importers:
       rimraf:
         specifier: 'catalog:'
         version: 6.1.3
-      ts-node:
-        specifier: 'catalog:'
-        version: 10.9.2(@swc/core@1.15.41)(@types/node@24.12.4)(typescript@5.9.3)
       tsx:
         specifier: 'catalog:'
         version: 4.22.4
@@ -2554,10 +2500,6 @@ packages:
     peerDependencies:
       eslint: ^9.39.1
 
-  '@cspotcode/source-map-support@0.8.1':
-    resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
-    engines: {node: '>=12'}
-
   '@csstools/color-helpers@5.1.0':
     resolution: {integrity: sha512-S11EXWJyy0Mz5SYvRmY8nJYTFFd1LCNV+7cXyAgQtOOuzb4EsgfqDufL+9esx72/eLhsRdGZwaldu/h+E4t4BA==}
     engines: {node: '>=18'}
@@ -3207,9 +3149,6 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@jridgewell/trace-mapping@0.3.9':
-    resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
-
   '@kwsites/file-exists@1.1.1':
     resolution: {integrity: sha512-m9/5YGR18lIwxSFDwfE3oA7bWuq9kdau6ugN4H2rJeyhFQZcG9AgSHkQtSD15a8WvTgfz9aikZMrKPHvbpqFiw==}
 
@@ -3677,18 +3616,6 @@ packages:
     engines: {node: '>=12', npm: '>=6'}
     peerDependencies:
       '@testing-library/dom': '>=7.21.4'
-
-  '@tsconfig/node10@1.0.11':
-    resolution: {integrity: sha512-DcRjDCujK/kCk/cUe8Xz8ZSpm8mS3mNNpta+jGCA6USEDfktlNvm1+IuZ9eTcDbNk41BHwpHHeW+N1lKCz4zOw==}
-
-  '@tsconfig/node12@1.0.11':
-    resolution: {integrity: sha512-cqefuRsh12pWyGsIoBKJA9luFu3mRxCA+ORZvA4ktLSzIuCUtWVxGIuXigEwO5/ywWFMZ2QEGKWvkZG1zDMTag==}
-
-  '@tsconfig/node14@1.0.3':
-    resolution: {integrity: sha512-ysT8mhdixWK6Hw3i1V2AeRqZ5WfXg1G43mqoYlM2nc6388Fq5jcXyr5mRsqViLx/GJYdoL0bfXD8nmF+Zn/Iow==}
-
-  '@tsconfig/node16@1.0.4':
-    resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
 
   '@tufjs/canonical-json@2.0.0':
     resolution: {integrity: sha512-yVtV8zsdo8qFHe+/3kw81dSLyF7D576A5cCFCi4X7B39tWT7SekaEFUnvnWJHz+9qO7qJTah1JbrDjWKqFtdWA==}
@@ -4200,10 +4127,6 @@ packages:
     peerDependencies:
       acorn: ^6.0.0 || ^7.0.0 || ^8.0.0
 
-  acorn-walk@8.3.3:
-    resolution: {integrity: sha512-MxXdReSRhGO7VlFe1bRG/oI7/mdLV9B9JJT0N8vZOhF7gFRR5l3M8W9G8JxmKV+JC5mGqJ0QvqfSOLsCPa4nUw==}
-    engines: {node: '>=0.4.0'}
-
   acorn@8.16.0:
     resolution: {integrity: sha512-UVJyE9MttOsBQIDKw1skb9nAwQuR5wuGD3+82K6JgJlm/Y+KI92oNsMNGZCYdDsVtRHSak0pcV5Dno5+4jh9sw==}
     engines: {node: '>=0.4.0'}
@@ -4272,9 +4195,6 @@ packages:
   are-docs-informative@0.0.2:
     resolution: {integrity: sha512-ixiS0nLNNG5jNQzgZJNoUpBKdo9yTYZMGJ+QgT2jmjR7G7+QHRCc4v6LQ3NgE7EBJq+o0ams3waJwkrlBom8Ig==}
     engines: {node: '>=14'}
-
-  arg@4.1.3:
-    resolution: {integrity: sha512-58S9QDqG0Xx27YwPSt9fJxivjYl432YCwfDMfZ+71RAqUrZef7LrKQZ3LHLOwCS4FLNBplP533Zx895SeOCHvA==}
 
   argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
@@ -4631,9 +4551,6 @@ packages:
       typescript:
         optional: true
 
-  create-require@1.1.1:
-    resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
-
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
@@ -4760,10 +4677,6 @@ packages:
 
   devlop@1.1.0:
     resolution: {integrity: sha512-RWmIqhcFf1lRYBvNmr7qTNuyCt/7/ns2jbpp1+PalgE/rDQcBT0fioSMUpJ93irlUhC5hrg4cYqe6U+0ImW0rA==}
-
-  diff@4.0.4:
-    resolution: {integrity: sha512-X07nttJQkwkfKfvTPG/KSnE2OMdcUCao6+eXF3wmnIQRn2aPAHH3VxDbDOdegkd6JbPsXqShpvEOHfAT+nCNwQ==}
-    engines: {node: '>=0.3.1'}
 
   doctrine@2.1.0:
     resolution: {integrity: sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw==}
@@ -5912,9 +5825,6 @@ packages:
   make-dir@3.1.0:
     resolution: {integrity: sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw==}
     engines: {node: '>=8'}
-
-  make-error@1.3.6:
-    resolution: {integrity: sha512-s8UhlNe7vPKomQhC1qFelMokr/Sc3AgNbso3n74mVPA5LTZwkB9NlXf4XPamLxJE8h0gh73rM94xvwRT2CVInw==}
 
   make-fetch-happen@15.0.5:
     resolution: {integrity: sha512-uCbIa8jWWmQZt4dSnEStkVC6gdakiinAm4PiGsywIkguF0eWMdcjDz0ECYhUolFU3pFLOev9VNPCEygydXnddg==}
@@ -7135,20 +7045,6 @@ packages:
     resolution: {integrity: sha512-JfJeIHke7y2egdGGgRAvpCwYFUsHlM2gPcrVOxFkznt/4uzQ7HFmvE63iFHVLBJNDuyDOQgijDK/tXH/f6Msjg==}
     engines: {node: '>=6.10'}
 
-  ts-node@10.9.2:
-    resolution: {integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==}
-    hasBin: true
-    peerDependencies:
-      '@swc/core': '>=1.2.50'
-      '@swc/wasm': '>=1.2.50'
-      '@types/node': '*'
-      typescript: '>=2.7'
-    peerDependenciesMeta:
-      '@swc/core':
-        optional: true
-      '@swc/wasm':
-        optional: true
-
   tsconfig-paths@3.15.0:
     resolution: {integrity: sha512-2Ac2RgzDe/cn48GvOe3M+o82pEFewD3UPbyoUHHdKasHwJKjds4fLXWf/Ux5kATBKN20oaFGu+jbElp1pos0mg==}
 
@@ -7311,9 +7207,6 @@ packages:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
-
-  v8-compile-cache-lib@3.0.1:
-    resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
 
   validate-npm-package-name@7.0.2:
     resolution: {integrity: sha512-hVDIBwsRruT73PbK7uP5ebUt+ezEtCmzZz3F59BSr2F6OVFnJ/6h8liuvdLrQ88Xmnk6/+xGGuq+pG9WwTuy3A==}
@@ -7533,10 +7426,6 @@ packages:
   yargs@18.0.0:
     resolution: {integrity: sha512-4UEqdc2RYGHZc7Doyqkrqiln3p9X2DZVxaGbwhn2pi7MrRagKaOcIKe8L3OxYcbhXLgLFUS3zAYuQjKBQgmuNg==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=23}
-
-  yn@3.1.1:
-    resolution: {integrity: sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q==}
-    engines: {node: '>=6'}
 
   yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
@@ -8910,6 +8799,8 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.6.2
       '@ckeditor/ckeditor5-widget': 47.6.2
       ckeditor5: 47.6.2
+    transitivePeerDependencies:
+      - supports-color
 
   '@ckeditor/ckeditor5-html-embed@48.1.1':
     dependencies:
@@ -8997,8 +8888,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.6.2
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-indent@48.1.1':
     dependencies:
@@ -9019,8 +8908,6 @@ snapshots:
       '@ckeditor/ckeditor5-ui': 47.6.2
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-language@48.1.1':
     dependencies:
@@ -9042,8 +8929,6 @@ snapshots:
       '@ckeditor/ckeditor5-widget': 47.6.2
       ckeditor5: 47.6.2
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-link@48.1.1':
     dependencies:
@@ -9072,8 +8957,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 47.6.2
       ckeditor5: 47.6.2
       es-toolkit: 1.39.5
-    transitivePeerDependencies:
-      - supports-color
 
   '@ckeditor/ckeditor5-list@48.1.1':
     dependencies:
@@ -9649,10 +9532,6 @@ snapshots:
       - supports-color
       - typescript
 
-  '@cspotcode/source-map-support@0.8.1':
-    dependencies:
-      '@jridgewell/trace-mapping': 0.3.9
-
   '@csstools/color-helpers@5.1.0': {}
 
   '@csstools/css-calc@2.1.4(@csstools/css-parser-algorithms@3.0.5(@csstools/css-tokenizer@3.0.4))(@csstools/css-tokenizer@3.0.4)':
@@ -10072,11 +9951,6 @@ snapshots:
   '@jridgewell/sourcemap-codec@1.5.5': {}
 
   '@jridgewell/trace-mapping@0.3.31':
-    dependencies:
-      '@jridgewell/resolve-uri': 3.1.2
-      '@jridgewell/sourcemap-codec': 1.5.0
-
-  '@jridgewell/trace-mapping@0.3.9':
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
@@ -10695,14 +10569,6 @@ snapshots:
     dependencies:
       '@testing-library/dom': 10.4.0
 
-  '@tsconfig/node10@1.0.11': {}
-
-  '@tsconfig/node12@1.0.11': {}
-
-  '@tsconfig/node14@1.0.3': {}
-
-  '@tsconfig/node16@1.0.4': {}
-
   '@tufjs/canonical-json@2.0.0': {}
 
   '@tufjs/models@4.1.0':
@@ -10784,11 +10650,11 @@ snapshots:
 
   '@types/uuid@9.0.8': {}
 
-  '@types/webpack@5.28.5(@swc/core@1.15.41)(postcss@8.5.15)':
+  '@types/webpack@5.28.5(postcss@8.5.15)':
     dependencies:
       '@types/node': 24.12.4
       tapable: 2.3.3
-      webpack: 5.107.1(@swc/core@1.15.41)(postcss@8.5.15)
+      webpack: 5.107.1(postcss@8.5.15)
     transitivePeerDependencies:
       - '@minify-html/node'
       - '@swc/core'
@@ -11296,10 +11162,6 @@ snapshots:
     dependencies:
       acorn: 8.16.0
 
-  acorn-walk@8.3.3:
-    dependencies:
-      acorn: 8.16.0
-
   acorn@8.16.0: {}
 
   agent-base@7.1.4: {}
@@ -11358,8 +11220,6 @@ snapshots:
       picomatch: 2.3.2
 
   are-docs-informative@0.0.2: {}
-
-  arg@4.1.3: {}
 
   argparse@2.0.1: {}
 
@@ -11878,8 +11738,6 @@ snapshots:
     optionalDependencies:
       typescript: 5.9.3
 
-  create-require@1.1.1: {}
-
   cross-spawn@7.0.6:
     dependencies:
       path-key: 3.1.1
@@ -12031,8 +11889,6 @@ snapshots:
   devlop@1.1.0:
     dependencies:
       dequal: 2.0.3
-
-  diff@4.0.4: {}
 
   doctrine@2.1.0:
     dependencies:
@@ -13425,8 +13281,6 @@ snapshots:
   make-dir@3.1.0:
     dependencies:
       semver: 6.3.1
-
-  make-error@1.3.6: {}
 
   make-fetch-happen@15.0.5:
     dependencies:
@@ -14851,17 +14705,6 @@ snapshots:
       esbuild: 0.25.12
       postcss: 8.5.15
 
-  terser-webpack-plugin@5.6.0(@swc/core@1.15.41)(postcss@8.5.15)(webpack@5.107.1(@swc/core@1.15.41)(postcss@8.5.15)):
-    dependencies:
-      '@jridgewell/trace-mapping': 0.3.31
-      jest-worker: 27.5.1
-      schema-utils: 4.3.3
-      terser: 5.48.0
-      webpack: 5.107.1(@swc/core@1.15.41)(postcss@8.5.15)
-    optionalDependencies:
-      '@swc/core': 1.15.41
-      postcss: 8.5.15
-
   terser-webpack-plugin@5.6.0(postcss@8.5.15)(webpack@5.107.1(postcss@8.5.15)):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
@@ -14938,26 +14781,6 @@ snapshots:
       typescript: 5.9.3
 
   ts-dedent@2.3.0: {}
-
-  ts-node@10.9.2(@swc/core@1.15.41)(@types/node@24.12.4)(typescript@5.9.3):
-    dependencies:
-      '@cspotcode/source-map-support': 0.8.1
-      '@tsconfig/node10': 1.0.11
-      '@tsconfig/node12': 1.0.11
-      '@tsconfig/node14': 1.0.3
-      '@tsconfig/node16': 1.0.4
-      '@types/node': 24.12.4
-      acorn: 8.16.0
-      acorn-walk: 8.3.3
-      arg: 4.1.3
-      create-require: 1.1.1
-      diff: 4.0.4
-      make-error: 1.3.6
-      typescript: 5.9.3
-      v8-compile-cache-lib: 3.0.1
-      yn: 3.1.1
-    optionalDependencies:
-      '@swc/core': 1.15.41
 
   tsconfig-paths@3.15.0:
     dependencies:
@@ -15178,8 +15001,6 @@ snapshots:
 
   uuid@9.0.1: {}
 
-  v8-compile-cache-lib@3.0.1: {}
-
   validate-npm-package-name@7.0.2: {}
 
   validate-peer-dependencies@2.2.0:
@@ -15278,45 +15099,6 @@ snapshots:
       schema-utils: 4.3.3
       tapable: 2.3.3
       terser-webpack-plugin: 5.6.0(@swc/core@1.15.41)(esbuild@0.25.12)(postcss@8.5.15)(webpack@5.107.1(@swc/core@1.15.41)(esbuild@0.25.12)(postcss@8.5.15))
-      watchpack: 2.5.1
-      webpack-sources: 3.4.1
-    transitivePeerDependencies:
-      - '@minify-html/node'
-      - '@swc/core'
-      - '@swc/css'
-      - '@swc/html'
-      - clean-css
-      - cssnano
-      - csso
-      - esbuild
-      - html-minifier-terser
-      - lightningcss
-      - postcss
-      - uglify-js
-
-  webpack@5.107.1(@swc/core@1.15.41)(postcss@8.5.15):
-    dependencies:
-      '@types/estree': 1.0.8
-      '@types/json-schema': 7.0.15
-      '@webassemblyjs/ast': 1.14.1
-      '@webassemblyjs/wasm-edit': 1.14.1
-      '@webassemblyjs/wasm-parser': 1.14.1
-      acorn: 8.16.0
-      acorn-import-phases: 1.0.4(acorn@8.16.0)
-      browserslist: 4.28.2
-      chrome-trace-event: 1.0.4
-      enhanced-resolve: 5.21.6
-      es-module-lexer: 2.1.0
-      eslint-scope: 5.1.1
-      events: 3.3.0
-      glob-to-regexp: 0.4.1
-      graceful-fs: 4.2.11
-      loader-runner: 4.3.2
-      mime-db: 1.54.0
-      neo-async: 2.6.2
-      schema-utils: 4.3.3
-      tapable: 2.3.3
-      terser-webpack-plugin: 5.6.0(@swc/core@1.15.41)(postcss@8.5.15)(webpack@5.107.1(@swc/core@1.15.41)(postcss@8.5.15))
       watchpack: 2.5.1
       webpack-sources: 3.4.1
     transitivePeerDependencies:
@@ -15555,8 +15337,6 @@ snapshots:
       string-width: 7.2.0
       y18n: 5.0.8
       yargs-parser: 22.0.0
-
-  yn@3.1.1: {}
 
   yocto-queue@0.1.0: {}
 

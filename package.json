@@ -61,7 +61,6 @@
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",
     "eslint": "catalog:",
-    "eslint-config-prettier": "catalog:",
     "eslint-plugin-import": "catalog:",
     "eslint-plugin-jsdoc": "catalog:",
     "eslint-plugin-prettier": "catalog:",
