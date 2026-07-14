@@ -34,7 +34,6 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "bootstrap": "pnpm install",
     "publishall": "pnpm --recursive publish",
     "setversion": "set-version",
     "clean": "pnpm --recursive run clean",
