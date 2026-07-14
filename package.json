@@ -61,7 +61,6 @@
     "eslint-plugin-import": "catalog:",
     "eslint-plugin-jsdoc": "catalog:",
     "eslint-plugin-prettier": "catalog:",
-    "eslint-plugin-tsdoc": "catalog:",
     "minimist": "catalog:",
     "package-directory": "catalog:",
     "rimraf": "catalog:",

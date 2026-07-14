@@ -2,9 +2,11 @@ packages:
   - packages/*
   - tests/*
   - app
+
 allowBuilds:
   esbuild: true
   unrs-resolver: true
+
 catalog:
   '@bbob/core': 4.3.1
   '@bbob/html': 4.3.1
@@ -33,7 +35,6 @@ catalog:
   '@storybook/html-webpack5': ^8.6.14
   '@storybook/test': ^8.6.14
   '@stylistic/eslint-plugin': ^5.2.3
-  '@types/eslint': ^9.6.1
   '@types/node': ^24.12.4
   '@types/webpack': ^5.28.5
   '@typescript-eslint/parser': ^8.39.1
@@ -48,7 +49,6 @@ catalog:
   eslint-plugin-import: ^2.32.0
   eslint-plugin-jsdoc: ^54.0.0
   eslint-plugin-prettier: ^5.5.4
-  eslint-plugin-tsdoc: ^0.5.2
   expect: ^30.4.1
   express: ^5.1.0
   global-jsdom: ^27.0.0
@@ -80,6 +80,8 @@ minimumReleaseAgeExclude:
   - '@coremedia-internal/*'
   - '@jangaroo/*'
 onlyBuiltDependencies:
+  - '@swc/core'
   - esbuild
+  - unrs-resolver
 patchedDependencies:
   '@bbob/preset-html5': patches/@bbob__preset-html5.patch
