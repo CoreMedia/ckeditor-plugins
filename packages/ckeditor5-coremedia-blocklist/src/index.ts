@@ -10,3 +10,4 @@
 
 export { default as Blocklist } from "./blocklist";
 export { default as BlocklistActionsView } from "./ui/blocklistActionsView";
+export { de, en } from "./translations";

@@ -1,19 +1,18 @@
 import { ifCommand } from "@coremedia/ckeditor5-core-common";
 import type {
+  DomOptimalPositionOptions,
   ModelTextProxy,
   ViewAttributeElement,
   ViewDocumentClickEvent,
   ViewDocumentFragment,
   ViewNode,
   ViewPosition,
-  DomOptimalPositionOptions,
 } from "ckeditor5";
-import { Plugin, ButtonView, clickOutsideHandler, ContextualBalloon } from "ckeditor5";
+import { ButtonView, clickOutsideHandler, ContextualBalloon, Plugin } from "ckeditor5";
 import blocklistIcon from "../theme/icons/blocklist.svg";
 import type BlocklistCommand from "./blocklistCommand";
 import { BLOCKLIST_COMMAND_NAME } from "./blocklistCommand";
 import BlocklistActionsView from "./ui/blocklistActionsView";
-import "./lang/blocklist";
 import type { UnblockEvent } from "./ui/blockedWordView";
 import BlocklistEditing from "./blocklistediting";
 

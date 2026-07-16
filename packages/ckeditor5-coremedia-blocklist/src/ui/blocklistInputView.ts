@@ -1,14 +1,13 @@
-import type { ViewCollection, InputTextView, Locale } from "ckeditor5";
+import type { InputTextView, Locale, ViewCollection } from "ckeditor5";
 import {
   ButtonView,
-  LabeledFieldView,
-  View,
   createLabeledInputText,
-  submitHandler,
-  KeystrokeHandler,
   IconCheck,
+  KeystrokeHandler,
+  LabeledFieldView,
+  submitHandler,
+  View,
 } from "ckeditor5";
-import "../lang/blocklist";
 
 /**
  * A view, displaying an input field and a save button next to it.
