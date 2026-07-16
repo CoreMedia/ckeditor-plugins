@@ -7,10 +7,21 @@ import {
   ContentLinks,
   COREMEDIA_CONTEXT_KEY,
   COREMEDIA_LINK_CONFIG_KEY,
+  de as deLinkTranslations,
+  en as enLinkTranslations,
   LinkTarget,
 } from "@coremedia/ckeditor5-coremedia-link";
-import { ContentClipboard, PasteContentPlugin } from "@coremedia/ckeditor5-coremedia-content-clipboard";
-import { ContentImagePlugin } from "@coremedia/ckeditor5-coremedia-images";
+import {
+  ContentClipboard,
+  de as deClipboardTranslations,
+  en as enClipboardTranslations,
+  PasteContentPlugin,
+} from "@coremedia/ckeditor5-coremedia-content-clipboard";
+import {
+  ContentImagePlugin,
+  de as deImagesTranslations,
+  en as enImagesTranslations,
+} from "@coremedia/ckeditor5-coremedia-images";
 import { FontMapper as CoreMediaFontMapper } from "@coremedia/ckeditor5-font-mapper";
 import {
   COREMEDIA_MOCK_CONTENT_PLUGIN,
@@ -63,6 +74,8 @@ import {
   TableToolbar,
   Underline,
 } from "ckeditor5";
+import enCoreTranslations from "ckeditor5/translations/en.js";
+import deCoreTranslations from "ckeditor5/translations/de.js";
 import type { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
 import type {
   LatestCoreMediaRichTextConfig,
@@ -78,7 +91,11 @@ import type { FilterRuleSetConfiguration } from "@coremedia/ckeditor5-dataproces
 import type { LinkAttributesConfig } from "@coremedia/ckeditor5-link-common";
 import { LinkAttributes } from "@coremedia/ckeditor5-link-common";
 import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing";
-import { Blocklist } from "@coremedia/ckeditor5-coremedia-blocklist";
+import {
+  Blocklist,
+  de as deBlocklistTranslations,
+  en as enBlocklistTranslations,
+} from "@coremedia/ckeditor5-coremedia-blocklist";
 import { DataFacade } from "@coremedia/ckeditor5-data-facade";
 import type { CKEditorInstanceFactory } from "../CKEditorInstanceFactory";
 import type { ApplicationState } from "../ApplicationState";
@@ -418,6 +435,18 @@ export const createRichTextEditor: CKEditorInstanceFactory = async (
         // Won't change the language of content.
         content: "en",
       },
+      translations: [
+        enCoreTranslations,
+        deCoreTranslations,
+        enBlocklistTranslations,
+        deBlocklistTranslations,
+        enImagesTranslations,
+        deImagesTranslations,
+        enLinkTranslations,
+        deLinkTranslations,
+        enClipboardTranslations,
+        deClipboardTranslations,
+      ],
       autosave: {
         waitingTime: 1000, // in ms
       },
