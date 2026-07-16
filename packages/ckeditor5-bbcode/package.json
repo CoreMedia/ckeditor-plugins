@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-bbcode",
-  "version": "27.0.0",
+  "version": "28.0.0",
   "type": "module",
   "description": "BBCode Data-Processor",
   "author": {
@@ -59,10 +59,10 @@
     "@bbob/preset": "catalog:",
     "@bbob/preset-html5": "catalog:",
     "@bbob/types": "catalog:",
-    "@coremedia/ckeditor5-common": "workspace:^27.0.0",
-    "@coremedia/ckeditor5-core-common": "workspace:^27.0.0",
-    "@coremedia/ckeditor5-dom-support": "workspace:^27.0.0",
-    "@coremedia/ckeditor5-logging": "workspace:^27.0.0"
+    "@coremedia/ckeditor5-common": "workspace:28.0.0",
+    "@coremedia/ckeditor5-core-common": "workspace:28.0.0",
+    "@coremedia/ckeditor5-dom-support": "workspace:28.0.0",
+    "@coremedia/ckeditor5-logging": "workspace:28.0.0"
   },
   "devDependencies": {
     "@coremedia-internal/studio-client.test-runner-helper": "catalog:",
