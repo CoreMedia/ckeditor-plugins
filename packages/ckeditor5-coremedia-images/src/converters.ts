@@ -9,18 +9,17 @@ import { LoggerProvider } from "@coremedia/ckeditor5-logging";
 import { serviceAgent } from "@coremedia/service-agent";
 import type {
   DowncastDispatcher,
-  ViewDowncastWriter,
   Editor,
-  ModelElement,
   EventInfo,
+  ModelElement,
   UpcastConversionApi,
   UpcastDispatcher,
+  ViewDowncastWriter,
   ViewElement,
 } from "ckeditor5";
 import { IMAGE_PLUGIN_NAME, IMAGE_SPINNER_CSS_CLASS, IMAGE_SPINNER_SVG } from "./constants";
 import ModelBoundSubscriptionPlugin from "./ModelBoundSubscriptionPlugin";
 import "../theme/loadmask.css";
-import "./lang/contentimage";
 
 const LOGGER = LoggerProvider.getLogger(IMAGE_PLUGIN_NAME);
 
@@ -62,14 +61,12 @@ export const preventUpcastImageSrc =
     dispatcher.on(
       `element:img`,
       (evt: EventInfo, data, conversionApi: UpcastConversionApi) => {
-        // eslint-disable-next-line
-          if (data.viewItem.hasAttribute("data-xlink-href")) {
-          // eslint-disable-next-line
-            conversionApi.consumable.consume(data.viewItem, {
+        if (data.viewItem.hasAttribute("data-xlink-href")) {
+          conversionApi.consumable.consume(data.viewItem, {
             attributes: "src",
           });
-          // eslint-disable-next-line
-            data.viewItem._removeAttribute("src");
+
+          data.viewItem._removeAttribute("src");
         }
       },
       {

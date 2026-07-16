@@ -1,6 +1,10 @@
 import { BBCode } from "@coremedia/ckeditor5-bbcode";
 import { DataFacade } from "@coremedia/ckeditor5-data-facade";
-import { Blocklist } from "@coremedia/ckeditor5-coremedia-blocklist";
+import {
+  Blocklist,
+  de as deBlocklistTranslations,
+  en as enBlocklistTranslations,
+} from "@coremedia/ckeditor5-coremedia-blocklist";
 import { MockBlocklistService } from "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock";
 import {
   Autoformat,
@@ -34,6 +38,8 @@ import {
   Strikethrough,
   Underline,
 } from "ckeditor5";
+import enCoreTranslations from "ckeditor5/translations/en.js";
+import deCoreTranslations from "ckeditor5/translations/de.js";
 import { updatePreview } from "../preview";
 import type { ApplicationState } from "../ApplicationState";
 import type { CKEditorInstanceFactory } from "../CKEditorInstanceFactory";
@@ -298,6 +304,7 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
         // Won't change the language of content.
         content: "en",
       },
+      translations: [enCoreTranslations, deCoreTranslations, enBlocklistTranslations, deBlocklistTranslations],
       list: {
         properties: {
           startIndex: false,

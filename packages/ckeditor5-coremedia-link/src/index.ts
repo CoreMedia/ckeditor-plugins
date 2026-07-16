@@ -32,4 +32,5 @@ export { default as LinkTargetCommand } from "./linktarget/command/LinkTargetCom
 export { default as LinkTargetModelView } from "./linktarget/LinkTargetModelView";
 export { default as CustomLinkTargetUI } from "./linktarget/ui/CustomLinkTargetUI";
 
+export { de, en } from "./translations";
 import "./augmentation";

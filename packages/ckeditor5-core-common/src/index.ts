@@ -10,6 +10,6 @@ export {
   type InitInformation,
   type OnMissingPlugin,
 } from "./Plugins";
-export { addTranslations, openLink } from "./utils";
+export { openLink } from "./utils";
 export type { CommandHandler } from "./Commands";
 export { disableCommand, enableCommand, ifCommand, optionalCommandNotFound, recommendCommand } from "./Commands";
