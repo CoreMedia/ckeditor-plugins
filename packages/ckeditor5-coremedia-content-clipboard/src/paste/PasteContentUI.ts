@@ -2,7 +2,6 @@ import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common
 import type { Editor } from "ckeditor5";
 import { ButtonView, Plugin } from "ckeditor5";
 import pasteIcon from "../../theme/icons/paste.svg";
-import "../lang/paste";
 
 export default class PasteContentUI extends Plugin {
   static readonly pluginName = "pasteContentUI";
