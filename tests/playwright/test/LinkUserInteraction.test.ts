@@ -5,7 +5,7 @@ import { editor } from "./locators/editor";
 import { applicationUrl } from "./utils/environment";
 import { ApplicationWrapper } from "./wrappers/ApplicationWrapper";
 
-const externalLinkUrl = "https://www.coremedia.com/";
+const externalLinkUrl = "https://www.google.de/index.html/";
 
 /**
  * Tests mouse and keyboard interaction with links in ckeditor.
