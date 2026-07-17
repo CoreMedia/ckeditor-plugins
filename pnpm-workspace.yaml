@@ -28,7 +28,7 @@ catalog:
   '@playwright/test': ^1.59.1
   '@stylistic/eslint-plugin': ^5.2.3
   '@types/eslint': ^9.6.1
-  '@types/node': ^24.12.4
+  '@types/node': ^24.13.3
   '@types/webpack': ^5.28.5
   '@typescript-eslint/eslint-plugin': ^8.39.1
   '@typescript-eslint/parser': ^8.39.1
