@@ -24,9 +24,14 @@ declare global {
  * Initializes an editor for a scenario. Concrete initializers (richtext /
  * bbcode), together with the migrated mock-content setup, are provided by the
  * Storybook story-setup utilities. The signature is the contract: given a host
- * element and the resolved scenario args, return the ready editor instance.
+ * element and the resolved scenario args, return the ready editor instance and
+ * a cleanup function that undoes any side-effects (e.g. DOM elements added to
+ * document.body).
  */
-export type ScenarioInitializer = (host: HTMLElement, args: ScenarioArgs) => Promise<ClassicEditor>;
+export type ScenarioInitializer = (
+  host: HTMLElement,
+  args: ScenarioArgs,
+) => Promise<{ editor: ClassicEditor; cleanup: () => void }>;
 
 /**
  * Resolves once the given element is attached to the document. CKEditor's
@@ -79,20 +84,22 @@ export const mountScenario = (initialize: ScenarioInitializer, args?: Partial<Sc
 
   void whenAttached(host)
     .then(() => initialize(host, resolvedArgs))
-    .then((editor) => {
+    .then(({ editor, cleanup: scenarioCleanup }) => {
       window.editor = editor;
-      const cleanup = installOutputsHarness(container, editor, resolvedArgs);
-      if (cleanup) {
-        // ponytail: MutationObserver is the only way to detect removal without
-        // changing every story's render function.
-        const observer = new MutationObserver(() => {
-          if (!container.isConnected) {
-            observer.disconnect();
-            cleanup();
-          }
-        });
-        observer.observe(document.body, { childList: true, subtree: true });
-      }
+      const outputsCleanup = installOutputsHarness(container, editor, resolvedArgs);
+      const cleanup = (): void => {
+        scenarioCleanup();
+        outputsCleanup();
+      };
+      // ponytail: MutationObserver is the only way to detect removal without
+      // changing every story's render function.
+      const observer = new MutationObserver(() => {
+        if (!container.isConnected) {
+          observer.disconnect();
+          cleanup();
+        }
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
       container.setAttribute(EDITOR_READY_ATTRIBUTE, "true");
     })
     .catch((error: unknown) => {

@@ -30,6 +30,6 @@ export const editorFactories: Record<ScenarioDataType, EditorFactory> = {
 export const createEditorScenario: ScenarioInitializer = async (host, args) => {
   const factory = editorFactories[args.dataType];
   const editor = await factory(host, args);
-  await applyScenario(editor, args);
-  return editor;
+  const cleanup = await applyScenario(editor, args);
+  return { editor, cleanup };
 };

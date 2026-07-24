@@ -24,7 +24,7 @@ export const SCENARIO_READ_ONLY_LOCK_ID = "storybook-scenario";
  * @param editor - freshly created editor instance
  * @param args - resolved scenario args
  */
-export const applyScenario = async (editor: ClassicEditor, args: ScenarioArgs): Promise<void> => {
+export const applyScenario = async (editor: ClassicEditor, args: ScenarioArgs): Promise<() => void> => {
   if (args.mockContents.length > 0) {
     registerMockContents(editor, ...args.mockContents);
   }
@@ -34,9 +34,7 @@ export const applyScenario = async (editor: ClassicEditor, args: ScenarioArgs): 
   for (const word of args.blockedWords) {
     await addBlockedWord(editor, word);
   }
-  for (const element of args.inputExampleElements) {
-    addInputExampleElement(editor, element);
-  }
+  const inputElements = args.inputExampleElements.map((element) => addInputExampleElement(editor, element));
   if (args.readOnly) {
     editor.enableReadOnlyMode(SCENARIO_READ_ONLY_LOCK_ID);
   }
@@ -44,4 +42,5 @@ export const applyScenario = async (editor: ClassicEditor, args: ScenarioArgs): 
   if (args.clipboard) {
     await writeClipboard(args.clipboard);
   }
+  return () => inputElements.forEach((el) => el.remove());
 };

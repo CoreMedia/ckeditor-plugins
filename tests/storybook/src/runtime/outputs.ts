@@ -62,10 +62,7 @@ const installDroppableState = (editor: ClassicEditor, element: HTMLElement, uris
   };
   update();
   const id = window.setInterval(update, POLL_INTERVAL_MS);
-  return () => {
-    clearInterval(id);
-    console.log("did it");
-  };
+  return () => clearInterval(id);
 };
 
 const installDroppableInLinkBalloon = (editor: ClassicEditor, element: HTMLElement, uris: string[]): (() => void) => {
@@ -91,9 +88,9 @@ export const installOutputsHarness = (
   container: HTMLElement,
   editor: ClassicEditor,
   args: ScenarioArgs,
-): (() => void) | undefined => {
+): (() => void) => {
   if (args.outputs.length === 0) {
-    return undefined;
+    return () => {};
   }
 
   const outputsContainer = document.createElement("div");
@@ -125,8 +122,8 @@ export const installOutputsHarness = (
     }
   }
 
-  if (cleanups.length === 0) {
-    return undefined;
-  }
-  return () => cleanups.forEach((fn) => fn());
+  return () => {
+    cleanups.forEach((fn) => fn());
+    outputsContainer.remove();
+  };
 };

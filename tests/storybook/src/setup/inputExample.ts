@@ -23,9 +23,10 @@ const inputExamplePlugin = (editor: Editor): MockInputExamplePlugin => {
  * @param editor - live editor instance
  * @param data - description of the input-example element
  */
-export const addInputExampleElement = (editor: Editor, data: InputExampleElement): void => {
+export const addInputExampleElement = (editor: Editor, data: InputExampleElement): HTMLElement => {
   const element = inputExamplePlugin(editor).createInsertElement(data);
   document.body.append(element);
+  return element;
 };
 
 /**
