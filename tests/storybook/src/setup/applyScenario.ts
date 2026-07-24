@@ -35,12 +35,18 @@ export const applyScenario = async (editor: ClassicEditor, args: ScenarioArgs): 
     await addBlockedWord(editor, word);
   }
   const inputElements = args.inputExampleElements.map((element) => addInputExampleElement(editor, element));
-  if (args.readOnly) {
-    editor.enableReadOnlyMode(SCENARIO_READ_ONLY_LOCK_ID);
+  const cleanup = (): void => inputElements.forEach((el) => el.remove());
+  try {
+    if (args.readOnly) {
+      editor.enableReadOnlyMode(SCENARIO_READ_ONLY_LOCK_ID);
+    }
+    setEditorData(editor, args.data);
+    if (args.clipboard) {
+      await writeClipboard(args.clipboard);
+    }
+    return cleanup;
+  } catch (e) {
+    cleanup();
+    throw e;
   }
-  setEditorData(editor, args.data);
-  if (args.clipboard) {
-    await writeClipboard(args.clipboard);
-  }
-  return () => inputElements.forEach((el) => el.remove());
 };
