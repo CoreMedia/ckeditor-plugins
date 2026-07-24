@@ -77,11 +77,15 @@ const config: StorybookConfig = {
     // (`error-ui-iconview-invalid-svg`). Mirror the former application build
     // (`app/webpack.config.js`) and load SVGs as `asset/source`.
     const rules = webpackConfig.module?.rules ?? [];
-    for (const rule of rules) {
-      if (rule && typeof rule === "object" && "test" in rule && rule.test instanceof RegExp && rule.test.test(".svg")) {
-        rule.exclude = /\.svg$/;
-      }
-    }
+for (const rule of rules) {
+  if (rule && typeof rule === "object" && "test" in rule && rule.test instanceof RegExp && rule.test.test(".svg")) {
+    rule.exclude = rule.exclude
+      ? Array.isArray(rule.exclude)
+        ? [...rule.exclude, /\.svg$/]
+        : [rule.exclude, /\.svg$/]
+      : /\.svg$/;
+  }
+}
     rules.push({
       test: /\.svg$/,
       type: "asset/source",
