@@ -7,7 +7,7 @@ import {
 import { ensurePluginLoaded } from "./plugins";
 
 const serviceAgentPlugin = (editor: Editor): MockServiceAgentPlugin => {
-  ensurePluginLoaded(editor, "MockServiceAgent");
+  ensurePluginLoaded(editor, MockServiceAgentPlugin.pluginName);
   return editor.plugins.get(MockServiceAgentPlugin);
 };
 
