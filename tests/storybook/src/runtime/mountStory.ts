@@ -81,7 +81,18 @@ export const mountScenario = (initialize: ScenarioInitializer, args?: Partial<Sc
     .then(() => initialize(host, resolvedArgs))
     .then((editor) => {
       window.editor = editor;
-      installOutputsHarness(container, editor, resolvedArgs);
+      const cleanup = installOutputsHarness(container, editor, resolvedArgs);
+      if (cleanup) {
+        // ponytail: MutationObserver is the only way to detect removal without
+        // changing every story's render function.
+        const observer = new MutationObserver(() => {
+          if (!container.isConnected) {
+            observer.disconnect();
+            cleanup();
+          }
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+      }
       container.setAttribute(EDITOR_READY_ATTRIBUTE, "true");
     })
     .catch((error: unknown) => {

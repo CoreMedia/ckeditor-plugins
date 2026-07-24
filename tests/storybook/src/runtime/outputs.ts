@@ -44,30 +44,37 @@ const installDataView = (editor: ClassicEditor, element: HTMLElement, data: stri
   editor.setData(data);
 };
 
-const installLastOpenedEntities = (editor: ClassicEditor, element: HTMLElement): void => {
+const installLastOpenedEntities = (editor: ClassicEditor, element: HTMLElement): (() => void) => {
+  let id: number | undefined;
   void getContentFormService(editor).then((service) => {
     const update = async (): Promise<void> => {
       element.textContent = JSON.stringify(await service.getLastOpenedEntities());
     };
     void update();
-    window.setInterval(() => void update(), POLL_INTERVAL_MS);
+    id = window.setInterval(() => void update(), POLL_INTERVAL_MS);
   });
+  return () => clearInterval(id);
 };
 
-const installDroppableState = (editor: ClassicEditor, element: HTMLElement, uris: string[]): void => {
+const installDroppableState = (editor: ClassicEditor, element: HTMLElement, uris: string[]): (() => void) => {
   const update = (): void => {
     element.textContent = JSON.stringify(validateIsDroppableState(editor, uris) ?? null);
   };
   update();
-  window.setInterval(update, POLL_INTERVAL_MS);
+  const id = window.setInterval(update, POLL_INTERVAL_MS);
+  return () => {
+    clearInterval(id);
+    console.log("did it");
+  };
 };
 
-const installDroppableInLinkBalloon = (editor: ClassicEditor, element: HTMLElement, uris: string[]): void => {
+const installDroppableInLinkBalloon = (editor: ClassicEditor, element: HTMLElement, uris: string[]): (() => void) => {
   const update = (): void => {
     element.textContent = JSON.stringify(validateIsDroppableInLinkBalloon(editor, uris) ?? null);
   };
   update();
-  window.setInterval(update, POLL_INTERVAL_MS);
+  const id = window.setInterval(update, POLL_INTERVAL_MS);
+  return () => clearInterval(id);
 };
 
 /**
@@ -80,14 +87,20 @@ const installDroppableInLinkBalloon = (editor: ClassicEditor, element: HTMLEleme
  * @param editor - live editor instance
  * @param args - resolved scenario args
  */
-export const installOutputsHarness = (container: HTMLElement, editor: ClassicEditor, args: ScenarioArgs): void => {
+export const installOutputsHarness = (
+  container: HTMLElement,
+  editor: ClassicEditor,
+  args: ScenarioArgs,
+): (() => void) | undefined => {
   if (args.outputs.length === 0) {
-    return;
+    return undefined;
   }
 
   const outputsContainer = document.createElement("div");
   outputsContainer.classList.add(OUTPUTS_CONTAINER_CLASS);
   container.appendChild(outputsContainer);
+
+  const cleanups: (() => void)[] = [];
 
   for (const output of args.outputs) {
     const element = createOutputElement(output);
@@ -101,14 +114,19 @@ export const installOutputsHarness = (container: HTMLElement, editor: ClassicEdi
         installDataView(editor, element, args.data);
         break;
       case "last-opened-entities":
-        installLastOpenedEntities(editor, element);
+        cleanups.push(installLastOpenedEntities(editor, element));
         break;
       case "is-droppable-state":
-        installDroppableState(editor, element, args.droppableUris);
+        cleanups.push(installDroppableState(editor, element, args.droppableUris));
         break;
       case "is-droppable-in-link-balloon":
-        installDroppableInLinkBalloon(editor, element, args.droppableUris);
+        cleanups.push(installDroppableInLinkBalloon(editor, element, args.droppableUris));
         break;
     }
   }
+
+  if (cleanups.length === 0) {
+    return undefined;
+  }
+  return () => cleanups.forEach((fn) => fn());
 };
