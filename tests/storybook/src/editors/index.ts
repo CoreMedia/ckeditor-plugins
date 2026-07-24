@@ -30,6 +30,12 @@ export const editorFactories: Record<ScenarioDataType, EditorFactory> = {
 export const createEditorScenario: ScenarioInitializer = async (host, args) => {
   const factory = editorFactories[args.dataType];
   const editor = await factory(host, args);
-  const cleanup = await applyScenario(editor, args);
+  const applyCleanup = await applyScenario(editor, args);
+
+  const cleanup = (): void => {
+    applyCleanup();
+    void editor.destroy().catch((error: unknown) => console.error("Failed to destroy editor scenario", error));
+  };
+
   return { editor, cleanup };
 };
