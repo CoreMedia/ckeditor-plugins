@@ -9,8 +9,9 @@ import type { ClipboardScenarioItem } from "../runtime/scenario";
  *
  * `Blob` and `ClipboardItem` are browser-only globals, so this must run in the
  * Storybook runtime (browser), not in the Playwright (Node) process. The
- * `clipboard-write` permission must be granted on the browser context (the
- * Playwright config does so); otherwise the write rejects.
+ * `clipboard-write` permission (and `clipboard-read` for the read-back
+ * verification below) must be granted on the browser context (the Playwright
+ * config does so); otherwise the write/read rejects.
  *
  * @param item - the clipboard item (MIME type + content) to write
  */
