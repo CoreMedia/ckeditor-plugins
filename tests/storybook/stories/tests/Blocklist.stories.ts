@@ -29,7 +29,7 @@ type Story = StoryObj<ScenarioArgs>;
 export const Default: Story = {
   args: {
     data: richtext(
-      `(${p(blocklistScenario.helloWorldText)}${p(blocklistScenario.contentText)}${p(blocklistScenario.exampleText)}`,
+      `${p(blocklistScenario.helloWorldText)}${p(blocklistScenario.contentText)}${p(blocklistScenario.exampleText)}`,
     ),
   },
 };
