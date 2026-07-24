@@ -8,7 +8,7 @@
 declare const CKEDITOR_LICENSE_KEY: string | undefined;
 
 export const licenseKeyErrorMessage =
-  "Please provide a valid license key for your CKEditor5 instance. Please create a .env file in the workspace root and make your license as CKEDITOR_LICENSE_KEY variable. Please use 'GPL' if you want to use the GNU General Public License.";
+  "Please provide a valid license key for your CKEditor 5 instance. Create a .env file in the workspace root and set the CKEDITOR_LICENSE_KEY variable. Use 'GPL' if you want to use the GNU General Public License.";
 
 /**
  * Resolved CKEditor 5 license key, replaced during the Storybook build.
