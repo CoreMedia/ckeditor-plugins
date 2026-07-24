@@ -20,21 +20,23 @@ const createOutputElement = (output: ScenarioOutput): HTMLElement => {
   return element;
 };
 
-const installEditorData = (editor: ClassicEditor, element: HTMLElement): void => {
+const installEditorData = (editor: ClassicEditor, element: HTMLElement): (() => void) => {
   const update = (): void => {
     element.textContent = getEditorData(editor);
   };
   update();
   editor.model.document.on("change:data", update);
+  return () => editor.model.document.off("change:data", update);
 };
 
-const installDataView = (editor: ClassicEditor, element: HTMLElement, data: string): void => {
+const installDataView = (editor: ClassicEditor, element: HTMLElement, data: string): (() => void) => {
   const processor = editor.data.processor as RichTextDataProcessor;
-  processor.on("richtext:toView", (_eventInfo, eventData: { dataView?: string }) => {
+  const update = (_eventInfo: unknown, eventData: { dataView?: string }): void => {
     if (typeof eventData.dataView === "string") {
       element.textContent = eventData.dataView;
     }
-  });
+  };
+  processor.on("richtext:toView", update);
   // The scenario data was already set before the harness was installed, so the
   // initial `richtext:toView` fired before we subscribed. Re-set the original
   // scenario data once to populate the output. We deliberately re-set the
@@ -42,6 +44,7 @@ const installDataView = (editor: ClassicEditor, element: HTMLElement, data: stri
   // server-side differencing's `<xdiff:span>` are stripped from `getData()`,
   // but must be visible in the data view.
   editor.setData(data);
+  return () => processor.off("richtext:toView", update);
 };
 
 const installLastOpenedEntities = (editor: ClassicEditor, element: HTMLElement): (() => void) => {
@@ -105,10 +108,10 @@ export const installOutputsHarness = (
 
     switch (output) {
       case "editor-data":
-        installEditorData(editor, element);
+        cleanups.push(installEditorData(editor, element));
         break;
       case "data-view":
-        installDataView(editor, element, args.data);
+        cleanups.push(installDataView(editor, element, args.data));
         break;
       case "last-opened-entities":
         cleanups.push(installLastOpenedEntities(editor, element));
