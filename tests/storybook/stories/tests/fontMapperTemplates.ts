@@ -28,7 +28,7 @@ export const FONT_MAPPER_EXPECTED_OUTPUT = "∃";
  */
 const wordTemplate = `<html xmlns="http://www.w3.org/TR/REC-html40">
 <!--
-The most simples word file: One symbol without any container or anything.
+The simplest word file: One symbol without any container or anything.
 -->
 <head>
   <meta http-equiv=Content-Type content="text/html; charset=utf-8">
