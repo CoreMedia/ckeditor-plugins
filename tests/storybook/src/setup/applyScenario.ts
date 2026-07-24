@@ -40,9 +40,7 @@ export const applyScenario = async (editor: ClassicEditor, args: ScenarioArgs): 
   if (args.readOnly) {
     editor.enableReadOnlyMode(SCENARIO_READ_ONLY_LOCK_ID);
   }
-  if (args.data) {
-    setEditorData(editor, args.data);
-  }
+  setEditorData(editor, args.data);
   if (args.clipboard) {
     await writeClipboard(args.clipboard);
   }
