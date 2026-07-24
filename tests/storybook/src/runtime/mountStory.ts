@@ -94,7 +94,7 @@ export const mountScenario = (initialize: ScenarioInitializer, args?: Partial<Sc
           delete window.editor;
         }
       };
-      // ponytail: MutationObserver is the only way to detect removal without
+      // MutationObserver is the only way to detect removal without
       // changing every story's render function.
       const observer = new MutationObserver(() => {
         if (!container.isConnected) {
