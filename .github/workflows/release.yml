@@ -25,9 +25,7 @@ env:
   NODE_VERSION: 24
   # https://github.com/actions/runner-images/issues/70
   NODE_OPTIONS: "--max_old_space_size=4096"
-  PNPM_VERSION: ^10.9
-  NPM_CONFIG_@coremedia:registry: 'https://repository.coremedia.com/nexus/repository/coremedia-npm'
-  NPM_CONFIG_@coremedia-internal:registry: 'https://repository.coremedia.com/nexus/repository/coremedia-npm'
+  PNPM_VERSION: ^11.7
 
 jobs:
   build:
@@ -56,18 +54,24 @@ jobs:
         run: |
           echo "For maintenance branches only patch versions are allowed."
           exit 1
+      - name: Use PNPM ${{ env.PNPM_VERSION }}
+        uses: pnpm/action-setup@v5
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
       - name: Configure NPM
         run: |
           NPM_AUTH_TOKEN=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.PLUGINS_NEXUS_USER }}", "password": "${{ secrets.PLUGINS_NEXUS_PASSWORD }}"}' https://repository.coremedia.com/nexus/repository/coremedia-npm/-/user/org.couchdb.user:${{ secrets.PLUGINS_NEXUS_USER }} | jq -r .token)
           echo "::add-mask::$NPM_AUTH_TOKEN"
           echo "NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
-          echo "NPM_CONFIG_//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
-
-          npm install -g pnpm@${{ env.PNPM_VERSION }}
+          echo "PNPM_CONFIG_//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
+          echo "@coremedia:registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/" >> .npmrc
+          echo "@coremedia-internal:registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/" >> .npmrc
       - name: Setup Git
         run: |
           git config --global user.name 'coremedia-ci'
@@ -123,13 +127,6 @@ jobs:
           git commit -am "doc(typedoc): Update typedoc"
       - name: Install for Production
         run: pnpm install --production
-      # Publishes a release candidate with tag "next".
-      - name: Publish RC
-        if: github.event_name == 'push'
-        run: |
-          echo '//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
-          pnpm publishall --registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/ --no-git-checks --tag next
-          git reset --hard
       # Publishes a release with tag "latest"
       - name: Publish Release
         if: github.event_name == 'workflow_dispatch'

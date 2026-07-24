@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-content",
-  "version": "27.0.0",
+  "version": "28.0.0",
   "type": "module",
   "description": "CKEditor components and utilities related to CoreMedia content.",
   "author": {
@@ -45,8 +45,8 @@
     "typescript": "catalog:"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-coremedia-studio-integration": "workspace:^27.0.0",
-    "@coremedia/ckeditor5-logging": "workspace:^27.0.0"
+    "@coremedia/ckeditor5-coremedia-studio-integration": "workspace:^28.0.0",
+    "@coremedia/ckeditor5-logging": "workspace:^28.0.0"
   },
   "peerDependencies": {
     "@coremedia/service-agent": "catalog:",

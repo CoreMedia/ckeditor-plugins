@@ -8,5 +8,6 @@ export { default as ContentImageOpenInTabUI } from "./contentImageOpenInTab/Cont
 export { default as ContentImagePlugin } from "./ContentImagePlugin";
 export { default as ModelBoundSubscriptionPlugin } from "./ModelBoundSubscriptionPlugin";
 export { OpenImageInTabCommand } from "./contentImageOpenInTab/OpenImageInTabCommand";
+export { de, en } from "./translations";
 
 import "./augmentation";

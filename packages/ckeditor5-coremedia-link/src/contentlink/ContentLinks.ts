@@ -11,7 +11,6 @@ import type { Subscription } from "rxjs";
 import { createDecoratorHook } from "../utils";
 import ContentLinkClipboardPlugin from "./ContentLinkClipboardPlugin";
 import ContentLinkCommandHook from "./ContentLinkCommandHook";
-import "../lang/contentlink";
 import { closeContextualBalloon } from "./ContentLinkViewUtils";
 import { hasRequiredInternalLinkUI } from "./InternalLinkUI";
 import { parseLinkBalloonConfig } from "./LinkBalloonConfig";
