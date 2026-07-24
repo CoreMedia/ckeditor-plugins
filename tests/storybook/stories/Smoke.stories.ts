@@ -14,7 +14,14 @@ const meta: Meta<SmokeStoryArgs> = {
   render: ({ title, description }) => {
     const container = document.createElement("section");
     container.setAttribute("data-testid", "storybook-smoke");
-    container.innerHTML = `<h1>${title}</h1><p>${description}</p>`;
+
+    const heading = document.createElement("h1");
+    heading.textContent = title;
+
+    const paragraph = document.createElement("p");
+    paragraph.textContent = description;
+
+    container.append(heading, paragraph);
     return container;
   },
 };
