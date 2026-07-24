@@ -90,6 +90,9 @@ export const mountScenario = (initialize: ScenarioInitializer, args?: Partial<Sc
       const cleanup = (): void => {
         scenarioCleanup();
         outputsCleanup();
+        if (window.editor === editor) {
+          delete window.editor;
+        }
       };
       // ponytail: MutationObserver is the only way to detect removal without
       // changing every story's render function.
