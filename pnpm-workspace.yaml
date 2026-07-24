@@ -3,6 +3,7 @@ packages:
   - tests/*
   - app
 allowBuilds:
+  '@swc/core': true
   esbuild: true
   unrs-resolver: true
 catalog:
