@@ -10,7 +10,7 @@ export { OUTPUT_TEST_IDS, OUTPUTS_CONTAINER_CLASS };
 
 /**
  * Polling interval (ms) for outputs that have no change event to subscribe to
- * (service state, dropability evaluation).
+ * (service state, droppability evaluation).
  */
 const POLL_INTERVAL_MS = 100;
 
