@@ -5,9 +5,9 @@
  * the former example application. The story id is the stable, kebab-cased
  * identifier Storybook derives from a story's `title` and export name.
  *
- * Source of truth for this URL strategy:
- * `tests/storybook/src/runtime/environment.ts`. Kept as an independent copy
- * here to avoid a build-time dependency on the Storybook package.
+ * URL strategy follows Storybook's standard `iframe.html` preview endpoint:
+ * `${storybookUrl}/iframe.html?id=<storyId>&viewMode=story`.
+ * This file intentionally duplicates that logic to avoid a build-time dependency on the Storybook package.
  */
 
 export const storybookPort = process.env.STORYBOOK_PORT ?? "6006";
