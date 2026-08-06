@@ -1,13 +1,13 @@
 import { reportInitEnd, reportInitStart } from "@coremedia/ckeditor5-core-common";
 import { getLinkAttributes, LinkAttributes } from "@coremedia/ckeditor5-link-common";
 import type {
-  DifferItemAttribute,
-  ModelRange,
-  ModelWriter,
   DifferItem,
+  DifferItemAttribute,
   DifferItemInsert,
   ModelElement,
   ModelNode,
+  ModelRange,
+  ModelWriter,
 } from "ckeditor5";
 import { Plugin } from "ckeditor5";
 import { LINK_TARGET_MODEL, LINK_TARGET_VIEW } from "./Constants";
@@ -129,7 +129,10 @@ export default class LinkTargetModelView extends Plugin {
    * @param diffItem - the variable to check
    */
   #isDiffItemInsert(diffItem: DifferItem): diffItem is DifferItemInsert {
-    return diffItem.type === "insert" && diffItem.attributes.has("linkHref");
+    // an already set `linkTarget` (e.g., from paste) wins over the default.
+    return (
+      diffItem.type === "insert" && diffItem.attributes.has("linkHref") && !diffItem.attributes.has(LINK_TARGET_MODEL)
+    );
   }
 
   /**
@@ -187,6 +190,9 @@ export default class LinkTargetModelView extends Plugin {
    * @private
    */
   #computeLinkTargetForNode(child: ModelNode): string | undefined {
+    if (child.hasAttribute(LINK_TARGET_MODEL)) {
+      return undefined;
+    }
     const url = child.getAttribute("linkHref");
     if (url && typeof url === "string") {
       return computeDefaultLinkTargetForUrl(url, this.editor.config);
