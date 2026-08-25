@@ -1,0 +1,59 @@
+{
+  "name": "@coremedia/ckeditor5-storybook-itest",
+  "version": "28.0.0",
+  "author": {
+    "name": "CoreMedia GmbH",
+    "email": "info@coremedia.com",
+    "url": "https://coremedia.com/",
+    "avatar": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2OTguNjY3IiBoZWlnaHQ9IjY5OC42NjciIHZlcnNpb249IjEuMCIgdmlld0JveD0iMCAwIDUyNCA1MjQiPjxwYXRoIGQ9Ik0yODIuNS42QzI0NSA0LjUgMjE1LjEgMTIuOSAxODUgMjcuOSAxMDYuNCA2Ny4yIDUzLjUgMTQyLjEgNDIuNCAyMjkuNWMtMi4xIDE3LjItMi4yIDQ4IDAgNjQuMUM0OCAzMzYuMiA2MS4zIDM3Mi4yIDg0IDQwNi4zYzYxLjkgOTMuMSAxNzUuNCAxMzYuNCAyODUgMTA4LjcgMTkuMi00LjggMzMuNy0xMC4zIDUzLjItMjAuMSAyMS0xMC41IDQyLjUtMjUuMyA1OC4zLTQwLjJsOC03LjYtMjEuNS0yMS42Yy0yMy42LTIzLjgtMjcuMS0yNi43LTM4LjYtMzIuNC0yMi40LTExLjItNDQuNy0xMS42LTcxLjctMS41LTE4LjYgNy0zMC40IDkuNC00OC43IDEwLjEtMTMgLjQtMTcuNS4yLTI3LjgtMS42LTMwLjUtNS4yLTU1LTE3LjgtNzYuOC0zOS41LTMzLjYtMzMuNi00Ny44LTgwLjQtMzguNC0xMjYuNCAxMC4yLTUwLjUgNDYuMi05MC41IDk1LjItMTA2LjEgMzEuNy0xMC4xIDY0LjItOC44IDk2LjYgMy45IDEyLjggNC45IDIyLjcgNyAzNC4xIDcgMTYuNCAwIDMxLjItNC4yIDQ1LjEtMTIuNyA1LjUtMy40IDEzLjYtMTAuNyAzMC40LTI3LjNsMjIuOC0yMi42LTkuMy04LjRjLTM5LjgtMzUuNC04NS42LTU3LTEzOC40LTY1LjEtMTIuNS0yLTQ4LjctMy4zLTU5LTIuM3oiLz48cGF0aCBkPSJNMjk2IDIxOC4xYy0yOC4zIDQuOC00NC4zIDM1LjQtMzIuMSA2MS40IDcuOSAxNyAyNy4yIDI3LjQgNDUuNCAyNC41IDI4LjktNC42IDQ1LjEtMzUuMiAzMi43LTYxLjctOC0xNy4yLTI3LjMtMjcuMy00Ni0yNC4yeiIvPjwvc3ZnPg=="
+  },
+  "license": "Apache-2.0",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@coremedia-internal/ckeditor5-coremedia-example-data": "workspace:^1.0.0-SNAPSHOT",
+    "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock": "workspace:^1.0.0-SNAPSHOT",
+    "@coremedia/ckeditor5-bbcode": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-coremedia-blocklist": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-coremedia-content-clipboard": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-coremedia-differencing": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-coremedia-images": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-coremedia-link": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-coremedia-richtext": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-coremedia-studio-essentials": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-data-facade": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-dataprocessor-support": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-dialog-visibility": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-dom-converter": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-font-mapper": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-itest-constants": "workspace:^27.0.0",
+    "@coremedia/ckeditor5-link-common": "workspace:^27.0.0",
+    "ckeditor5": "catalog:"
+  },
+  "devDependencies": {
+    "@coremedia/studio-client.build-config": "catalog:",
+    "@coremedia/studio-client.eslint-config": "catalog:",
+    "@storybook/addon-essentials": "catalog:",
+    "@storybook/addon-interactions": "catalog:",
+    "@storybook/addon-webpack5-compiler-swc": "catalog:",
+    "@storybook/html": "catalog:",
+    "@storybook/html-webpack5": "catalog:",
+    "@storybook/test": "catalog:",
+    "@types/node": "catalog:",
+    "dotenv": "catalog:",
+    "eslint": "catalog:",
+    "rimraf": "catalog:",
+    "storybook": "catalog:",
+    "typescript": "catalog:",
+    "webpack": "catalog:"
+  },
+  "scripts": {
+    "clean": "rimraf ./build",
+    "typecheck": "tsc --noEmit",
+    "storybook": "storybook dev --ci --port 6006",
+    "build-storybook": "storybook build --output-dir ./build/storybook",
+    "lint": "eslint",
+    "test-storybook": "storybook test --ci"
+  }
+}

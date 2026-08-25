@@ -1,0 +1,310 @@
+import { BBCode } from "@coremedia/ckeditor5-bbcode";
+import { DataFacade } from "@coremedia/ckeditor5-data-facade";
+import { Blocklist } from "@coremedia/ckeditor5-coremedia-blocklist";
+import { MockBlocklistService } from "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock";
+import {
+  Autoformat,
+  AutoImage,
+  AutoLink,
+  Autosave,
+  Base64UploadAdapter,
+  BlockQuote,
+  Bold,
+  ClassicEditor,
+  CodeBlock,
+  Essentials,
+  FontColor,
+  FontSize,
+  Heading,
+  ImageBlockEditing,
+  ImageInline,
+  ImageInsert,
+  ImageInsertViaUrl,
+  ImageToolbar,
+  Indent,
+  Italic,
+  Link,
+  LinkImage,
+  List,
+  ListProperties,
+  Paragraph,
+  PasteFromOffice,
+  RemoveFormat,
+  SourceEditing,
+  Strikethrough,
+  Underline,
+} from "ckeditor5";
+import type { ScenarioArgs } from "../runtime/scenario";
+import { licenseKey, licenseKeyErrorMessage } from "./license";
+
+/**
+ * Creates the BBCode editor used by the migrated Playwright scenarios. Ported
+ * from `app/src/editors/bbCode.ts`, with the application's preview wiring
+ * removed; scenario configuration is provided through {@link ScenarioArgs}
+ * instead.
+ *
+ * @param sourceElement - host element the editor is mounted into
+ * @param args - resolved scenario args
+ */
+export const createBBCodeEditor = (sourceElement: HTMLElement, args: ScenarioArgs): Promise<ClassicEditor> => {
+  const { uiLanguage } = args;
+
+  try {
+    return ClassicEditor.create(sourceElement, {
+      licenseKey,
+      placeholder: "Type your text here...",
+      plugins: [
+        AutoImage,
+        AutoLink,
+        Autoformat,
+        Autosave,
+        // Base64: Not recommended in production use.
+        Base64UploadAdapter,
+        BBCode,
+        BlockQuote,
+        Blocklist,
+        Bold,
+        CodeBlock,
+        DataFacade,
+        List,
+        ListProperties,
+        Essentials,
+        FontColor,
+        FontSize,
+        Heading,
+        // ImageBlockEditing: Required by LinkImage; but images in BBCode are always inline.
+        ImageBlockEditing,
+        ImageInline,
+        ImageInsert,
+        ImageInsertViaUrl,
+        ImageToolbar,
+        Indent,
+        Italic,
+        Link,
+        LinkImage,
+        MockBlocklistService,
+        Paragraph,
+        PasteFromOffice,
+        RemoveFormat,
+        SourceEditing,
+        Strikethrough,
+        Underline,
+      ],
+      toolbar: [
+        "undo",
+        "redo",
+        "|",
+        "heading",
+        "|",
+        "bold",
+        "italic",
+        "underline",
+        "strikethrough",
+        "fontSize",
+        "fontColor",
+        "removeFormat",
+        "|",
+        "link",
+        "imageInsert",
+        "|",
+        "blockQuote",
+        "codeBlock",
+        "|",
+        "numberedList",
+        "bulletedList",
+        "outdent",
+        "indent",
+        "|",
+        "blocklist",
+        "|",
+        "sourceEditing",
+      ],
+      autosave: {
+        waitingTime: 1000,
+      },
+      codeBlock: {
+        languages: [
+          {
+            language: "plaintext",
+            label: "Plain text",
+          },
+          {
+            language: "bbcode",
+            label: "BBCode",
+          },
+          {
+            language: "c",
+            label: "C",
+          },
+          {
+            language: "cs",
+            label: "C#",
+          },
+          {
+            language: "cpp",
+            label: "C++",
+          },
+          {
+            language: "css",
+            label: "CSS",
+          },
+          {
+            language: "diff",
+            label: "Diff",
+          },
+          {
+            language: "html",
+            label: "HTML",
+          },
+          {
+            language: "java",
+            label: "Java",
+          },
+          {
+            language: "javascript",
+            label: "JavaScript",
+          },
+          {
+            language: "php",
+            label: "PHP",
+          },
+          {
+            language: "python",
+            label: "Python",
+          },
+          {
+            language: "ruby",
+            label: "Ruby",
+          },
+          {
+            language: "typescript",
+            label: "TypeScript",
+          },
+          {
+            language: "xml",
+            label: "XML",
+          },
+        ],
+      },
+      dataFacade: {
+        save(): Promise<void> {
+          return Promise.resolve();
+        },
+      },
+      fontColor: {
+        colors: [
+          {
+            color: "hsl(0,0%,0%)",
+            label: "Black",
+          },
+          {
+            color: "#ff0000",
+            label: "Red",
+          },
+          {
+            color: "rgb(255,255,0)",
+            label: "Yellow",
+          },
+          {
+            color: "#00ff00",
+            label: "Green",
+          },
+          {
+            color: "#00ffff",
+            label: "Cyan",
+          },
+          {
+            color: "#0000ff",
+            label: "Blue",
+          },
+          {
+            color: "fuchsia",
+            label: "Fuchsia",
+          },
+          {
+            color: "#ffffff",
+            label: "White",
+            hasBorder: true,
+          },
+          {
+            color: "rgba(0,0,0,0.63)",
+            label: "Darken",
+          },
+        ],
+        colorPicker: {
+          format: "hex",
+        },
+      },
+      heading: {
+        options: [
+          {
+            model: "paragraph",
+            title: "Paragraph",
+            class: "ck-heading_paragraph",
+          },
+          {
+            model: "heading1",
+            view: "h1",
+            title: "Heading 1",
+            class: "ck-heading_heading1",
+          },
+          {
+            model: "heading2",
+            view: "h2",
+            title: "Heading 2",
+            class: "ck-heading_heading2",
+          },
+          {
+            model: "heading3",
+            view: "h3",
+            title: "Heading 3",
+            class: "ck-heading_heading3",
+          },
+          {
+            model: "heading4",
+            view: "h4",
+            title: "Heading 4",
+            class: "ck-heading_heading4",
+          },
+          {
+            model: "heading5",
+            view: "h5",
+            title: "Heading 5",
+            class: "ck-heading_heading5",
+          },
+          {
+            model: "heading6",
+            view: "h6",
+            title: "Heading 6",
+            class: "ck-heading_heading6",
+          },
+        ],
+      },
+      image: {
+        toolbar: ["imageTextAlternative"],
+        upload: {
+          types: ["jpeg", "png", "gif", "bmp", "webp", "tiff", "avif", "svg"],
+        },
+      },
+      language: {
+        ui: uiLanguage,
+        content: "en",
+      },
+      list: {
+        properties: {
+          startIndex: false,
+          styles: {
+            useAttribute: true,
+          },
+          reversed: false,
+        },
+      },
+      link: {
+        defaultProtocol: "https://",
+      },
+    });
+  } catch (e: unknown) {
+    console.error("Caught error when creating Editor.", e);
+    throw Error(licenseKeyErrorMessage);
+  }
+};

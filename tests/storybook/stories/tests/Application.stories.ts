@@ -1,0 +1,25 @@
+import type { Meta, StoryObj } from "@storybook/html";
+import { defaultScenarioArgs, mountScenario, type ScenarioArgs } from "../../src/runtime";
+import { createEditorScenario } from "../../src/editors";
+
+/**
+ * Dedicated scenario for `Application.test.ts`: a plain, empty CoreMedia
+ * RichText editor used to assert the editor becomes available.
+ */
+const meta: Meta<ScenarioArgs> = {
+  title: "Tests/Application",
+  args: {
+    ...defaultScenarioArgs,
+    dataType: "richtext",
+  },
+  render: (args) => mountScenario(createEditorScenario, args),
+};
+
+export default meta;
+
+type Story = StoryObj<ScenarioArgs>;
+
+/**
+ * Empty RichText editor.
+ */
+export const Default: Story = {};

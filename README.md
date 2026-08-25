@@ -174,6 +174,8 @@ implements the described behavior.
 ## See Also
 
 * **[GitHub Pages][gp:ckeditor-plugins]:** These pages on GitHub Pages.
+* **[Storybook][gp:storybook]:** Interactive Storybook of the integration-test
+  scenarios on GitHub Pages (see [`tests/storybook`](./tests/storybook/README.md)).
 * **[Walk-Through Examples](./examples/README.md):** Some step-by-step guides
   for customizing CKEditor 5.
 * **[Development](./DEVELOPMENT.md):** Hints for developing within this
@@ -250,3 +252,5 @@ implements the described behavior.
 [CoreMedia CMS]: <https://www.coremedia.com/> "Best-of-Breed Digital Experience Platform CoreMedia"
 
 [gp:ckeditor-plugins]: <https://coremedia.github.io/ckeditor-plugins/>  "CoreMedia CKEditor 5 Plugins – GitHub Pages"
+
+[gp:storybook]: <https://coremedia.github.io/ckeditor-plugins/storybook/>  "CoreMedia CKEditor 5 Plugins – Storybook"

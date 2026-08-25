@@ -34,7 +34,6 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "bootstrap": "pnpm install",
     "publishall": "pnpm --recursive publish",
     "setversion": "set-version",
     "clean": "pnpm --recursive run clean",
@@ -44,8 +43,6 @@
     "doc:config": "typedoc --showConfig",
     "ui-test": "pnpm --recursive --filter \"@coremedia/ckeditor5-playwright-itest\" run ui-test",
     "test": "pnpm --recursive test",
-    "prettier": "prettier --check \"**/*.{js,cjs,mjs,ts,tsx}\"",
-    "prettier:fix": "prettier --write \"**/*.{js,cjs,mjs,ts,tsx}\"",
     "preinstall": "node ./scripts/check-pnpm.mjs",
     "start": "pnpm --recursive --filter \"@coremedia/ckeditor5-app\" start",
     "script:version": "node ./scripts/version.mjs"
@@ -58,21 +55,16 @@
     "@eslint/eslintrc": "catalog:",
     "@eslint/js": "catalog:",
     "@stylistic/eslint-plugin": "catalog:",
-    "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",
     "eslint": "catalog:",
-    "eslint-config-prettier": "catalog:",
     "eslint-plugin-import": "catalog:",
     "eslint-plugin-jsdoc": "catalog:",
     "eslint-plugin-prettier": "catalog:",
-    "eslint-plugin-tsdoc": "catalog:",
     "minimist": "catalog:",
     "package-directory": "catalog:",
-    "prettier": "catalog:",
     "rimraf": "catalog:",
     "semver": "catalog:",
     "typedoc": "catalog:",
-    "typescript": "catalog:",
-    "validate-peer-dependencies": "catalog:"
+    "typescript": "catalog:"
   }
 }

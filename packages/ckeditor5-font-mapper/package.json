@@ -46,7 +46,6 @@
     "global-jsdom": "catalog:",
     "jsdom": "catalog:",
     "rimraf": "catalog:",
-    "ts-node": "catalog:",
     "tsx": "catalog:",
     "typescript": "catalog:"
   },
