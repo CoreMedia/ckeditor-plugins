@@ -305,6 +305,6 @@ export const createBBCodeEditor = (sourceElement: HTMLElement, args: ScenarioArg
     });
   } catch (e: unknown) {
     console.error("Caught error when creating Editor.", e);
-    throw Error(licenseKeyErrorMessage);
+    throw Error(licenseKeyErrorMessage, { cause: e });
   }
 };

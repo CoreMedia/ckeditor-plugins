@@ -29,7 +29,7 @@ const removeInvalidAtParent = (
   listener: SanitationListener,
 ) => {
   // Used internally and as a state to possibly trigger revalidation.
-  let replacedByChildren = false;
+  let replacedByChildren: boolean;
   listener.removeNode(child, "invalidAtParent");
   try {
     replacedByChildren = isParentNode(child) && child.hasChildNodes();

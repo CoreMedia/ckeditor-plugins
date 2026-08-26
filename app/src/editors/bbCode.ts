@@ -320,6 +320,6 @@ export const createBBCodeEditor: CKEditorInstanceFactory = (
     });
   } catch (e: unknown) {
     console.error("Catched error when creating Editor.", e);
-    throw Error(licenseKeyErrorMessage);
+    throw Error(licenseKeyErrorMessage, { cause: e });
   }
 };

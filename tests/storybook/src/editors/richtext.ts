@@ -420,6 +420,6 @@ export const createRichTextEditor = async (sourceElement: HTMLElement, args: Sce
     return editor;
   } catch (e) {
     console.error("Caught error when creating Editor.", e);
-    throw Error(licenseKeyErrorMessage);
+    throw Error(licenseKeyErrorMessage, { cause: e });
   }
 };

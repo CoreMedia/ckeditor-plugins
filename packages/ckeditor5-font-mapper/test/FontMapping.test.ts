@@ -107,7 +107,7 @@ const mappedCharacterToLowCharCode: string[][] = [
   // ["}", "}"],
   // ["~", "~"],
   // ["", ""],
-  // //["€", " "], See manual test-sheet
+  // //["€", "<U+202F>"], See manual test-sheet
   // ["ϒ", "¡"],
   // ["′", "¢"],
   // ["≤", "£"],
