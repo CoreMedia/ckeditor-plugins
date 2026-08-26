@@ -46,8 +46,10 @@
     "/src"
   ],
   "devDependencies": {
+    "@coremedia/studio-client.eslint-config": "catalog:",
     "ckeditor5": "catalog:",
     "copyfiles": "catalog:",
+    "eslint": "catalog:",
     "rimraf": "catalog:",
     "typescript": "catalog:"
   },

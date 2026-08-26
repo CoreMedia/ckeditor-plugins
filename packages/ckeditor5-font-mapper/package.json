@@ -38,10 +38,12 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@coremedia-internal/studio-client.test-runner-helper": "catalog:",
+    "@coremedia/studio-client.eslint-config": "catalog:",
     "@types/node": "catalog:",
     "@types/webpack": "catalog:",
     "ckeditor5": "catalog:",
     "copyfiles": "catalog:",
+    "eslint": "catalog:",
     "expect": "catalog:",
     "global-jsdom": "catalog:",
     "jsdom": "catalog:",

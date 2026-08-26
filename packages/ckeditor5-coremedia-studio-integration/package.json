@@ -49,8 +49,10 @@
   "devDependencies": {
     "@coremedia-internal/studio-client.test-runner-helper": "catalog:",
     "@coremedia/service-agent": "catalog:",
+    "@coremedia/studio-client.eslint-config": "catalog:",
     "@types/node": "catalog:",
     "copyfiles": "catalog:",
+    "eslint": "catalog:",
     "expect": "catalog:",
     "global-jsdom": "catalog:",
     "jsdom": "catalog:",
