@@ -1,7 +1,7 @@
 import "global-jsdom/register";
 import type { TestContext } from "node:test";
 import test, { describe, beforeEach } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import { NodeProxy } from "../src/NodeProxy";
 
 const PARSER = new DOMParser();

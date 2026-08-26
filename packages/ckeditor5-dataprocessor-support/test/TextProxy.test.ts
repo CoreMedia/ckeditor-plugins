@@ -1,6 +1,6 @@
 import "global-jsdom/register";
 import test, { describe } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import { Editor } from "ckeditor5";
 import type { TextFilterRule } from "../src/TextProxy";
 import { TextProxy } from "../src/TextProxy";

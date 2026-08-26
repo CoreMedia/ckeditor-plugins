@@ -1,6 +1,6 @@
 import type { TestContext } from "node:test";
 import { describe, test } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import { bbCodeDefaultRules } from "../src";
 import { html2bbcode } from "../src/html2bbcode";
 import { parseAsFragment } from "./DOMUtils";

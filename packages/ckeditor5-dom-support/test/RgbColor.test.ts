@@ -1,5 +1,5 @@
 import test, { describe } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import { RgbColor, rgb } from "../src/RgbColor";
 
 void describe("RgbColor", () => {

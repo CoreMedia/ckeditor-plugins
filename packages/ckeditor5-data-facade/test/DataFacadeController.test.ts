@@ -1,7 +1,7 @@
 import "./setup.mjs";
 import { describe, beforeEach, test } from "node:test";
 import type { TestContext } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import type { DataController, Editor } from "ckeditor5";
 import { CKEditorError } from "ckeditor5";
 import type { SetDataData } from "../src";

@@ -1,5 +1,5 @@
 import test, { describe } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import { observeMutableProperty } from "../../src/content/ObservableMutableProperty";
 import type Delayed from "../../src/content/Delayed";
 import { retrieveValues } from "./ObservableTestUtil";

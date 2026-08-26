@@ -1,5 +1,5 @@
 import test, { describe } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import { documentFromXml } from "../src/Documents";
 import { isAttr, copyAttributesFrom } from "../src/Attrs";
 import { serializeToXmlString } from "../src/Nodes";

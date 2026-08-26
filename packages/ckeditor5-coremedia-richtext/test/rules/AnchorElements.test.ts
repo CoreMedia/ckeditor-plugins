@@ -2,7 +2,7 @@
 
 import "global-jsdom/register";
 import test, { describe } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import { p, richtext } from "@coremedia-internal/ckeditor5-coremedia-example-data";
 import * as aut from "../../src/rules/AnchorElements";
 import { RulesTester } from "./RulesTester";

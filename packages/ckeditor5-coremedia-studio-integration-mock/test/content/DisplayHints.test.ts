@@ -1,6 +1,6 @@
 import test, { describe } from "node:test";
 import type { DisplayHint } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import expect from "expect";
+import { expect } from "expect";
 import type Delayed from "../../src/content/Delayed";
 import type { NameHintConfig } from "../../src/content/DisplayHints";
 import { observeNameHint, unreadableNameHint } from "../../src/content/DisplayHints";

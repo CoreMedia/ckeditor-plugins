@@ -1,5 +1,5 @@
 import test, { describe } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import type { RequireSelected } from "@coremedia/ckeditor5-common";
 import { documentFromHtml, isHTMLElement, rgb, RgbColor } from "../src";
 import type { FontWeightInformation } from "../src/CSSStyleDeclarations";

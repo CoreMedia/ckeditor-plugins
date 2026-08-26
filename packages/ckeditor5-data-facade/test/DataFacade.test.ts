@@ -1,6 +1,6 @@
 import "./setup.mjs";
 import test, { describe, beforeEach } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import type { Editor } from "ckeditor5";
 import { Autosave } from "ckeditor5";
 import { DataFacade } from "../src/DataFacade";

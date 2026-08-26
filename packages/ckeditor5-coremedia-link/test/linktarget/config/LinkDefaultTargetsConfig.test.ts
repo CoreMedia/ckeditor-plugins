@@ -1,6 +1,6 @@
 import type { TestContext } from "node:test";
 import { describe, beforeEach, test } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import { Config } from "ckeditor5";
 import { computeDefaultLinkTargetForUrl } from "../../../src/linktarget/config/LinkTargetConfig";
 

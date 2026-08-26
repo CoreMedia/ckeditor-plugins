@@ -1,6 +1,6 @@
 import "global-jsdom/register";
 import test, { describe } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import { Editor } from "ckeditor5";
 import type { FilterRuleSetConfiguration } from "../src/Rules";
 import { parseFilterRuleSetConfigurations } from "../src/Rules";

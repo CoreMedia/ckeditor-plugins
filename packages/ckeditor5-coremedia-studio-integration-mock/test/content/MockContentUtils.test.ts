@@ -1,5 +1,5 @@
 import test, { describe } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import { capitalize, increaseUpToAndRestart, isObject } from "../../src/content/MockContentUtils";
 
 const someFunction = () => {

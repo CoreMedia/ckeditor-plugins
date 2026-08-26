@@ -1,5 +1,5 @@
 import test, { describe } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import { documentFromHtml, documentFromXml } from "../src/Documents";
 import { HTMLTableElementWrapper, isHTMLTableElement, wrapIfTableElement } from "../src/HTMLTableElements";
 import { USE_CASE_NAME } from "./Constants";

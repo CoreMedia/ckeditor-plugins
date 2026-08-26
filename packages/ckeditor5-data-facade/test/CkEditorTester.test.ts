@@ -1,6 +1,6 @@
 import "./setup.mjs";
-import test, { describe, beforeEach } from "node:test";
-import expect from "expect";
+import test, { beforeEach, describe } from "node:test";
+import { expect } from "expect";
 import { completeToolbar, createTestEditor, prepareDocument } from "./helpers/TestEditor";
 
 void describe("CkEditor", () => {

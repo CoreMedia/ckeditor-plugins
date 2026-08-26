@@ -1,5 +1,5 @@
 import test, { describe } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import { documentFromHtml, documentFromXml } from "../src/Documents";
 import { extractNodeContents, lookupNamespaceURI, serializeToXmlString } from "../src/Nodes";
 import { fragmentFromNodeContents } from "../src/DocumentFragments";

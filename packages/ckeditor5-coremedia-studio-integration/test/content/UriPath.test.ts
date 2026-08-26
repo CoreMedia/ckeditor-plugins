@@ -1,6 +1,6 @@
 import "global-jsdom/register";
 import test from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import { requireContentUriPath, requireContentCkeModelUri } from "../../src/content/UriPath";
 
 test("requireContentCkeModelUri: should replace / with : for a CoreMedia Studio Uri", () => {

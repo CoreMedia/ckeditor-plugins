@@ -1,6 +1,6 @@
 import "global-jsdom/register";
 import test from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import type { RuleConfig } from "@coremedia/ckeditor5-dom-converter";
 import { RuleBasedHtmlDomConverterFactory } from "./RuleBasedHtmlDomConverters";
 import type { TestDirection } from "./TestDirection";
