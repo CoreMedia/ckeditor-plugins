@@ -21,10 +21,7 @@ catalog:
   '@coremedia/service-agent': ^2.1.2
   '@coremedia/set-version': 1.2.1
   '@coremedia/studio-client.build-config': ^2.0.0
-  '@coremedia/studio-client.eslint-config': ^1.0.2
-  '@eslint/compat': ^1.3.2
-  '@eslint/eslintrc': ^3.3.1
-  '@eslint/js': ^9.33.0
+  '@coremedia/studio-client.eslint-config': ^2.0.0
   '@playwright/test': ^1.59.1
   '@storybook/addon-essentials': ^8.6.14
   '@storybook/addon-interactions': ^8.6.14
@@ -32,8 +29,6 @@ catalog:
   '@storybook/html': ^8.6.14
   '@storybook/html-webpack5': ^8.6.14
   '@storybook/test': ^8.6.14
-  '@stylistic/eslint-plugin': ^5.2.3
-  '@types/eslint': ^9.6.1
   '@types/node': ^24.13.3
   '@types/webpack': ^5.28.5
   '@typescript-eslint/eslint-plugin': ^8.39.1
@@ -45,10 +40,7 @@ catalog:
   css-loader: ^7.1.2
   dotenv: ^16.4.7
   esbuild-loader: ^4.4.3
-  eslint: ^9.39.1
-  eslint-plugin-import: ^2.32.0
-  eslint-plugin-jsdoc: ^54.0.0
-  eslint-plugin-prettier: ^5.5.4
+  eslint: ^10.8.1
   expect: ^30.4.1
   express: ^5.1.0
   global-jsdom: ^27.0.0
