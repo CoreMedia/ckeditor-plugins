@@ -27,9 +27,6 @@ catalogs:
     '@bbob/types':
       specifier: 4.3.1
       version: 4.3.1
-    '@ckeditor/ckeditor5-dev-translations':
-      specifier: ^55.6.1
-      version: 55.6.1
     '@ckeditor/ckeditor5-dev-utils':
       specifier: ^55.6.1
       version: 55.6.1
@@ -316,9 +313,6 @@ importers:
         specifier: 'catalog:'
         version: 3.6.3
     devDependencies:
-      '@ckeditor/ckeditor5-dev-translations':
-        specifier: 'catalog:'
-        version: 55.6.1(@babel/core@7.29.7)(webpack@5.107.1)
       '@ckeditor/ckeditor5-dev-utils':
         specifier: 'catalog:'
         version: 55.6.1(@babel/core@7.29.7)(webpack@5.107.1)
@@ -2136,10 +2130,6 @@ packages:
 
   '@ckeditor/ckeditor5-core@48.1.1':
     resolution: {integrity: sha512-oF97gavgmGIkdrdIBc94zhxGlV0NSc9RxfyaM5Szd7z8Yxcml65QAXeQpGKc7B6PqomXBSUJRNyfoe+ruRDTWg==}
-
-  '@ckeditor/ckeditor5-dev-translations@55.6.1':
-    resolution: {integrity: sha512-oNJi1acjfebdVGRXr2JlE4+ZiFhC5t9mKC+nLXSHPt+9vPO1TeESgWuy5iQLG+3xTU0SpQVF5sRBLD40I/ERnw==}
-    engines: {node: '>=24.11.0', npm: '>=5.7.1'}
 
   '@ckeditor/ckeditor5-dev-utils@55.6.1':
     resolution: {integrity: sha512-4IQAd4sr9mpbPCfycG0YeNw78S6bZNroexyfIpsdwsLqOe+Hf2bIAaGkW99eLMxhePDlgaQB30fhKh4XnTl+iQ==}
@@ -4814,6 +4804,7 @@ packages:
   eslint@9.39.4:
     resolution: {integrity: sha512-XoMjdBOwe/esVgEvLmNsD3IRHkm7fbKIUGvrleloJXUZgDHig2IPWNniv+GwjyJXzuNqVjlr5+4yVUZjycJwfQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -6208,12 +6199,6 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  plural-forms@0.5.5:
-    resolution: {integrity: sha512-rJw4xp22izsfJOVqta5Hyvep2lR3xPkFUtj7dyQtpf/FbxUiX7PQCajTn2EHDRylizH5N/Uqqodfdu22I0ju+g==}
-
-  pofile@1.1.4:
-    resolution: {integrity: sha512-r6Q21sKsY1AjTVVjOuU02VYKVNQGJNQHjTIvs4dEbeuuYfxgYk/DGD2mqqq4RDaVkwdSq0VEtmQUOPe/wH8X3g==}
-
   polished@4.3.1:
     resolution: {integrity: sha512-OBatVyC/N7SCW/FaDHrSd+vn0o5cS855TOmYi4OkdWUMSJCET/xip//ch8xGUvtr3i44X9LVyWwQlRMTN3pwSA==}
     engines: {node: '>=10'}
@@ -6948,11 +6933,6 @@ packages:
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0
       typescript: '>=4.8.4 <6.0.0'
-
-  typescript@5.5.4:
-    resolution: {integrity: sha512-Mtq29sKDAEYP7aljRgtPOpTvOfbwRWlS6dPRzwjdE+C0R4brX/GUyhHSecbHMFLNBLcJIPt9nl9yG5TZ1weH+Q==}
-    engines: {node: '>=14.17'}
-    hasBin: true
 
   typescript@6.0.3:
     resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
@@ -8291,24 +8271,6 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 48.1.1
       '@ckeditor/ckeditor5-watchdog': 48.1.1
       es-toolkit: 1.45.1
-
-  '@ckeditor/ckeditor5-dev-translations@55.6.1(@babel/core@7.29.7)(webpack@5.107.1)':
-    dependencies:
-      '@babel/parser': 7.29.7
-      '@babel/traverse': 7.29.7
-      '@ckeditor/ckeditor5-dev-utils': 55.6.1(@babel/core@7.29.7)(webpack@5.107.1)
-      glob: 13.0.6
-      plural-forms: 0.5.5
-      pofile: 1.1.4
-      rimraf: 6.1.3
-      typescript: 5.5.4
-      upath: 2.0.1
-      webpack-sources: 3.4.1
-    transitivePeerDependencies:
-      - '@babel/core'
-      - '@rspack/core'
-      - supports-color
-      - webpack
 
   '@ckeditor/ckeditor5-dev-utils@55.6.1(@babel/core@7.29.7)(webpack@5.107.1)':
     dependencies:
@@ -13709,10 +13671,6 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.2
 
-  plural-forms@0.5.5: {}
-
-  pofile@1.1.4: {}
-
   polished@4.3.1:
     dependencies:
       '@babel/runtime': 7.29.2
@@ -14552,8 +14510,6 @@ snapshots:
       typescript: 6.0.3
     transitivePeerDependencies:
       - supports-color
-
-  typescript@5.5.4: {}
 
   typescript@6.0.3: {}
 
