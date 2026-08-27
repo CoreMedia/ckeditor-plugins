@@ -1,6 +1,6 @@
 import type { TestContext } from "node:test";
 import test from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import LoggerProvider from "../../src/logging/LoggerProvider";
 
 const mockFunctionName = "ORIGINAL";

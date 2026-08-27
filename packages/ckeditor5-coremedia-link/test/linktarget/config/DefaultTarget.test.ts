@@ -1,6 +1,6 @@
 import type { TestContext } from "node:test";
 import test, { describe } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import {
   DEFAULT_TARGETS_ARRAY,
   getDefaultTargetDefinition,

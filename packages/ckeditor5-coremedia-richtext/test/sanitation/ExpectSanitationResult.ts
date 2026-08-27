@@ -1,4 +1,4 @@
-import expect from "expect";
+import { expect } from "expect";
 import type { RichTextSanitizer } from "../../src/sanitation/RichTextSanitizer";
 import { Strictness } from "../../src/Strictness";
 import type { ListenerExpectations } from "./TestSanitationListener";

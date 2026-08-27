@@ -1,4 +1,4 @@
-import expect from "expect";
+import { expect } from "expect";
 import { SanitationListener } from "../../src/sanitation/SanitationListener";
 import type { AttributeCause, ElementCause } from "../../src/sanitation/Causes";
 

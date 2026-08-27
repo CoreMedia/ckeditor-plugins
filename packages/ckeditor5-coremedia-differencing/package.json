@@ -39,9 +39,11 @@
   "devDependencies": {
     "@coremedia-internal/ckeditor5-coremedia-example-data": "workspace:^1.0.0-SNAPSHOT",
     "@coremedia-internal/studio-client.test-runner-helper": "catalog:",
+    "@coremedia/studio-client.eslint-config": "catalog:",
     "@types/node": "catalog:",
     "ckeditor5": "catalog:",
     "copyfiles": "catalog:",
+    "eslint": "catalog:",
     "expect": "catalog:",
     "global-jsdom": "catalog:",
     "jsdom": "catalog:",

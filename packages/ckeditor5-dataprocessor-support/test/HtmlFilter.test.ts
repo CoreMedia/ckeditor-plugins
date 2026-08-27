@@ -5,7 +5,7 @@
 import "global-jsdom/register";
 import type { TestContext } from "node:test";
 import test, { describe } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import { Editor } from "ckeditor5";
 import type { FilterRuleSet } from "../src/HtmlFilter";
 import { HtmlFilter } from "../src/HtmlFilter";

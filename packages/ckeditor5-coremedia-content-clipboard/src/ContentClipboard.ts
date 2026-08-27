@@ -258,8 +258,8 @@ export default class ContentClipboard extends Plugin {
     if (!data.targetRanges) {
       return editor.model.document.selection.getFirstRange();
     }
-    const targetRanges: ModelRange[] = data.targetRanges.map(
-      (viewRange: ViewRange): ModelRange => editor.editing.mapper.toModelRange(viewRange),
+    const targetRanges: ModelRange[] = data.targetRanges.map((viewRange: ViewRange): ModelRange =>
+      editor.editing.mapper.toModelRange(viewRange),
     );
     if (targetRanges.length > 0) {
       return targetRanges[0];

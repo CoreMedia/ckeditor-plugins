@@ -10,7 +10,7 @@ export * from "./CSSStyleDeclarations";
 export * from "./DocumentFragments";
 export * from "./Documents";
 export * from "./Elements";
-// eslint-disable-next-line import/export
+// eslint-disable-next-line import-x/export
 export * from "./HasNamespaceUris";
 export * from "./HTMLAnchorElements";
 export * from "./HTMLElements";
@@ -20,6 +20,6 @@ export * from "./Nodes";
 export * from "./ParentNodes";
 export * from "./RgbColor";
 export * from "./Texts";
-// eslint-disable-next-line import/export
+// eslint-disable-next-line import-x/export
 export type * from "./Types";
 export * from "./w3ExtendedColorNames";

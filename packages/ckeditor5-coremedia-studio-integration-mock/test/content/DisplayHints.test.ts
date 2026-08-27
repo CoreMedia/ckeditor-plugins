@@ -1,6 +1,6 @@
 import test, { describe } from "node:test";
 import type { DisplayHint } from "@coremedia/ckeditor5-coremedia-studio-integration";
-import expect from "expect";
+import { expect } from "expect";
 import type Delayed from "../../src/content/Delayed";
 import type { NameHintConfig } from "../../src/content/DisplayHints";
 import { observeNameHint, unreadableNameHint } from "../../src/content/DisplayHints";
@@ -36,12 +36,10 @@ void describe("DisplayHints", () => {
         };
 
         const expectedNames = [...names, ...names.slice(0, loop ? 1 : 0)];
-        const expectedValues: DisplayHint[] = expectedNames.map(
-          (name: string): DisplayHint => ({
-            name,
-            classes,
-          }),
-        );
+        const expectedValues: DisplayHint[] = expectedNames.map((name: string): DisplayHint => ({
+          name,
+          classes,
+        }));
 
         await test(`[${i}] Should retrieve hints for names: ${JSON.stringify(names)} (loop? ${loop})`, async () =>
           expect(await retrieveValues(observeNameHint(config, 10), expectedValues)).toStrictEqual(expectedValues));

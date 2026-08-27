@@ -1,5 +1,5 @@
 import test, { describe } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import { documentFromHtml, documentFromXml, isDocument } from "../src/Documents";
 import { USE_CASE_NAME } from "./Constants";
 

@@ -2,7 +2,7 @@
 import "global-jsdom/register";
 import type { TestContext } from "node:test";
 import test, { describe } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import { bbCodeDefaultRules } from "../src";
 import { bbcode2html, processBBCode } from "../src/bbcode2html";
 

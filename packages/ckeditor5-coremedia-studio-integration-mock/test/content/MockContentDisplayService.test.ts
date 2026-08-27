@@ -1,5 +1,5 @@
 import test, { describe } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import { first } from "rxjs/operators";
 import MockContentDisplayService from "../../src/content/MockContentDisplayService";
 import { retrieveValuesUntilComplete } from "./ObservableTestUtil";

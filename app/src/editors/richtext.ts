@@ -498,6 +498,6 @@ export const createRichTextEditor: CKEditorInstanceFactory = async (
     });
   } catch (e) {
     console.error("Catched error when creating Editor.", e);
-    throw Error(licenseKeyErrorMessage);
+    throw Error(licenseKeyErrorMessage, { cause: e });
   }
 };

@@ -51,15 +51,8 @@
     "@coremedia/set-version": "catalog:"
   },
   "devDependencies": {
-    "@eslint/compat": "catalog:",
-    "@eslint/eslintrc": "catalog:",
-    "@eslint/js": "catalog:",
-    "@stylistic/eslint-plugin": "catalog:",
-    "@typescript-eslint/parser": "catalog:",
+    "@coremedia/studio-client.eslint-config": "catalog:",
     "eslint": "catalog:",
-    "eslint-plugin-import": "catalog:",
-    "eslint-plugin-jsdoc": "catalog:",
-    "eslint-plugin-prettier": "catalog:",
     "minimist": "catalog:",
     "package-directory": "catalog:",
     "rimraf": "catalog:",

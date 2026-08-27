@@ -421,8 +421,7 @@ export interface HTMLAnchorElementPreprocessor {
  */
 export const preProcessAnchorElement = (
   preProcessor:
-    | RequireSelected<HTMLAnchorElementPreprocessor, "toData">
-    | RequireSelected<HTMLAnchorElementPreprocessor, "toView">,
+    RequireSelected<HTMLAnchorElementPreprocessor, "toData"> | RequireSelected<HTMLAnchorElementPreprocessor, "toView">,
   ruleId = "pre-process-anchor-element",
 ): RuleConfig => {
   const { toData: toDataMapper, toView: toViewMapper } = preProcessor;

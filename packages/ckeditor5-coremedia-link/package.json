@@ -48,11 +48,13 @@
     "/theme"
   ],
   "devDependencies": {
-    "@coremedia/service-agent": "catalog:",
     "@coremedia-internal/studio-client.test-runner-helper": "catalog:",
+    "@coremedia/service-agent": "catalog:",
+    "@coremedia/studio-client.eslint-config": "catalog:",
     "@types/node": "catalog:",
     "ckeditor5": "catalog:",
     "copyfiles": "catalog:",
+    "eslint": "catalog:",
     "expect": "catalog:",
     "global-jsdom": "catalog:",
     "jsdom": "catalog:",

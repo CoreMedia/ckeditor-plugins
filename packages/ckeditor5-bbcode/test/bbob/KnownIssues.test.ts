@@ -1,7 +1,7 @@
 import type { TestContext } from "node:test";
 import test, { describe } from "node:test";
 import type { TagNodeTree } from "@bbob/types";
-import expect from "expect";
+import { expect } from "expect";
 import bbob from "@bbob/core";
 
 const render = (node: TagNodeTree | undefined) => {

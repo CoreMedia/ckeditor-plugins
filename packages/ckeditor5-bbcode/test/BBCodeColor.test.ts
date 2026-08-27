@@ -1,7 +1,7 @@
 import "global-jsdom/register";
 import type { TestContext } from "node:test";
 import test, { describe } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import type { RgbColor } from "@coremedia/ckeditor5-dom-support";
 import { w3ExtendedColorNames } from "@coremedia/ckeditor5-dom-support";
 import type { ColorMapper } from "../src/rules/BBCodeColor";

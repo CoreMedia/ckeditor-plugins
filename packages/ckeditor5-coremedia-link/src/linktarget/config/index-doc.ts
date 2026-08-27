@@ -3,10 +3,10 @@
  * @category Virtual
  */
 
-// eslint-disable-next-line import/export
+// eslint-disable-next-line import-x/export
 export * from "./DefaultTarget";
-// eslint-disable-next-line import/export
-export type { default as DefaultTarget } from "./DefaultTarget";
+// eslint-disable-next-line import-x/export
+export type { DefaultTarget } from "./DefaultTarget";
 
 export * from "./LinkTargetConfig";
 export type { default as LinkTargetConfig } from "./LinkTargetConfig";

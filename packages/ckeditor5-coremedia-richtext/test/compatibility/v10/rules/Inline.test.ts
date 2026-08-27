@@ -1,6 +1,6 @@
 import "global-jsdom/register";
 import test, { describe } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import type { DataProcessingTestCase } from "../DataDrivenTests";
 import { allDataProcessingTests, applyFilter, Direction, getFilter } from "../DataDrivenTests";
 import { flatten } from "../Utils";

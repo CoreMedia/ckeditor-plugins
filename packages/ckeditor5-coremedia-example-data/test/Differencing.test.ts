@@ -1,6 +1,6 @@
 import "global-jsdom/register";
 import test, { describe } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import { Differencing, EOD } from "../src/Differencing";
 
 void describe("Differencing", () => {

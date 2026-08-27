@@ -1,6 +1,6 @@
 import "global-jsdom/register";
 import test, { describe } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import { HtmlFilter } from "@coremedia/ckeditor5-dataprocessor-support";
 import { Editor } from "ckeditor5";
 import ToDataProcessor from "../../../src/ToDataProcessor";

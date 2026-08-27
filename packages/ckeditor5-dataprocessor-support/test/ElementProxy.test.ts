@@ -1,6 +1,6 @@
 import "global-jsdom/register";
 import test, { beforeEach, describe } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import { Editor } from "ckeditor5";
 import type { ElementFilterParams, ElementFilterRule } from "../src/ElementProxy";
 import { ElementProxy } from "../src/ElementProxy";

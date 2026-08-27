@@ -1,6 +1,6 @@
 import "global-jsdom/register";
 import test, { describe } from "node:test";
-import expect from "expect";
+import { expect } from "expect";
 import { ElementProxy } from "@coremedia/ckeditor5-dataprocessor-support";
 import type { V10Strictness } from "../../../src/compatibility/v10/RichTextSchema";
 import RichTextSchema from "../../../src/compatibility/v10/RichTextSchema";
