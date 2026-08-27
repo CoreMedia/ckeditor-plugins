@@ -14,7 +14,6 @@ catalog:
   '@bbob/preset': 4.3.1
   '@bbob/preset-html5': 4.3.1
   '@bbob/types': 4.3.1
-  '@ckeditor/ckeditor5-dev-translations': ^55.6.1
   '@ckeditor/ckeditor5-dev-utils': ^55.6.1
   '@ckeditor/ckeditor5-inspector': ^5.0.0
   '@ckeditor/ckeditor5-theme-lark': 47.6.2
@@ -37,6 +36,7 @@ catalog:
   '@types/eslint': ^9.6.1
   '@types/node': ^24.13.3
   '@types/webpack': ^5.28.5
+  '@typescript-eslint/eslint-plugin': ^8.39.1
   '@typescript-eslint/parser': ^8.39.1
   ci-info: ^3.9.0
   circular-dependency-plugin: ^5.2.2

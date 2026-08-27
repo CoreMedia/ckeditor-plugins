@@ -33,7 +33,6 @@
     "xml-formatter": "catalog:"
   },
   "devDependencies": {
-    "@ckeditor/ckeditor5-dev-translations": "catalog:",
     "@ckeditor/ckeditor5-dev-utils": "catalog:",
     "@ckeditor/ckeditor5-inspector": "catalog:",
     "@ckeditor/ckeditor5-theme-lark": "catalog:",

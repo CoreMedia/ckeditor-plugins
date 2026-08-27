@@ -3,7 +3,6 @@
 import path from "path";
 import webpack from "webpack";
 import { loaders } from "@ckeditor/ckeditor5-dev-utils";
-import { CKEditorTranslationsPlugin } from "@ckeditor/ckeditor5-dev-translations";
 import TerserPlugin from "terser-webpack-plugin";
 import CircularDependencyPlugin from "circular-dependency-plugin";
 import fs from "fs";
@@ -67,13 +66,6 @@ export default {
   },
 
   plugins: [
-    new CKEditorTranslationsPlugin({
-      // UI language. Language codes follow the https://en.wikipedia.org/wiki/ISO_639-1 format.
-      // When changing the built-in language, remember to also change it in the editor's configuration (src/ckeditor.js).
-      language: "en",
-      additionalLanguages: ["de"],
-      sourceFilesPattern: "[/\\]ckeditor5/translations/[a-z]{2}.js",
-    }),
     new CircularDependencyPlugin({
       exclude: /node_modules/,
       failOnError: true,
