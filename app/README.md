@@ -65,4 +65,4 @@ Here: https://ckeditor.com/docs/ckeditor5/latest/framework/
 
 | Is it possible to use online builder with common frameworks like React, Vue or Angular?
 
-Not yet, but it these integrations will be available at some point in the future.
+Not yet, but these integrations will be available at some point in the future.
