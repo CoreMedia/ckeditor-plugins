@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-playwright-itest",
-  "version": "28.0.0",
+  "version": "28.1.0",
   "author": {
     "name": "CoreMedia GmbH",
     "email": "info@coremedia.com",
@@ -15,9 +15,9 @@
     "@coremedia/studio-client.eslint-config": "catalog:",
     "@coremedia-internal/ckeditor5-coremedia-example-data": "workspace:^1.0.0-SNAPSHOT",
     "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock": "workspace:^1.0.0-SNAPSHOT",
-    "@coremedia/ckeditor5-coremedia-richtext": "workspace:^28.0.0",
-    "@coremedia/ckeditor5-coremedia-studio-integration": "workspace:^28.0.0",
-    "@coremedia/ckeditor5-itest-constants": "workspace:^28.0.0",
+    "@coremedia/ckeditor5-coremedia-richtext": "workspace:28.1.0",
+    "@coremedia/ckeditor5-coremedia-studio-integration": "workspace:28.1.0",
+    "@coremedia/ckeditor5-itest-constants": "workspace:28.1.0",
     "@playwright/test": "catalog:",
     "@types/node": "catalog:",
     "ci-info": "catalog:",
