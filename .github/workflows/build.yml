@@ -92,11 +92,12 @@ jobs:
         name: "Initialize NPM Configuration"
         run: |
           npmAuthToken="${{ env.NODE_AUTH_TOKEN }}"
-          echo "//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=${npmAuthToken}" >> .npmrc
-          echo "@coremedia:registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/" >> .npmrc
-          echo "@coremedia-internal:registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/" >> .npmrc
-          # We must not commit this change.
-          git update-index --assume-unchanged .npmrc
+          # The .npmrc is not checked in (see .gitignore) and fully generated here.
+          {
+            echo "@coremedia:registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/"
+            echo "@coremedia-internal:registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/"
+            echo "//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=${npmAuthToken}"
+          } > .npmrc
       - id: installPnpm
         name: "Install: Use PNPM ${{ env.pnpmVersion }}"
         uses: pnpm/action-setup@v5
