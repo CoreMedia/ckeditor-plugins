@@ -94,7 +94,6 @@ jobs:
           npmAuthToken="${{ env.NODE_AUTH_TOKEN }}"
           # The .npmrc is not checked in (see .gitignore) and fully generated here.
           {
-            echo "strict-ssl=false"
             echo "@coremedia:registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/"
             echo "@coremedia-internal:registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/"
             echo "//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=${npmAuthToken}"

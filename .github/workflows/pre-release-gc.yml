@@ -63,7 +63,6 @@ jobs:
           # a project .npmrc, so the resolved token has to be written out literally.
           # The file is gitignored and the token is masked in the logs.
           {
-            echo "strict-ssl=false"
             echo "@coremedia:registry=${{ env.NPM_REPOSITORY_URL }}"
             echo "//${{ env.NPM_REPOSITORY }}/:_authToken=${NPM_AUTH_TOKEN}"
           } > .npmrc

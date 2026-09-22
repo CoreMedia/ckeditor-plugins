@@ -78,7 +78,6 @@ jobs:
 
           # The .npmrc is not checked in (see .gitignore) and fully generated here.
           {
-            echo "strict-ssl=false"
             echo "@coremedia:registry=${npmUrl}"
             echo "@coremedia-internal:registry=${npmUrl}"
             echo "//${npmHost}/:_authToken=${npmAuthToken}"
