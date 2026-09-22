@@ -57,7 +57,7 @@
     "ckeditor5": "catalog:"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-coremedia-richtext": "workspace:28.1.0",
-    "@coremedia/ckeditor5-coremedia-richtext-support": "workspace:28.1.0"
+    "@coremedia/ckeditor5-coremedia-richtext": "workspace:^28.1.0",
+    "@coremedia/ckeditor5-coremedia-richtext-support": "workspace:^28.1.0"
   }
 }

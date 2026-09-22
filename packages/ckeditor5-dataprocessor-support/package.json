@@ -64,7 +64,7 @@
     "ckeditor5": "catalog:"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "workspace:28.1.0",
-    "@coremedia/ckeditor5-logging": "workspace:28.1.0"
+    "@coremedia/ckeditor5-common": "workspace:^28.1.0",
+    "@coremedia/ckeditor5-logging": "workspace:^28.1.0"
   }
 }

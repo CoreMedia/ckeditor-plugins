@@ -48,7 +48,7 @@
     "typescript": "catalog:"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "workspace:28.1.0"
+    "@coremedia/ckeditor5-common": "workspace:^28.1.0"
   },
   "scripts": {
     "clean": "pnpm clean:src && pnpm clean:dist",

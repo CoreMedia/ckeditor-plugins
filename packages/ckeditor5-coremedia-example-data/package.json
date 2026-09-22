@@ -41,7 +41,7 @@
     "typescript": "catalog:"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "workspace:28.1.0"
+    "@coremedia/ckeditor5-common": "workspace:^28.1.0"
   },
   "scripts": {
     "build": "tsc --project ./tsconfig.release.json",
