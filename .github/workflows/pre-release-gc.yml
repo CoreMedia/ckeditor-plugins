@@ -52,6 +52,10 @@ jobs:
             --data '{"name": "${{ secrets.PLUGINS_NEXUS_USER }}", "password": "${{ secrets.PLUGINS_NEXUS_PASSWORD }}"}' \
             "${{ env.NPM_REPOSITORY_URL }}/-/user/org.couchdb.user:${{ secrets.PLUGINS_NEXUS_USER }}" | \
             jq -r .token)
+          if [ -z "$NPM_AUTH_TOKEN" ] || [ "$NPM_AUTH_TOKEN" = "null" ]; then
+            echo "::error::Nexus auth exchange returned no token. Check PLUGINS_NEXUS_USER/PLUGINS_NEXUS_PASSWORD secrets and Nexus availability."
+            exit 1
+          fi
           echo "::add-mask::$NPM_AUTH_TOKEN"
           echo "PNPM_CONFIG_//${{ env.NPM_REPOSITORY }}/:_authToken=${NPM_AUTH_TOKEN}" >> $GITHUB_ENV
           echo "NPM_AUTH_TOKEN=${NPM_AUTH_TOKEN}" >> $GITHUB_ENV
