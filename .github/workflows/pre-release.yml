@@ -54,9 +54,16 @@ jobs:
           fi
           echo "::add-mask::$NPM_AUTH_TOKEN"
           echo "NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
-          echo "PNPM_CONFIG_//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=$NPM_AUTH_TOKEN" >> $GITHUB_ENV
-          echo "@coremedia:registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/" >> .npmrc
-          echo "@coremedia-internal:registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/" >> .npmrc
+          # The .npmrc is not checked in (see .gitignore) and fully generated here.
+          # pnpm ignores ${VAR} placeholders in registry credentials that come from
+          # a project .npmrc, so the resolved token has to be written out literally.
+          # The file is gitignored and the token is masked in the logs.
+          {
+            echo "strict-ssl=false"
+            echo "@coremedia:registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/"
+            echo "@coremedia-internal:registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/"
+            echo "//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=$NPM_AUTH_TOKEN"
+          } > .npmrc
       - name: Setup Git
         run: |
           git config --global user.name 'coremedia-ci'
@@ -104,7 +111,6 @@ jobs:
         if: github.event_name == 'workflow_dispatch'
         run: |
           pnpm install --production
-          echo '//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=${NPM_AUTH_TOKEN}' > .npmrc
           pnpm publishall --registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/ --no-git-checks --tag pullrequest
       # The "Set prerelease version" step pinned all @coremedia/* interdependencies
       # to concrete versions so they could be published. Now that publishing is done,
@@ -113,8 +119,6 @@ jobs:
       - name: Restore workspace dependency versions
         if: github.event_name == 'workflow_dispatch'
         run: |
-          # Avoid committing the auth token written to .npmrc during publishing.
-          git checkout -- .npmrc || true
           echo "Restoring workspace dependency versions for: ${NEXT_VERSION}"
           pnpm run setversion ${NEXT_VERSION} --filter=coremedia/* --dependencyVersion=workspace:^${NEXT_VERSION}
           pnpm install --no-frozen-lockfile

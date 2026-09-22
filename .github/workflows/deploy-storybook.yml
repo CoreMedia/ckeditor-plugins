@@ -76,11 +76,13 @@ jobs:
           npmUrl="${{ env.npmUrl }}"
           npmAuthToken="${{ env.NODE_AUTH_TOKEN }}"
 
-          echo "//${npmHost}/:_authToken=${npmAuthToken}" >> .npmrc
-          echo "@coremedia:registry=${npmUrl}" >> .npmrc
-          echo "@coremedia-internal:registry=${npmUrl}" >> .npmrc
-          # We must not commit this change.
-          git update-index --assume-unchanged .npmrc
+          # The .npmrc is not checked in (see .gitignore) and fully generated here.
+          {
+            echo "strict-ssl=false"
+            echo "@coremedia:registry=${npmUrl}"
+            echo "@coremedia-internal:registry=${npmUrl}"
+            echo "//${npmHost}/:_authToken=${npmAuthToken}"
+          } > .npmrc
       - id: installPnpm
         name: "Install: Use PNPM ${{ env.pnpmVersion }}"
         uses: pnpm/action-setup@v5

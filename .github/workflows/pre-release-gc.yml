@@ -57,10 +57,16 @@ jobs:
             exit 1
           fi
           echo "::add-mask::$NPM_AUTH_TOKEN"
-          echo "PNPM_CONFIG_//${{ env.NPM_REPOSITORY }}/:_authToken=${NPM_AUTH_TOKEN}" >> $GITHUB_ENV
           echo "NPM_AUTH_TOKEN=${NPM_AUTH_TOKEN}" >> $GITHUB_ENV
-          echo "//${{ env.NPM_REPOSITORY }}/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc
-          echo "@coremedia:registry=${{ env.NPM_REPOSITORY_URL }}" >> .npmrc
+          # The .npmrc is not checked in (see .gitignore) and fully generated here.
+          # pnpm ignores ${VAR} placeholders in registry credentials that come from
+          # a project .npmrc, so the resolved token has to be written out literally.
+          # The file is gitignored and the token is masked in the logs.
+          {
+            echo "strict-ssl=false"
+            echo "@coremedia:registry=${{ env.NPM_REPOSITORY_URL }}"
+            echo "//${{ env.NPM_REPOSITORY }}/:_authToken=${NPM_AUTH_TOKEN}"
+          } > .npmrc
       - name: "Performing Garbage Collection (retain: ${{ inputs.retain }}, dry-run: ${{ inputs.dryRun }})"
         run: |
           packages=($(npm search "@coremedia/ckeditor" --json --registry "${{ env.NPM_REPOSITORY_URL }}" | jq -r ".[].name"))
