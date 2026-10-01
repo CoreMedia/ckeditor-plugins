@@ -35,7 +35,7 @@ catalog:
   '@typescript-eslint/parser': ^8.39.1
   ci-info: ^3.9.0
   circular-dependency-plugin: ^5.2.2
-  ckeditor5: 48.5.1
+  ckeditor5: 48.5.2
   copyfiles: ^2.4.1
   css-loader: ^7.1.2
   dotenv: ^16.4.7
