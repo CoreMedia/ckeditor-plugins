@@ -47,8 +47,8 @@
     "typescript": "catalog:"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-coremedia-studio-integration": "workspace:28.1.1",
-    "@coremedia/ckeditor5-logging": "workspace:28.1.1"
+    "@coremedia/ckeditor5-coremedia-studio-integration": "workspace:^28.1.1",
+    "@coremedia/ckeditor5-logging": "workspace:^28.1.1"
   },
   "peerDependencies": {
     "@coremedia/service-agent": "catalog:",
