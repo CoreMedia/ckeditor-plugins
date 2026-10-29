@@ -2,7 +2,7 @@
 
 import path from "path";
 import webpack from "webpack";
-import { loaders } from "@ckeditor/ckeditor5-dev-utils";
+import { Features } from "lightningcss";
 import TerserPlugin from "terser-webpack-plugin";
 import CircularDependencyPlugin from "circular-dependency-plugin";
 import fs from "fs";
@@ -82,10 +82,36 @@ export default {
         test: /\.svg$/,
         type: "asset/source",
       },
-      loaders.getStylesLoader({
-        minify: true,
-      }),
-      loaders.getTypeScriptLoader(),
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: "style-loader",
+            options: {
+              injectType: "singletonStyleTag",
+              attributes: { "data-cke": true },
+            },
+          },
+          {
+            loader: "css-loader",
+            options: { importLoaders: 1 },
+          },
+          {
+            loader: path.resolve(dirname, "lightningcss-loader.js"),
+            options: {
+              lightningCssOptions: { minify: true, include: Features.Nesting },
+            },
+          },
+        ],
+      },
+      {
+        test: /\.ts$/,
+        loader: "esbuild-loader",
+        options: {
+          target: "es2022",
+          tsconfig: path.resolve(dirname, "tsconfig.json"),
+        },
+      },
       {
         test: /\.m?js$/,
         enforce: "pre",
