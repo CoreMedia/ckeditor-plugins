@@ -35,7 +35,6 @@
   "devDependencies": {
     "@ckeditor/ckeditor5-dev-utils": "catalog:",
     "@ckeditor/ckeditor5-inspector": "catalog:",
-    "@ckeditor/ckeditor5-theme-lark": "catalog:",
     "@coremedia/studio-client.eslint-config": "catalog:",
     "@types/node": "catalog:",
     "circular-dependency-plugin": "catalog:",

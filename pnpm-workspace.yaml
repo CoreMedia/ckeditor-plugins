@@ -16,7 +16,6 @@ catalog:
   '@bbob/types': 4.3.1
   '@ckeditor/ckeditor5-dev-utils': ^55.6.1
   '@ckeditor/ckeditor5-inspector': ^5.0.3
-  '@ckeditor/ckeditor5-theme-lark': 47.7.4
   '@coremedia-internal/studio-client.test-runner-helper': ^1.1.0
   '@coremedia/service-agent': ^2.1.2
   '@coremedia/set-version': 1.2.1
@@ -35,7 +34,7 @@ catalog:
   '@typescript-eslint/parser': ^8.39.1
   ci-info: ^3.9.0
   circular-dependency-plugin: ^5.2.2
-  ckeditor5: 48.5.2
+  ckeditor5: 49.0.1
   copyfiles: ^2.4.1
   css-loader: ^7.1.2
   dotenv: ^16.4.7

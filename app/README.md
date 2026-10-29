@@ -18,6 +18,10 @@ If you picked the non-real-time collaboration plugins:
 
 ## Configuring build
 
+Editor styles are imported from `ckeditor5/ckeditor5.css` and bundled together
+with the CoreMedia plugins' CSS. A separate `@ckeditor/ckeditor5-theme-lark`
+dependency is not required.
+
 Changes like changing toolbar items, changing order of icons or customizing plugin configurations should be relatively easy to make. Open the `sample/index.html` file and edit the script that initialized the CKEditor 5. Save the file and refresh the browser. That's all.
 
 *Note:* If you have any problems with browser caching use the `Ctrl + R` or `Cmd + R` shortcut depending on your system.

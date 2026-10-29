@@ -83,7 +83,6 @@ export default {
         type: "asset/source",
       },
       loaders.getStylesLoader({
-        themePath: import.meta.resolve("@ckeditor/ckeditor5-theme-lark"),
         minify: true,
       }),
       loaders.getTypeScriptLoader(),
