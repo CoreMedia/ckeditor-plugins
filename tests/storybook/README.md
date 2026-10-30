@@ -70,9 +70,10 @@ starts it automatically (see [below](#how-playwright-targets-storybook)).
 ```text
 tests/storybook/
 ├─ .storybook/            Storybook configuration
-│  ├─ main.ts             Framework, addons, .env + SVG-as-source webpack tweaks
-│  ├─ preview.ts          Global preview config; imports content-styles.css
-│  └─ content-styles.css  Editing-view CSS (float/align/list/min-height, …)
+│  ├─ main.ts             Shared config + stories location, .env, license key
+│  ├─ preview.ts          Shared preview config; imports content-styles.css
+│  ├─ content-styles.css  Editing-view CSS (float/align/list/min-height, …)
+│  └─ framework/preset.js Local framework: HTML renderer + webpack builder
 ├─ src/
 │  ├─ editors/            Editor factories (richtext, bbCode) + license helper
 │  ├─ runtime/            Story runtime contract:
@@ -88,6 +89,18 @@ tests/storybook/
    ├─ RuntimeContract.*   Documents/validates the runtime contract
    └─ Smoke.stories.ts    Minimal smoke story
 ```
+
+The Storybook configuration is built on the shared
+`@coremedia-internal/studio-client.storybook-config` (addons, SWC compiler,
+`*.svg` imports as raw source, fonts and docs styling). `main.ts` only adds what
+is specific to this package: the `stories/` location, the `.env` lookup and the
+`CKEDITOR_LICENSE_KEY` define, applied on top of the shared `webpackFinal`.
+
+The shared configuration requires a webpack-based Storybook framework, but
+Storybook ships its HTML renderer only for Vite (`@storybook/html-vite`). The
+local framework in `.storybook/framework/preset.js` therefore pairs the official
+`@storybook/html` renderer with `@storybook/builder-webpack5`, so stories stay
+plain HTML and keep importing their types from `@storybook/html`.
 
 ## Stories
 

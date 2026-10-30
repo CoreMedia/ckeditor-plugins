@@ -1,15 +1,4 @@
-import type { Preview } from "@storybook/html";
+import { createPreviewConfig } from "@coremedia-internal/studio-client.storybook-config";
 import "./content-styles.css";
 
-const preview: Preview = {
-  parameters: {
-    controls: {
-      matchers: {
-        color: /(background|color)$/i,
-        date: /Date$/i,
-      },
-    },
-  },
-};
-
-export default preview;
+export default createPreviewConfig();
