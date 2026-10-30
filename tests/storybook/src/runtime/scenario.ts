@@ -99,8 +99,9 @@ export interface ScenarioArgs {
    * When set, the scenario writes this item to the browser clipboard while
    * mounting, so a test can paste a fully prepared payload (e.g. a Word HTML
    * document) without itself calling `page.evaluate`. Requires the browser
-   * context to grant the `clipboard-write` permission (the Playwright config
-   * does). Defaults to `null` (no clipboard write).
+   * context to grant the `clipboard-write` permission (the Playwright test
+   * using such a story does, via `test.use({ permissions })`). Defaults to
+   * `null` (no clipboard write).
    */
   clipboard: ClipboardScenarioItem | null;
 }
