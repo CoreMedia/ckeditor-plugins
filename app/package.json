@@ -33,9 +33,7 @@
     "xml-formatter": "catalog:"
   },
   "devDependencies": {
-    "@ckeditor/ckeditor5-dev-utils": "catalog:",
     "@ckeditor/ckeditor5-inspector": "catalog:",
-    "@ckeditor/ckeditor5-theme-lark": "catalog:",
     "@coremedia/studio-client.eslint-config": "catalog:",
     "@types/node": "catalog:",
     "circular-dependency-plugin": "catalog:",
@@ -44,6 +42,7 @@
     "esbuild-loader": "catalog:",
     "eslint": "catalog:",
     "http-server": "catalog:",
+    "lightningcss": "catalog:",
     "postcss": "catalog:",
     "postcss-loader": "catalog:",
     "rimraf": "catalog:",
