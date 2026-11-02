@@ -72,6 +72,13 @@ const addCustomClickOutsideHandler = ({
 }): void => {
   const EDITOR_CLASS = "ck-editor";
   /**
+   * Whether the event path contains an editor element. Checks the composed
+   * path, as `document.getElementsByClassName` does not find editors rendered
+   * inside a shadow root.
+   */
+  const isEditorElement = (target: unknown): boolean =>
+    target instanceof Element && target.classList.contains(EDITOR_CLASS);
+  /**
    * Whether the mouseDown event occurred on an allow-listed element.
    * Background: The mouseDown and click events may not always share the same path.
    * (E.g., when dragging elements like the CoreMedia Studio library)
@@ -103,7 +110,7 @@ const addCustomClickOutsideHandler = ({
 
       // Do not close balloon if user clicked on draggable outside any editor component
       const editorElements = document.getElementsByClassName(EDITOR_CLASS);
-      let pathIncludesAnyEditor = false;
+      let pathIncludesAnyEditor = path.some(isEditorElement);
       for (const editorElement of editorElements) {
         if (path.includes(editorElement)) {
           pathIncludesAnyEditor = true;
@@ -145,6 +152,9 @@ const addCustomClickOutsideHandler = ({
         return;
       }
       const path = typeof domEvt.composedPath === "function" ? domEvt.composedPath() : [];
+      if (path.some(isEditorElement)) {
+        return;
+      }
       const editorElements = document.getElementsByClassName(EDITOR_CLASS);
       for (const editorElement of editorElements) {
         if (editorElement.contains(domEvt.target) || path.includes(editorElement)) {

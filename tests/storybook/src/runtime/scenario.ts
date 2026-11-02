@@ -104,6 +104,14 @@ export interface ScenarioArgs {
    * `null` (no clipboard write).
    */
   clipboard: ClipboardScenarioItem | null;
+  /**
+   * Whether to mount the editor inside an open shadow root instead of the
+   * light DOM. The editor and content style sheets are adopted into that root,
+   * and CKEditor's floating UI (balloons, tooltips) is rendered into a separate
+   * shadow root at the end of `document.body`, configured as
+   * `config.ui.overlayContainer`. Defaults to `false`.
+   */
+  shadowDom: boolean;
 }
 
 /**
@@ -121,4 +129,5 @@ export const defaultScenarioArgs: ScenarioArgs = {
   outputs: [],
   droppableUris: [],
   clipboard: null,
+  shadowDom: false,
 };
