@@ -31,11 +31,11 @@ catalogs:
       specifier: ^5.0.3
       version: 5.0.3
     '@coremedia-internal/studio-client.playwright-config':
-      specifier: 1.0.0-SNAPSHOT.31ee53a-41036238544
-      version: 1.0.0-SNAPSHOT.31ee53a-41036238544
+      specifier: ^1.4.0
+      version: 1.4.0
     '@coremedia-internal/studio-client.storybook-config':
-      specifier: ^2.0.0
-      version: 2.0.0
+      specifier: ^2.0.1
+      version: 2.0.1
     '@coremedia-internal/studio-client.test-runner-helper':
       specifier: ^1.1.0
       version: 1.1.1
@@ -1461,7 +1461,7 @@ importers:
         version: link:../../packages/ckeditor5-coremedia-studio-integration-mock
       '@coremedia-internal/studio-client.playwright-config':
         specifier: 'catalog:'
-        version: 1.0.0-SNAPSHOT.31ee53a-41036238544(@coremedia/service-agent@2.1.3)(@playwright/test@1.64.1)(rxjs@7.8.2)
+        version: 1.4.0(@coremedia/service-agent@2.1.3)(@playwright/test@1.64.1)(rxjs@7.8.2)
       '@coremedia/ckeditor5-coremedia-richtext':
         specifier: workspace:^28.1.1
         version: link:../../packages/ckeditor5-coremedia-richtext
@@ -1567,7 +1567,7 @@ importers:
     devDependencies:
       '@coremedia-internal/studio-client.storybook-config':
         specifier: 'catalog:'
-        version: 2.0.0(@storybook/addon-docs@10.6.5(@types/react@19.2.17)(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0)))(@storybook/addon-links@10.6.5(@types/react@19.2.17)(react@19.2.0)(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0)))(@storybook/addon-webpack5-compiler-swc@4.0.3(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0))(webpack@5.107.1(@swc/core@1.15.46)(clean-css@5.3.3)(esbuild@0.28.0)(html-minifier-terser@6.1.0)(lightningcss@1.32.0)(postcss@8.5.32)))(@storybook/builder-webpack5@10.6.5(@swc/core@1.15.46)(clean-css@5.3.3)(esbuild@0.28.0)(html-minifier-terser@6.1.0)(lightningcss@1.32.0)(postcss@8.5.32)(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0))(typescript@6.0.3))(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0))
+        version: 2.0.1(@storybook/addon-docs@10.6.5(@types/react@19.2.17)(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0)))(@storybook/addon-links@10.6.5(@types/react@19.2.17)(react@19.2.0)(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0)))(@storybook/addon-webpack5-compiler-swc@4.0.3(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0))(webpack@5.107.1(@swc/core@1.15.46)(clean-css@5.3.3)(esbuild@0.28.0)(html-minifier-terser@6.1.0)(lightningcss@1.32.0)(postcss@8.5.32)))(@storybook/builder-webpack5@10.6.5(@swc/core@1.15.46)(clean-css@5.3.3)(esbuild@0.28.0)(html-minifier-terser@6.1.0)(lightningcss@1.32.0)(postcss@8.5.32)(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0))(typescript@6.0.3))(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0))
       '@coremedia/studio-client.build-config':
         specifier: 'catalog:'
         version: 2.0.0(@swc/core@1.15.46)(clean-css@5.3.3)(esbuild@0.28.0)(html-minifier-terser@6.1.0)(lightningcss@1.32.0)(postcss@8.5.32)(supports-color@8.1.1)(typescript@6.0.3)(webpack@5.107.1(@swc/core@1.15.46)(clean-css@5.3.3)(esbuild@0.28.0)(html-minifier-terser@6.1.0)(lightningcss@1.32.0)(postcss@8.5.32))
@@ -2361,21 +2361,21 @@ packages:
   '@ckeditor/ckeditor5-word-count@49.0.1':
     resolution: {integrity: sha512-siKKZKf9OqnVxj1SA7PNKvrFqaRKlqn8w+GMoKMaWRaTmZCd3X40hG5sMT2J3mCbiJpVmmDitZVUk+7tKhZ77w==}
 
-  '@coremedia-internal/studio-client.playwright-config@1.0.0-SNAPSHOT.31ee53a-41036238544':
-    resolution: {integrity: sha512-iL3Yk8nz7umPVJ0dfec6JvU4r2WkTcYJfUNl/edLb88aI+kC6yjOyw7YoqgfHayy9avDU6fcCmLIDzXf6GysNg==}
+  '@coremedia-internal/studio-client.playwright-config@1.4.0':
+    resolution: {integrity: sha512-C1Jo0UKrPb2pqlBcD/MRrv/uoIQ27ZcAc5FJIYt0dA3x0ofsm+ka+40wY3i9SMoc76TWCBfSykYujpyOxMB8Yg==}
     peerDependencies:
       '@coremedia/service-agent': ^2.1.2
       '@playwright/test': ^1.62.1
       rxjs: ^7.8.2
 
-  '@coremedia-internal/studio-client.storybook-config@2.0.0':
-    resolution: {integrity: sha512-NQNtep8et/29/ZC0hfyLvvUUh7/1Qhhv+vQt+i8sEF1rvDC0uMO5R0OcONK8eJFt9LGzBUO6guRiVxxhKLvodg==}
+  '@coremedia-internal/studio-client.storybook-config@2.0.1':
+    resolution: {integrity: sha512-24JpgRQVaYMMZVeF6KJEcDA1sVQcf7Ll8hE0xQ7Tpg+IuKTEiFzdV1mFXaUwdO5epi4HU82IZGkRLfVypqLRHw==}
     peerDependencies:
-      '@storybook/addon-docs': ^10.6.0
-      '@storybook/addon-links': ^10.6.0
+      '@storybook/addon-docs': ^10.6.2
+      '@storybook/addon-links': ^10.6.2
       '@storybook/addon-webpack5-compiler-swc': ^4.0.3
-      '@storybook/builder-webpack5': ^10.6.0
-      storybook: ^10.6.0
+      '@storybook/builder-webpack5': ^10.6.2
+      storybook: ^10.6.2
 
   '@coremedia-internal/studio-client.test-runner-helper@1.1.1':
     resolution: {integrity: sha512-uLZ5Nv/VCDV9qNaA1+PATzS07wuOw3TuGF3sHS/ylVYLEuv9+rGdAElhrYYzvx0wOeFrb4g+N8gKKyJYJuguHg==}
@@ -7870,14 +7870,14 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 49.0.1
       es-toolkit: 1.52.0
 
-  '@coremedia-internal/studio-client.playwright-config@1.0.0-SNAPSHOT.31ee53a-41036238544(@coremedia/service-agent@2.1.3)(@playwright/test@1.64.1)(rxjs@7.8.2)':
+  '@coremedia-internal/studio-client.playwright-config@1.4.0(@coremedia/service-agent@2.1.3)(@playwright/test@1.64.1)(rxjs@7.8.2)':
     dependencies:
       '@coremedia/service-agent': 2.1.3
       '@playwright/test': 1.64.1
       ci-info: 3.9.0
       rxjs: 7.8.2
 
-  '@coremedia-internal/studio-client.storybook-config@2.0.0(@storybook/addon-docs@10.6.5(@types/react@19.2.17)(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0)))(@storybook/addon-links@10.6.5(@types/react@19.2.17)(react@19.2.0)(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0)))(@storybook/addon-webpack5-compiler-swc@4.0.3(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0))(webpack@5.107.1(@swc/core@1.15.46)(clean-css@5.3.3)(esbuild@0.28.0)(html-minifier-terser@6.1.0)(lightningcss@1.32.0)(postcss@8.5.32)))(@storybook/builder-webpack5@10.6.5(@swc/core@1.15.46)(clean-css@5.3.3)(esbuild@0.28.0)(html-minifier-terser@6.1.0)(lightningcss@1.32.0)(postcss@8.5.32)(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0))(typescript@6.0.3))(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0))':
+  '@coremedia-internal/studio-client.storybook-config@2.0.1(@storybook/addon-docs@10.6.5(@types/react@19.2.17)(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0)))(@storybook/addon-links@10.6.5(@types/react@19.2.17)(react@19.2.0)(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0)))(@storybook/addon-webpack5-compiler-swc@4.0.3(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0))(webpack@5.107.1(@swc/core@1.15.46)(clean-css@5.3.3)(esbuild@0.28.0)(html-minifier-terser@6.1.0)(lightningcss@1.32.0)(postcss@8.5.32)))(@storybook/builder-webpack5@10.6.5(@swc/core@1.15.46)(clean-css@5.3.3)(esbuild@0.28.0)(html-minifier-terser@6.1.0)(lightningcss@1.32.0)(postcss@8.5.32)(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0))(typescript@6.0.3))(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0))':
     dependencies:
       '@storybook/addon-docs': 10.6.5(@types/react@19.2.17)(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0))
       '@storybook/addon-links': 10.6.5(@types/react@19.2.17)(react@19.2.0)(storybook@10.6.5(@types/react@19.2.17)(prettier@3.9.6)(react@19.2.0))
