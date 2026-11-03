@@ -1,25 +1,6 @@
 import { OVERLAY_HOST_CLASS } from "@coremedia/ckeditor5-itest-constants";
-import editorStyles from "ckeditor5/ckeditor5.css?raw";
-import contentStyles from "../../.storybook/content-styles.css?raw";
 
 export { OVERLAY_HOST_CLASS };
-
-let editorStyleSheets: CSSStyleSheet[] | undefined;
-
-/**
- * Constructed style sheets with the CKEditor styles and the test content
- * styles (`.storybook/content-styles.css`). Page style sheets do not cross a
- * shadow boundary, so every shadow root holding editor UI has to adopt these.
- * Created once and shared by all roots.
- */
-const getEditorStyleSheets = (): CSSStyleSheet[] => {
-  editorStyleSheets ??= [editorStyles, contentStyles].map((css) => {
-    const sheet = new CSSStyleSheet();
-    sheet.replaceSync(css);
-    return sheet;
-  });
-  return editorStyleSheets;
-};
 
 /**
  * Constructed copies of the document style sheets, keyed by their owner node
@@ -53,10 +34,14 @@ const getStyleSheetSource = (sheet: CSSStyleSheet): string | undefined => {
 /**
  * Constructed copies of all document style sheets, in document order.
  *
- * Plugins load their styles as side-effect imports (e.g.
- * `import "../../theme/linkformviewextension.css"`), which end up as style
- * sheets of the document. Mirroring them applies to shadow roots the same
- * styles as to the light DOM, without having to know every plugin style sheet.
+ * Page style sheets do not cross a shadow boundary, so every shadow root
+ * holding editor UI has to adopt copies of them. They include `ckeditor5.css`
+ * (imported by the editor factories), the test content styles
+ * (`.storybook/content-styles.css`, imported by the preview) and the plugin
+ * styles, which plugins load as side-effect imports (e.g.
+ * `import "../../theme/linkformviewextension.css"`). Mirroring them applies to
+ * shadow roots the same styles as to the light DOM, without having to know
+ * every style sheet.
  */
 const getDocumentStyleSheetMirrors = (): CSSStyleSheet[] => {
   const mirrors: CSSStyleSheet[] = [];
@@ -80,12 +65,11 @@ const getDocumentStyleSheetMirrors = (): CSSStyleSheet[] => {
 };
 
 /**
- * Adopts the editor style sheets, followed by the mirrored document style
- * sheets, into all mirroring shadow roots.
+ * Adopts the mirrored document style sheets into all mirroring shadow roots.
  */
 const syncStyleSheets = (): void => {
   syncScheduled = false;
-  const sheets = [...getEditorStyleSheets(), ...getDocumentStyleSheetMirrors()];
+  const sheets = getDocumentStyleSheetMirrors();
   for (const root of mirroringRoots) {
     root.adoptedStyleSheets = sheets;
   }
@@ -118,9 +102,9 @@ const stopObservingDocumentStyles = (): void => {
 };
 
 /**
- * Attaches an open shadow root to the given element and adopts the editor
- * style sheets and the document style sheets into it. The adopted document
- * style sheets are kept in sync until the shadow root is released.
+ * Attaches an open shadow root to the given element and adopts copies of the
+ * document style sheets into it, kept in sync until the shadow root is
+ * released.
  *
  * @param shadowHost - element to attach the shadow root to
  * @returns the attached shadow root and a function to stop syncing its styles

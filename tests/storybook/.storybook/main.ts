@@ -58,24 +58,6 @@ const framework = path.join(currentDir, "framework");
 
 const sharedConfig = createStorybookConfig({ framework });
 
-/**
- * Query marking a style sheet import that should resolve to its source text
- * instead of being injected into the document, for example
- * `ckeditor5/ckeditor5.css?raw`. Used to adopt style sheets into shadow roots,
- * which page style sheets do not reach.
- */
-const rawQuery = /raw/;
-
-/**
- * Excludes `?raw` imports from the given (CSS) rule, so only the
- * `asset/source` rule handles them. Otherwise, the regular CSS loaders process
- * the import and the shadow root receives an empty style sheet.
- */
-const excludeRawQuery = (rule: webpack.RuleSetRule): webpack.RuleSetRule =>
-  rule.test instanceof RegExp && rule.test.test("style.css") && !rule.resourceQuery
-    ? { ...rule, resourceQuery: { not: [rawQuery] } }
-    : rule;
-
 export default createStorybookConfig({
   framework,
   stories: ["../stories/**/*.stories.@(ts|mdx)"],
@@ -83,13 +65,6 @@ export default createStorybookConfig({
   // its handling of `*.svg` imports as raw source, as CKEditor 5 icons require.
   webpackFinal: async (webpackConfig, options) => {
     const config = (await sharedConfig.webpackFinal?.(webpackConfig, options)) ?? webpackConfig;
-    const rules = (config.module?.rules ?? []).map((rule) =>
-      rule && typeof rule === "object" ? excludeRawQuery(rule) : rule,
-    );
-    config.module = {
-      ...config.module,
-      rules: [...rules, { test: /\.css$/, resourceQuery: rawQuery, type: "asset/source" }],
-    };
     config.plugins = [
       ...(config.plugins ?? []),
       new webpack.DefinePlugin({

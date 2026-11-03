@@ -96,10 +96,8 @@ tests/storybook/
 The Storybook configuration is built on the shared
 `@coremedia-internal/studio-client.storybook-config` (addons, SWC compiler,
 `*.svg` imports as raw source, fonts and docs styling). `main.ts` only adds what
-is specific to this package: the `stories/` location, the `.env` lookup, the
-`CKEDITOR_LICENSE_KEY` define and `*.css?raw` imports as source text (for
-[shadow DOM scenarios](#shadow-dom-scenarios)), applied on top of the shared
-`webpackFinal`.
+is specific to this package: the `stories/` location, the `.env` lookup and the
+`CKEDITOR_LICENSE_KEY` define, applied on top of the shared `webpackFinal`.
 
 The shared configuration requires a webpack-based Storybook framework, but
 Storybook ships its HTML renderer only for Vite (`@storybook/html-vite`). The
@@ -223,13 +221,13 @@ following CKEditor's
 - the scenario container (readiness attribute, outputs harness) stays in the
   light DOM; the editor host lives in the shadow root of a `SHADOW_HOST_CLASS`
   element inside it;
-- page style sheets do not cross the shadow boundary, so `ckeditor5.css` and
-  `.storybook/content-styles.css` are imported as source text (`?raw`) and
-  adopted as constructed style sheets;
-- the plugins load their own styles as side-effect imports (e.g.
-  `theme/linkformviewextension.css`), which end up as document style sheets;
-  these are mirrored into every shadow root as constructed style sheets and
-  kept in sync by a `MutationObserver` on `document.head`;
+- page style sheets do not cross the shadow boundary, so all document style
+  sheets are mirrored into every shadow root as constructed style sheets and
+  kept in sync by a `MutationObserver` on `document.head`. These include
+  `ckeditor5.css` (imported by the editor factories),
+  `.storybook/content-styles.css` (imported by the preview) and the plugin
+  styles, which the plugins load as side-effect imports (e.g.
+  `theme/linkformviewextension.css`);
 - the floating UI renders into a separate shadow root on an `OVERLAY_HOST_CLASS`
   element at the end of `document.body`, configured as
   `config.ui.overlayContainer`.
