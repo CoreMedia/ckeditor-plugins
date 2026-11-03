@@ -43,8 +43,6 @@
     "eslint": "catalog:",
     "http-server": "catalog:",
     "lightningcss": "catalog:",
-    "postcss": "catalog:",
-    "postcss-loader": "catalog:",
     "rimraf": "catalog:",
     "source-map-loader": "catalog:",
     "style-loader": "catalog:",

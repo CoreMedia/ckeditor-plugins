@@ -49,8 +49,6 @@ catalog:
   node-esapi: ^0.0.1
   package-directory: ^8.1.0
   playwright-core: ^1.62.1
-  postcss: ^8.5.32
-  postcss-loader: ^8.1.1
   rimraf: ^6.0.1
   rxjs: ^7.8.2
   semver: ^7.6.2

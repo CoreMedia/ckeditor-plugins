@@ -16,6 +16,8 @@ export default function lightningCssLoader(source, map) {
       ...lightningCssOptions,
       filename: this.resourcePath,
       code: Buffer.from(source),
+      // Without it, Lightning CSS returns no source map.
+      sourceMap: this.sourceMap,
       inputSourceMap,
     });
     const sourceMap = result.map ? JSON.parse(Buffer.from(result.map).toString()) : undefined;
