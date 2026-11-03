@@ -1,3 +1,9 @@
+/*
+ * The `--ck-*` custom properties are defined by CKEditor
+ * (ckeditor5/dist/ckeditor5.css), which the application loads at runtime.
+ * The IDE cannot resolve them, as this file does not import it.
+ */
+
 @import "contentlinkvisibility.css";
 @import "contentlinkformview.css";
 
@@ -6,14 +12,25 @@
   min-width: auto !important;
 }
 
+/*
+ * The suggester is the first visible field of the row, but not its first
+ * child, as the hidden content link view wrapper precedes it.
+ */
+.ck.cm-ck-link-form-view .ck-form__row_with-submit > .ck.cm-ck-content-link-suggester {
+  margin-inline-start: 0;
+}
+
 .ck.cm-ck-link-form-view .cm-ck-content-link-view {
   display: flex;
   width: 100%;
+  /*noinspection CssUnresolvedCustomProperty*/
   border: 1px solid var(--ck-color-input-disabled-border);
+  /*noinspection CssUnresolvedCustomProperty*/
   border-radius: var(--ck-border-radius);
 }
 
 .ck.cm-ck-link-form-view .cm-ck-content-link-view:focus {
+  /*noinspection CssUnresolvedCustomProperty*/
   border: var(--ck-focus-ring);
 }
 
@@ -30,6 +47,7 @@
 
 /* content link view inner button */
 .cm-ck-content-link-view > .ck.ck-button{
+  /*noinspection CssUnresolvedCustomProperty*/
   min-height: calc(var(--ck-ui-component-min-height) - 2px);
 }
 
@@ -45,6 +63,7 @@
 
 /* we need to set a width to make ellipsis work for content link views */
 .ck .cm-ck-link-actions-view .cm-ck-content-link-view {
+  /*noinspection CssUnresolvedCustomProperty*/
   max-width: var(--ck-input-text-width);
   margin-left: 0 !important;
 }

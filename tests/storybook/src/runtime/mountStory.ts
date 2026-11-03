@@ -102,11 +102,14 @@ export const mountScenario = (initialize: ScenarioInitializer, args?: Partial<Sc
 
   const host = document.createElement("div");
   host.id = EDITOR_ELEMENT_ID;
+  let releaseShadowRoot = (): void => {};
   if (resolvedArgs.shadowDom) {
     const shadowHost = document.createElement("div");
     shadowHost.classList.add(SHADOW_HOST_CLASS);
     container.appendChild(shadowHost);
-    attachEditorShadowRoot(shadowHost).appendChild(host);
+    const { shadowRoot, release } = attachEditorShadowRoot(shadowHost);
+    shadowRoot.appendChild(host);
+    releaseShadowRoot = release;
   } else {
     container.appendChild(host);
   }
@@ -130,6 +133,7 @@ export const mountScenario = (initialize: ScenarioInitializer, args?: Partial<Sc
         scenarioCleanup();
         outputsCleanup();
         removeOverlayContainer();
+        releaseShadowRoot();
         if (window.editor === editor) {
           delete window.editor;
         }
@@ -147,6 +151,7 @@ export const mountScenario = (initialize: ScenarioInitializer, args?: Partial<Sc
     })
     .catch((error: unknown) => {
       removeOverlayContainer();
+      releaseShadowRoot();
       container.setAttribute(EDITOR_READY_ATTRIBUTE, "error");
       console.error("Failed to initialize editor scenario", error);
     });

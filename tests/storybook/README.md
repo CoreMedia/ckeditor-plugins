@@ -74,6 +74,7 @@ tests/storybook/
 │  ├─ main.ts             Shared config + stories location, .env, license key
 │  ├─ preview.ts          Shared preview config; imports content-styles.css
 │  ├─ content-styles.css  Editing-view CSS (float/align/list/min-height, …)
+│  ├─ core-icons.css      Stand-in SVG icons for the CoreMedia Studio icon font
 │  └─ framework/preset.js Local framework: HTML renderer + webpack builder
 ├─ src/
 │  ├─ editors/            Editor factories (richtext, bbCode) + license helper
@@ -225,6 +226,10 @@ following CKEditor's
 - page style sheets do not cross the shadow boundary, so `ckeditor5.css` and
   `.storybook/content-styles.css` are imported as source text (`?raw`) and
   adopted as constructed style sheets;
+- the plugins load their own styles as side-effect imports (e.g.
+  `theme/linkformviewextension.css`), which end up as document style sheets;
+  these are mirrored into every shadow root as constructed style sheets and
+  kept in sync by a `MutationObserver` on `document.head`;
 - the floating UI renders into a separate shadow root on an `OVERLAY_HOST_CLASS`
   element at the end of `document.body`, configured as
   `config.ui.overlayContainer`.
