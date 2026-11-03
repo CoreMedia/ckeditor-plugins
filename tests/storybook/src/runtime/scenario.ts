@@ -99,10 +99,19 @@ export interface ScenarioArgs {
    * When set, the scenario writes this item to the browser clipboard while
    * mounting, so a test can paste a fully prepared payload (e.g. a Word HTML
    * document) without itself calling `page.evaluate`. Requires the browser
-   * context to grant the `clipboard-write` permission (the Playwright config
-   * does). Defaults to `null` (no clipboard write).
+   * context to grant the `clipboard-write` permission (the Playwright test
+   * using such a story does, via `test.use({ permissions })`). Defaults to
+   * `null` (no clipboard write).
    */
   clipboard: ClipboardScenarioItem | null;
+  /**
+   * Whether to mount the editor inside an open shadow root instead of the
+   * light DOM. The editor and content style sheets are adopted into that root,
+   * and CKEditor's floating UI (balloons, tooltips) is rendered into a separate
+   * shadow root at the end of `document.body`, configured as
+   * `config.ui.overlayContainer`. Defaults to `false`.
+   */
+  shadowDom: boolean;
 }
 
 /**
@@ -120,4 +129,5 @@ export const defaultScenarioArgs: ScenarioArgs = {
   outputs: [],
   droppableUris: [],
   clipboard: null,
+  shadowDom: false,
 };

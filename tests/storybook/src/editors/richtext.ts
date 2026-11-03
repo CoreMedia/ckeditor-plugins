@@ -78,6 +78,7 @@ import { Differencing } from "@coremedia/ckeditor5-coremedia-differencing";
 import { Blocklist } from "@coremedia/ckeditor5-coremedia-blocklist";
 import { DataFacade } from "@coremedia/ckeditor5-data-facade";
 import type { ScenarioArgs } from "../runtime/scenario";
+import type { ScenarioMountContext } from "../runtime/mountStory";
 import { licenseKey, licenseKeyErrorMessage } from "./license";
 
 const withinTextIcon = IconObjectInline;
@@ -156,8 +157,13 @@ const getRichTextConfig = (
  *
  * @param sourceElement - host element the editor is mounted into
  * @param args - resolved scenario args
+ * @param context - mount context, providing the overlay container in shadow DOM
  */
-export const createRichTextEditor = async (sourceElement: HTMLElement, args: ScenarioArgs): Promise<ClassicEditor> => {
+export const createRichTextEditor = async (
+  sourceElement: HTMLElement,
+  args: ScenarioArgs,
+  { overlayContainer }: ScenarioMountContext,
+): Promise<ClassicEditor> => {
   const { uiLanguage } = args;
   const contextUriPath = `content/123`;
 
@@ -165,6 +171,7 @@ export const createRichTextEditor = async (sourceElement: HTMLElement, args: Sce
     const editor = await ClassicEditor.create(sourceElement, {
       licenseKey,
       placeholder: "Type your text here...",
+      ui: { overlayContainer },
       plugins: [
         ...imagePlugins,
         Alignment,

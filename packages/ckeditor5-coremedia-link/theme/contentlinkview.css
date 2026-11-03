@@ -6,11 +6,19 @@
   min-width: auto !important;
 }
 
+/*
+ * The suggester is the first visible field of the row, but not its first
+ * child, as the hidden content link view wrapper precedes it.
+ */
+.ck.cm-ck-link-form-view .ck-form__row_with-submit > .ck.cm-ck-content-link-suggester {
+  margin-inline-start: 0;
+}
+
 .ck.cm-ck-link-form-view .cm-ck-content-link-view {
   display: flex;
   width: 100%;
-  border: 1px solid var(--ck-color-input-disabled-border);
-  border-radius: var(--ck-border-radius);
+  border: 1px solid var(--ck-input-disabled-border-color);
+  border-radius: var(--ck-input-border-radius);
 }
 
 .ck.cm-ck-link-form-view .cm-ck-content-link-view:focus {
@@ -30,7 +38,7 @@
 
 /* content link view inner button */
 .cm-ck-content-link-view > .ck.ck-button{
-  min-height: calc(var(--ck-ui-component-min-height) - 2px);
+  min-height: calc(var(--ck-size-min-height) - 2px);
 }
 
 /* prevents icons to be too high in studio context */

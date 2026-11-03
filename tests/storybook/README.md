@@ -22,6 +22,7 @@ so the test scenarios can be browsed interactively.
 - [Stories](#stories)
 - [Story ↔ Test Mapping](#story--test-mapping)
 - [Observable Outputs Harness](#observable-outputs-harness)
+- [Shadow DOM Scenarios](#shadow-dom-scenarios)
 - [How Playwright Targets Storybook](#how-playwright-targets-storybook)
 - [CKEditor License (`.env`)](#ckeditor-license-env)
 - [GitHub Pages Deployment](#github-pages-deployment)
@@ -70,15 +71,18 @@ starts it automatically (see [below](#how-playwright-targets-storybook)).
 ```text
 tests/storybook/
 ├─ .storybook/            Storybook configuration
-│  ├─ main.ts             Framework, addons, .env + SVG-as-source webpack tweaks
-│  ├─ preview.ts          Global preview config; imports content-styles.css
-│  └─ content-styles.css  Editing-view CSS (float/align/list/min-height, …)
+│  ├─ main.ts             Shared config + stories location, .env, license key
+│  ├─ preview.ts          Shared preview config; imports content-styles.css
+│  ├─ content-styles.css  Editing-view CSS (float/align/list/min-height, …)
+│  ├─ core-icons.css      Stand-in SVG icons for the CoreMedia Studio icon font
+│  └─ framework/preset.js Local framework: HTML renderer + webpack builder
 ├─ src/
 │  ├─ editors/            Editor factories (richtext, bbCode) + license helper
 │  ├─ runtime/            Story runtime contract:
 │  │  ├─ mountStory.ts    Mounts a scenario into the story canvas
 │  │  ├─ scenario.ts      Scenario args (`ScenarioArgs`) + ready signalling
 │  │  ├─ outputs.ts       Observable Outputs Harness (`installOutputsHarness`)
+│  │  ├─ shadowDom.ts     Shadow-root style adoption + overlay container
 │  │  └─ environment.ts   Storybook URL / story-id helpers
 │  └─ setup/              Reusable scenario setup utilities (migrated from the
 │                         former JS-handle wrappers)
@@ -88,6 +92,18 @@ tests/storybook/
    ├─ RuntimeContract.*   Documents/validates the runtime contract
    └─ Smoke.stories.ts    Minimal smoke story
 ```
+
+The Storybook configuration is built on the shared
+`@coremedia-internal/studio-client.storybook-config` (addons, SWC compiler,
+`*.svg` imports as raw source, fonts and docs styling). `main.ts` only adds what
+is specific to this package: the `stories/` location, the `.env` lookup and the
+`CKEDITOR_LICENSE_KEY` define, applied on top of the shared `webpackFinal`.
+
+The shared configuration requires a webpack-based Storybook framework, but
+Storybook ships its HTML renderer only for Vite (`@storybook/html-vite`). The
+local framework in `.storybook/framework/preset.js` therefore pairs the official
+`@storybook/html` renderer with `@storybook/builder-webpack5`, so stories stay
+plain HTML and keep importing their types from `@storybook/html`.
 
 ## Stories
 
@@ -156,6 +172,7 @@ prepared export via `openStory(page, storyId)`. The story id of an export is
 | `FontMapper.test.ts`                | `FontMapper`                | `WordTemplate`, `WordTemplateTable`, `WordTemplateTableInheritFont`                                                                            |
 | `Images.test.ts`                    | `Images`                    | `NormalFast`, `SlowLoading`, `Unreadable`, `NoData`, `InvalidHref`, `Alignment`, `OpenInTabEnabled`, `OpenInTabDisabled`, `LinksNoLink`, `LinksWithLink` |
 | `PasteButton.test.ts`               | `PasteButton`               | `OneLink`, `SlowLinks`, `MultipleLinks`, `PasteViaKeyboardLink`, `OneImage`, `MultipleImages`, `SlowImages`                                    |
+| `ShadowDom.test.ts`                 | `ShadowDom`                 | `Typing`, `HeadingDropdown`, `ContentLink`                                                                                                     |
 
 > **Adding a test case:** add a named export to
 > `stories/tests/<Name>.stories.ts` (sharing its fixture via
@@ -191,14 +208,41 @@ Stories can also bake in a **prepared clipboard** payload: when a scenario's
 the browser clipboard while mounting (`src/setup/clipboard.ts`). This lets the
 clipboard-driven `FontMapper` test paste a fully prepared Word document and
 assert through the `editor-data` output — so it, too, runs with **locators
-only, no `page.evaluate`** (the browser context grants `clipboard-write` via the
-Playwright config).
+only, no `page.evaluate`** (`FontMapper.test.ts` grants `clipboard-read` and
+`clipboard-write` to its browser context via `test.use({ permissions })`).
+
+## Shadow DOM Scenarios
+
+A scenario with `shadowDom: true` mounts the editor inside an open shadow root,
+following CKEditor's
+[shadow DOM guide](https://ckeditor.com/docs/ckeditor5/latest/getting-started/setup/shadow-dom.html)
+(`src/runtime/shadowDom.ts`):
+
+- the scenario container (readiness attribute, outputs harness) stays in the
+  light DOM; the editor host lives in the shadow root of a `SHADOW_HOST_CLASS`
+  element inside it;
+- page style sheets do not cross the shadow boundary, so all document style
+  sheets are mirrored into every shadow root as constructed style sheets and
+  kept in sync by a `MutationObserver` on `document.head`. These include
+  `ckeditor5.css` (imported by the editor factories),
+  `.storybook/content-styles.css` (imported by the preview) and the plugin
+  styles, which the plugins load as side-effect imports (e.g.
+  `theme/linkformviewextension.css`);
+- the floating UI renders into a separate shadow root on an `OVERLAY_HOST_CLASS`
+  element at the end of `document.body`, configured as
+  `config.ui.overlayContainer`.
+
+Playwright CSS and role locators pierce open shadow roots, so existing locators
+keep working; `shadowHost(page)` and `overlayHost(page)`
+(`tests/playwright/test/locators/storybook.ts`) scope assertions to either tree.
 
 ## How Playwright Targets Storybook
 
 Playwright no longer talks to the `app`. Instead:
 
-1. `tests/playwright/playwright.config.ts` declares a single `webServer` that
+1. `tests/playwright/playwright.config.ts` builds on the shared
+   `@coremedia-internal/studio-client.playwright-config` (`createPlaywrightConfig`)
+   and declares a single `webServer` that
    runs `pnpm run webserver:storybook` (which starts this package's Storybook
    dev server) and waits for `http://localhost:6006`.
 2. `tests/playwright/test/storybook/environment.ts` builds the story preview URL
@@ -217,8 +261,10 @@ pnpm --filter "@coremedia/ckeditor5-playwright-itest" run ui-test
 pnpm --filter "@coremedia/ckeditor5-playwright-itest" run ui-test --project=HelloEditor.test.ts
 ```
 
-Useful environment variables: `STORYBOOK_PORT`/`STORYBOOK_HOST`,
-`PLAYWRIGHT_RETRIES`, `PLAYWRIGHT_TIMEOUT_FACTOR`.
+Useful environment variables: `STORYBOOK_PORT`/`STORYBOOK_HOST`, and — read by
+the shared Playwright config — `PLAYWRIGHT_RETRIES`, `PLAYWRIGHT_TIMEOUT_FACTOR`
+and `CDP_ENDPOINT` (drive an already running browser over the Chrome DevTools
+Protocol). Tests run headless unless you pass `--headed` (or use `--ui`).
 
 ## CKEditor License (`.env`)
 
