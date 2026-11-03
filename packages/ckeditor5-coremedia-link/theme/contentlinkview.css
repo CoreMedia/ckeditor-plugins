@@ -1,9 +1,3 @@
-/*
- * The `--ck-*` custom properties are defined by CKEditor
- * (ckeditor5/dist/ckeditor5.css), which the application loads at runtime.
- * The IDE cannot resolve them, as this file does not import it.
- */
-
 @import "contentlinkvisibility.css";
 @import "contentlinkformview.css";
 
@@ -23,14 +17,11 @@
 .ck.cm-ck-link-form-view .cm-ck-content-link-view {
   display: flex;
   width: 100%;
-  /*noinspection CssUnresolvedCustomProperty*/
-  border: 1px solid var(--ck-color-input-disabled-border);
-  /*noinspection CssUnresolvedCustomProperty*/
-  border-radius: var(--ck-border-radius);
+  border: 1px solid var(--ck-input-disabled-border-color);
+  border-radius: var(--ck-input-border-radius);
 }
 
 .ck.cm-ck-link-form-view .cm-ck-content-link-view:focus {
-  /*noinspection CssUnresolvedCustomProperty*/
   border: var(--ck-focus-ring);
 }
 
@@ -47,8 +38,7 @@
 
 /* content link view inner button */
 .cm-ck-content-link-view > .ck.ck-button{
-  /*noinspection CssUnresolvedCustomProperty*/
-  min-height: calc(var(--ck-ui-component-min-height) - 2px);
+  min-height: calc(var(--ck-size-min-height) - 2px);
 }
 
 /* prevents icons to be too high in studio context */
@@ -63,7 +53,6 @@
 
 /* we need to set a width to make ellipsis work for content link views */
 .ck .cm-ck-link-actions-view .cm-ck-content-link-view {
-  /*noinspection CssUnresolvedCustomProperty*/
   max-width: var(--ck-input-text-width);
   margin-left: 0 !important;
 }
