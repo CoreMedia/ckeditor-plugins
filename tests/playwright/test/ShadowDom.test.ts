@@ -27,7 +27,7 @@ test.describe("Shadow DOM", () => {
     const editable = shadowHost(page).getByRole("textbox", { name: "Rich Text Editor" });
     await expect(editable).toBeVisible();
     // Adopted `ckeditor5.css`: the toolbar is a flex container.
-    await expect(shadowHost(page).locator(".ck-toolbar").first()).toHaveCSS("display", "flex");
+    await expect(shadowHost(page).getByRole("toolbar", { name: "Editor toolbar" })).toHaveCSS("display", "flex");
     // Adopted `content-styles.css`: the editable has a minimum height.
     await expect(editable).toHaveCSS("min-height", "400px");
 
@@ -47,29 +47,28 @@ test.describe("Shadow DOM", () => {
     await toolbar.getByRole("button", { name: "Heading" }).click();
     await shadowHost(page).getByRole("menuitemradio", { name: "Heading 1" }).click();
 
-    await expect(editor(page).locator("h1", { hasText: shadowDomScenario.paragraphText })).toBeVisible();
+    await expect(editor(page).getByRole("heading", { level: 1, name: shadowDomScenario.paragraphText })).toBeVisible();
   });
 
   test("Should open the link balloon in the overlay container and keep it open on click into it.", async ({ page }) => {
     await openStory(page, "tests-shadowdom--content-link");
 
-    await editor(page).locator("a", { hasText: shadowDomScenario.linkText }).click();
+    await editor(page).getByRole("link", { name: shadowDomScenario.linkText }).click();
 
     const balloonPanel = BalloonPanelViewWrapper.fromParent(fromLocator(overlayHost(page)));
-    const { linkToolbarView } = balloonPanel;
+    const { linkToolbarView, linkFormView } = balloonPanel;
     await expect(linkToolbarView.locator).toBeVisible();
 
     const { contentLinkView } = linkToolbarView;
     await expect(contentLinkView.locator.getByText(`Document for ${shadowDomScenario.linkText}`)).toBeVisible();
 
-    // A click into the balloon must not be treated as a click outside.
-    await balloonPanel.locator
-      .filter({ has: page.locator(".cm-ck-link-actions-view") })
-      .click({ position: { x: 2, y: 2 } });
-    await expect(linkToolbarView.locator).toBeVisible();
+    // A click into the balloon must not be treated as a click outside: the
+    // button must survive the mousedown to switch the balloon to the form view.
+    await linkToolbarView.locator.getByRole("button", { name: "Edit link" }).click();
+    await expect(linkFormView.locator).toBeVisible();
 
     // A click outside of editor and balloon closes the balloon.
-    await page.locator("body").click({ position: { x: 1, y: 1 } });
-    await expect(linkToolbarView.locator).toBeHidden();
+    await page.mouse.click(1, 1);
+    await expect(linkFormView.locator).toBeHidden();
   });
 });
