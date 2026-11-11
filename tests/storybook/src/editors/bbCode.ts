@@ -35,6 +35,7 @@ import {
   Underline,
 } from "ckeditor5";
 import type { ScenarioArgs } from "../runtime/scenario";
+import type { ScenarioMountContext } from "../runtime/mountStory";
 import { licenseKey, licenseKeyErrorMessage } from "./license";
 
 /**
@@ -45,14 +46,20 @@ import { licenseKey, licenseKeyErrorMessage } from "./license";
  *
  * @param sourceElement - host element the editor is mounted into
  * @param args - resolved scenario args
+ * @param context - mount context, providing the overlay container in shadow DOM
  */
-export const createBBCodeEditor = (sourceElement: HTMLElement, args: ScenarioArgs): Promise<ClassicEditor> => {
+export const createBBCodeEditor = (
+  sourceElement: HTMLElement,
+  args: ScenarioArgs,
+  { overlayContainer }: ScenarioMountContext,
+): Promise<ClassicEditor> => {
   const { uiLanguage } = args;
 
   try {
     return ClassicEditor.create(sourceElement, {
       licenseKey,
       placeholder: "Type your text here...",
+      ui: { overlayContainer },
       plugins: [
         AutoImage,
         AutoLink,

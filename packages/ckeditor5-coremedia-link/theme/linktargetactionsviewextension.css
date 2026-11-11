@@ -1,6 +1,8 @@
 .ck.ck-link-actions .ck-button.cm-ck-target-button {
-  margin-right: calc(var(--ck-spacing-small) / 2) !important;
-  margin-left: calc(var(--ck-spacing-small) / 2) !important;
+  /*noinspection CssUnresolvedCustomProperty*/
+  margin-right: calc(var(--ck-spacing-small, var(--ck-spacing-sm)) / 2) !important;
+  /*noinspection CssUnresolvedCustomProperty*/
+  margin-left: calc(var(--ck-spacing-small, var(--ck-spacing-sm)) / 2) !important;
 }
 
 

@@ -38,6 +38,9 @@ const wordDocumentStories = [
 ];
 
 test.describe("Font Mapper features", () => {
+  // The stories write their payload to the clipboard while mounting, which Chromium rejects without these permissions.
+  test.use({ permissions: ["clipboard-read", "clipboard-write"] });
+
   /**
    * Test for the FontMapper Plugin.
    *

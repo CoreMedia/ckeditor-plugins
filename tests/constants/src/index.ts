@@ -19,3 +19,4 @@ export * from "./stories/images";
 export * from "./stories/linkBalloon";
 export * from "./stories/linkUserInteraction";
 export * from "./stories/pasteButton";
+export * from "./stories/shadowDom";

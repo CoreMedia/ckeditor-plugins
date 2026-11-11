@@ -1,4 +1,4 @@
-import type { StorybookConfig } from "@storybook/html-webpack5";
+import { createStorybookConfig } from "@coremedia-internal/studio-client.storybook-config";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
@@ -50,52 +50,27 @@ if (envPath) {
   dotenv.config({ path: envPath });
 }
 
-const config: StorybookConfig = {
+/**
+ * Local framework pairing the HTML renderer with the webpack builder; see
+ * `framework/preset.js`.
+ */
+const framework = path.join(currentDir, "framework");
+
+const sharedConfig = createStorybookConfig({ framework });
+
+export default createStorybookConfig({
+  framework,
   stories: ["../stories/**/*.stories.@(ts|mdx)"],
-  addons: [
-    "@storybook/addon-essentials",
-    "@storybook/addon-interactions",
-    "@storybook/addon-webpack5-compiler-swc",
-  ],
-  framework: {
-    name: "@storybook/html-webpack5",
-    options: {},
-  },
-  docs: {
-    autodocs: "tag",
-  },
-  webpackFinal: (webpackConfig) => {
-    webpackConfig.plugins = webpackConfig.plugins ?? [];
-    webpackConfig.plugins.push(
+  // Extends the shared `webpackFinal` instead of replacing it, which would drop
+  // its handling of `*.svg` imports as raw source, as CKEditor 5 icons require.
+  webpackFinal: async (webpackConfig, options) => {
+    const config = (await sharedConfig.webpackFinal?.(webpackConfig, options)) ?? webpackConfig;
+    config.plugins = [
+      ...(config.plugins ?? []),
       new webpack.DefinePlugin({
         CKEDITOR_LICENSE_KEY: JSON.stringify(process.env.CKEDITOR_LICENSE_KEY),
       }),
-    );
-
-    // CKEditor 5 imports `*.svg` icons as raw source strings. Storybook's
-    // default asset handling resolves them to URLs, which breaks icon rendering
-    // (`error-ui-iconview-invalid-svg`). Mirror the former application build
-    // (`app/webpack.config.js`) and load SVGs as `asset/source`.
-    const rules = webpackConfig.module?.rules ?? [];
-for (const rule of rules) {
-  if (rule && typeof rule === "object" && "test" in rule && rule.test instanceof RegExp && rule.test.test(".svg")) {
-    rule.exclude = rule.exclude
-      ? Array.isArray(rule.exclude)
-        ? [...rule.exclude, /\.svg$/]
-        : [rule.exclude, /\.svg$/]
-      : /\.svg$/;
-  }
-}
-    rules.push({
-      test: /\.svg$/,
-      type: "asset/source",
-    });
-    if (webpackConfig.module) {
-      webpackConfig.module.rules = rules;
-    }
-
-    return webpackConfig;
+    ];
+    return config;
   },
-};
-
-export default config;
+});

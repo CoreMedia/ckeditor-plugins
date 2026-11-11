@@ -32,14 +32,14 @@
     "ckeditor5": "catalog:"
   },
   "devDependencies": {
+    "@coremedia-internal/studio-client.storybook-config": "catalog:",
     "@coremedia/studio-client.build-config": "catalog:",
     "@coremedia/studio-client.eslint-config": "catalog:",
-    "@storybook/addon-essentials": "catalog:",
-    "@storybook/addon-interactions": "catalog:",
+    "@storybook/addon-docs": "catalog:",
+    "@storybook/addon-links": "catalog:",
     "@storybook/addon-webpack5-compiler-swc": "catalog:",
+    "@storybook/builder-webpack5": "catalog:",
     "@storybook/html": "catalog:",
-    "@storybook/html-webpack5": "catalog:",
-    "@storybook/test": "catalog:",
     "@types/node": "catalog:",
     "dotenv": "catalog:",
     "eslint": "catalog:",
