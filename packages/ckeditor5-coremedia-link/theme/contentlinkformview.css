@@ -35,7 +35,8 @@
 
 .cm-ck-form-view--loading .cm-ck-content-link-view,
 .cm-ck-form-view--loading .cm-ck-external-link-field input {
-  opacity: var(--ck-opacity-disabled);
+  /*noinspection CssUnresolvedCustomProperty*/
+  opacity: var(--ck-disabled-opacity, var(--ck-opacity-disabled));
 }
 
 @keyframes rotate {
