@@ -8,6 +8,9 @@
   npm install --global pnpm
   ```
 
+  The pnpm version used by this workspace is pinned via `packageManager` in
+  the root `package.json`; pnpm switches to it automatically.
+
 ## Typical Build Process
 
 ```text

@@ -40,22 +40,14 @@ on:
 permissions: {}
 
 jobs:
-  get-engines:
-    uses: "./.github/workflows/get-engines.yml"
-    secrets: inherit
   main:
     name: "Main"
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs:
-      - get-engines
-    env:
-      nodeVersion: ${{ needs.get-engines.outputs.nodeVersion }}
-      pnpmVersion: ${{ needs.get-engines.outputs.pnpmVersion }}
     steps:
       - id: checkout
         name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 1
           sparse-checkout: |
@@ -63,16 +55,15 @@ jobs:
             ./.release-version
             ./scripts
       - id: installPnpm
-        name: "Install: Use PNPM ${{ env.pnpmVersion }}"
-        uses: pnpm/action-setup@v5
+        name: "Install: Use PNPM (packageManager)"
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
         with:
-          version: ${{ env.pnpmVersion }}
           run_install: false
       - id: installNodeJs
-        name: "Install: Use Node.js ${{ env.nodeVersion }}"
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        name: "Install: Use Node.js (engines.node)"
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: ${{ env.nodeVersion }}
+          node-version-file: package.json
           cache: "pnpm"
       - id: install
         name: Install

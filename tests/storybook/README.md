@@ -11,8 +11,9 @@ back from the running editor is exposed by the story as an
 [observable DOM output](#observable-outputs-harness) that Playwright reads with a
 locator.
 
-The same Storybook is also published to [GitHub Pages](#github-pages-deployment),
-so the test scenarios can be browsed interactively.
+Publishing this Storybook to GitHub Pages is being reworked (the previous
+deployment workflow was removed); the scenarios can be browsed locally via
+`pnpm --filter "@coremedia/ckeditor5-storybook-itest" run storybook`.
 
 ## Contents
 
@@ -25,7 +26,6 @@ so the test scenarios can be browsed interactively.
 - [Shadow DOM Scenarios](#shadow-dom-scenarios)
 - [How Playwright Targets Storybook](#how-playwright-targets-storybook)
 - [CKEditor License (`.env`)](#ckeditor-license-env)
-- [GitHub Pages Deployment](#github-pages-deployment)
 
 ## Why Storybook?
 
@@ -275,23 +275,9 @@ The editor factories read `CKEDITOR_LICENSE_KEY` (use `GPL` for the GNU GPL).
 2. `app/.env`,
 3. the workspace-root `.env`.
 
-In CI the value comes from the `CKEDITOR_LICENSE` secret (see the deployment
-workflow and `build.yml`).
-
-## GitHub Pages Deployment
-
-The workflow `.github/workflows/deploy-storybook.yml` builds and publishes this
-Storybook on every push to `main` (and on manual dispatch).
-
-To **coexist with the existing GitHub Pages content** (the API documentation is
-served from the Pages root at `…/docs/api/`), the static Storybook is published
-into a dedicated `storybook/` subfolder of the `gh-pages` branch using
-`peaceiris/actions-gh-pages` with `keep_files: true`. Sibling content is left
-untouched.
-
-- **Live URL:** <https://coremedia.github.io/ckeditor-plugins/storybook/>
-- **Base path:** none required — the static build uses **relative** asset paths,
-  so it works unchanged under the `/storybook/` subpath.
+In CI the value comes from the `CKEDITOR_LICENSE` secret (see `build.yml`).
+Never publish a Storybook built with that key: the key is inlined into the
+bundle. Builds meant for publishing use `GPL`.
 
 [Storybook]: <https://storybook.js.org/> "Storybook: Frontend workshop for UI development"
 [playwright]: <../playwright> "Playwright integration tests"

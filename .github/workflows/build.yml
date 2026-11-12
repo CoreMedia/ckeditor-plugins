@@ -64,23 +64,14 @@ env:
 permissions: { }
 
 jobs:
-  get-engines:
-    name: "Get Engines"
-    uses: "./.github/workflows/get-engines.yml"
-    secrets: inherit
   main:
     name: "Main"
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    needs:
-      - get-engines
-    env:
-      nodeVersion: ${{ needs.get-engines.outputs.nodeVersion }}
-      pnpmVersion: ${{ needs.get-engines.outputs.pnpmVersion }}
     steps:
       - id: checkout
         name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - id: authorize
         name: "NPM Authorization"
         run: |
@@ -99,22 +90,21 @@ jobs:
             echo "//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=${npmAuthToken}"
           } > .npmrc
       - id: installPnpm
-        name: "Install: Use PNPM ${{ env.pnpmVersion }}"
-        uses: pnpm/action-setup@v5
+        name: "Install: Use PNPM (packageManager)"
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
         with:
-          version: ${{ env.pnpmVersion }}
           run_install: false
       - id: installNodeJs
-        name: "Install: Use Node.js ${{ env.nodeVersion }}"
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        name: "Install: Use Node.js (engines.node)"
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: ${{ env.nodeVersion }}
+          node-version-file: package.json
           cache: "pnpm"
       - id: install
         name: Install
         run: |
           pnpm install --frozen-lockfile
-      - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         id: playwright-cache
         if: ${{ inputs.itest }}
         with:
@@ -161,7 +151,7 @@ jobs:
           pnpm doc
       - name: Add Documentation Artifact
         if: ${{ inputs.doc }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: api-doc
           path: docs/
