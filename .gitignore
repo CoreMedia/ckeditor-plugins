@@ -37,6 +37,8 @@ build/
 # Folder we defined to contain the built artifacts.
 dist/
 node_modules/
+# TypeDoc API documentation (`pnpm doc`); deployed to GitHub Pages by CI.
+docs/api/
 
 # Ignore compiled TypeScript files.
 **/src/**/*.js

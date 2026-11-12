@@ -11,9 +11,8 @@ back from the running editor is exposed by the story as an
 [observable DOM output](#observable-outputs-harness) that Playwright reads with a
 locator.
 
-Publishing this Storybook to GitHub Pages is being reworked (the previous
-deployment workflow was removed); the scenarios can be browsed locally via
-`pnpm --filter "@coremedia/ckeditor5-storybook-itest" run storybook`.
+The same Storybook is also published to [GitHub Pages](#github-pages-deployment),
+so the test scenarios can be browsed interactively.
 
 ## Contents
 
@@ -26,6 +25,7 @@ deployment workflow was removed); the scenarios can be browsed locally via
 - [Shadow DOM Scenarios](#shadow-dom-scenarios)
 - [How Playwright Targets Storybook](#how-playwright-targets-storybook)
 - [CKEditor License (`.env`)](#ckeditor-license-env)
+- [GitHub Pages Deployment](#github-pages-deployment)
 
 ## Why Storybook?
 
@@ -275,9 +275,25 @@ The editor factories read `CKEDITOR_LICENSE_KEY` (use `GPL` for the GNU GPL).
 2. `app/.env`,
 3. the workspace-root `.env`.
 
-In CI the value comes from the `CKEDITOR_LICENSE` secret (see `build.yml`).
+In CI the value comes from the `CKEDITOR_LICENSE` secret, written to the
+workspace-root `.env` by the `build` action (`.github/actions/build`).
 Never publish a Storybook built with that key: the key is inlined into the
 bundle. Builds meant for publishing use `GPL`.
+
+## GitHub Pages Deployment
+
+The `deploy-storybook` action (`.github/actions/deploy-storybook`) builds this
+Storybook and publishes it to `storybook/<branch>/` on the `gh-pages` branch:
+for every pull request from this repository (`pull-request.yml`) and for `main`
+after each integration (`qa-gate.yml`). `on-delete-branch.yml` removes the
+Storybooks of deleted branches.
+
+- **Live URL:** <https://coremedia.github.io/ckeditor-plugins/storybook/> lists
+  all deployed branches; `…/storybook/main/` is the current `main`.
+- **License:** the deployed build uses `CKEDITOR_LICENSE_KEY=GPL`; the action
+  fails if the commercial key ends up in the bundle.
+- **Base path:** none required — the static build uses **relative** asset paths,
+  so it works unchanged under any subpath.
 
 [Storybook]: <https://storybook.js.org/> "Storybook: Frontend workshop for UI development"
 [playwright]: <../playwright> "Playwright integration tests"

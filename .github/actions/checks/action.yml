@@ -1,0 +1,143 @@
+name: 'Checks'
+description: 'Run all quality checks (changesets, unit tests, lint, API documentation, playwright). Requires build action to be run first.'
+
+inputs:
+  perform-all-checks:
+    description: 'Run all checks regardless if one check has failed. When false, fails fast on first error.'
+    required: false
+    default: 'false'
+  base-ref:
+    description: 'Ref the changeset check compares against. Leave empty to skip it, e.g. for a release.'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check Changesets
+      id: changeset-check
+      # The "Version Packages" release PR consumes all changesets, so it carries none itself.
+      if: ${{ inputs.base-ref != '' && !startsWith(github.head_ref || github.ref_name, 'changeset-release/') }}
+      continue-on-error: ${{ inputs.perform-all-checks == 'true' }}
+      shell: bash
+      env:
+        BASE_REF: ${{ inputs.base-ref }}
+      run: |
+        # Changesets awaiting release are already on the base ref, so only a newly added one
+        # proves that this pull request brought its own.
+        NEW=$(git diff --name-only --diff-filter=A "$BASE_REF" -- .changeset \
+          | grep -E '^\.changeset/[^/]+\.md$' | grep -vE '^\.changeset/README\.md$' || true)
+        if [ -z "$NEW" ]; then
+          echo "::error::No new changeset. Run 'pnpm changeset', or 'pnpm changeset add --empty' if this change needs no release."
+          exit 1
+        fi
+        echo "New changesets:"
+        echo "$NEW"
+        # Rejects unparsable frontmatter, unknown package names and invalid bump types.
+        pnpm changeset status --since="$BASE_REF"
+
+    - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      id: playwright-cache
+      with:
+        path: ~/.cache/ms-playwright
+        key: ${{ runner.os }}-playwright-${{ hashFiles('node_modules/.pnpm/@playwright+test@*/node_modules/@playwright/test/package.json') }}
+
+    - name: Install playwright deps
+      if: steps.playwright-cache.outputs.cache-hit != 'true'
+      shell: bash
+      working-directory: tests/playwright
+      run: pnpm exec playwright install --with-deps chromium
+
+    - name: Unit Tests
+      id: unit-tests
+      continue-on-error: ${{ inputs.perform-all-checks == 'true' }}
+      shell: bash
+      run: pnpm -r run test
+
+    - name: Check Linting
+      id: lint-check
+      continue-on-error: ${{ inputs.perform-all-checks == 'true' }}
+      shell: bash
+      run: |
+        mkdir -p build/lint && \
+          (pnpm -r run lint; echo $? > build/lint/exitcode) | tee build/lint/output.log
+        exit $(cat build/lint/exitcode)
+
+    # Not part of component-foundation: building the TypeDoc API documentation reveals,
+    # for example, private API exposed by public API.
+    - name: Check API Documentation
+      id: doc-check
+      continue-on-error: ${{ inputs.perform-all-checks == 'true' }}
+      shell: bash
+      run: pnpm doc
+
+    - name: Run Playwright tests
+      id: playwright-tests
+      continue-on-error: ${{ inputs.perform-all-checks == 'true' }}
+      shell: bash
+      working-directory: tests/playwright
+      run: |
+        pnpm exec playwright install --with-deps chromium
+        pnpm ui-test
+
+    - name: Upload all reports
+      if: ${{ !cancelled() }}
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: check-reports
+        path: |
+          **/build/test/**
+          build/lint/**
+          tests/playwright/build/playwright/html-report/
+        retention-days: 30
+        if-no-files-found: warn
+
+    - name: Verify all checks passed
+      shell: bash
+      run: |
+        echo "## Check Results" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        FAILED=false
+
+        if [ "${{ steps.changeset-check.outcome }}" == "skipped" ]; then
+          echo "⏭️ Changeset check skipped" >> $GITHUB_STEP_SUMMARY
+        elif [ "${{ steps.changeset-check.outcome }}" == "success" ]; then
+          echo "✅ Changeset check passed" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ Changeset check failed" >> $GITHUB_STEP_SUMMARY
+          FAILED=true
+        fi
+
+        if [ "${{ steps.unit-tests.outcome }}" == "success" ]; then
+          echo "✅ Unit tests passed" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ Unit tests failed" >> $GITHUB_STEP_SUMMARY
+          FAILED=true
+        fi
+
+        if [ "${{ steps.lint-check.outcome }}" == "success" ]; then
+          echo "✅ Lint checks passed" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ Lint checks failed" >> $GITHUB_STEP_SUMMARY
+          FAILED=true
+        fi
+
+        if [ "${{ steps.doc-check.outcome }}" == "success" ]; then
+          echo "✅ API documentation built" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ API documentation failed" >> $GITHUB_STEP_SUMMARY
+          FAILED=true
+        fi
+
+        if [ "${{ steps.playwright-tests.outcome }}" == "success" ]; then
+          echo "✅ Playwright tests passed" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ Playwright tests failed" >> $GITHUB_STEP_SUMMARY
+          FAILED=true
+        fi
+
+        if [ "$FAILED" == "true" ]; then
+          echo "::error::One or more checks failed"
+          exit 1
+        fi

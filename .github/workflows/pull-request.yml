@@ -1,0 +1,69 @@
+name: "Pull Request"
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: read
+  packages: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+run-name: |
+  ${{ github.workflow }} ${{ github.head_ref || github.ref_name }}
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    # Public repository: fork PRs get no secrets (Nexus, CKEditor license), so they can
+    # neither build nor deploy a Storybook. See the "fork" job.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Configure git safe directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Build
+        uses: ./.github/actions/build
+        with:
+          nexus-user: ${{ secrets.PLUGINS_NEXUS_USER }}
+          nexus-password: ${{ secrets.PLUGINS_NEXUS_PASSWORD }}
+          ckeditor-license: ${{ secrets.CKEDITOR_LICENSE }}
+
+      - name: Deploy Storybook
+        uses: ./.github/actions/deploy-storybook
+        with:
+          branch-name: ${{ github.head_ref || github.ref_name }}
+          ckeditor-license: ${{ secrets.CKEDITOR_LICENSE }}
+
+      - name: Checks
+        uses: ./.github/actions/checks
+        with:
+          perform-all-checks: 'true'
+          base-ref: origin/main
+
+  fork:
+    name: Fork Pull Request
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository
+    permissions: {}
+    steps:
+      - name: Explain how fork pull requests are validated
+        run: |
+          echo "::notice::Pull requests from forks are not built: they get no access to the Nexus registry and the CKEditor license. A maintainer pushes the changes to a branch of this repository to validate and integrate them."
+          {
+            echo "## Pull request from a fork"
+            echo ""
+            echo "Fork pull requests are not built, because they get no access to the Nexus registry"
+            echo "and the CKEditor license. A maintainer pushes the changes to a branch of this"
+            echo "repository and opens a pull request from there, which runs all checks and the QA gate."
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,93 @@
+name: "Publish Snapshot"
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+run-name: |
+  ${{ github.workflow }} ${{ github.head_ref || github.ref_name }}
+
+jobs:
+  build-and-publish:
+    name: Build and Publish Snapshot
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Configure git safe directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Calculate snapshot version
+        id: version
+        shell: bash
+        run: |
+          # The root package.json is a private placeholder; all published packages share
+          # one version. The snapshot is based on the next patch version, so it sorts
+          # above the latest release.
+          existing_version=$(jq -r .version packages/ckeditor5-common/package.json)
+          IFS=. read -r major minor patch <<< "${existing_version%%-*}"
+          short_sha="${{ github.sha }}"
+          short_sha="${short_sha:0:7}"
+          next_version="${major}.${minor}.$((patch + 1))-SNAPSHOT.${short_sha}-${{ github.run_id }}"
+          echo "Calculated snapshot version: ${next_version}"
+          echo "version=${next_version}" >> $GITHUB_OUTPUT
+
+      - name: Build
+        uses: ./.github/actions/build
+        with:
+          version: ${{ steps.version.outputs.version }}
+          nexus-user: ${{ secrets.PLUGINS_NEXUS_USER }}
+          nexus-password: ${{ secrets.PLUGINS_NEXUS_PASSWORD }}
+          ckeditor-license: ${{ secrets.CKEDITOR_LICENSE }}
+
+      - name: Publish Snapshot Packages
+        env:
+          NEXUS_USER: ${{ secrets.PLUGINS_NEXUS_USER }}
+          NEXUS_PASSWORD: ${{ secrets.PLUGINS_NEXUS_PASSWORD }}
+        run: |
+          TARGET_REGISTRY="https://repository.coremedia.com/nexus/repository/npm-github-hosted/"
+
+          # Authenticate with Nexus
+          NPM_AUTH_TOKEN=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" \
+            -X PUT --data "{\"name\": \"$NEXUS_USER\", \"password\": \"$NEXUS_PASSWORD\"}" \
+            "${TARGET_REGISTRY}-/user/org.couchdb.user:$NEXUS_USER" | jq -r .token)
+          echo "::add-mask::$NPM_AUTH_TOKEN"
+
+          # Project-level .npmrc, which wins over the coremedia-npm one written by the
+          # build step; restored afterwards so the job leaves the workspace as it found it.
+          cp "$GITHUB_WORKSPACE/.npmrc" "$GITHUB_WORKSPACE/.npmrc.bak"
+          cat > "$GITHUB_WORKSPACE/.npmrc" << EOF
+          @coremedia:registry=${TARGET_REGISTRY}
+          @coremedia-internal:registry=${TARGET_REGISTRY}
+          //repository.coremedia.com/nexus/repository/npm-github-hosted/:_authToken=${NPM_AUTH_TOKEN}
+          EOF
+
+          echo "Publishing packages to $TARGET_REGISTRY"
+
+          # Publish all packages directly
+          pnpm -r publish --tag snapshot --no-git-checks
+
+          mv "$GITHUB_WORKSPACE/.npmrc.bak" "$GITHUB_WORKSPACE/.npmrc"
+
+          # Generate catalog entries
+          CATALOG_ENTRIES=$(pnpm -r exec sh -c '
+            if [ "$(jq -r ".private // false" package.json)" != "true" ]; then
+              echo "  \"$(jq -r .name package.json)\": \"${{ steps.version.outputs.version }}\""
+            fi
+          ')
+
+          echo "## ✅ Snapshot published" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** ${{ steps.version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Registry:** npm-github-hosted" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### pnpm-workspace.yaml catalog entries" >> $GITHUB_STEP_SUMMARY
+          echo "Add the following to your \`pnpm-workspace.yaml\` under \`catalog:\`:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`yaml" >> $GITHUB_STEP_SUMMARY
+          echo "$CATALOG_ENTRIES" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY

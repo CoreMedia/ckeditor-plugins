@@ -35,8 +35,7 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "publishall": "pnpm --recursive publish",
-    "setversion": "set-version",
+    "set-version": "set-version",
     "changeset": "changeset",
     "ci:version": "changeset version && pnpm install --lockfile-only",
     "ci:publish": "changeset publish",
@@ -48,8 +47,7 @@
     "ui-test": "pnpm --recursive --filter \"@coremedia/ckeditor5-playwright-itest\" run ui-test",
     "test": "pnpm --recursive test",
     "preinstall": "node ./scripts/check-pnpm.mjs",
-    "start": "pnpm --recursive --filter \"@coremedia/ckeditor5-app\" start",
-    "script:version": "node ./scripts/version.mjs"
+    "start": "pnpm --recursive --filter \"@coremedia/ckeditor5-app\" start"
   },
   "dependencies": {
     "@coremedia/set-version": "catalog:"
@@ -58,10 +56,8 @@
     "@changesets/cli": "catalog:",
     "@coremedia/studio-client.eslint-config": "catalog:",
     "eslint": "catalog:",
-    "minimist": "catalog:",
     "package-directory": "catalog:",
     "rimraf": "catalog:",
-    "semver": "catalog:",
     "typedoc": "catalog:",
     "typescript": "catalog:"
   }

@@ -1,0 +1,189 @@
+name: "QA-Gate"
+
+on:
+  pull_request_target:
+    types: [labeled, unlabeled]
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: qa-gate-main
+  cancel-in-progress: false
+
+run-name: |
+  QA-Gate PR #${{ github.event.pull_request.number }}
+
+jobs:
+  check-queue:
+    name: Check Queue Position
+    runs-on: ubuntu-latest
+    # Trigger when 'approved' is added OR when 'qa-failed' is removed.
+    # Never for fork PRs: pull_request_target would run their code with this repo's secrets.
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      ((github.event.action == 'labeled' && github.event.label.name == 'approved') ||
+      (github.event.action == 'unlabeled' && github.event.label.name == 'qa-failed'))
+    outputs:
+      should-proceed: ${{ steps.queue.outputs.should-proceed }}
+      pr-number: ${{ github.event.pull_request.number }}
+      pr-branch: ${{ github.event.pull_request.head.ref }}
+    steps:
+      - name: Check if oldest approved PR
+        id: queue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Get all open PRs into main with 'approved' label but without 'qa-failed', sorted by updated_at (oldest first)
+          OLDEST_PR=$(gh api \
+            -H "Accept: application/vnd.github+json" \
+            "/repos/${{ github.repository }}/pulls?state=open&base=main&sort=updated&direction=asc" \
+            --jq '[.[] | select((.labels | map(.name) | contains(["approved"])) and (.labels | map(.name) | contains(["qa-failed"]) | not))] | first | .number')
+
+          CURRENT_PR=${{ github.event.pull_request.number }}
+
+          # Check current PR labels
+          PR_LABELS=$(gh api \
+            -H "Accept: application/vnd.github+json" \
+            "/repos/${{ github.repository }}/pulls/$CURRENT_PR" \
+            --jq '.labels | map(.name)')
+
+          HAS_APPROVED=$(echo "$PR_LABELS" | jq 'contains(["approved"])')
+          HAS_QA_FAILED=$(echo "$PR_LABELS" | jq 'contains(["qa-failed"])')
+
+          echo "Oldest approved PR (without qa-failed): $OLDEST_PR"
+          echo "Current PR: $CURRENT_PR"
+          echo "Current PR has approved: $HAS_APPROVED"
+          echo "Current PR has qa-failed: $HAS_QA_FAILED"
+
+          if [ "$HAS_APPROVED" != "true" ]; then
+            echo "This PR does not have approved label, skipping"
+            echo "should-proceed=false" >> $GITHUB_OUTPUT
+          elif [ "$HAS_QA_FAILED" == "true" ]; then
+            echo "This PR has qa-failed label, skipping"
+            echo "should-proceed=false" >> $GITHUB_OUTPUT
+          elif [ "$OLDEST_PR" == "$CURRENT_PR" ]; then
+            echo "This PR is next in queue, proceeding with integration"
+            echo "should-proceed=true" >> $GITHUB_OUTPUT
+          else
+            echo "PR #$OLDEST_PR is ahead in queue, skipping"
+            echo "should-proceed=false" >> $GITHUB_OUTPUT
+          fi
+
+  integrate:
+    name: Integrate and Merge
+    runs-on: ubuntu-latest
+    needs: check-queue
+    if: needs.check-queue.outputs.should-proceed == 'true'
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GH_PAT_PUSH_FROM_GHA }}
+
+      - name: Configure Git
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config user.name 'coremedia-ci'
+          git config user.email 'coremedia-ci@coremedia.com'
+
+      - name: Reject autosquash commits
+        env:
+          PR_BRANCH: ${{ needs.check-queue.outputs.pr-branch }}
+        run: |
+          echo "Fetching PR branch: $PR_BRANCH"
+          git fetch origin "$PR_BRANCH"
+
+          # "fixup!"/"squash!"/"amend!" commits are autosquash markers created by
+          # git commit --fixup/--squash/--amend. They must be squashed into their
+          # targets (git rebase -i --autosquash) before the PR can be integrated.
+          MARKER_COMMITS=$(git log --no-merges -E \
+            --grep='^(fixup|squash|amend)! ' \
+            --format='%h %s' "main..origin/$PR_BRANCH" || true)
+
+          if [ -n "$MARKER_COMMITS" ]; then
+            echo "::error::The PR contains fixup!/squash!/amend! commits. Run 'git rebase -i --autosquash main' and push before integration."
+            {
+              echo "## ❌ Autosquash commits found"
+              echo ""
+              echo "The following commits must be squashed before integration:"
+              echo ""
+              echo '```'
+              echo "$MARKER_COMMITS"
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+          echo "No fixup/squash commits found."
+
+      - name: Merge PR branch into main
+        env:
+          PR_BRANCH: ${{ needs.check-queue.outputs.pr-branch }}
+          PR_NUMBER: ${{ needs.check-queue.outputs.pr-number }}
+        run: |
+          echo "Fetching PR branch: $PR_BRANCH"
+          git fetch origin "$PR_BRANCH"
+
+          echo "Merging $PR_BRANCH into main"
+          if ! git merge "origin/$PR_BRANCH" --no-edit -m "Merge PR #$PR_NUMBER"; then
+            echo "::error::Merge conflict detected. Please rebase your branch."
+            exit 1
+          fi
+
+          echo "Merge successful"
+
+      - name: Build
+        uses: ./.github/actions/build
+        with:
+          nexus-user: ${{ secrets.PLUGINS_NEXUS_USER }}
+          nexus-password: ${{ secrets.PLUGINS_NEXUS_PASSWORD }}
+          ckeditor-license: ${{ secrets.CKEDITOR_LICENSE }}
+
+      - name: Checks
+        uses: ./.github/actions/checks
+        with:
+          base-ref: origin/main
+
+      - name: Push to main
+        env:
+          PR_NUMBER: ${{ needs.check-queue.outputs.pr-number }}
+        run: |
+          echo "Pushing to main..."
+          git push origin main
+
+          # Update local tracking to match remote after push
+          git fetch origin main
+          git branch --set-upstream-to=origin/main main
+
+          echo "## ✅ PR #$PR_NUMBER successfully integrated" >> $GITHUB_STEP_SUMMARY
+
+      - name: Deploy Storybook for main
+        uses: ./.github/actions/deploy-storybook
+        with:
+          branch-name: main
+          ckeditor-license: ${{ secrets.CKEDITOR_LICENSE }}
+
+  on-failure:
+    name: Handle Failure
+    runs-on: ubuntu-latest
+    needs: [check-queue, integrate]
+    if: failure() && needs.check-queue.outputs.should-proceed == 'true'
+    steps:
+      - name: Add qa-failed label and comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ needs.check-queue.outputs.pr-number }}
+        run: |
+          gh pr edit "$PR_NUMBER" --repo "${{ github.repository }}" --add-label "qa-failed"
+
+          gh pr comment "$PR_NUMBER" --repo "${{ github.repository }}" --body "❌ **Integration failed**
+
+          The integration pipeline failed. Please check the [workflow run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.
+
+          After fixing the issue, remove the \`qa-failed\` label to retry."

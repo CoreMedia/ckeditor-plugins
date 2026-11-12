@@ -1,0 +1,48 @@
+name: Create / Update Release Pull Request
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create-release-pr:
+    name: Create Release Pull Request
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: package.json
+          cache: 'pnpm'
+          cache-dependency-path: "./pnpm-lock.yaml"
+
+      - name: Setup npm registries
+        run: |
+          REGISTRY_URL="https://repository.coremedia.com/nexus/repository/coremedia-npm/"
+          NPM_AUTH_TOKEN=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.PLUGINS_NEXUS_USER }}", "password": "${{ secrets.PLUGINS_NEXUS_PASSWORD }}"}' ${REGISTRY_URL}-/user/org.couchdb.user:${{ secrets.PLUGINS_NEXUS_USER }} | jq -r .token)
+          echo "::add-mask::$NPM_AUTH_TOKEN"
+          pnpm config set //repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=$NPM_AUTH_TOKEN
+          pnpm config set @jangaroo:registry=${REGISTRY_URL}
+          pnpm config set @coremedia:registry=${REGISTRY_URL}
+          pnpm config set @coremedia-internal:registry=${REGISTRY_URL}
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Create Release Pull Request
+        uses: changesets/action@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1
+        with:
+          version-script: pnpm ci:version
+          pr-base-branch: main
+          github-token: ${{ secrets.GH_PAT_PUSH_FROM_GHA }}
