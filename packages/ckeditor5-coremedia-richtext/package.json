@@ -28,7 +28,7 @@
     "test": "test-runner-react --test-force-exit=true"
   },
   "devDependencies": {
-    "@coremedia-internal/ckeditor5-coremedia-example-data": "workspace:^1.0.0-SNAPSHOT",
+    "@coremedia-internal/ckeditor5-coremedia-example-data": "workspace:*",
     "@coremedia-internal/studio-client.test-runner-helper": "catalog:",
     "@coremedia/studio-client.eslint-config": "catalog:",
     "@types/node": "catalog:",
@@ -68,12 +68,12 @@
     "ckeditor5": "catalog:"
   },
   "dependencies": {
-    "@coremedia/ckeditor5-common": "workspace:^28.1.1",
-    "@coremedia/ckeditor5-core-common": "workspace:^28.1.1",
-    "@coremedia/ckeditor5-dataprocessor-support": "workspace:^28.1.1",
-    "@coremedia/ckeditor5-dom-converter": "workspace:^28.1.1",
-    "@coremedia/ckeditor5-dom-support": "workspace:^28.1.1",
-    "@coremedia/ckeditor5-link-common": "workspace:^28.1.1",
-    "@coremedia/ckeditor5-logging": "workspace:^28.1.1"
+    "@coremedia/ckeditor5-common": "workspace:*",
+    "@coremedia/ckeditor5-core-common": "workspace:*",
+    "@coremedia/ckeditor5-dataprocessor-support": "workspace:*",
+    "@coremedia/ckeditor5-dom-converter": "workspace:*",
+    "@coremedia/ckeditor5-dom-support": "workspace:*",
+    "@coremedia/ckeditor5-link-common": "workspace:*",
+    "@coremedia/ckeditor5-logging": "workspace:*"
   }
 }

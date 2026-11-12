@@ -275,23 +275,25 @@ The editor factories read `CKEDITOR_LICENSE_KEY` (use `GPL` for the GNU GPL).
 2. `app/.env`,
 3. the workspace-root `.env`.
 
-In CI the value comes from the `CKEDITOR_LICENSE` secret (see the deployment
-workflow and `build.yml`).
+In CI the value comes from the `CKEDITOR_LICENSE` secret, written to the
+workspace-root `.env` by the `build` action (`.github/actions/build`).
+Never publish a Storybook built with that key: the key is inlined into the
+bundle. Builds meant for publishing use `GPL`.
 
 ## GitHub Pages Deployment
 
-The workflow `.github/workflows/deploy-storybook.yml` builds and publishes this
-Storybook on every push to `main` (and on manual dispatch).
+The `deploy-storybook` action (`.github/actions/deploy-storybook`) builds this
+Storybook and publishes it to `storybook/<branch>/` on the `gh-pages` branch:
+for every pull request from this repository (`pull-request.yml`) and for `main`
+after each integration (`qa-gate.yml`). `on-delete-branch.yml` removes the
+Storybooks of deleted branches.
 
-To **coexist with the existing GitHub Pages content** (the API documentation is
-served from the Pages root at `…/docs/api/`), the static Storybook is published
-into a dedicated `storybook/` subfolder of the `gh-pages` branch using
-`peaceiris/actions-gh-pages` with `keep_files: true`. Sibling content is left
-untouched.
-
-- **Live URL:** <https://coremedia.github.io/ckeditor-plugins/storybook/>
+- **Live URL:** <https://coremedia.github.io/ckeditor-plugins/storybook/> lists
+  all deployed branches; `…/storybook/main/` is the current `main`.
+- **License:** the deployed build uses `CKEDITOR_LICENSE_KEY=GPL`; the action
+  fails if the commercial key ends up in the bundle.
 - **Base path:** none required — the static build uses **relative** asset paths,
-  so it works unchanged under the `/storybook/` subpath.
+  so it works unchanged under any subpath.
 
 [Storybook]: <https://storybook.js.org/> "Storybook: Frontend workshop for UI development"
 [playwright]: <../playwright> "Playwright integration tests"

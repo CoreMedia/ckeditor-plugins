@@ -8,6 +8,9 @@
   npm install --global pnpm
   ```
 
+  The pnpm version used by this workspace is pinned via `packageManager` in
+  the root `package.json`; pnpm switches to it automatically.
+
 ## Typical Build Process
 
 ```text
@@ -24,30 +27,37 @@ Create a file named `.env` in the root of this workspace and add a line
 CKEDITOR_LICENSE_KEY=<your-license-key>
 ```
 
-To run tests use:
+## Changesets
+
+Every pull request needs a changeset, which states the kind of release the change
+requires (see [Versioning](./VERSIONING.md)) and becomes its changelog entry:
 
 ```text
-pnpm run test
+pnpm changeset
 ```
+
+If a change needs no release (e.g. CI or documentation only), add an empty one:
+
+```text
+pnpm changeset add --empty
+```
+
+All published packages share one version: a changeset for one package bumps all of
+them.
 
 ## Update Process
 
-If updating CKEditor 5, it is best done in three steps:
+All dependency versions are maintained centrally in the `catalog` of
+`pnpm-workspace.yaml`; the packages refer to them as `catalog:`, including their
+`peerDependencies`. To update CKEditor 5, change the `ckeditor5` entry and the
+`@ckeditor/*` entries there, then run:
 
 ```text
-pnpm update:latest:third-party
-pnpm update:latest:ckeditor5-dev
-pnpm update:latest:ckeditor5
+pnpm install
 ```
 
-The first one will trigger an update of all other third-party packages.
-
-The second one will trigger an update of the CKEditor 5 Development Tooling.
-
-The third one will perform the update of the main CKEditor 5 packages.
-
-**Peer Dependencies:** Note, that `pnpm update` will not update the
-`peerDependencies`. This has to be done in a manual adjustment afterwards.
+pnpm only installs versions released at least one day ago (`minimumReleaseAge`),
+except for the scopes listed in `minimumReleaseAgeExclude`.
 
 ## Troubleshooting
 

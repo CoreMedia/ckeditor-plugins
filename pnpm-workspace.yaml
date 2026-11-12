@@ -14,6 +14,7 @@ catalog:
   '@bbob/preset': 4.3.1
   '@bbob/preset-html5': 4.3.1
   '@bbob/types': 4.3.1
+  '@changesets/cli': ^3.0.3
   '@ckeditor/ckeditor5-inspector': ^5.0.3
   '@coremedia-internal/studio-client.playwright-config': ^1.4.0
   '@coremedia-internal/studio-client.storybook-config': ^2.0.1
@@ -45,13 +46,10 @@ catalog:
   http-server: ^14.1.1
   jsdom: ^27.0.0
   lightningcss: ^1.32.0
-  minimist: ^1.2.8
   node-esapi: ^0.0.1
-  package-directory: ^8.1.0
   playwright-core: ^1.62.1
   rimraf: ^6.0.1
   rxjs: ^7.8.2
-  semver: ^7.6.2
   source-map-loader: ^5.0.0
   style-loader: ^4.0.0
   storybook: ^10.6.1

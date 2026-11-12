@@ -1,0 +1,53 @@
+name: 'Deploy Storybook'
+description: 'Build the Storybook with the GPL license key and deploy it to storybook/<branch>/ on the gh-pages branch'
+inputs:
+  branch-name:
+    description: 'Branch name for the Storybook deployment'
+    required: true
+  ckeditor-license:
+    description: 'Commercial CKEditor 5 license key; only used to verify that it is not part of the published bundle'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    # GitHub Pages is public: the Storybook bundle inlines CKEDITOR_LICENSE_KEY, so it is
+    # built with "GPL". dotenv does not override the variable with the .env written by the
+    # build action.
+    - name: Build Storybook (GPL)
+      shell: bash
+      env:
+        CKEDITOR_LICENSE_KEY: GPL
+      run: pnpm --filter "@coremedia/ckeditor5-storybook-itest" run build-storybook
+
+    - name: Verify the license key is not published
+      shell: bash
+      env:
+        COMMERCIAL_KEY: ${{ inputs.ckeditor-license }}
+      run: |
+        if [ -n "$COMMERCIAL_KEY" ] && [ "$COMMERCIAL_KEY" != "GPL" ] \
+          && grep -rqF -- "$COMMERCIAL_KEY" tests/storybook/build/storybook; then
+          echo "::error::The Storybook build contains the commercial CKEditor license key; refusing to deploy."
+          exit 1
+        fi
+        echo "Storybook build does not contain the commercial license key."
+
+    - name: Deploy to gh-pages
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+        BRANCH_NAME: ${{ inputs.branch-name }}
+      run: |
+        SAFE_BRANCH_NAME=$(echo "$BRANCH_NAME" | sed 's/[^a-zA-Z0-9-]/-/g')
+        export SAFE_BRANCH_NAME
+        # Only storybook/ belongs to this action; the site root holds the landing page and
+        # the API documentation (deploy-docs action).
+        bash "$GITHUB_WORKSPACE/.github/scripts/publish-gh-pages.sh" \
+          "Deploy Storybook for branch: $SAFE_BRANCH_NAME" \
+          bash -c '
+            set -euo pipefail
+            rm -rf "storybook/$SAFE_BRANCH_NAME"
+            mkdir -p "storybook/$SAFE_BRANCH_NAME"
+            cp -r "$GITHUB_WORKSPACE"/tests/storybook/build/storybook/. "storybook/$SAFE_BRANCH_NAME/"
+            bash "$GITHUB_WORKSPACE/.github/scripts/storybook-index.sh"
+          '

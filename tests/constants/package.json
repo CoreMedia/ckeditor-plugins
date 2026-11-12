@@ -16,7 +16,7 @@
     "/src"
   ],
   "dependencies": {
-    "@coremedia-internal/ckeditor5-coremedia-example-data": "workspace:^1.0.0-SNAPSHOT"
+    "@coremedia-internal/ckeditor5-coremedia-example-data": "workspace:*"
   },
   "devDependencies": {
     "@coremedia/studio-client.build-config": "catalog:",

@@ -1,0 +1,136 @@
+name: Release and publish by Changesets
+
+on:
+  # Manually: also (re-)deploys the documentation, e.g. to initially fill gh-pages.
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+  packages: read
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+env:
+  NODE_OPTIONS: "--max_old_space_size=4096"
+
+jobs:
+  check-changesets:
+    name: Check for pending changesets
+    runs-on: ubuntu-latest
+    outputs:
+      should-release: ${{ steps.check.outputs.should-release }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Check for pending changesets
+        id: check
+        run: |
+          # Pending changesets mean the release PR has not been merged yet. Only once
+          # "changeset version" consumed them are the packages ready to be published.
+          COUNT=$(find .changeset -maxdepth 1 -name '*.md' ! -name 'README.md' | wc -l)
+          echo "Pending changesets: $COUNT"
+          if [ "$COUNT" -eq 0 ]; then
+            echo "should-release=true" >> $GITHUB_OUTPUT
+          else
+            echo "should-release=false" >> $GITHUB_OUTPUT
+          fi
+
+  release:
+    name: Release and publish
+    needs: check-changesets
+    if: needs.check-changesets.outputs.should-release == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      published: ${{ steps.changesets.outputs.published }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup Git
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config --global user.name 'coremedia-ci'
+          git config --global user.email 'coremedia-ci@coremedia.com'
+
+      - name: Build
+        uses: ./.github/actions/build
+        with:
+          nexus-user: ${{ secrets.PLUGINS_NEXUS_USER }}
+          nexus-password: ${{ secrets.PLUGINS_NEXUS_PASSWORD }}
+          ckeditor-license: ${{ secrets.CKEDITOR_LICENSE }}
+
+      - name: Checks
+        uses: ./.github/actions/checks
+
+      - name: Setup npm registries for publish
+        run: |
+          NPM_AUTH_TOKEN=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ secrets.PLUGINS_NEXUS_USER }}", "password": "${{ secrets.PLUGINS_NEXUS_PASSWORD }}"}' https://repository.coremedia.com/nexus/repository/coremedia-npm/-/user/org.couchdb.user:${{ secrets.PLUGINS_NEXUS_USER }} | jq -r .token)
+          echo "::add-mask::$NPM_AUTH_TOKEN"
+          echo "//repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=${NPM_AUTH_TOKEN}" >> .npmrc
+          echo "@jangaroo:registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/" >> .npmrc
+          echo "@coremedia:registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/" >> .npmrc
+          echo "@coremedia-internal:registry=https://repository.coremedia.com/nexus/repository/coremedia-npm/" >> .npmrc
+
+      - name: Publish to npm registry
+        id: changesets
+        uses: changesets/action@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1
+        with:
+          publish-script: pnpm ci:publish
+          github-token: ${{ github.token }}
+          # One aggregate release per version instead of one per package (see below).
+          create-github-releases: false
+
+      - name: Log published output
+        run: |
+          echo "Published output: ${{ steps.changesets.outputs.published }}"
+
+      - name: Push git tag after publish
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          git push --follow-tags
+
+      # All packages share one version (fixed group), so the release is tagged and
+      # announced once as "X.Y.Z" / "vX.Y.Z", like before Changesets.
+      - name: Create aggregate tag and GitHub release
+        if: steps.changesets.outputs.published == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(jq -r .version packages/ckeditor5-common/package.json)
+          node scripts/release-notes.mjs "$VERSION" > "$RUNNER_TEMP/release-notes.md"
+          git tag -a "$VERSION" -m "$VERSION"
+          git push origin "$VERSION"
+          gh release create "$VERSION" --verify-tag --title "v$VERSION" --notes-file "$RUNNER_TEMP/release-notes.md"
+          echo "## Released $VERSION" >> "$GITHUB_STEP_SUMMARY"
+
+  # Separate job, so a manual run deploys the documentation even while changesets are
+  # pending and the release job is skipped (e.g. to initially fill gh-pages).
+  docs:
+    name: Deploy documentation
+    needs: [check-changesets, release]
+    if: >-
+      !cancelled() && needs.release.result != 'failure' &&
+      (needs.release.outputs.published == 'true' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Build
+        uses: ./.github/actions/build
+        with:
+          nexus-user: ${{ secrets.PLUGINS_NEXUS_USER }}
+          nexus-password: ${{ secrets.PLUGINS_NEXUS_PASSWORD }}
+          ckeditor-license: ${{ secrets.CKEDITOR_LICENSE }}
+
+      - name: Deploy documentation
+        uses: ./.github/actions/deploy-docs

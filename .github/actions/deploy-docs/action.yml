@@ -1,0 +1,31 @@
+name: 'Deploy Documentation'
+description: 'Build the TypeDoc API documentation and deploy the site (landing page + docs/api/) to the gh-pages branch, keeping storybook/'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Build API documentation
+      shell: bash
+      run: pnpm doc
+
+    # The site is the repository tree rendered by Jekyll (README.md as landing page,
+    # _config.yml, 404.md, the other Markdown files) plus the generated docs/api/. This
+    # keeps the URLs Pages served from main:/ before. storybook/ belongs to the
+    # deploy-storybook action and stays untouched.
+    - name: Deploy to gh-pages
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      run: |
+        SITE_ARCHIVE="$RUNNER_TEMP/site.tar"
+        git -C "$GITHUB_WORKSPACE" archive --format=tar -o "$SITE_ARCHIVE" HEAD
+        export SITE_ARCHIVE
+        bash "$GITHUB_WORKSPACE/.github/scripts/publish-gh-pages.sh" \
+          "Deploy documentation for ${GITHUB_SHA::8}" \
+          bash -c '
+            set -euo pipefail
+            find . -mindepth 1 -maxdepth 1 ! -name .git ! -name storybook -exec rm -rf {} +
+            tar -xf "$SITE_ARCHIVE"
+            mkdir -p docs
+            cp -r "$GITHUB_WORKSPACE/docs/api" docs/
+          '
