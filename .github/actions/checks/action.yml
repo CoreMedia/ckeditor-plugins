@@ -17,7 +17,12 @@ runs:
     - name: Check Changesets
       id: changeset-check
       # The "Version Packages" release PR consumes all changesets, so it carries none itself.
-      if: ${{ inputs.base-ref != '' && !startsWith(github.head_ref || github.ref_name, 'changeset-release/') }}
+      # Dependabot's GitHub Actions updates only touch CI, so they have nothing to release.
+      if: >-
+        ${{ inputs.base-ref != '' &&
+        !startsWith(github.head_ref || github.ref_name, 'changeset-release/') &&
+        !(github.event.pull_request.user.login == 'dependabot[bot]' &&
+        startsWith(github.head_ref, 'dependabot/github_actions/')) }}
       continue-on-error: ${{ inputs.perform-all-checks == 'true' }}
       shell: bash
       env:
