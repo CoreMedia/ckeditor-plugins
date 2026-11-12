@@ -47,7 +47,6 @@ catalog:
   jsdom: ^27.0.0
   lightningcss: ^1.32.0
   node-esapi: ^0.0.1
-  package-directory: ^8.1.0
   playwright-core: ^1.62.1
   rimraf: ^6.0.1
   rxjs: ^7.8.2

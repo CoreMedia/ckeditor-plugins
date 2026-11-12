@@ -43,10 +43,6 @@
     "clean:node_modules": "rimraf --glob \"./**/node_modules\"",
     "build": "pnpm --recursive build",
     "doc": "typedoc",
-    "doc:config": "typedoc --showConfig",
-    "ui-test": "pnpm --recursive --filter \"@coremedia/ckeditor5-playwright-itest\" run ui-test",
-    "test": "pnpm --recursive test",
-    "preinstall": "node ./scripts/check-pnpm.mjs",
     "start": "pnpm --recursive --filter \"@coremedia/ckeditor5-app\" start"
   },
   "dependencies": {
@@ -56,7 +52,6 @@
     "@changesets/cli": "catalog:",
     "@coremedia/studio-client.eslint-config": "catalog:",
     "eslint": "catalog:",
-    "package-directory": "catalog:",
     "rimraf": "catalog:",
     "typedoc": "catalog:",
     "typescript": "catalog:"
