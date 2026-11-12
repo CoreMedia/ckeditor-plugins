@@ -1,7 +1,10 @@
 name: "QA-Gate"
 
+# pull_request rather than pull_request_target: the gate builds and tests the PR code,
+# which must not run with secrets for fork PRs. GitHub withholds secrets from fork PRs
+# for pull_request and blocks pull_request_target on public repositories by default.
 on:
-  pull_request_target:
+  pull_request:
     types: [labeled, unlabeled]
     branches:
       - main
@@ -22,7 +25,7 @@ jobs:
     name: Check Queue Position
     runs-on: ubuntu-latest
     # Trigger when 'approved' is added OR when 'qa-failed' is removed.
-    # Never for fork PRs: pull_request_target would run their code with this repo's secrets.
+    # Never for fork PRs: they get no secrets, so the integration could not succeed.
     if: >-
       github.event.pull_request.head.repo.full_name == github.repository &&
       ((github.event.action == 'labeled' && github.event.label.name == 'approved') ||
