@@ -1,0 +1,63 @@
+{
+  "name": "@coremedia/ckeditor5-app",
+  "description": "A custom CKEditor 5 build made by the CKEditor 5 online builder.",
+  "version": "28.1.1",
+  "type": "module",
+  "author": {
+    "name": "CoreMedia GmbH",
+    "email": "info@coremedia.com",
+    "url": "https://coremedia.com/",
+    "avatar": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2OTguNjY3IiBoZWlnaHQ9IjY5OC42NjciIHZlcnNpb249IjEuMCIgdmlld0JveD0iMCAwIDUyNCA1MjQiPjxwYXRoIGQ9Ik0yODIuNS42QzI0NSA0LjUgMjE1LjEgMTIuOSAxODUgMjcuOSAxMDYuNCA2Ny4yIDUzLjUgMTQyLjEgNDIuNCAyMjkuNWMtMi4xIDE3LjItMi4yIDQ4IDAgNjQuMUM0OCAzMzYuMiA2MS4zIDM3Mi4yIDg0IDQwNi4zYzYxLjkgOTMuMSAxNzUuNCAxMzYuNCAyODUgMTA4LjcgMTkuMi00LjggMzMuNy0xMC4zIDUzLjItMjAuMSAyMS0xMC41IDQyLjUtMjUuMyA1OC4zLTQwLjJsOC03LjYtMjEuNS0yMS42Yy0yMy42LTIzLjgtMjcuMS0yNi43LTM4LjYtMzIuNC0yMi40LTExLjItNDQuNy0xMS42LTcxLjctMS41LTE4LjYgNy0zMC40IDkuNC00OC43IDEwLjEtMTMgLjQtMTcuNS4yLTI3LjgtMS42LTMwLjUtNS4yLTU1LTE3LjgtNzYuOC0zOS41LTMzLjYtMzMuNi00Ny44LTgwLjQtMzguNC0xMjYuNCAxMC4yLTUwLjUgNDYuMi05MC41IDk1LjItMTA2LjEgMzEuNy0xMC4xIDY0LjItOC44IDk2LjYgMy45IDEyLjggNC45IDIyLjcgNyAzNC4xIDcgMTYuNCAwIDMxLjItNC4yIDQ1LjEtMTIuNyA1LjUtMy40IDEzLjYtMTAuNyAzMC40LTI3LjNsMjIuOC0yMi42LTkuMy04LjRjLTM5LjgtMzUuNC04NS42LTU3LTEzOC40LTY1LjEtMTIuNS0yLTQ4LjctMy4zLTU5LTIuM3oiLz48cGF0aCBkPSJNMjk2IDIxOC4xYy0yOC4zIDQuOC00NC4zIDM1LjQtMzIuMSA2MS40IDcuOSAxNyAyNy4yIDI3LjQgNDUuNCAyNC41IDI4LjktNC42IDQ1LjEtMzUuMiAzMi43LTYxLjctOC0xNy4yLTI3LjMtMjcuMy00Ni0yNC4yeiIvPjwvc3ZnPg=="
+  },
+  "license": "Apache-2.0",
+  "private": true,
+  "dependencies": {
+    "@coremedia-internal/ckeditor5-coremedia-example-data": "workspace:*",
+    "@coremedia-internal/ckeditor5-coremedia-studio-integration-mock": "workspace:*",
+    "@coremedia/ckeditor5-bbcode": "workspace:*",
+    "@coremedia/ckeditor5-coremedia-blocklist": "workspace:*",
+    "@coremedia/ckeditor5-coremedia-content-clipboard": "workspace:*",
+    "@coremedia/ckeditor5-coremedia-differencing": "workspace:*",
+    "@coremedia/ckeditor5-coremedia-images": "workspace:*",
+    "@coremedia/ckeditor5-coremedia-link": "workspace:*",
+    "@coremedia/ckeditor5-coremedia-richtext": "workspace:*",
+    "@coremedia/ckeditor5-coremedia-studio-essentials": "workspace:*",
+    "@coremedia/ckeditor5-data-facade": "workspace:*",
+    "@coremedia/ckeditor5-dataprocessor-support": "workspace:*",
+    "@coremedia/ckeditor5-dialog-visibility": "workspace:*",
+    "@coremedia/ckeditor5-dom-converter": "workspace:*",
+    "@coremedia/ckeditor5-font-mapper": "workspace:*",
+    "@coremedia/ckeditor5-link-common": "workspace:*",
+    "@coremedia/service-agent": "catalog:",
+    "ckeditor5": "catalog:",
+    "xml-formatter": "catalog:"
+  },
+  "devDependencies": {
+    "@ckeditor/ckeditor5-inspector": "catalog:",
+    "@coremedia/studio-client.eslint-config": "catalog:",
+    "@types/node": "catalog:",
+    "circular-dependency-plugin": "catalog:",
+    "css-loader": "catalog:",
+    "dotenv": "catalog:",
+    "esbuild-loader": "catalog:",
+    "eslint": "catalog:",
+    "http-server": "catalog:",
+    "lightningcss": "catalog:",
+    "rimraf": "catalog:",
+    "source-map-loader": "catalog:",
+    "style-loader": "catalog:",
+    "terser-webpack-plugin": "catalog:",
+    "typescript": "catalog:",
+    "webpack": "catalog:",
+    "webpack-cli": "catalog:"
+  },
+  "scripts": {
+    "clean": "pnpm clean:src && pnpm clean:dist",
+    "clean:src": "rimraf --glob \"src/**/*.@(js|js.map|d.ts|d.ts.map)\"",
+    "clean:dist": "rimraf ./dist",
+    "build": "webpack --mode production --stats-error-details",
+    "lint": "eslint \"**/*.{ts,tsx}\"",
+    "npm-check-updates": "npm-check-updates --upgrade",
+    "start": "http-server . --port 0 -d false -o sample"
+  }
+}

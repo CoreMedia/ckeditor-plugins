@@ -1,0 +1,62 @@
+name: "Cleanup deleted branch"
+
+on:
+  delete:
+  workflow_dispatch:
+
+concurrency:
+  group: storybook-deployment-group
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+run-name: |
+  Cleanup after branch deletion: ${{ github.event.ref || 'manual run' }}
+
+jobs:
+  cleanup:
+    name: Remove branch Storybook
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event.ref_type == 'branch'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Remove Storybooks of deleted branches
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          if ! git ls-remote --exit-code --heads origin gh-pages > /dev/null 2>&1; then
+            echo "No gh-pages branch, nothing to clean up"
+            exit 0
+          fi
+
+          BRANCHES_FILE="$RUNNER_TEMP/branches.txt"
+          gh api "repos/${REPOSITORY}/branches?per_page=100" --paginate --jq '.[].name' \
+            | sed 's/[^a-zA-Z0-9-]/-/g' | sort -u > "$BRANCHES_FILE"
+          # An incomplete branch list would delete live Storybooks.
+          if ! grep -qx 'main' "$BRANCHES_FILE"; then
+            echo "::error::Branch list does not contain main; refusing to clean up."
+            exit 1
+          fi
+          export BRANCHES_FILE
+
+          # Only storybook/ is touched; the landing page and docs/api/ stay.
+          bash .github/scripts/publish-gh-pages.sh "Remove Storybooks of deleted branches" \
+            bash -c '
+              set -euo pipefail
+              [ -d storybook ] || exit 0
+              for dir in storybook/*/; do
+                name=$(basename "$dir")
+                # Only directories holding a deployed Storybook are branch sites.
+                [ -f "$dir/iframe.html" ] || continue
+                if ! grep -qxF "$name" "$BRANCHES_FILE"; then
+                  rm -rf "$dir"
+                  echo "Removed Storybook of deleted branch: $name"
+                fi
+              done
+              bash "$GITHUB_WORKSPACE/.github/scripts/storybook-index.sh"
+            '

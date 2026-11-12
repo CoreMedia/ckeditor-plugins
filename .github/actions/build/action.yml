@@ -1,0 +1,75 @@
+name: 'Build'
+description: 'Setup environment and build packages'
+
+inputs:
+  version:
+    description: 'Version to set before build (optional, used for snapshots)'
+    required: false
+    default: ''
+  nexus-user:
+    description: 'Nexus registry username'
+    required: true
+  nexus-password:
+    description: 'Nexus registry password'
+    required: true
+  ckeditor-license:
+    description: 'CKEditor 5 license key, written to .env for tests and the Storybook dev server. Never publish a build containing it.'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup PNPM
+      uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+
+    - name: Setup NodeJS
+      uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version-file: package.json
+        cache: 'pnpm'
+        cache-dependency-path: "./pnpm-lock.yaml"
+
+    - name: Setup npm registries
+      shell: bash
+      run: |
+        REGISTRY_URL="https://repository.coremedia.com/nexus/repository/coremedia-npm/"
+        NPM_AUTH_TOKEN=$(curl -s -H "Accept: application/json" -H "Content-Type:application/json" -X PUT --data '{"name": "${{ inputs.nexus-user }}", "password": "${{ inputs.nexus-password }}"}' ${REGISTRY_URL}-/user/org.couchdb.user:${{ inputs.nexus-user }} | jq -r .token)
+        echo "::add-mask::$NPM_AUTH_TOKEN"
+        # Project-level .npmrc rather than `pnpm config set`: an explicit location we
+        # control, whereas `pnpm config set` moved from ~/.npmrc (pnpm 9) to
+        # ~/.config/pnpm/auth.ini (pnpm 11), silently breaking later overrides.
+        cat > "$GITHUB_WORKSPACE/.npmrc" << EOF
+        //repository.coremedia.com/nexus/repository/coremedia-npm/:_authToken=${NPM_AUTH_TOKEN}
+        @jangaroo:registry=${REGISTRY_URL}
+        @coremedia:registry=${REGISTRY_URL}
+        @coremedia-internal:registry=${REGISTRY_URL}
+        EOF
+
+    - name: Create .env
+      shell: bash
+      env:
+        CKEDITOR_LICENSE_KEY: ${{ inputs.ckeditor-license }}
+      run: echo "CKEDITOR_LICENSE_KEY=${CKEDITOR_LICENSE_KEY}" > "$GITHUB_WORKSPACE/.env"
+
+    - name: Install Dependencies
+      shell: bash
+      run: pnpm install
+
+    - name: Set version
+      if: inputs.version != ''
+      shell: bash
+      run: |
+        echo "Setting version: ${{ inputs.version }}"
+        pnpm run set-version ${{ inputs.version }} --dependency-version="workspace:*"
+        echo "**Version:** ${{ inputs.version }}" >> $GITHUB_STEP_SUMMARY
+        # "set-version" changes the package versions without touching pnpm-lock.yaml.
+        # pnpm v11's verifyDepsBeforeRun default check would abort every subsequent
+        # "pnpm run" in this job (here and in the Checks action) with
+        # ERR_PNPM_OUTDATED_LOCKFILE because of that expected mismatch, so disable it
+        # for the remainder of this job. Jobs that don't set a version (regular PR
+        # builds) keep the check enabled.
+        pnpm config set verifyDepsBeforeRun false
+
+    - name: Build Packages
+      shell: bash
+      run: pnpm -r run build

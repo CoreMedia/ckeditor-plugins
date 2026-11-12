@@ -1,0 +1,378 @@
+/**
+ * @license Copyright (c) 2014-2020, CKSource - Frederico Knabben. All rights reserved.
+ * This file is licensed under the terms of the MIT License (see LICENSE.md).
+ */
+
+:root {
+  --ck-sample-base-spacing: 2em;
+  --ck-sample-color-white: #fff;
+  --ck-sample-color-green: #279863;
+  --ck-sample-color-blue: #1a9aef;
+  --ck-sample-container-width: 1285px;
+  --ck-sample-sidebar-width: 350px;
+  --ck-sample-editor-min-height: 400px;
+  /* We are not ready for dark/light color-scheme support, yet. Let's tell that to the browser. */
+  color-scheme: normal !important;
+}
+
+/* --------- NOTIFICATIONS ------------------------------------------------------------------------------------------ */
+
+#notifications {
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+
+.notification {
+  margin: 10px;
+  padding: 12px 20px;
+  font-size: 12px;
+  background-color: var(--ck-sample-color-green);
+  color: white;
+  border-radius: 2px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* --------- IMAGE STYLES ------------------------------------------------------------------------------------------- */
+
+.ck-editor__editable .float--right {
+  float: right;
+  margin-left: 6px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.ck-editor__editable .float--left {
+  float: left;
+  margin-right: 6px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.ck-editor__editable .float--none {
+  float: none;
+}
+
+/* Also float surrounding a-tag to set correct link balloon position */
+a:has(> span.float--right) {
+  float: right;
+}
+
+a:has(> span.float--left) {
+  float: left;
+}
+
+/* --------- EXAMPLE DATA ------------------------------------------------------------------------------------------- */
+
+input.error {
+  border-color: red;
+  background-color: #ff000044;
+}
+
+.ck-content .grs.xmp {
+  color: #880000;
+}
+
+.ck-content .grs.xmp1 {
+  color: #004444;
+}
+
+.ck-content [lang="de"] {
+  background: rgba(0, 0, 0, 0.3) !important;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(255, 0, 0, 0.3) 50%, rgba(255, 204, 0, 0.3) 100%) !important;
+}
+
+.ck-content [lang="en"] {
+  background: rgba(0, 36, 125, 0.3) !important;
+  background: linear-gradient(135deg, rgba(0, 36, 125, 0.3) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(207, 20, 43, 0.3) 100%) !important;
+}
+
+/* --------- DND  --------------------------------------------------------------------------------------------------- */
+
+
+.input-example {
+  display: inline-block;
+  border-radius: 2px;
+  background-color: #f1f1f1;
+  margin: 4px;
+  padding: 2px;
+}
+
+/* --------- PREVIEW STYLES  ---------------------------------------------------------------------------------------- */
+.preview {
+  display: none;
+  vertical-align: top;
+  background-color: white;
+  padding: 2px 2em;
+  border: 1px solid #c4c4c4;
+  white-space: pre-wrap;
+  font-family: Monaco, Menlo, Consolas, "Roboto Mono", "Courier New", "Ubuntu Mono", monospace;
+  overflow-y: scroll;
+  max-height: calc(50vh + 38.67px);
+  width: calc(50% - 8px);
+  margin-left: 10px;
+  min-height: calc(var(--ck-sample-editor-min-height) + 38.67px);
+}
+
+.with-preview .preview {
+  display: inline-block;
+}
+
+#input-examples.hidden {
+  display: none;
+}
+
+/* --------- CK Content Formatting --------------------------------------------------------------------------------- */
+
+.ck-content .align--left {
+  text-align: left;
+}
+
+.ck-content .align--right {
+  text-align: right;
+}
+
+.ck-content .align--center {
+  text-align: center;
+}
+
+.ck-content .align--justify {
+  text-align: justify;
+}
+
+/* --------- CK List Styles (useAttribute: true)  ------------------------------------------------------------------- */
+
+.ck-content ol[type="1"] {
+  list-style-type: decimal;
+}
+
+/* Case-Insensitive Matching; see https://github.com/w3c/csswg-drafts/issues/2101 */
+.ck-content ol[type="i"] {
+  list-style-type: lower-roman;
+}
+
+/* Case-Insensitive Matching; see https://github.com/w3c/csswg-drafts/issues/2101 */
+.ck-content ol[type="a"] {
+  list-style-type: lower-latin;
+}
+
+/* --------- EDITOR STYLES  ---------------------------------------------------------------------------------------- */
+
+#ckeditor {
+  display: none;
+}
+
+.editor__editable,
+  /* Classic build. */
+main .ck-editor[role='application'] .ck.ck-content,
+  /* Decoupled document build. */
+.ck.editor__editable[role='textbox'],
+.ck.ck-editor__editable[role='textbox'],
+  /* Inline & Balloon build. */
+.ck.editor[role='textbox'] {
+  line-height: 1.6em;
+  min-height: var(--ck-sample-editor-min-height);
+  padding: 1.5em 2em;
+}
+
+.with-preview .ck.ck-editor {
+  display: inline-block;
+  vertical-align: top;
+  width: calc(50% - 8px) !important;
+}
+
+/* Because of sidebar `position: relative`, Edge is overriding the outline of a focused editor. */
+.ck.ck-editor__editable {
+  position: relative;
+  max-height: 50vh;
+  z-index: 10;
+}
+
+/* --------- SAMPLE GENERIC STYLES (not related to CKEditor) ------------------------------------------------------- */
+body, html {
+  padding: 0;
+  margin: 0;
+
+  font-family: sans-serif, Arial, Verdana, "Trebuchet MS", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+body {
+  height: 100%;
+  color: #2D3A4A;
+}
+
+body * {
+  box-sizing: border-box;
+}
+
+a {
+  color: #38A5EE;
+}
+
+header .centered {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 8em;
+}
+
+header h1 a {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  color: #2D3A4A;
+  text-decoration: none;
+}
+
+header h1 img {
+  display: block;
+  height: 64px;
+}
+
+header nav ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+header nav ul li {
+  display: inline-block;
+}
+
+header nav ul li + li {
+  margin-left: 1em;
+}
+
+header nav ul li a {
+  font-weight: bold;
+  text-decoration: none;
+  color: #2D3A4A;
+}
+
+header nav ul li a:hover {
+  text-decoration: underline;
+}
+
+main .message {
+  padding: 0 0 var(--ck-sample-base-spacing);
+  background: var(--ck-sample-color-green);
+  color: var(--ck-sample-color-white);
+}
+
+main .message::after {
+  content: "";
+  z-index: -1;
+  display: block;
+  height: 10em;
+  width: 100%;
+  background: var(--ck-sample-color-green);
+  position: absolute;
+  left: 0;
+}
+
+main .message h2 {
+  position: relative;
+  padding-top: 1em;
+  font-size: 2em;
+}
+
+.centered {
+  /* Hide overlapping comments. */
+  overflow: hidden;
+  max-width: var(--ck-sample-container-width);
+  margin: 0 auto;
+  padding: 0 var(--ck-sample-base-spacing);
+}
+
+.row {
+  position: relative;
+}
+
+footer {
+  margin: calc(2 * var(--ck-sample-base-spacing)) var(--ck-sample-base-spacing);
+  font-size: .8em;
+  text-align: center;
+  color: rgba(0, 0, 0, .4);
+}
+
+/* Differencing */
+
+xdiff\:span[xdiff\:class="diff-html-added"] {
+  color: rgba(92, 160, 63, 1);
+  text-decoration: underline;
+}
+/* Represents inserted newline. */
+xdiff\:br[xdiff\:class="diff-html-added"]::before {
+  content: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICAgeD0iMHB4IgogICAgIHk9IjBweCIKICAgICB3aWR0aD0iMTZweCIKICAgICBoZWlnaHQ9IjE2cHgiCiAgICAgdmlld0JveD0iMCAwIDE2IDE2Ij4KPHBvbHlnb24gZmlsbD0icmdiKDkyLCAxNjAsIDYzKSIgcG9pbnRzPSIxMSw0IDExLDYgMTMsNiAxMyw5IDUsOSA1LDYgMSwxMCA1LDE0IDUsMTEgMTUsMTEgMTUsOSAxNSw2IDE1LDQiLz4KPC9zdmc+Cg==");
+  height: 16px;
+  position: absolute;
+  margin-left: 3px;
+}
+/* Represents removed newline. */
+xdiff\:br[xdiff\:class="diff-html-removed"]::before {
+  content: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICAgeD0iMHB4IgogICAgIHk9IjBweCIKICAgICB3aWR0aD0iMTZweCIKICAgICBoZWlnaHQ9IjE2cHgiCiAgICAgdmlld0JveD0iMCAwIDE2IDE2Ij4KPHBvbHlnb24gZmlsbD0icmdiKDE5NiwgMTksIDE5KSIgcG9pbnRzPSIxMSw0IDExLDYgMTMsNiAxMyw5IDUsOSA1LDYgMSwxMCA1LDE0IDUsMTEgMTUsMTEgMTUsOSAxNSw2IDE1LDQiLz4KPC9zdmc+Cg==");
+  height: 16px;
+  position: absolute;
+  margin-left: 3px;
+}
+xdiff\:span[xdiff\:class="diff-html-removed"] {
+  color: rgba(196, 19, 19, 1);
+  text-decoration: line-through;
+}
+xdiff\:span[xdiff\:class="diff-html-changed"] {
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(92, 160, 63, 1);
+}
+xdiff\:span[xdiff\:class="diff-html-changed"] a:link {
+  color: rgba(255, 255, 255, 1);
+}
+xdiff\:span[xdiff\:class="diff-html-conflict"] {
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(196, 19, 19, 1);
+}
+xdiff\:span[xdiff\:class="diff-html-changed"] img {
+  box-sizing: border-box;
+  outline: 4px dashed rgba(92, 160, 63, 1);
+  outline-offset: -4px;
+}
+span.image-inline[xdiff\:changetype="diff-added-image"] > img, span.html-object-embed[xdiff\:changetype="diff-added-image"] > img {
+  box-sizing: border-box;
+  outline: 2px solid rgba(92, 160, 63, 1) !important;
+  outline-offset: -2px;
+}
+span.image-inline[xdiff\:changetype="diff-removed-image"]> img, span.html-object-embed[xdiff\:changetype="diff-removed-image"] > img {
+  box-sizing: border-box;
+  outline: 2px solid rgba(196, 19, 19, 1) !important;
+  outline-offset: -2px;
+}
+span.image-inline[xdiff\:changetype="diff-conflict-image"] > img, span.html-object-embed[xdiff\:changetype="diff-conflict-image"] > img {
+  box-sizing: border-box;
+  outline: 4px dashed rgba(196, 19, 19, 1) !important;
+  outline-offset: -4px;
+}
+
+/* --------- RWD --------------------------------------------------------------------------------------------------- */
+@media screen and ( max-width: 800px ) {
+  :root {
+    --ck-sample-base-spacing: 1em;
+  }
+
+  header h1 {
+    width: 100%;
+  }
+
+  header h1 img {
+    height: 40px;
+  }
+
+  header nav ul {
+    text-align: right;
+  }
+
+  main .message h2 {
+    font-size: 1.5em;
+  }
+}

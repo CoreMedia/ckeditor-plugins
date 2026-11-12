@@ -1,0 +1,14 @@
+{
+  "extends": "@coremedia/studio-client.build-config/tsconfig-shared.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "./build",
+    "emitDeclarationOnly": false,
+    "noEmit": true,
+    "strict": true,
+    "types": [
+      "node"
+    ]
+  },
+  "references": []
+}

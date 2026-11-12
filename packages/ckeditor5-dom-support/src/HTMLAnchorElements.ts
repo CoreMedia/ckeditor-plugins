@@ -1,0 +1,1 @@
+export { isHTMLAnchorElement } from "./TypeGuards";

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <title>CKEditor 5: CoreMedia Plugin Showcase</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="https://c.cksource.com/a/1/logos/ckeditor5.png">
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <link rel="stylesheet" type="text/css" href="coremedia.css">
+  <!--
+    Unfortunately, it was impossible to simply import the CKEditorInspector in
+    the ts file. The CKEditorInspector was always undefined. This way it works,
+    and it is fine for an example application.
+  -->
+  <script src="../node_modules/@ckeditor/ckeditor5-inspector/build/inspector.js"></script>
+</head>
+<body data-editor="ClassicEditor" data-collaboration="false">
+
+<header>
+  <div id="notifications">
+    <!-- Place to render notifications like "open in tab" -->
+  </div>
+  <div class="centered">
+    <h1><a href="https://ckeditor.com/ckeditor-5/" target="_blank" rel="noopener noreferrer"><img
+            src="https://c.cksource.com/a/1/logos/ckeditor5.svg" alt="CKEditor 5 logo">CKEditor 5</a></h1>
+    <nav>
+      <ul>
+        <li><a href="https://ckeditor.com/docs/ckeditor5/" target="_blank" rel="noopener noreferrer">Documentation</a>
+        </li>
+        <li><a href="https://ckeditor.com/" target="_blank" rel="noopener noreferrer">Website</a></li>
+        <li><a href=".?#ckdebug=verbose" rel="noopener noreferrer" id="debug">Debug Logging</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div id="examples">
+    <!-- Place to render example selection combobox to. -->
+  </div>
+</header>
+
+<main>
+  <div class="message">
+    <div class="centered">
+      <h2>CKEditor 5: CoreMedia Plugin Showcase</h2>
+    </div>
+  </div>
+  <div class="centered">
+    <div id="applicationToolbar">
+      <button id="inputExampleContentButton">Show Input Example Content</button>
+    </div>
+
+    <div id="inputExampleContentDiv" hidden="hidden">
+      <!-- The Drag Examples will be generated here. -->
+    </div>
+
+    <div id="defaultEditorRow" class="row editor-row">
+      <div class="row-editor">
+        <!-- RichText Editor Starts Here. Content is initial content to display on load. -->
+        <div id="editor"></div>
+        <div id="preview">
+          <!-- The preview displaying the "stored data" will be rendered here. -->
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>Copyright © 2020-2024,
+    <a href="https://www.coremedia.com/" target="_blank" rel="noopener">CoreMedia</a>
+  </p>
+</footer>
+<script src="../dist/ckeditor.js"></script>
+</body>
+</html>

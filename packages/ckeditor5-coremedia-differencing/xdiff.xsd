@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.coremedia.com/2015/xdiff"
+           xmlns:xdiff="http://www.coremedia.com/2015/xdiff">
+
+  <xs:annotation>
+    <xs:documentation><![CDATA[
+      This schema document provides attribute declarations and
+      attribute group, complex type and simple type definitions which can be used
+      to annotate changes.
+    ]]>
+    </xs:documentation>
+  </xs:annotation>
+
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+
+  <xs:element name="span">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:any minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute ref="xdiff:id" use="required"/>
+      <xs:attribute ref="xdiff:previous" use="optional"/>
+      <xs:attribute ref="xdiff:next" use="optional"/>
+      <xs:attribute ref="xdiff:changeType" use="optional"/>
+      <xs:attribute ref="xdiff:changes" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:attribute name="id" type="xdiff:idType"/>
+
+  <xs:simpleType name="idType">
+    <xs:annotation>
+      <xs:documentation>ID of current diff</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:ID"/>
+  </xs:simpleType>
+
+  <xs:attribute name="class" type="xdiff:classType"/>
+
+  <xs:simpleType name="classType">
+    <xs:annotation>
+      <xs:documentation>the class of change</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:NMTOKENS"/>
+  </xs:simpleType>
+
+  <xs:attribute name="previous" type="xdiff:previousType"/>
+
+  <xs:simpleType name="previousType">
+    <xs:annotation>
+      <xs:documentation>ID of previous diff</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:ID"/>
+  </xs:simpleType>
+
+  <xs:attribute name="changeType" type="xdiff:changeTypeType"/>
+
+  <xs:simpleType name="changeTypeType">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+
+  <xs:attribute name="next" type="xdiff:nextType"/>
+
+  <xs:simpleType name="nextType">
+    <xs:annotation>
+      <xs:documentation>ID of next diff</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:ID"/>
+  </xs:simpleType>
+
+  <xs:attribute name="changes" type="xdiff:changesType"/>
+
+  <xs:simpleType name="changesType">
+    <xs:annotation>
+      <xs:documentation>descriptive list of changes</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+
+</xs:schema>

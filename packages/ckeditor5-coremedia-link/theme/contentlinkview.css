@@ -1,0 +1,75 @@
+@import "contentlinkvisibility.css";
+@import "contentlinkformview.css";
+
+.ck.cm-ck-content-link-suggester {
+  flex: 1;
+  min-width: auto !important;
+}
+
+/*
+ * The suggester is the first visible field of the row, but not its first
+ * child, as the hidden content link view wrapper precedes it.
+ */
+.ck.cm-ck-link-form-view .ck-form__row_with-submit > .ck.cm-ck-content-link-suggester {
+  margin-inline-start: 0;
+}
+
+.ck.cm-ck-link-form-view .cm-ck-content-link-view {
+  display: flex;
+  width: 100%;
+  /*noinspection CssUnresolvedCustomProperty*/
+  border: 1px solid var(--ck-color-input-disabled-border, var(--ck-input-disabled-border-color));
+  border-radius: var(--ck-input-border-radius);
+}
+
+.ck.cm-ck-link-form-view .cm-ck-content-link-view:focus {
+  border-color: var(--ck-input-focus-border-color);
+}
+
+/* content view label */
+.cm-ck-content-link-view > .ck.ck-button__label {
+  flex: 1;
+  overflow: hidden;
+  margin-left: 6px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  user-select: none;
+  max-width: 250px;
+}
+
+/* content link view inner button */
+.cm-ck-content-link-view > .ck.ck-button{
+  min-height: calc(var(--ck-size-control-min-height) - 2px);
+}
+
+/* prevents icons to be too high in studio context */
+.cm-ck-content-link-view .cm-core-icons {
+  line-height: 1;
+}
+
+
+/*
+ * ACTIONS VIEW
+ */
+
+/* we need to set a width to make ellipsis work for content link views */
+.ck .cm-ck-link-actions-view .cm-ck-content-link-view {
+  max-width: var(--ck-input-width);
+  margin-left: 0 !important;
+}
+
+/*
+ * FORM VIEW
+ */
+
+.ck.cm-ck-link-form-view .cm-ck-content-link-view-wrapper {
+  position: relative;
+  margin-left: 0 !important;
+  flex: 1;
+  /*display: inline-block !important;*/
+}
+
+.cm-ck-content-link-view-wrapper .cm-ck-content-link-view > .ck.ck-button {
+  min-height: 100%;
+  padding: 0;
+}

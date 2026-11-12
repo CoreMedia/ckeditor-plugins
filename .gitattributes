@@ -1,0 +1,39 @@
+* text=auto eol=lf
+
+# Documents
+
+*.docx diff=word
+*.md       text diff=markdown
+
+# Graphics
+
+*.png      binary
+*.jpg      binary
+*.gif      binary
+*.tif      binary
+*.ico      binary
+*.svg      text
+
+# Audio
+
+*.mp3 binary
+
+# Scripts
+
+*.sh       text eol=lf
+*.bat      text eol=crlf
+*.cmd      text eol=crlf
+*.ps1      text eol=crlf
+
+# Serialisation
+
+*.json     text
+*.toml     text
+*.xml      text
+*.yaml     text
+*.yml      text
+
+# Calm GitHub not to Show Diffs for Auto-Generated Files
+# https://docs.github.com/en/repositories/working-with-files/managing-files/customizing-how-changed-files-appear-on-github
+
+docs/** linguist-generated=true

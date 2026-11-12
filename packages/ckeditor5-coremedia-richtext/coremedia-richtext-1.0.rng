@@ -1,0 +1,1350 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<doctype>
+  <comment>
+   CoreMedia Rich Text XML DTD
+
+   Copyright (c) 2002 CoreMedia AG, Hamburg.
+   All Rights Reserved.
+
+   This DTD module is based on XHTML 1.0 Strict DTD.
+
+   This DTD module is identified by the PUBLIC and SYSTEM identifiers:
+
+   PUBLIC &quot;-//CoreMedia//DTD Rich Text 1.0//EN&quot;
+   SYSTEM &quot;http://www.coremedia.com/DTD/coremedia-richtext-1.0.dtd&quot;
+
+   For some attributes related to linking, the following XML namespace is used:
+
+   &quot;xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;
+
+</comment>
+  <comment>================ Character mnemonic entities =========================</comment>
+  <comment> Character entity set &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent&quot;
+       embedded to avoid external entity references. </comment>
+  <comment> Portions (C) International Organization for Standardization 1986
+       Permission to copy in any form is granted for use with
+       conforming SGML systems and applications as defined in
+       ISO 8879, provided this notice is included in all copies.
+  </comment>
+  <internalEntity name="nbsp">&#x00A0;</internalEntity>
+  <comment> no-break space = non-breaking space,
+                                  U+00A0 ISOnum </comment>
+  <internalEntity name="iexcl">&#x00A1;</internalEntity>
+  <comment> inverted exclamation mark, U+00A1 ISOnum </comment>
+  <internalEntity name="cent">&#x00A2;</internalEntity>
+  <comment> cent sign, U+00A2 ISOnum </comment>
+  <internalEntity name="pound">&#x00A3;</internalEntity>
+  <comment> pound sign, U+00A3 ISOnum </comment>
+  <internalEntity name="curren">&#x00A4;</internalEntity>
+  <comment> currency sign, U+00A4 ISOnum </comment>
+  <internalEntity name="yen">&#x00A5;</internalEntity>
+  <comment> yen sign = yuan sign, U+00A5 ISOnum </comment>
+  <internalEntity name="brvbar">&#x00A6;</internalEntity>
+  <comment> broken bar = broken vertical bar,
+                                  U+00A6 ISOnum </comment>
+  <internalEntity name="sect">&#x00A7;</internalEntity>
+  <comment> section sign, U+00A7 ISOnum </comment>
+  <internalEntity name="uml">&#x00A8;</internalEntity>
+  <comment> diaeresis = spacing diaeresis,
+                                  U+00A8 ISOdia </comment>
+  <internalEntity name="copy">&#x00A9;</internalEntity>
+  <comment> copyright sign, U+00A9 ISOnum </comment>
+  <internalEntity name="ordf">&#x00AA;</internalEntity>
+  <comment> feminine ordinal indicator, U+00AA ISOnum </comment>
+  <internalEntity name="laquo">&#x00AB;</internalEntity>
+  <comment> left-pointing double angle quotation mark
+                                  = left pointing guillemet, U+00AB ISOnum </comment>
+  <internalEntity name="not">&#x00AC;</internalEntity>
+  <comment> not sign = discretionary hyphen,
+                                  U+00AC ISOnum </comment>
+  <internalEntity name="shy">&#x00AD;</internalEntity>
+  <comment> soft hyphen = discretionary hyphen,
+                                  U+00AD ISOnum </comment>
+  <internalEntity name="reg">&#x00AE;</internalEntity>
+  <comment> registered sign = registered trade mark sign,
+                                  U+00AE ISOnum </comment>
+  <internalEntity name="macr">&#x00AF;</internalEntity>
+  <comment> macron = spacing macron = overline
+                                  = APL overbar, U+00AF ISOdia </comment>
+  <internalEntity name="deg">&#x00B0;</internalEntity>
+  <comment> degree sign, U+00B0 ISOnum </comment>
+  <internalEntity name="plusmn">&#x00B1;</internalEntity>
+  <comment> plus-minus sign = plus-or-minus sign,
+                                  U+00B1 ISOnum </comment>
+  <internalEntity name="sup2">&#x00B2;</internalEntity>
+  <comment> superscript two = superscript digit two
+                                  = squared, U+00B2 ISOnum </comment>
+  <internalEntity name="sup3">&#x00B3;</internalEntity>
+  <comment> superscript three = superscript digit three
+                                  = cubed, U+00B3 ISOnum </comment>
+  <internalEntity name="acute">&#x00B4;</internalEntity>
+  <comment> acute accent = spacing acute,
+                                  U+00B4 ISOdia </comment>
+  <internalEntity name="micro">&#x00B5;</internalEntity>
+  <comment> micro sign, U+00B5 ISOnum </comment>
+  <internalEntity name="para">&#x00B6;</internalEntity>
+  <comment> pilcrow sign = paragraph sign,
+                                  U+00B6 ISOnum </comment>
+  <internalEntity name="middot">&#x00B7;</internalEntity>
+  <comment> middle dot = Georgian comma
+                                  = Greek middle dot, U+00B7 ISOnum </comment>
+  <internalEntity name="cedil">&#x00B8;</internalEntity>
+  <comment> cedilla = spacing cedilla, U+00B8 ISOdia </comment>
+  <internalEntity name="sup1">&#x00B9;</internalEntity>
+  <comment> superscript one = superscript digit one,
+                                  U+00B9 ISOnum </comment>
+  <internalEntity name="ordm">&#x00BA;</internalEntity>
+  <comment> masculine ordinal indicator,
+                                  U+00BA ISOnum </comment>
+  <internalEntity name="raquo">&#x00BB;</internalEntity>
+  <comment> right-pointing double angle quotation mark
+                                  = right pointing guillemet, U+00BB ISOnum </comment>
+  <internalEntity name="frac14">&#x00BC;</internalEntity>
+  <comment> vulgar fraction one quarter
+                                  = fraction one quarter, U+00BC ISOnum </comment>
+  <internalEntity name="frac12">&#x00BD;</internalEntity>
+  <comment> vulgar fraction one half
+                                  = fraction one half, U+00BD ISOnum </comment>
+  <internalEntity name="frac34">&#x00BE;</internalEntity>
+  <comment> vulgar fraction three quarters
+                                  = fraction three quarters, U+00BE ISOnum </comment>
+  <internalEntity name="iquest">&#x00BF;</internalEntity>
+  <comment> inverted question mark
+                                  = turned question mark, U+00BF ISOnum </comment>
+  <internalEntity name="Agrave">&#x00C0;</internalEntity>
+  <comment> latin capital letter A with grave
+                                  = latin capital letter A grave,
+                                  U+00C0 ISOlat1 </comment>
+  <internalEntity name="Aacute">&#x00C1;</internalEntity>
+  <comment> latin capital letter A with acute,
+                                  U+00C1 ISOlat1 </comment>
+  <internalEntity name="Acirc">&#x00C2;</internalEntity>
+  <comment> latin capital letter A with circumflex,
+                                  U+00C2 ISOlat1 </comment>
+  <internalEntity name="Atilde">&#x00C3;</internalEntity>
+  <comment> latin capital letter A with tilde,
+                                  U+00C3 ISOlat1 </comment>
+  <internalEntity name="Auml">&#x00C4;</internalEntity>
+  <comment> latin capital letter A with diaeresis,
+                                  U+00C4 ISOlat1 </comment>
+  <internalEntity name="Aring">&#x00C5;</internalEntity>
+  <comment> latin capital letter A with ring above
+                                  = latin capital letter A ring,
+                                  U+00C5 ISOlat1 </comment>
+  <internalEntity name="AElig">&#x00C6;</internalEntity>
+  <comment> latin capital letter AE
+                                  = latin capital ligature AE,
+                                  U+00C6 ISOlat1 </comment>
+  <internalEntity name="Ccedil">&#x00C7;</internalEntity>
+  <comment> latin capital letter C with cedilla,
+                                  U+00C7 ISOlat1 </comment>
+  <internalEntity name="Egrave">&#x00C8;</internalEntity>
+  <comment> latin capital letter E with grave,
+                                  U+00C8 ISOlat1 </comment>
+  <internalEntity name="Eacute">&#x00C9;</internalEntity>
+  <comment> latin capital letter E with acute,
+                                  U+00C9 ISOlat1 </comment>
+  <internalEntity name="Ecirc">&#x00CA;</internalEntity>
+  <comment> latin capital letter E with circumflex,
+                                  U+00CA ISOlat1 </comment>
+  <internalEntity name="Euml">&#x00CB;</internalEntity>
+  <comment> latin capital letter E with diaeresis,
+                                  U+00CB ISOlat1 </comment>
+  <internalEntity name="Igrave">&#x00CC;</internalEntity>
+  <comment> latin capital letter I with grave,
+                                  U+00CC ISOlat1 </comment>
+  <internalEntity name="Iacute">&#x00CD;</internalEntity>
+  <comment> latin capital letter I with acute,
+                                  U+00CD ISOlat1 </comment>
+  <internalEntity name="Icirc">&#x00CE;</internalEntity>
+  <comment> latin capital letter I with circumflex,
+                                  U+00CE ISOlat1 </comment>
+  <internalEntity name="Iuml">&#x00CF;</internalEntity>
+  <comment> latin capital letter I with diaeresis,
+                                  U+00CF ISOlat1 </comment>
+  <internalEntity name="ETH">&#x00D0;</internalEntity>
+  <comment> latin capital letter ETH, U+00D0 ISOlat1 </comment>
+  <internalEntity name="Ntilde">&#x00D1;</internalEntity>
+  <comment> latin capital letter N with tilde,
+                                  U+00D1 ISOlat1 </comment>
+  <internalEntity name="Ograve">&#x00D2;</internalEntity>
+  <comment> latin capital letter O with grave,
+                                  U+00D2 ISOlat1 </comment>
+  <internalEntity name="Oacute">&#x00D3;</internalEntity>
+  <comment> latin capital letter O with acute,
+                                  U+00D3 ISOlat1 </comment>
+  <internalEntity name="Ocirc">&#x00D4;</internalEntity>
+  <comment> latin capital letter O with circumflex,
+                                  U+00D4 ISOlat1 </comment>
+  <internalEntity name="Otilde">&#x00D5;</internalEntity>
+  <comment> latin capital letter O with tilde,
+                                  U+00D5 ISOlat1 </comment>
+  <internalEntity name="Ouml">&#x00D6;</internalEntity>
+  <comment> latin capital letter O with diaeresis,
+                                  U+00D6 ISOlat1 </comment>
+  <internalEntity name="times">&#x00D7;</internalEntity>
+  <comment> multiplication sign, U+00D7 ISOnum </comment>
+  <internalEntity name="Oslash">&#x00D8;</internalEntity>
+  <comment> latin capital letter O with stroke
+                                  = latin capital letter O slash,
+                                  U+00D8 ISOlat1 </comment>
+  <internalEntity name="Ugrave">&#x00D9;</internalEntity>
+  <comment> latin capital letter U with grave,
+                                  U+00D9 ISOlat1 </comment>
+  <internalEntity name="Uacute">&#x00DA;</internalEntity>
+  <comment> latin capital letter U with acute,
+                                  U+00DA ISOlat1 </comment>
+  <internalEntity name="Ucirc">&#x00DB;</internalEntity>
+  <comment> latin capital letter U with circumflex,
+                                  U+00DB ISOlat1 </comment>
+  <internalEntity name="Uuml">&#x00DC;</internalEntity>
+  <comment> latin capital letter U with diaeresis,
+                                  U+00DC ISOlat1 </comment>
+  <internalEntity name="Yacute">&#x00DD;</internalEntity>
+  <comment> latin capital letter Y with acute,
+                                  U+00DD ISOlat1 </comment>
+  <internalEntity name="THORN">&#x00DE;</internalEntity>
+  <comment> latin capital letter THORN,
+                                  U+00DE ISOlat1 </comment>
+  <internalEntity name="szlig">&#x00DF;</internalEntity>
+  <comment> latin small letter sharp s = ess-zed,
+                                  U+00DF ISOlat1 </comment>
+  <internalEntity name="agrave">&#x00E0;</internalEntity>
+  <comment> latin small letter a with grave
+                                  = latin small letter a grave,
+                                  U+00E0 ISOlat1 </comment>
+  <internalEntity name="aacute">&#x00E1;</internalEntity>
+  <comment> latin small letter a with acute,
+                                  U+00E1 ISOlat1 </comment>
+  <internalEntity name="acirc">&#x00E2;</internalEntity>
+  <comment> latin small letter a with circumflex,
+                                  U+00E2 ISOlat1 </comment>
+  <internalEntity name="atilde">&#x00E3;</internalEntity>
+  <comment> latin small letter a with tilde,
+                                  U+00E3 ISOlat1 </comment>
+  <internalEntity name="auml">&#x00E4;</internalEntity>
+  <comment> latin small letter a with diaeresis,
+                                  U+00E4 ISOlat1 </comment>
+  <internalEntity name="aring">&#x00E5;</internalEntity>
+  <comment> latin small letter a with ring above
+                                  = latin small letter a ring,
+                                  U+00E5 ISOlat1 </comment>
+  <internalEntity name="aelig">&#x00E6;</internalEntity>
+  <comment> latin small letter ae
+                                  = latin small ligature ae, U+00E6 ISOlat1 </comment>
+  <internalEntity name="ccedil">&#x00E7;</internalEntity>
+  <comment> latin small letter c with cedilla,
+                                  U+00E7 ISOlat1 </comment>
+  <internalEntity name="egrave">&#x00E8;</internalEntity>
+  <comment> latin small letter e with grave,
+                                  U+00E8 ISOlat1 </comment>
+  <internalEntity name="eacute">&#x00E9;</internalEntity>
+  <comment> latin small letter e with acute,
+                                  U+00E9 ISOlat1 </comment>
+  <internalEntity name="ecirc">&#x00EA;</internalEntity>
+  <comment> latin small letter e with circumflex,
+                                  U+00EA ISOlat1 </comment>
+  <internalEntity name="euml">&#x00EB;</internalEntity>
+  <comment> latin small letter e with diaeresis,
+                                  U+00EB ISOlat1 </comment>
+  <internalEntity name="igrave">&#x00EC;</internalEntity>
+  <comment> latin small letter i with grave,
+                                  U+00EC ISOlat1 </comment>
+  <internalEntity name="iacute">&#x00ED;</internalEntity>
+  <comment> latin small letter i with acute,
+                                  U+00ED ISOlat1 </comment>
+  <internalEntity name="icirc">&#x00EE;</internalEntity>
+  <comment> latin small letter i with circumflex,
+                                  U+00EE ISOlat1 </comment>
+  <internalEntity name="iuml">&#x00EF;</internalEntity>
+  <comment> latin small letter i with diaeresis,
+                                  U+00EF ISOlat1 </comment>
+  <internalEntity name="eth">&#x00F0;</internalEntity>
+  <comment> latin small letter eth, U+00F0 ISOlat1 </comment>
+  <internalEntity name="ntilde">&#x00F1;</internalEntity>
+  <comment> latin small letter n with tilde,
+                                  U+00F1 ISOlat1 </comment>
+  <internalEntity name="ograve">&#x00F2;</internalEntity>
+  <comment> latin small letter o with grave,
+                                  U+00F2 ISOlat1 </comment>
+  <internalEntity name="oacute">&#x00F3;</internalEntity>
+  <comment> latin small letter o with acute,
+                                  U+00F3 ISOlat1 </comment>
+  <internalEntity name="ocirc">&#x00F4;</internalEntity>
+  <comment> latin small letter o with circumflex,
+                                  U+00F4 ISOlat1 </comment>
+  <internalEntity name="otilde">&#x00F5;</internalEntity>
+  <comment> latin small letter o with tilde,
+                                  U+00F5 ISOlat1 </comment>
+  <internalEntity name="ouml">&#x00F6;</internalEntity>
+  <comment> latin small letter o with diaeresis,
+                                  U+00F6 ISOlat1 </comment>
+  <internalEntity name="divide">&#x00F7;</internalEntity>
+  <comment> division sign, U+00F7 ISOnum </comment>
+  <internalEntity name="oslash">&#x00F8;</internalEntity>
+  <comment> latin small letter o with stroke,
+                                  = latin small letter o slash,
+                                  U+00F8 ISOlat1 </comment>
+  <internalEntity name="ugrave">&#x00F9;</internalEntity>
+  <comment> latin small letter u with grave,
+                                  U+00F9 ISOlat1 </comment>
+  <internalEntity name="uacute">&#x00FA;</internalEntity>
+  <comment> latin small letter u with acute,
+                                  U+00FA ISOlat1 </comment>
+  <internalEntity name="ucirc">&#x00FB;</internalEntity>
+  <comment> latin small letter u with circumflex,
+                                  U+00FB ISOlat1 </comment>
+  <internalEntity name="uuml">&#x00FC;</internalEntity>
+  <comment> latin small letter u with diaeresis,
+                                  U+00FC ISOlat1 </comment>
+  <internalEntity name="yacute">&#x00FD;</internalEntity>
+  <comment> latin small letter y with acute,
+                                  U+00FD ISOlat1 </comment>
+  <internalEntity name="thorn">&#x00FE;</internalEntity>
+  <comment> latin small letter thorn with,
+                                  U+00FE ISOlat1 </comment>
+  <internalEntity name="yuml">&#x00FF;</internalEntity>
+  <comment> latin small letter y with diaeresis,
+                                  U+00FF ISOlat1 </comment>
+  <comment> Character entity set &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent&quot;
+       embedded to avoid external entity references. </comment>
+  <comment> Mathematical, Greek and Symbolic characters for HTML </comment>
+  <comment> Portions (C) International Organization for Standardization 1986:
+       Permission to copy in any form is granted for use with
+       conforming SGML systems and applications as defined in
+       ISO 8879, provided this notice is included in all copies.
+  </comment>
+  <comment> Relevant ISO entity set is given unless names are newly introduced.
+       New names (i.e., not in ISO 8879 list) do not clash with any
+       existing ISO 8879 entity names. ISO 10646 character numbers
+       are given for each character, in hex. values are decimal
+       conversions of the ISO 10646 values and refer to the document
+       character set. Names are Unicode names.
+  </comment>
+  <comment> Latin Extended-B </comment>
+  <internalEntity name="fnof">&#x0192;</internalEntity>
+  <comment> latin small f with hook = function
+                                    = florin, U+0192 ISOtech </comment>
+  <comment> Greek </comment>
+  <internalEntity name="Alpha">&#x0391;</internalEntity>
+  <comment> greek capital letter alpha, U+0391 </comment>
+  <internalEntity name="Beta">&#x0392;</internalEntity>
+  <comment> greek capital letter beta, U+0392 </comment>
+  <internalEntity name="Gamma">&#x0393;</internalEntity>
+  <comment> greek capital letter gamma,
+                                    U+0393 ISOgrk3 </comment>
+  <internalEntity name="Delta">&#x0394;</internalEntity>
+  <comment> greek capital letter delta,
+                                    U+0394 ISOgrk3 </comment>
+  <internalEntity name="Epsilon">&#x0395;</internalEntity>
+  <comment> greek capital letter epsilon, U+0395 </comment>
+  <internalEntity name="Zeta">&#x0396;</internalEntity>
+  <comment> greek capital letter zeta, U+0396 </comment>
+  <internalEntity name="Eta">&#x0397;</internalEntity>
+  <comment> greek capital letter eta, U+0397 </comment>
+  <internalEntity name="Theta">&#x0398;</internalEntity>
+  <comment> greek capital letter theta,
+                                    U+0398 ISOgrk3 </comment>
+  <internalEntity name="Iota">&#x0399;</internalEntity>
+  <comment> greek capital letter iota, U+0399 </comment>
+  <internalEntity name="Kappa">&#x039A;</internalEntity>
+  <comment> greek capital letter kappa, U+039A </comment>
+  <internalEntity name="Lambda">&#x039B;</internalEntity>
+  <comment> greek capital letter lambda,
+                                    U+039B ISOgrk3 </comment>
+  <internalEntity name="Mu">&#x039C;</internalEntity>
+  <comment> greek capital letter mu, U+039C </comment>
+  <internalEntity name="Nu">&#x039D;</internalEntity>
+  <comment> greek capital letter nu, U+039D </comment>
+  <internalEntity name="Xi">&#x039E;</internalEntity>
+  <comment> greek capital letter xi, U+039E ISOgrk3 </comment>
+  <internalEntity name="Omicron">&#x039F;</internalEntity>
+  <comment> greek capital letter omicron, U+039F </comment>
+  <internalEntity name="Pi">&#x03A0;</internalEntity>
+  <comment> greek capital letter pi, U+03A0 ISOgrk3 </comment>
+  <internalEntity name="Rho">&#x03A1;</internalEntity>
+  <comment> greek capital letter rho, U+03A1 </comment>
+  <comment> there is no Sigmaf, and no U+03A2 character either </comment>
+  <internalEntity name="Sigma">&#x03A3;</internalEntity>
+  <comment> greek capital letter sigma,
+                                    U+03A3 ISOgrk3 </comment>
+  <internalEntity name="Tau">&#x03A4;</internalEntity>
+  <comment> greek capital letter tau, U+03A4 </comment>
+  <internalEntity name="Upsilon">&#x03A5;</internalEntity>
+  <comment> greek capital letter upsilon,
+                                    U+03A5 ISOgrk3 </comment>
+  <internalEntity name="Phi">&#x03A6;</internalEntity>
+  <comment> greek capital letter phi,
+                                    U+03A6 ISOgrk3 </comment>
+  <internalEntity name="Chi">&#x03A7;</internalEntity>
+  <comment> greek capital letter chi, U+03A7 </comment>
+  <internalEntity name="Psi">&#x03A8;</internalEntity>
+  <comment> greek capital letter psi,
+                                    U+03A8 ISOgrk3 </comment>
+  <internalEntity name="Omega">&#x03A9;</internalEntity>
+  <comment> greek capital letter omega,
+                                    U+03A9 ISOgrk3 </comment>
+  <internalEntity name="alpha">&#x03B1;</internalEntity>
+  <comment> greek small letter alpha,
+                                    U+03B1 ISOgrk3 </comment>
+  <internalEntity name="beta">&#x03B2;</internalEntity>
+  <comment> greek small letter beta, U+03B2 ISOgrk3 </comment>
+  <internalEntity name="gamma">&#x03B3;</internalEntity>
+  <comment> greek small letter gamma,
+                                    U+03B3 ISOgrk3 </comment>
+  <internalEntity name="delta">&#x03B4;</internalEntity>
+  <comment> greek small letter delta,
+                                    U+03B4 ISOgrk3 </comment>
+  <internalEntity name="epsilon">&#x03B5;</internalEntity>
+  <comment> greek small letter epsilon,
+                                    U+03B5 ISOgrk3 </comment>
+  <internalEntity name="zeta">&#x03B6;</internalEntity>
+  <comment> greek small letter zeta, U+03B6 ISOgrk3 </comment>
+  <internalEntity name="eta">&#x03B7;</internalEntity>
+  <comment> greek small letter eta, U+03B7 ISOgrk3 </comment>
+  <internalEntity name="theta">&#x03B8;</internalEntity>
+  <comment> greek small letter theta,
+                                    U+03B8 ISOgrk3 </comment>
+  <internalEntity name="iota">&#x03B9;</internalEntity>
+  <comment> greek small letter iota, U+03B9 ISOgrk3 </comment>
+  <internalEntity name="kappa">&#x03BA;</internalEntity>
+  <comment> greek small letter kappa,
+                                    U+03BA ISOgrk3 </comment>
+  <internalEntity name="lambda">&#x03BB;</internalEntity>
+  <comment> greek small letter lambda,
+                                    U+03BB ISOgrk3 </comment>
+  <internalEntity name="mu">&#x03BC;</internalEntity>
+  <comment> greek small letter mu, U+03BC ISOgrk3 </comment>
+  <internalEntity name="nu">&#x03BD;</internalEntity>
+  <comment> greek small letter nu, U+03BD ISOgrk3 </comment>
+  <internalEntity name="xi">&#x03BE;</internalEntity>
+  <comment> greek small letter xi, U+03BE ISOgrk3 </comment>
+  <internalEntity name="omicron">&#x03BF;</internalEntity>
+  <comment> greek small letter omicron, U+03BF NEW </comment>
+  <internalEntity name="pi">&#x03C0;</internalEntity>
+  <comment> greek small letter pi, U+03C0 ISOgrk3 </comment>
+  <internalEntity name="rho">&#x03C1;</internalEntity>
+  <comment> greek small letter rho, U+03C1 ISOgrk3 </comment>
+  <internalEntity name="sigmaf">&#x03C2;</internalEntity>
+  <comment> greek small letter final sigma,
+                                    U+03C2 ISOgrk3 </comment>
+  <internalEntity name="sigma">&#x03C3;</internalEntity>
+  <comment> greek small letter sigma,
+                                    U+03C3 ISOgrk3 </comment>
+  <internalEntity name="tau">&#x03C4;</internalEntity>
+  <comment> greek small letter tau, U+03C4 ISOgrk3 </comment>
+  <internalEntity name="upsilon">&#x03C5;</internalEntity>
+  <comment> greek small letter upsilon,
+                                    U+03C5 ISOgrk3 </comment>
+  <internalEntity name="phi">&#x03C6;</internalEntity>
+  <comment> greek small letter phi, U+03C6 ISOgrk3 </comment>
+  <internalEntity name="chi">&#x03C7;</internalEntity>
+  <comment> greek small letter chi, U+03C7 ISOgrk3 </comment>
+  <internalEntity name="psi">&#x03C8;</internalEntity>
+  <comment> greek small letter psi, U+03C8 ISOgrk3 </comment>
+  <internalEntity name="omega">&#x03C9;</internalEntity>
+  <comment> greek small letter omega,
+                                    U+03C9 ISOgrk3 </comment>
+  <internalEntity name="thetasym">&#x03D1;</internalEntity>
+  <comment> greek small letter theta symbol,
+                                    U+03D1 NEW </comment>
+  <internalEntity name="upsih">&#x03D2;</internalEntity>
+  <comment> greek upsilon with hook symbol,
+                                    U+03D2 NEW </comment>
+  <internalEntity name="piv">&#x03D6;</internalEntity>
+  <comment> greek pi symbol, U+03D6 ISOgrk3 </comment>
+  <comment> General Punctuation </comment>
+  <internalEntity name="bull">&#x2022;</internalEntity>
+  <comment> bullet = black small circle,
+                                     U+2022 ISOpub  </comment>
+  <comment> bullet is NOT the same as bullet operator, U+2219 </comment>
+  <internalEntity name="hellip">&#x2026;</internalEntity>
+  <comment> horizontal ellipsis = three dot leader,
+                                     U+2026 ISOpub  </comment>
+  <internalEntity name="prime">&#x2032;</internalEntity>
+  <comment> prime = minutes = feet, U+2032 ISOtech </comment>
+  <internalEntity name="Prime">&#x2033;</internalEntity>
+  <comment> double prime = seconds = inches,
+                                     U+2033 ISOtech </comment>
+  <internalEntity name="oline">&#x203E;</internalEntity>
+  <comment> overline = spacing overscore,
+                                     U+203E NEW </comment>
+  <internalEntity name="frasl">&#x2044;</internalEntity>
+  <comment> fraction slash, U+2044 NEW </comment>
+  <comment> Letterlike Symbols </comment>
+  <internalEntity name="weierp">&#x2118;</internalEntity>
+  <comment> script capital P = power set
+                                     = Weierstrass p, U+2118 ISOamso </comment>
+  <internalEntity name="image">&#x2111;</internalEntity>
+  <comment> blackletter capital I = imaginary part,
+                                     U+2111 ISOamso </comment>
+  <internalEntity name="real">&#x211C;</internalEntity>
+  <comment> blackletter capital R = real part symbol,
+                                     U+211C ISOamso </comment>
+  <internalEntity name="trade">&#x2122;</internalEntity>
+  <comment> trade mark sign, U+2122 ISOnum </comment>
+  <internalEntity name="alefsym">&#x2135;</internalEntity>
+  <comment> alef symbol = first transfinite cardinal,
+                                     U+2135 NEW </comment>
+  <comment> alef symbol is NOT the same as hebrew letter alef,
+       U+05D0 although the same glyph could be used to depict both characters </comment>
+  <comment> Arrows </comment>
+  <internalEntity name="larr">&#x2190;</internalEntity>
+  <comment> leftwards arrow, U+2190 ISOnum </comment>
+  <internalEntity name="uarr">&#x2191;</internalEntity>
+  <comment> upwards arrow, U+2191 ISOnum</comment>
+  <internalEntity name="rarr">&#x2192;</internalEntity>
+  <comment> rightwards arrow, U+2192 ISOnum </comment>
+  <internalEntity name="darr">&#x2193;</internalEntity>
+  <comment> downwards arrow, U+2193 ISOnum </comment>
+  <internalEntity name="harr">&#x2194;</internalEntity>
+  <comment> left right arrow, U+2194 ISOamsa </comment>
+  <internalEntity name="crarr">&#x21B5;</internalEntity>
+  <comment> downwards arrow with corner leftwards
+                                     = carriage return, U+21B5 NEW </comment>
+  <internalEntity name="lArr">&#x21D0;</internalEntity>
+  <comment> leftwards double arrow, U+21D0 ISOtech </comment>
+  <comment> Unicode does not say that lArr is the same as the 'is implied by' arrow
+      but also does not have any other character for that function. So ? lArr can
+      be used for 'is implied by' as ISOtech suggests </comment>
+  <internalEntity name="uArr">&#x21D1;</internalEntity>
+  <comment> upwards double arrow, U+21D1 ISOamsa </comment>
+  <internalEntity name="rArr">&#x21D2;</internalEntity>
+  <comment> rightwards double arrow,
+                                     U+21D2 ISOtech </comment>
+  <comment> Unicode does not say this is the 'implies' character but does not have
+       another character with this function so ?
+       rArr can be used for 'implies' as ISOtech suggests </comment>
+  <internalEntity name="dArr">&#x21D3;</internalEntity>
+  <comment> downwards double arrow, U+21D3 ISOamsa </comment>
+  <internalEntity name="hArr">&#x21D4;</internalEntity>
+  <comment> left right double arrow,
+                                     U+21D4 ISOamsa </comment>
+  <comment> Mathematical Operators </comment>
+  <internalEntity name="forall">&#x2200;</internalEntity>
+  <comment> for all, U+2200 ISOtech </comment>
+  <internalEntity name="part">&#x2202;</internalEntity>
+  <comment> partial differential, U+2202 ISOtech  </comment>
+  <internalEntity name="exist">&#x2203;</internalEntity>
+  <comment> there exists, U+2203 ISOtech </comment>
+  <internalEntity name="empty">&#x2205;</internalEntity>
+  <comment> empty set = null set = diameter,
+                                     U+2205 ISOamso </comment>
+  <internalEntity name="nabla">&#x2207;</internalEntity>
+  <comment> nabla = backward difference,
+                                     U+2207 ISOtech </comment>
+  <internalEntity name="isin">&#x2208;</internalEntity>
+  <comment> element of, U+2208 ISOtech </comment>
+  <internalEntity name="notin">&#x2209;</internalEntity>
+  <comment> not an element of, U+2209 ISOtech </comment>
+  <internalEntity name="ni">&#x220B;</internalEntity>
+  <comment> contains as member, U+220B ISOtech </comment>
+  <comment> should there be a more memorable name than 'ni'? </comment>
+  <internalEntity name="prod">&#x220F;</internalEntity>
+  <comment> n-ary product = product sign,
+                                     U+220F ISOamsb </comment>
+  <comment> prod is NOT the same character as U+03A0 'greek capital letter pi' though
+       the same glyph might be used for both </comment>
+  <internalEntity name="sum">&#x2211;</internalEntity>
+  <comment> n-ary sumation, U+2211 ISOamsb </comment>
+  <comment> sum is NOT the same character as U+03A3 'greek capital letter sigma'
+       though the same glyph might be used for both </comment>
+  <internalEntity name="minus">&#x2212;</internalEntity>
+  <comment> minus sign, U+2212 ISOtech </comment>
+  <internalEntity name="lowast">&#x2217;</internalEntity>
+  <comment> asterisk operator, U+2217 ISOtech </comment>
+  <internalEntity name="radic">&#x221A;</internalEntity>
+  <comment> square root = radical sign,
+                                     U+221A ISOtech </comment>
+  <internalEntity name="prop">&#x221D;</internalEntity>
+  <comment> proportional to, U+221D ISOtech </comment>
+  <internalEntity name="infin">&#x221E;</internalEntity>
+  <comment> infinity, U+221E ISOtech </comment>
+  <internalEntity name="ang">&#x2220;</internalEntity>
+  <comment> angle, U+2220 ISOamso </comment>
+  <internalEntity name="and">&#x2227;</internalEntity>
+  <comment> logical and = wedge, U+2227 ISOtech </comment>
+  <internalEntity name="or">&#x2228;</internalEntity>
+  <comment> logical or = vee, U+2228 ISOtech </comment>
+  <internalEntity name="cap">&#x2229;</internalEntity>
+  <comment> intersection = cap, U+2229 ISOtech </comment>
+  <internalEntity name="cup">&#x222A;</internalEntity>
+  <comment> union = cup, U+222A ISOtech </comment>
+  <internalEntity name="int">&#x222B;</internalEntity>
+  <comment> integral, U+222B ISOtech </comment>
+  <internalEntity name="there4">&#x2234;</internalEntity>
+  <comment> therefore, U+2234 ISOtech </comment>
+  <internalEntity name="sim">&#x223C;</internalEntity>
+  <comment> tilde operator = varies with = similar to,
+                                     U+223C ISOtech </comment>
+  <comment> tilde operator is NOT the same character as the tilde, U+007E,
+       although the same glyph might be used to represent both  </comment>
+  <internalEntity name="cong">&#x2245;</internalEntity>
+  <comment> approximately equal to, U+2245 ISOtech </comment>
+  <internalEntity name="asymp">&#x2248;</internalEntity>
+  <comment> almost equal to = asymptotic to,
+                                     U+2248 ISOamsr </comment>
+  <internalEntity name="ne">&#x2260;</internalEntity>
+  <comment> not equal to, U+2260 ISOtech </comment>
+  <internalEntity name="equiv">&#x2261;</internalEntity>
+  <comment> identical to, U+2261 ISOtech </comment>
+  <internalEntity name="le">&#x2264;</internalEntity>
+  <comment> less-than or equal to, U+2264 ISOtech </comment>
+  <internalEntity name="ge">&#x2265;</internalEntity>
+  <comment> greater-than or equal to,
+                                     U+2265 ISOtech </comment>
+  <internalEntity name="sub">&#x2282;</internalEntity>
+  <comment> subset of, U+2282 ISOtech </comment>
+  <internalEntity name="sup">&#x2283;</internalEntity>
+  <comment> superset of, U+2283 ISOtech </comment>
+  <comment> note that nsup, 'not a superset of, U+2283' is not covered by the Symbol
+       font encoding and is not included. Should it be, for symmetry?
+       It is in ISOamsn  </comment>
+  <internalEntity name="nsub">&#x2284;</internalEntity>
+  <comment> not a subset of, U+2284 ISOamsn </comment>
+  <internalEntity name="sube">&#x2286;</internalEntity>
+  <comment> subset of or equal to, U+2286 ISOtech </comment>
+  <internalEntity name="supe">&#x2287;</internalEntity>
+  <comment> superset of or equal to,
+                                     U+2287 ISOtech </comment>
+  <internalEntity name="oplus">&#x2295;</internalEntity>
+  <comment> circled plus = direct sum,
+                                     U+2295 ISOamsb </comment>
+  <internalEntity name="otimes">&#x2297;</internalEntity>
+  <comment> circled times = vector product,
+                                     U+2297 ISOamsb </comment>
+  <internalEntity name="perp">&#x22A5;</internalEntity>
+  <comment> up tack = orthogonal to = perpendicular,
+                                     U+22A5 ISOtech </comment>
+  <internalEntity name="sdot">&#x22C5;</internalEntity>
+  <comment> dot operator, U+22C5 ISOamsb </comment>
+  <comment> dot operator is NOT the same character as U+00B7 middle dot </comment>
+  <comment> Miscellaneous Technical </comment>
+  <internalEntity name="lceil">&#x2308;</internalEntity>
+  <comment> left ceiling = apl upstile,
+                                     U+2308 ISOamsc  </comment>
+  <internalEntity name="rceil">&#x2309;</internalEntity>
+  <comment> right ceiling, U+2309 ISOamsc  </comment>
+  <internalEntity name="lfloor">&#x230A;</internalEntity>
+  <comment> left floor = apl downstile,
+                                     U+230A ISOamsc  </comment>
+  <internalEntity name="rfloor">&#x230B;</internalEntity>
+  <comment> right floor, U+230B ISOamsc  </comment>
+  <internalEntity name="lang">&#x2329;</internalEntity>
+  <comment> left-pointing angle bracket = bra,
+                                     U+2329 ISOtech </comment>
+  <comment> lang is NOT the same character as U+003C 'less than'
+       or U+2039 'single left-pointing angle quotation mark' </comment>
+  <internalEntity name="rang">&#x232A;</internalEntity>
+  <comment> right-pointing angle bracket = ket,
+                                     U+232A ISOtech </comment>
+  <comment> rang is NOT the same character as U+003E 'greater than'
+       or U+203A 'single right-pointing angle quotation mark' </comment>
+  <comment> Geometric Shapes </comment>
+  <internalEntity name="loz">&#x25CA;</internalEntity>
+  <comment> lozenge, U+25CA ISOpub </comment>
+  <comment> Miscellaneous Symbols </comment>
+  <internalEntity name="spades">&#x2660;</internalEntity>
+  <comment> black spade suit, U+2660 ISOpub </comment>
+  <comment> black here seems to mean filled as opposed to hollow </comment>
+  <internalEntity name="clubs">&#x2663;</internalEntity>
+  <comment> black club suit = shamrock,
+                                     U+2663 ISOpub </comment>
+  <internalEntity name="hearts">&#x2665;</internalEntity>
+  <comment> black heart suit = valentine,
+                                     U+2665 ISOpub </comment>
+  <internalEntity name="diams">&#x2666;</internalEntity>
+  <comment> black diamond suit, U+2666 ISOpub </comment>
+  <comment> Character entity set &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent&quot;
+       embedded to avoid external entity references. </comment>
+  <comment> Special characters for HTML </comment>
+  <comment> Portions (C) International Organization for Standardization 1986:
+       Permission to copy in any form is granted for use with
+       conforming SGML systems and applications as defined in
+       ISO 8879, provided this notice is included in all copies.
+  </comment>
+  <comment> Relevant ISO entity set is given unless names are newly introduced.
+       New names (i.e., not in ISO 8879 list) do not clash with any
+       existing ISO 8879 entity names. ISO 10646 character numbers
+       are given for each character, in hex. values are decimal
+       conversions of the ISO 10646 values and refer to the document
+       character set. Names are Unicode names.
+  </comment>
+  <comment> C0 Controls and Basic Latin </comment>
+  <internalEntity name="quot">&quot;</internalEntity>
+  <comment>  quotation mark = APL quote,
+                                    U+0022 ISOnum </comment>
+  <internalEntity name="amp">&amp;#38;</internalEntity>
+  <comment>  ampersand, U+0026 ISOnum </comment>
+  <internalEntity name="lt">&amp;#60;</internalEntity>
+  <comment>  less-than sign, U+003C ISOnum </comment>
+  <internalEntity name="gt">&gt;</internalEntity>
+  <comment>  greater-than sign, U+003E ISOnum </comment>
+  <internalEntity name="apos">'</internalEntity>
+  <comment>  apostrophe mark, U+0027 ISOnum </comment>
+  <comment> Latin Extended-A </comment>
+  <internalEntity name="OElig">&#x0152;</internalEntity>
+  <comment>  latin capital ligature OE,
+                                    U+0152 ISOlat2 </comment>
+  <internalEntity name="oelig">&#x0153;</internalEntity>
+  <comment>  latin small ligature oe, U+0153 ISOlat2 </comment>
+  <comment> ligature is a misnomer, this is a separate character in some languages </comment>
+  <internalEntity name="Scaron">&#x0160;</internalEntity>
+  <comment>  latin capital letter S with caron,
+                                    U+0160 ISOlat2 </comment>
+  <internalEntity name="scaron">&#x0161;</internalEntity>
+  <comment>  latin small letter s with caron,
+                                    U+0161 ISOlat2 </comment>
+  <internalEntity name="Yuml">&#x0178;</internalEntity>
+  <comment>  latin capital letter Y with diaeresis,
+                                    U+0178 ISOlat2 </comment>
+  <comment> Spacing Modifier Letters </comment>
+  <internalEntity name="circ">&#x02C6;</internalEntity>
+  <comment>  modifier letter circumflex accent,
+                                    U+02C6 ISOpub </comment>
+  <internalEntity name="tilde">&#x02DC;</internalEntity>
+  <comment>  small tilde, U+02DC ISOdia </comment>
+  <comment> General Punctuation </comment>
+  <internalEntity name="ensp">&#x2002;</internalEntity>
+  <comment> en space, U+2002 ISOpub </comment>
+  <internalEntity name="emsp">&#x2003;</internalEntity>
+  <comment> em space, U+2003 ISOpub </comment>
+  <internalEntity name="thinsp">&#x2009;</internalEntity>
+  <comment> thin space, U+2009 ISOpub </comment>
+  <internalEntity name="zwnj">&#x200C;</internalEntity>
+  <comment> zero width non-joiner,
+                                    U+200C NEW RFC 2070 </comment>
+  <internalEntity name="zwj">&#x200D;</internalEntity>
+  <comment> zero width joiner, U+200D NEW RFC 2070 </comment>
+  <internalEntity name="lrm">&#x200E;</internalEntity>
+  <comment> left-to-right mark, U+200E NEW RFC 2070 </comment>
+  <internalEntity name="rlm">&#x200F;</internalEntity>
+  <comment> right-to-left mark, U+200F NEW RFC 2070 </comment>
+  <internalEntity name="ndash">&#x2013;</internalEntity>
+  <comment> en dash, U+2013 ISOpub </comment>
+  <internalEntity name="mdash">&#x2014;</internalEntity>
+  <comment> em dash, U+2014 ISOpub </comment>
+  <internalEntity name="lsquo">&#x2018;</internalEntity>
+  <comment> left single quotation mark,
+                                    U+2018 ISOnum </comment>
+  <internalEntity name="rsquo">&#x2019;</internalEntity>
+  <comment> right single quotation mark,
+                                    U+2019 ISOnum </comment>
+  <internalEntity name="sbquo">&#x201A;</internalEntity>
+  <comment> single low-9 quotation mark, U+201A NEW </comment>
+  <internalEntity name="ldquo">&#x201C;</internalEntity>
+  <comment> left double quotation mark,
+                                    U+201C ISOnum </comment>
+  <internalEntity name="rdquo">&#x201D;</internalEntity>
+  <comment> right double quotation mark,
+                                    U+201D ISOnum </comment>
+  <internalEntity name="bdquo">&#x201E;</internalEntity>
+  <comment> double low-9 quotation mark, U+201E NEW </comment>
+  <internalEntity name="dagger">&#x2020;</internalEntity>
+  <comment> dagger, U+2020 ISOpub </comment>
+  <internalEntity name="Dagger">&#x2021;</internalEntity>
+  <comment> double dagger, U+2021 ISOpub </comment>
+  <internalEntity name="permil">&#x2030;</internalEntity>
+  <comment> per mille sign, U+2030 ISOtech </comment>
+  <internalEntity name="lsaquo">&#x2039;</internalEntity>
+  <comment> single left-pointing angle quotation mark,
+                                    U+2039 ISO proposed </comment>
+  <comment> lsaquo is proposed but not yet ISO standardized </comment>
+  <internalEntity name="rsaquo">&#x203A;</internalEntity>
+  <comment> single right-pointing angle quotation mark,
+                                    U+203A ISO proposed </comment>
+  <comment> rsaquo is proposed but not yet ISO standardized </comment>
+  <internalEntity name="euro">&#x20AC;</internalEntity>
+  <comment>  euro sign, U+20AC NEW </comment>
+  <comment>================== Imported Names ====================================</comment>
+  <param name="ContentType">CDATA</param>
+  <comment> media type, as per [RFC2045] </comment>
+  <param name="Charset">CDATA</param>
+  <comment> a character encoding, as per [RFC2045] </comment>
+  <datatype name="LanguageCode">
+    <tokenized name="NMTOKEN"/>
+  </datatype>
+  <comment> a language code, as per [RFC1766] </comment>
+  <param name="Character">CDATA</param>
+  <comment> a single character from [ISO10646] </comment>
+  <datatype name="Number">
+    <cdata/>
+  </datatype>
+  <comment> one or more digits </comment>
+  <datatype name="URI">
+    <cdata/>
+  </datatype>
+  <comment> a Uniform Resource Identifier, see [RFC2396] </comment>
+  <datatype name="Text">
+    <cdata/>
+  </datatype>
+  <comment> used for titles etc. </comment>
+  <datatype name="Length">
+    <cdata/>
+  </datatype>
+  <comment> nn for pixels or nn% for percentage length </comment>
+  <param name="Pixels">CDATA</param>
+  <comment> integer representing length in pixels </comment>
+  <comment>=================== Generic Attributes ===============================</comment>
+  <comment> core attributes common to most elements
+    class    space separated list of classes
+  </comment>
+  <attributeGroup name="coreattrs">
+    <attribute>
+      <name>class</name>
+      <cdata/>
+      <implied/>
+    </attribute>
+  </attributeGroup>
+  <comment> internationalization attributes
+    lang        language code (backwards compatible)
+    xml:lang    language code (as per XML 1.0 spec)
+    dir         direction for weak/neutral text
+  </comment>
+  <attributeGroup name="i18n">
+    <attribute>
+      <name>lang</name>
+      <datatypeRef name="LanguageCode"/>
+      <implied/>
+    </attribute>
+    <attribute>
+      <name>xml:lang</name>
+      <datatypeRef name="LanguageCode"/>
+      <implied/>
+    </attribute>
+    <attribute>
+      <name>dir</name>
+      <tokenized>
+        <enum>ltr</enum>
+        <enum>rtl</enum>
+      </tokenized>
+      <implied/>
+    </attribute>
+  </attributeGroup>
+  <attributeGroup name="attrs">
+    <attributeGroupRef name="coreattrs"/>
+    <attributeGroupRef name="i18n"/>
+  </attributeGroup>
+  <comment>=================== Text Elements ====================================</comment>
+  <modelGroup name="special">
+    <choice>
+      <elementRef>
+        <name>br</name>
+      </elementRef>
+      <elementRef>
+        <name>span</name>
+      </elementRef>
+      <elementRef>
+        <name>img</name>
+      </elementRef>
+    </choice>
+  </modelGroup>
+  <comment> u and strike are not supported as in xhtml strict, use styles instead. </comment>
+  <comment> i and b are not supported, use strong and em instead </comment>
+  <modelGroup name="phrase">
+    <choice>
+      <elementRef>
+        <name>em</name>
+      </elementRef>
+      <elementRef>
+        <name>strong</name>
+      </elementRef>
+      <elementRef>
+        <name>sub</name>
+      </elementRef>
+      <elementRef>
+        <name>sup</name>
+      </elementRef>
+    </choice>
+  </modelGroup>
+  <modelGroup name="inline">
+    <choice>
+      <elementRef>
+        <name>a</name>
+      </elementRef>
+      <modelGroupRef name="special"/>
+      <modelGroupRef name="phrase"/>
+    </choice>
+  </modelGroup>
+  <comment> %Inline; covers inline or &quot;text-level&quot; elements </comment>
+  <modelGroup name="Inline">
+    <zeroOrMore>
+      <choice>
+        <pcdata/>
+        <modelGroupRef name="inline"/>
+      </choice>
+    </zeroOrMore>
+  </modelGroup>
+  <comment>================== Block level elements ==============================</comment>
+  <modelGroup name="lists">
+    <choice>
+      <elementRef>
+        <name>ul</name>
+      </elementRef>
+      <elementRef>
+        <name>ol</name>
+      </elementRef>
+    </choice>
+  </modelGroup>
+  <modelGroup name="blocktext">
+    <choice>
+      <elementRef>
+        <name>pre</name>
+      </elementRef>
+      <elementRef>
+        <name>blockquote</name>
+      </elementRef>
+    </choice>
+  </modelGroup>
+  <modelGroup name="block">
+    <choice>
+      <elementRef>
+        <name>p</name>
+      </elementRef>
+      <modelGroupRef name="lists"/>
+      <modelGroupRef name="blocktext"/>
+      <elementRef>
+        <name>table</name>
+      </elementRef>
+    </choice>
+  </modelGroup>
+  <modelGroup name="Block">
+    <zeroOrMore>
+      <modelGroupRef name="block"/>
+    </zeroOrMore>
+  </modelGroup>
+  <comment> %Flow; mixes Block and Inline and is used for list items etc. </comment>
+  <modelGroup name="Flow">
+    <zeroOrMore>
+      <choice>
+        <pcdata/>
+        <modelGroupRef name="block"/>
+        <modelGroupRef name="inline"/>
+      </choice>
+    </zeroOrMore>
+  </modelGroup>
+  <comment>================== Content models for exclusions =====================</comment>
+  <comment> a elements use %Inline; excluding a </comment>
+  <modelGroup name="a.content">
+    <zeroOrMore>
+      <choice>
+        <pcdata/>
+        <modelGroupRef name="special"/>
+        <modelGroupRef name="phrase"/>
+      </choice>
+    </zeroOrMore>
+  </modelGroup>
+  <comment> pre uses %Inline excluding img, sup or sup </comment>
+  <modelGroup name="pre.content">
+    <zeroOrMore>
+      <choice>
+        <pcdata/>
+        <elementRef>
+          <name>a</name>
+        </elementRef>
+        <elementRef>
+          <name>br</name>
+        </elementRef>
+        <elementRef>
+          <name>span</name>
+        </elementRef>
+        <modelGroupRef name="phrase"/>
+      </choice>
+    </zeroOrMore>
+  </modelGroup>
+  <comment>================ Document Structure ==================================</comment>
+  <element>
+    <name>div</name>
+    <modelGroupRef name="Block"/>
+  </element>
+  <comment> May not contain flow content as in xhtml. Merely used as document root </comment>
+  <attlist>
+    <name>div</name>
+    <attribute>
+      <name>xmlns</name>
+      <datatypeRef name="URI"/>
+      <fixed>http://www.coremedia.com/2003/richtext-1.0</fixed>
+    </attribute>
+    <attribute>
+      <name>xmlns:xlink</name>
+      <datatypeRef name="URI"/>
+      <fixed>http://www.w3.org/1999/xlink</fixed>
+    </attribute>
+  </attlist>
+  <comment>=================== Paragraphs =======================================</comment>
+  <element>
+    <name>p</name>
+    <modelGroupRef name="Inline"/>
+  </element>
+  <attlist>
+    <name>p</name>
+    <attributeGroupRef name="attrs"/>
+  </attlist>
+  <comment>=================== Lists ============================================</comment>
+  <comment> Unordered list </comment>
+  <element>
+    <name>ul</name>
+    <oneOrMore>
+      <elementRef>
+        <name>li</name>
+      </elementRef>
+    </oneOrMore>
+  </element>
+  <attlist>
+    <name>ul</name>
+    <attributeGroupRef name="attrs"/>
+  </attlist>
+  <comment> Ordered (numbered) list </comment>
+  <element>
+    <name>ol</name>
+    <oneOrMore>
+      <elementRef>
+        <name>li</name>
+      </elementRef>
+    </oneOrMore>
+  </element>
+  <attlist>
+    <name>ol</name>
+    <attributeGroupRef name="attrs"/>
+  </attlist>
+  <comment> list item </comment>
+  <element>
+    <name>li</name>
+    <modelGroupRef name="Flow"/>
+  </element>
+  <attlist>
+    <name>li</name>
+    <attributeGroupRef name="attrs"/>
+  </attlist>
+  <comment>=================== Preformatted Text ================================</comment>
+  <comment> content is %Inline; excluding &quot;img|object|big|small|sub|sup&quot; </comment>
+  <element>
+    <name>pre</name>
+    <modelGroupRef name="pre.content"/>
+  </element>
+  <attlist>
+    <name>pre</name>
+    <attributeGroupRef name="attrs"/>
+    <attribute>
+      <name>xml:space</name>
+      <tokenized>
+        <enum>preserve</enum>
+      </tokenized>
+      <fixed>preserve</fixed>
+    </attribute>
+  </attlist>
+  <comment>=================== Block-like Quotes ================================</comment>
+  <element>
+    <name>blockquote</name>
+    <modelGroupRef name="Block"/>
+  </element>
+  <attlist>
+    <name>blockquote</name>
+    <attributeGroupRef name="attrs"/>
+    <attribute>
+      <name>cite</name>
+      <datatypeRef name="URI"/>
+      <implied/>
+    </attribute>
+  </attlist>
+  <comment>================== The Anchor Element ================================</comment>
+  <comment> content is %Inline; except that anchors shouldn't be nested </comment>
+  <element>
+    <name>a</name>
+    <modelGroupRef name="a.content"/>
+  </element>
+  <attlist>
+    <name>a</name>
+    <attributeGroupRef name="attrs"/>
+    <attribute>
+      <name>xlink:type</name>
+      <tokenized>
+        <enum>simple</enum>
+      </tokenized>
+      <fixed>simple</fixed>
+    </attribute>
+    <attribute>
+      <name>xlink:href</name>
+      <datatypeRef name="URI"/>
+      <required/>
+    </attribute>
+    <attribute>
+      <name>xlink:role</name>
+      <cdata/>
+      <implied/>
+    </attribute>
+    <attribute>
+      <name>xlink:title</name>
+      <cdata/>
+      <implied/>
+    </attribute>
+    <attribute>
+      <name>xlink:show</name>
+      <tokenized>
+        <enum>new</enum>
+        <enum>replace</enum>
+        <enum>embed</enum>
+        <enum>other</enum>
+        <enum>none</enum>
+      </tokenized>
+      <implied/>
+    </attribute>
+    <attribute>
+      <name>xlink:actuate</name>
+      <tokenized>
+        <enum>onRequest</enum>
+        <enum>onLoad</enum>
+      </tokenized>
+      <implied/>
+    </attribute>
+  </attlist>
+  <comment>
+
+    Note that the XHTML href attribute has been replaced by the
+    xlink:href attribute.
+
+    charset, type, name and accesskey are not supported. target is not
+    supported, either, because it resembles presentation
+    information. Even XHTML 1.0 strict does not support the target
+    attribute, only XHTML 1.0 transitional includes it. If desired, rendering parameters
+    may be stored in appropriate  xlink:role attributes.
+
+   </comment>
+  <comment>===================== Inline Elements ================================</comment>
+  <element>
+    <name>span</name>
+    <modelGroupRef name="Inline"/>
+  </element>
+  <comment> generic language/style container </comment>
+  <attlist>
+    <name>span</name>
+    <attributeGroupRef name="attrs"/>
+  </attlist>
+  <element>
+    <name>br</name>
+    <sequence/>
+  </element>
+  <comment> forced line break </comment>
+  <attlist>
+    <name>br</name>
+    <attributeGroupRef name="coreattrs"/>
+  </attlist>
+  <element>
+    <name>em</name>
+    <modelGroupRef name="Inline"/>
+  </element>
+  <comment> emphasis </comment>
+  <attlist>
+    <name>em</name>
+    <attributeGroupRef name="attrs"/>
+  </attlist>
+  <element>
+    <name>strong</name>
+    <modelGroupRef name="Inline"/>
+  </element>
+  <comment> strong emphasis </comment>
+  <attlist>
+    <name>strong</name>
+    <attributeGroupRef name="attrs"/>
+  </attlist>
+  <element>
+    <name>sub</name>
+    <modelGroupRef name="Inline"/>
+  </element>
+  <comment> subscript </comment>
+  <attlist>
+    <name>sub</name>
+    <attributeGroupRef name="attrs"/>
+  </attlist>
+  <element>
+    <name>sup</name>
+    <modelGroupRef name="Inline"/>
+  </element>
+  <comment> superscript </comment>
+  <attlist>
+    <name>sup</name>
+    <attributeGroupRef name="attrs"/>
+  </attlist>
+  <comment>=================== Images ===========================================</comment>
+  <comment>
+     To avoid accessibility problems for people who aren't
+     able to see the image, you should provide a text
+     description using the alt and longdesc attributes.
+     In addition, avoid the use of server-side image maps.
+     Note that in this DTD there is no name attribute. That
+     is only available in the transitional and frameset DTD.
+  </comment>
+  <element>
+    <name>img</name>
+    <sequence/>
+  </element>
+  <attlist>
+    <name>img</name>
+    <attributeGroupRef name="attrs"/>
+    <attribute>
+      <name>alt</name>
+      <datatypeRef name="Text"/>
+      <required/>
+    </attribute>
+    <attribute>
+      <name>height</name>
+      <datatypeRef name="Length"/>
+      <implied/>
+    </attribute>
+    <attribute>
+      <name>width</name>
+      <datatypeRef name="Length"/>
+      <implied/>
+    </attribute>
+    <attribute>
+      <name>xlink:type</name>
+      <tokenized>
+        <enum>simple</enum>
+      </tokenized>
+      <fixed>simple</fixed>
+    </attribute>
+    <attribute>
+      <name>xlink:href</name>
+      <cdata/>
+      <required/>
+    </attribute>
+    <attribute>
+      <name>xlink:role</name>
+      <cdata/>
+      <implied/>
+    </attribute>
+    <attribute>
+      <name>xlink:title</name>
+      <cdata/>
+      <implied/>
+    </attribute>
+    <attribute>
+      <name>xlink:show</name>
+      <tokenized>
+        <enum>embed</enum>
+      </tokenized>
+      <fixed>embed</fixed>
+    </attribute>
+    <attribute>
+      <name>xlink:actuate</name>
+      <tokenized>
+        <enum>onLoad</enum>
+      </tokenized>
+      <fixed>onLoad</fixed>
+    </attribute>
+  </attlist>
+  <comment>
+    Note that the XHTML src attribute has been replaced by the xlink:href attribute.
+
+    The XHTML attributes longdesc, usemap, ismap are not supported.
+  </comment>
+  <comment>======================= Tables =======================================</comment>
+  <comment> Derived from IETF HTML table standard, see [RFC1942] </comment>
+  <comment> horizontal alignment attributes for cell contents
+
+    The XHTML 'align' attribute values 'justify' and 'char' are not supported
+    for td elements by IE, and are thus left out, together with the char and
+    charoff attributes.
+  </comment>
+  <attributeGroup name="cellhalign">
+    <attribute>
+      <name>align</name>
+      <tokenized>
+        <enum>left</enum>
+        <enum>center</enum>
+        <enum>right</enum>
+      </tokenized>
+      <implied/>
+    </attribute>
+  </attributeGroup>
+  <comment> vertical alignment attributes for cell contents </comment>
+  <attributeGroup name="cellvalign">
+    <attribute>
+      <name>valign</name>
+      <tokenized>
+        <enum>top</enum>
+        <enum>middle</enum>
+        <enum>bottom</enum>
+        <enum>baseline</enum>
+      </tokenized>
+      <implied/>
+    </attribute>
+  </attributeGroup>
+  <element>
+    <name>table</name>
+    <choice>
+      <elementRef>
+        <name>tbody</name>
+      </elementRef>
+      <oneOrMore>
+        <elementRef>
+          <name>tr</name>
+        </elementRef>
+      </oneOrMore>
+    </choice>
+  </element>
+  <element>
+    <name>tbody</name>
+    <oneOrMore>
+      <elementRef>
+        <name>tr</name>
+      </elementRef>
+    </oneOrMore>
+  </element>
+  <element>
+    <name>tr</name>
+    <oneOrMore>
+      <elementRef>
+        <name>td</name>
+      </elementRef>
+    </oneOrMore>
+  </element>
+  <element>
+    <name>td</name>
+    <modelGroupRef name="Flow"/>
+  </element>
+  <attlist>
+    <name>table</name>
+    <attributeGroupRef name="attrs"/>
+    <attribute>
+      <name>summary</name>
+      <datatypeRef name="Text"/>
+      <implied/>
+    </attribute>
+  </attlist>
+  <comment> align, width, border, frame, rules, cellspacing, cellpadding are not supported.
+       Render them in templates or use class=&quot;xxx&quot; and cascading stylesheets instead </comment>
+  <attlist>
+    <name>tbody</name>
+    <attributeGroupRef name="attrs"/>
+    <attributeGroupRef name="cellhalign"/>
+    <attributeGroupRef name="cellvalign"/>
+  </attlist>
+  <attlist>
+    <name>tr</name>
+    <attributeGroupRef name="attrs"/>
+    <attributeGroupRef name="cellhalign"/>
+    <attributeGroupRef name="cellvalign"/>
+  </attlist>
+  <attlist>
+    <name>td</name>
+    <attributeGroupRef name="attrs"/>
+    <attribute>
+      <name>abbr</name>
+      <datatypeRef name="Text"/>
+      <implied/>
+    </attribute>
+    <attribute>
+      <name>rowspan</name>
+      <datatypeRef name="Number"/>
+      <default>1</default>
+    </attribute>
+    <attribute>
+      <name>colspan</name>
+      <datatypeRef name="Number"/>
+      <default>1</default>
+    </attribute>
+    <attributeGroupRef name="cellhalign"/>
+    <attributeGroupRef name="cellvalign"/>
+  </attlist>
+</doctype>

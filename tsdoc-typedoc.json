@@ -1,0 +1,127 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
+  "noStandardTags": true,
+  "tagDefinitions": [
+    {
+      "tagName": "@callback",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@category",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@deprecated",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@enum",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@event",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@example",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@hidden",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@ignore",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@internal",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@inheritDoc",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@link",
+      "syntaxKind": "inline",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@module",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@override",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@packageDocumentation",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@param",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@readonly",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@returns",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@see",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@template",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@throws",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@typeParam",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@typedef",
+      "syntaxKind": "modifier"
+    }
+  ],
+  "supportForTags": {
+    "@callback": true,
+    "@category": true,
+    "@deprecated": true,
+    "@enum": true,
+    "@event": true,
+    "@example": true,
+    "@hidden": true,
+    "@ignore": true,
+    "@inheritDoc": true,
+    "@internal": true,
+    "@link": true,
+    "@module": true,
+    "@override": true,
+    "@packageDocumentation": true,
+    "@param": true,
+    "@readonly": true,
+    "@returns": true,
+    "@see": true,
+    "@template": true,
+    "@throws": true,
+    "@typeParam": true,
+    "@typedef": true
+  }
+}
