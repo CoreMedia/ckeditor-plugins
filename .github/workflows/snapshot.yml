@@ -37,6 +37,17 @@ jobs:
           echo "Calculated snapshot version: ${next_version}"
           echo "version=${next_version}" >> $GITHUB_OUTPUT
 
+          # Snapshots of an older major (a maintenance branch or a branch based on one) get
+          # their own dist-tag, so "snapshot" keeps pointing to snapshots of main.
+          main_major=$(git show origin/main:packages/ckeditor5-common/package.json | jq -r .version | cut -d. -f1)
+          if [ "$major" = "$main_major" ]; then
+            dist_tag=snapshot
+          else
+            dist_tag="snapshot-maintenance-${major}"
+          fi
+          echo "Dist-tag: ${dist_tag}"
+          echo "dist-tag=${dist_tag}" >> $GITHUB_OUTPUT
+
       - name: Build
         uses: ./.github/actions/build
         with:
@@ -49,6 +60,7 @@ jobs:
         env:
           NEXUS_USER: ${{ secrets.PLUGINS_NEXUS_USER }}
           NEXUS_PASSWORD: ${{ secrets.PLUGINS_NEXUS_PASSWORD }}
+          DIST_TAG: ${{ steps.version.outputs.dist-tag }}
         run: |
           TARGET_REGISTRY="https://repository.coremedia.com/nexus/repository/npm-github-hosted/"
 
@@ -70,7 +82,7 @@ jobs:
           echo "Publishing packages to $TARGET_REGISTRY"
 
           # Publish all packages directly
-          pnpm -r publish --tag snapshot --no-git-checks
+          pnpm -r publish --tag "$DIST_TAG" --no-git-checks
 
           mv "$GITHUB_WORKSPACE/.npmrc.bak" "$GITHUB_WORKSPACE/.npmrc"
 
@@ -84,6 +96,7 @@ jobs:
           echo "## ✅ Snapshot published" >> $GITHUB_STEP_SUMMARY
           echo "**Version:** ${{ steps.version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
           echo "**Registry:** npm-github-hosted" >> $GITHUB_STEP_SUMMARY
+          echo "**Dist-tag:** ${DIST_TAG}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### pnpm-workspace.yaml catalog entries" >> $GITHUB_STEP_SUMMARY
           echo "Add the following to your \`pnpm-workspace.yaml\` under \`catalog:\`:" >> $GITHUB_STEP_SUMMARY

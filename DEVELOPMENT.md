@@ -45,6 +45,45 @@ pnpm changeset add --empty
 All published packages share one version: a changeset for one package bumps all of
 them.
 
+## Maintenance Branches
+
+`main` holds the newest major. To ship fixes for an older major (see
+[Versioning](./VERSIONING.md)), create a maintenance branch `maintenance/<major>`
+with the GitHub Actions workflow _Create Maintenance Branch_ (input: the major,
+e.g. `30`). It creates the branch from the newest release of that major.
+
+A maintenance branch is a release line of its own and works like `main`: pull
+requests need a changeset, are integrated by the QA gate, and are released via a
+"Version Packages" pull request. Differences:
+
+* Only `patch` and `minor` changesets are allowed; `major` changesets are rejected.
+* Releases are published with the npm dist-tag `maintenance-<major>`, so `latest`
+  keeps pointing to the newest release from `main`. Their GitHub release is not
+  marked as latest.
+* The API documentation on GitHub Pages is only deployed from `main`.
+
+A fix needed on both lines is made on one branch and cherry-picked to the other,
+including its changeset. `main` and maintenance branches are never merged into each
+other.
+
+**Example:**
+
+1. `main` is released up to `30.4.2`; a CMCC version is bound to major 30.
+2. `main` moves on with breaking changes and releases `31.0.0`, `31.1.0` and
+   `32.0.0`.
+3. A customer on that CMCC version needs a security fix, still on major 30.
+4. _Create Maintenance Branch_ with `30` creates `maintenance/30` from `30.4.2`.
+5. The fix is cherry-picked into `maintenance/30` with a `patch` changeset and
+   released as `30.4.3` (dist-tag `maintenance-30`); `latest` stays on `32.x`.
+
+The branch may also be created while `main` is still on that major, e.g. right
+before breaking changes. `main` must then not release that major again: its
+"Version Packages" pull request fails until a `major` changeset is pending.
+
+Only releases made with Changesets can be used as starting point. Releases of the
+old release process (up to `28.1.1`) and the legacy branches `maintenance/23.0`,
+`24.0` and `25.0` are not supported by this workflow.
+
 ## Update Process
 
 All dependency versions are maintained centrally in the `catalog` of

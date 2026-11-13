@@ -10,6 +10,10 @@ inputs:
     description: 'Ref the changeset check compares against. Leave empty to skip it, e.g. for a release.'
     required: false
     default: ''
+  target-branch:
+    description: 'Branch the checked change goes into. On "maintenance/<major>" major bumps are rejected.'
+    required: false
+    default: ''
 
 runs:
   using: 'composite'
@@ -40,6 +44,57 @@ runs:
         echo "$NEW"
         # Rejects unparsable frontmatter, unknown package names and invalid bump types.
         pnpm changeset status --since="$BASE_REF"
+
+    # A maintenance branch stays on its major; main moves on to higher majors (see
+    # "Check main release line"), so a major bump would collide with main's versions.
+    - name: Check maintenance release line
+      id: maintenance-check
+      if: ${{ startsWith(inputs.target-branch, 'maintenance/') }}
+      continue-on-error: ${{ inputs.perform-all-checks == 'true' }}
+      shell: bash
+      env:
+        TARGET_BRANCH: ${{ inputs.target-branch }}
+      run: |
+        BRANCH_MAJOR="${TARGET_BRANCH#maintenance/}"
+        VERSION_MAJOR=$(jq -r .version packages/ckeditor5-common/package.json | cut -d. -f1)
+        if [ "$VERSION_MAJOR" != "$BRANCH_MAJOR" ]; then
+          echo "::error::$TARGET_BRANCH holds version $VERSION_MAJOR.x.x; maintenance branches are named maintenance/<major>."
+          exit 1
+        fi
+
+        MAJOR_CHANGESETS=$(for f in .changeset/*.md; do
+            [ "$(basename "$f")" = README.md ] && continue
+            awk 'NR == 1 && $0 == "---" { fm = 1; next } fm && $0 == "---" { exit } fm' "$f" \
+              | grep -qE ":[[:space:]]*[\"']?major[\"']?[[:space:]]*$" && echo "$f"
+          done || true)
+        if [ -n "$MAJOR_CHANGESETS" ]; then
+          echo "::error::Major changes are not allowed on $TARGET_BRANCH; use patch or minor:"
+          echo "$MAJOR_CHANGESETS"
+          exit 1
+        fi
+        echo "No major changesets on $TARGET_BRANCH."
+
+    # Counterpart on main: once maintenance/<major> exists (it may be created while main is
+    # still on that major), main must not release that major again. Only an unreleased
+    # version, i.e. the "Version Packages" PR and the release itself, is checked, so other
+    # pull requests are not blocked.
+    - name: Check main release line
+      id: main-line-check
+      if: ${{ inputs.target-branch == 'main' }}
+      continue-on-error: ${{ inputs.perform-all-checks == 'true' }}
+      shell: bash
+      run: |
+        VERSION=$(jq -r .version packages/ckeditor5-common/package.json)
+        if git rev-parse -q --verify "refs/tags/$VERSION" > /dev/null; then
+          echo "$VERSION is already released; nothing to check."
+          exit 0
+        fi
+        MAJOR="${VERSION%%.*}"
+        if git ls-remote --exit-code --heads origin "maintenance/$MAJOR" > /dev/null; then
+          echo "::error::maintenance/$MAJOR exists, so main must not release $VERSION: its next release must be major. Add a 'major' changeset on main."
+          exit 1
+        fi
+        echo "main may release $VERSION."
 
     - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       id: playwright-cache
@@ -112,6 +167,20 @@ runs:
         else
           echo "❌ Changeset check failed" >> $GITHUB_STEP_SUMMARY
           FAILED=true
+        fi
+
+        if [ "${{ steps.maintenance-check.outcome }}" == "failure" ]; then
+          echo "❌ Maintenance release line check failed" >> $GITHUB_STEP_SUMMARY
+          FAILED=true
+        elif [ "${{ steps.maintenance-check.outcome }}" == "success" ]; then
+          echo "✅ Maintenance release line check passed" >> $GITHUB_STEP_SUMMARY
+        fi
+
+        if [ "${{ steps.main-line-check.outcome }}" == "failure" ]; then
+          echo "❌ Main release line check failed" >> $GITHUB_STEP_SUMMARY
+          FAILED=true
+        elif [ "${{ steps.main-line-check.outcome }}" == "success" ]; then
+          echo "✅ Main release line check passed" >> $GITHUB_STEP_SUMMARY
         fi
 
         if [ "${{ steps.unit-tests.outcome }}" == "success" ]; then
