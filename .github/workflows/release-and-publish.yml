@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - main
+      - 'maintenance/*'
 
 permissions:
   contents: write
@@ -69,6 +70,21 @@ jobs:
 
       - name: Checks
         uses: ./.github/actions/checks
+        with:
+          target-branch: ${{ github.ref_name }}
+
+      # Releases from a maintenance branch must not become "latest": consumers of the
+      # newest major get it from main.
+      - name: Determine release line
+        id: line
+        run: |
+          if [[ "$GITHUB_REF_NAME" == maintenance/* ]]; then
+            echo "dist-tag=maintenance-${GITHUB_REF_NAME#maintenance/}" >> "$GITHUB_OUTPUT"
+            echo "latest=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "dist-tag=" >> "$GITHUB_OUTPUT"
+            echo "latest=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Setup npm registries for publish
         run: |
@@ -83,7 +99,7 @@ jobs:
         id: changesets
         uses: changesets/action@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1
         with:
-          publish-script: pnpm ci:publish
+          publish-script: ${{ steps.line.outputs.dist-tag && format('pnpm ci:publish --tag {0}', steps.line.outputs.dist-tag) || 'pnpm ci:publish' }}
           github-token: ${{ github.token }}
           # One aggregate release per version instead of one per package (see below).
           create-github-releases: false
@@ -108,16 +124,18 @@ jobs:
           node scripts/release-notes.mjs "$VERSION" > "$RUNNER_TEMP/release-notes.md"
           git tag -a "$VERSION" -m "$VERSION"
           git push origin "$VERSION"
-          gh release create "$VERSION" --verify-tag --title "v$VERSION" --notes-file "$RUNNER_TEMP/release-notes.md"
+          gh release create "$VERSION" --verify-tag --title "v$VERSION" --notes-file "$RUNNER_TEMP/release-notes.md" \
+            --latest=${{ steps.line.outputs.latest }}
           echo "## Released $VERSION" >> "$GITHUB_STEP_SUMMARY"
 
   # Separate job, so a manual run deploys the documentation even while changesets are
   # pending and the release job is skipped (e.g. to initially fill gh-pages).
+  # GitHub Pages documents main only.
   docs:
     name: Deploy documentation
     needs: [check-changesets, release]
     if: >-
-      !cancelled() && needs.release.result != 'failure' &&
+      !cancelled() && needs.release.result != 'failure' && github.ref_name == 'main' &&
       (needs.release.outputs.published == 'true' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     timeout-minutes: 20

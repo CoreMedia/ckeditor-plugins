@@ -5,13 +5,20 @@ on:
     types: [labeled, unlabeled]
     branches:
       - main
+      # Release lines created by create-maintenance-branch.yml. The legacy maintenance/<x>.0
+      # branches do not run this: pull_request_target uses the base branch's workflow files.
+      - 'maintenance/*'
 
 permissions:
   contents: write
   pull-requests: write
 
+env:
+  # Every release line has its own queue: main or maintenance/<major>.
+  BASE_BRANCH: ${{ github.event.pull_request.base.ref }}
+
 concurrency:
-  group: qa-gate-main
+  group: qa-gate-${{ github.event.pull_request.base.ref }}
   cancel-in-progress: false
 
 run-name: |
@@ -37,10 +44,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          # Get all open PRs into main with 'approved' label but without 'qa-failed', sorted by updated_at (oldest first)
+          # Get all open PRs into the base branch with 'approved' label but without 'qa-failed', sorted by updated_at (oldest first)
           OLDEST_PR=$(gh api \
             -H "Accept: application/vnd.github+json" \
-            "/repos/${{ github.repository }}/pulls?state=open&base=main&sort=updated&direction=asc" \
+            "/repos/${{ github.repository }}/pulls?state=open&base=${BASE_BRANCH}&sort=updated&direction=asc" \
             --jq '[.[] | select((.labels | map(.name) | contains(["approved"])) and (.labels | map(.name) | contains(["qa-failed"]) | not))] | first | .number')
 
           CURRENT_PR=${{ github.event.pull_request.number }}
@@ -79,10 +86,10 @@ jobs:
     needs: check-queue
     if: needs.check-queue.outputs.should-proceed == 'true'
     steps:
-      - name: Checkout main
+      - name: Checkout base branch
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: main
+          ref: ${{ env.BASE_BRANCH }}
           fetch-depth: 0
           token: ${{ secrets.GH_PAT_PUSH_FROM_GHA }}
 
@@ -104,10 +111,10 @@ jobs:
           # targets (git rebase -i --autosquash) before the PR can be integrated.
           MARKER_COMMITS=$(git log --no-merges -E \
             --grep='^(fixup|squash|amend)! ' \
-            --format='%h %s' "main..origin/$PR_BRANCH" || true)
+            --format='%h %s' "${BASE_BRANCH}..origin/$PR_BRANCH" || true)
 
           if [ -n "$MARKER_COMMITS" ]; then
-            echo "::error::The PR contains fixup!/squash!/amend! commits. Run 'git rebase -i --autosquash main' and push before integration."
+            echo "::error::The PR contains fixup!/squash!/amend! commits. Run 'git rebase -i --autosquash ${BASE_BRANCH}' and push before integration."
             {
               echo "## ❌ Autosquash commits found"
               echo ""
@@ -122,7 +129,7 @@ jobs:
 
           echo "No fixup/squash commits found."
 
-      - name: Merge PR branch into main
+      - name: Merge PR branch into base branch
         env:
           PR_BRANCH: ${{ needs.check-queue.outputs.pr-branch }}
           PR_NUMBER: ${{ needs.check-queue.outputs.pr-number }}
@@ -130,7 +137,7 @@ jobs:
           echo "Fetching PR branch: $PR_BRANCH"
           git fetch origin "$PR_BRANCH"
 
-          echo "Merging $PR_BRANCH into main"
+          echo "Merging $PR_BRANCH into $BASE_BRANCH"
           if ! git merge "origin/$PR_BRANCH" --no-edit -m "Merge PR #$PR_NUMBER"; then
             echo "::error::Merge conflict detected. Please rebase your branch."
             exit 1
@@ -148,25 +155,26 @@ jobs:
       - name: Checks
         uses: ./.github/actions/checks
         with:
-          base-ref: origin/main
+          base-ref: origin/${{ env.BASE_BRANCH }}
+          target-branch: ${{ env.BASE_BRANCH }}
 
-      - name: Push to main
+      - name: Push to base branch
         env:
           PR_NUMBER: ${{ needs.check-queue.outputs.pr-number }}
         run: |
-          echo "Pushing to main..."
-          git push origin main
+          echo "Pushing to $BASE_BRANCH..."
+          git push origin "$BASE_BRANCH"
 
           # Update local tracking to match remote after push
-          git fetch origin main
-          git branch --set-upstream-to=origin/main main
+          git fetch origin "$BASE_BRANCH"
+          git branch --set-upstream-to="origin/$BASE_BRANCH" "$BASE_BRANCH"
 
-          echo "## ✅ PR #$PR_NUMBER successfully integrated" >> $GITHUB_STEP_SUMMARY
+          echo "## ✅ PR #$PR_NUMBER successfully integrated into $BASE_BRANCH" >> $GITHUB_STEP_SUMMARY
 
-      - name: Deploy Storybook for main
+      - name: Deploy Storybook for base branch
         uses: ./.github/actions/deploy-storybook
         with:
-          branch-name: main
+          branch-name: ${{ env.BASE_BRANCH }}
           ckeditor-license: ${{ secrets.CKEDITOR_LICENSE }}
 
   on-failure:
