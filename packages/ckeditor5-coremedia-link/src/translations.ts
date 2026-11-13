@@ -4,7 +4,8 @@ export const de: Translations = {
   de: {
     dictionary: {
       "Link": "Verknüpfung",
-      "Enter url or drag and drop content onto this area.": "URL angeben oder Inhalt hierher ziehen.",
+      "Type to search content, enter url or drag and drop content onto this area.":
+        "Geben Sie ein, um Inhalte zu suchen, geben Sie eine URL ein oder ziehen Sie Inhalte in diesen Bereich.",
       "No results found.": "Keine Ergebnisse gefunden.",
       "Enter at least 3 characters to search.": "Geben Sie mindestens 3 Zeichen für die Suche ein.",
       "Loading Content...": "Lade Inhalt...",
