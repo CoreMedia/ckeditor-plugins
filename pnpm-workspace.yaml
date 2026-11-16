@@ -15,6 +15,7 @@ catalog:
   '@bbob/preset-html5': 4.3.1
   '@bbob/types': 4.3.1
   '@changesets/cli': ^3.0.3
+  '@changesets/read': ^1.0.1
   '@ckeditor/ckeditor5-inspector': ^5.0.3
   '@coremedia-internal/studio-client.playwright-config': ^1.4.0
   '@coremedia-internal/studio-client.storybook-config': ^2.0.1

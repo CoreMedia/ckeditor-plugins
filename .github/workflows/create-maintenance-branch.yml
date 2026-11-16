@@ -1,0 +1,131 @@
+name: "Create Maintenance Branch"
+
+# Creates maintenance/<major> for an older major, so it can receive patch and minor
+# releases while main moves on. The branch is a release line of its own: changesets,
+# "Version Packages" PR, QA gate and release work there just like on main.
+on:
+  workflow_dispatch:
+    inputs:
+      major:
+        description: 'Major version to maintain, e.g. "28" creates maintenance/28 from the latest 28.x.y release'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+run-name: |
+  Create maintenance/${{ inputs.major }}
+
+jobs:
+  create:
+    name: Create maintenance/${{ inputs.major }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 0
+          # Pushes to maintenance/* are restricted by the ruleset; coremedia-ci bypasses it.
+          token: ${{ secrets.GH_PAT_PUSH_FROM_GHA }}
+
+      - name: Configure Git
+        run: |
+          git config user.name 'coremedia-ci'
+          git config user.email 'coremedia-ci@coremedia.com'
+
+      - name: Validate
+        id: validate
+        env:
+          MAJOR: ${{ inputs.major }}
+        run: |
+          fail() { echo "::error::$1"; exit 1; }
+
+          [[ "$MAJOR" =~ ^[1-9][0-9]*$ ]] || fail "\"$MAJOR\" is not a major version number."
+          BRANCH="maintenance/$MAJOR"
+
+          if git ls-remote --exit-code --heads origin "$BRANCH" > /dev/null; then
+            fail "$BRANCH already exists."
+          fi
+
+          # main may be on the same major (e.g. right before breaking changes): the checks
+          # action then rejects any further release of $MAJOR.x.y from main.
+          MAIN_VERSION=$(jq -r .version packages/ckeditor5-common/package.json)
+          MAIN_MAJOR="${MAIN_VERSION%%.*}"
+          [ "$MAIN_MAJOR" -ge "$MAJOR" ] \
+            || fail "main is on major $MAIN_MAJOR; there is no release of major $MAJOR to maintain."
+
+          # An unreleased version on main (e.g. after a failed release) would be left out of
+          # the branch, and main could not release it anymore.
+          if [ "$MAIN_MAJOR" -eq "$MAJOR" ]; then
+            git rev-parse -q --verify "refs/tags/$MAIN_VERSION" > /dev/null \
+              || fail "main holds the unreleased version $MAIN_VERSION; release it first."
+
+            # Changes merged into main but not yet released are not part of the branch.
+            # Empty changesets (no package bumps) release nothing, so they are ignored.
+            PENDING=""
+            for FILE in .changeset/*.md; do
+              [ "$FILE" = .changeset/README.md ] && continue
+              awk '/^---[[:space:]]*$/ { n++; next } n == 1 && !/^[[:space:]]*(#.*)?$/ { found = 1 } END { exit !found }' "$FILE" \
+                && PENDING+="$FILE"$'\n'
+            done
+            if [ -n "$PENDING" ]; then
+              echo "::warning::main has unreleased changes that are not part of $BRANCH; cherry-pick them including their changesets if $MAJOR.x.y needs them:"
+              echo -n "$PENDING"
+              echo -n "$PENDING" > "$RUNNER_TEMP/pending-changesets.txt"
+            fi
+          fi
+
+          TAG=$(git tag --list "$MAJOR.*" | grep -E "^$MAJOR\.[0-9]+\.[0-9]+$" | sort -V | tail -n 1 || true)
+          [ -n "$TAG" ] || fail "No release $MAJOR.x.y found."
+
+          # Releases made with the old release process have neither Changesets nor these
+          # workflows, so a branch cut from them could not release.
+          git cat-file -e "$TAG:.github/workflows/create-maintenance-branch.yml" 2> /dev/null \
+            || fail "Release $TAG predates the Changesets-based maintenance support; cut the branch manually or release $MAJOR.x.y from main first."
+
+          echo "Creating $BRANCH from $TAG (main is on major $MAIN_MAJOR)"
+          {
+            echo "branch=$BRANCH"
+            echo "tag=$TAG"
+            echo "main-major=$MAIN_MAJOR"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create and push branch
+        env:
+          BRANCH: ${{ steps.validate.outputs.branch }}
+          TAG: ${{ steps.validate.outputs.tag }}
+        run: |
+          git switch -c "$BRANCH" "$TAG"
+
+          # Changesets compares against its base branch, e.g. in "changeset status".
+          jq --indent 2 --arg branch "$BRANCH" '.baseBranch = $branch' .changeset/config.json \
+            > "$RUNNER_TEMP/config.json"
+          mv "$RUNNER_TEMP/config.json" .changeset/config.json
+
+          git add .changeset/config.json
+          git commit -m "ci: Create $BRANCH from $TAG"
+          git push origin "$BRANCH"
+
+      - name: Summary
+        env:
+          BRANCH: ${{ steps.validate.outputs.branch }}
+          TAG: ${{ steps.validate.outputs.tag }}
+          MAJOR: ${{ inputs.major }}
+          MAIN_MAJOR: ${{ steps.validate.outputs.main-major }}
+        run: |
+          {
+            echo "## ✅ Created [$BRANCH](${{ github.server_url }}/${{ github.repository }}/tree/$BRANCH) from $TAG"
+            echo ""
+            echo "- Open pull requests against \`$BRANCH\`; they need a \`patch\` or \`minor\` changeset."
+            echo "- Releases are published with the npm dist-tag \`maintenance-$MAJOR\` and do not become \`latest\`."
+            if [ "$MAIN_MAJOR" = "$MAJOR" ]; then
+              echo "- main is still on major $MAJOR: its next release must be major. Its \"Version Packages\" pull request fails until a \`major\` changeset is pending on main."
+            fi
+            if [ -s "$RUNNER_TEMP/pending-changesets.txt" ]; then
+              echo "- ⚠️ main has unreleased changes that are not part of $BRANCH. Cherry-pick them, including their changesets, if $MAJOR.x.y needs them:"
+              sed 's/.*/  - `&`/' "$RUNNER_TEMP/pending-changesets.txt"
+            fi
+            echo "- Dependabot only updates main: add an entry with \`target-branch: $BRANCH\` to \`.github/dependabot.yml\` on main if this line should get action updates."
+          } >> "$GITHUB_STEP_SUMMARY"

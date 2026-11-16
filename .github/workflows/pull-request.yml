@@ -49,7 +49,9 @@ jobs:
         uses: ./.github/actions/checks
         with:
           perform-all-checks: 'true'
-          base-ref: origin/main
+          # Manual runs have no base to compare against, so they skip the changeset check.
+          base-ref: ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || '' }}
+          target-branch: ${{ github.base_ref || github.ref_name }}
 
   fork:
     name: Fork Pull Request
