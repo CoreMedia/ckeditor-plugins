@@ -37,8 +37,9 @@ jobs:
           echo "Calculated snapshot version: ${next_version}"
           echo "version=${next_version}" >> $GITHUB_OUTPUT
 
-          # Snapshots of an older major (a maintenance branch or a branch based on one) get
-          # their own dist-tag, so "snapshot" keeps pointing to snapshots of main.
+          # Snapshots of an older major than main (a maintenance branch or a branch based on
+          # one) get their own dist-tag. All snapshots of main's major share "snapshot", also
+          # those of a maintenance branch created while main is still on that major.
           main_major=$(git show origin/main:packages/ckeditor5-common/package.json | jq -r .version | cut -d. -f1)
           if [ "$major" = "$main_major" ]; then
             dist_tag=snapshot
