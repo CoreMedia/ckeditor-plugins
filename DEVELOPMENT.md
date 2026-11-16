@@ -77,8 +77,10 @@ other.
    released as `30.4.3` (dist-tag `maintenance-30`); `latest` stays on `32.x`.
 
 The branch may also be created while `main` is still on that major, e.g. right
-before breaking changes. `main` must then not release that major again: its
-"Version Packages" pull request fails until a `major` changeset is pending.
+before breaking changes, as long as `main` has no unreleased version (e.g. after a
+failed release). `main` must then not release that major again: its
+"Version Packages" pull request and its release fail until a `major` changeset is
+pending.
 
 Only releases made with Changesets can be used as starting point. Releases of the
 old release process (up to `28.1.1`) and the legacy branches `maintenance/23.0`,

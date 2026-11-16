@@ -62,11 +62,7 @@ runs:
           exit 1
         fi
 
-        MAJOR_CHANGESETS=$(for f in .changeset/*.md; do
-            [ "$(basename "$f")" = README.md ] && continue
-            awk 'NR == 1 && $0 == "---" { fm = 1; next } fm && $0 == "---" { exit } fm' "$f" \
-              | grep -qE ":[[:space:]]*[\"']?major[\"']?[[:space:]]*$" && echo "$f"
-          done || true)
+        MAJOR_CHANGESETS=$(bash "$GITHUB_WORKSPACE/.github/scripts/major-changesets.sh")
         if [ -n "$MAJOR_CHANGESETS" ]; then
           echo "::error::Major changes are not allowed on $TARGET_BRANCH; use patch or minor:"
           echo "$MAJOR_CHANGESETS"
@@ -76,8 +72,9 @@ runs:
 
     # Counterpart on main: once maintenance/<major> exists (it may be created while main is
     # still on that major), main must not release that major again. Only an unreleased
-    # version, i.e. the "Version Packages" PR and the release itself, is checked, so other
-    # pull requests are not blocked.
+    # version is checked: the "Version Packages" PR and the release itself, but also main
+    # after a failed release. A pending major changeset makes the next release major, so it
+    # passes; otherwise the pull request adding it could never be integrated.
     - name: Check main release line
       id: main-line-check
       if: ${{ inputs.target-branch == 'main' }}
@@ -90,11 +87,18 @@ runs:
           exit 0
         fi
         MAJOR="${VERSION%%.*}"
-        if git ls-remote --exit-code --heads origin "maintenance/$MAJOR" > /dev/null; then
-          echo "::error::maintenance/$MAJOR exists, so main must not release $VERSION: its next release must be major. Add a 'major' changeset on main."
-          exit 1
+        if ! git ls-remote --exit-code --heads origin "maintenance/$MAJOR" > /dev/null; then
+          echo "main may release $VERSION."
+          exit 0
         fi
-        echo "main may release $VERSION."
+        MAJOR_CHANGESETS=$(bash "$GITHUB_WORKSPACE/.github/scripts/major-changesets.sh")
+        if [ -n "$MAJOR_CHANGESETS" ]; then
+          echo "maintenance/$MAJOR exists, but the next release is major:"
+          echo "$MAJOR_CHANGESETS"
+          exit 0
+        fi
+        echo "::error::maintenance/$MAJOR exists, so main must not release $VERSION: its next release must be major. Add a 'major' changeset on main."
+        exit 1
 
     - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       id: playwright-cache

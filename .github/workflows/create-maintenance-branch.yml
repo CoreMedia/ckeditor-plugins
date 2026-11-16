@@ -51,9 +51,17 @@ jobs:
 
           # main may be on the same major (e.g. right before breaking changes): the checks
           # action then rejects any further release of $MAJOR.x.y from main.
-          MAIN_MAJOR=$(jq -r .version packages/ckeditor5-common/package.json | cut -d. -f1)
+          MAIN_VERSION=$(jq -r .version packages/ckeditor5-common/package.json)
+          MAIN_MAJOR="${MAIN_VERSION%%.*}"
           [ "$MAIN_MAJOR" -ge "$MAJOR" ] \
             || fail "main is on major $MAIN_MAJOR; there is no release of major $MAJOR to maintain."
+
+          # An unreleased version on main (e.g. after a failed release) would be left out of
+          # the branch, and main could not release it anymore.
+          if [ "$MAIN_MAJOR" -eq "$MAJOR" ]; then
+            git rev-parse -q --verify "refs/tags/$MAIN_VERSION" > /dev/null \
+              || fail "main holds the unreleased version $MAIN_VERSION; release it first."
+          fi
 
           TAG=$(git tag --list "$MAJOR.*" | grep -E "^$MAJOR\.[0-9]+\.[0-9]+$" | sort -V | tail -n 1 || true)
           [ -n "$TAG" ] || fail "No release $MAJOR.x.y found."
