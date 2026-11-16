@@ -8,16 +8,10 @@
  *
  * Usage: node scripts/major-changesets.mjs
  */
-import { createRequire } from "node:module";
 import path from "node:path";
-import { pathToFileURL } from "node:url";
+import { readChangesets } from "@changesets/read";
 
 const rootDir = path.join(import.meta.dirname, "..");
-
-// @changesets/read is a dependency of @changesets/cli, not of this workspace.
-const cliPackageJson = createRequire(path.join(rootDir, "package.json")).resolve("@changesets/cli/package.json");
-const readModule = createRequire(cliPackageJson).resolve("@changesets/read");
-const { readChangesets } = await import(pathToFileURL(readModule).href);
 
 for (const { id, releases } of await readChangesets(rootDir)) {
   if (releases.some(({ type }) => type === "major")) {

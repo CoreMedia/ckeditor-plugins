@@ -66,6 +66,12 @@ A fix needed on both lines is made on one branch and cherry-picked to the other,
 including its changeset. `main` and maintenance branches are never merged into each
 other.
 
+A maintenance branch keeps the GitHub Actions workflows of the release it was
+created from. Fixes of the workflows on `main` do not reach it: cherry-pick them if
+the branch needs them. Likewise, Dependabot only updates `main`; add an entry with
+`target-branch: maintenance/<major>` to `.github/dependabot.yml` on `main` if a
+branch should get action updates.
+
 **Example:**
 
 1. `main` is released up to `30.4.2`; a CMCC version is bound to major 30.
@@ -78,14 +84,17 @@ other.
 
 The branch may also be created while `main` is still on that major, e.g. right
 before breaking changes, as long as `main` has no unreleased version (e.g. after a
-failed release). `main` must then not release that major again: its
+failed release). Changes merged into `main` with changesets that are not released
+yet are not part of the branch: release them first or cherry-pick them; the
+workflow lists them. `main` must then not release that major again: its
 "Version Packages" pull request and its release fail until a `major` changeset is
-pending.
+pending, and pull requests into `main` get a warning until then.
 
 The branch can only be created from a release that already contains the workflow
 _Create Maintenance Branch_, i.e. a release made with Changesets after it was
 introduced. Releases of the old release process (up to `28.1.1`) and the legacy
 branches `maintenance/23.0`, `24.0` and `25.0` are not supported by this workflow.
+Major 28 becomes maintainable with its first release made with Changesets.
 
 ## Update Process
 

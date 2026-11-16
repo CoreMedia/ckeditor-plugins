@@ -50,6 +50,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "catalog:",
+    "@changesets/read": "catalog:",
     "@coremedia/studio-client.eslint-config": "catalog:",
     "eslint": "catalog:",
     "rimraf": "catalog:",

@@ -71,10 +71,12 @@ runs:
         echo "No major changesets on $TARGET_BRANCH."
 
     # Counterpart on main: once maintenance/<major> exists (it may be created while main is
-    # still on that major), main must not release that major again. Only an unreleased
-    # version is checked: the "Version Packages" PR and the release itself, but also main
-    # after a failed release. A pending major changeset makes the next release major, so it
-    # passes; otherwise the pull request adding it could never be integrated.
+    # still on that major), main must not release that major again. An unreleased version
+    # fails: the "Version Packages" PR and the release itself, but also main after a failed
+    # release. A released version only warns, so patch and minor pull requests learn early
+    # that they will not be released before the next major. A pending major changeset makes
+    # the next release major, so it passes; otherwise the pull request adding it could
+    # never be integrated.
     - name: Check main release line
       id: main-line-check
       if: ${{ inputs.target-branch == 'main' }}
@@ -82,10 +84,6 @@ runs:
       shell: bash
       run: |
         VERSION=$(jq -r .version packages/ckeditor5-common/package.json)
-        if git rev-parse -q --verify "refs/tags/$VERSION" > /dev/null; then
-          echo "$VERSION is already released; nothing to check."
-          exit 0
-        fi
         MAJOR="${VERSION%%.*}"
         if ! git ls-remote --exit-code --heads origin "maintenance/$MAJOR" > /dev/null; then
           echo "main may release $VERSION."
@@ -95,6 +93,10 @@ runs:
         if [ -n "$MAJOR_CHANGESETS" ]; then
           echo "maintenance/$MAJOR exists, but the next release is major:"
           echo "$MAJOR_CHANGESETS"
+          exit 0
+        fi
+        if git rev-parse -q --verify "refs/tags/$VERSION" > /dev/null; then
+          echo "::warning::maintenance/$MAJOR exists, so main's next release must be major. Changes merged into main are not released until a 'major' changeset is added; fixes for $MAJOR.x.y go to maintenance/$MAJOR."
           exit 0
         fi
         echo "::error::maintenance/$MAJOR exists, so main must not release $VERSION: its next release must be major. Add a 'major' changeset on main."

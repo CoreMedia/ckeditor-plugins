@@ -47,4 +47,6 @@ jobs:
           version-script: pnpm ci:version
           # One "Version Packages" PR per release line (branch changeset-release/<branch>).
           pr-base-branch: ${{ github.ref_name }}
+          pr-title: Version Packages (${{ github.ref_name }})
+          commit-message: Version Packages (${{ github.ref_name }})
           github-token: ${{ secrets.GH_PAT_PUSH_FROM_GHA }}

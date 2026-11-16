@@ -61,6 +61,20 @@ jobs:
           if [ "$MAIN_MAJOR" -eq "$MAJOR" ]; then
             git rev-parse -q --verify "refs/tags/$MAIN_VERSION" > /dev/null \
               || fail "main holds the unreleased version $MAIN_VERSION; release it first."
+
+            # Changes merged into main but not yet released are not part of the branch.
+            # Empty changesets (no package bumps) release nothing, so they are ignored.
+            PENDING=""
+            for FILE in .changeset/*.md; do
+              [ "$FILE" = .changeset/README.md ] && continue
+              awk '/^---[[:space:]]*$/ { n++; next } n == 1 && !/^[[:space:]]*(#.*)?$/ { found = 1 } END { exit !found }' "$FILE" \
+                && PENDING+="$FILE"$'\n'
+            done
+            if [ -n "$PENDING" ]; then
+              echo "::warning::main has unreleased changes that are not part of $BRANCH; cherry-pick them including their changesets if $MAJOR.x.y needs them:"
+              echo -n "$PENDING"
+              echo -n "$PENDING" > "$RUNNER_TEMP/pending-changesets.txt"
+            fi
           fi
 
           TAG=$(git tag --list "$MAJOR.*" | grep -E "^$MAJOR\.[0-9]+\.[0-9]+$" | sort -V | tail -n 1 || true)
@@ -108,6 +122,10 @@ jobs:
             echo "- Releases are published with the npm dist-tag \`maintenance-$MAJOR\` and do not become \`latest\`."
             if [ "$MAIN_MAJOR" = "$MAJOR" ]; then
               echo "- main is still on major $MAJOR: its next release must be major. Its \"Version Packages\" pull request fails until a \`major\` changeset is pending on main."
+            fi
+            if [ -s "$RUNNER_TEMP/pending-changesets.txt" ]; then
+              echo "- ⚠️ main has unreleased changes that are not part of $BRANCH. Cherry-pick them, including their changesets, if $MAJOR.x.y needs them:"
+              sed 's/.*/  - `&`/' "$RUNNER_TEMP/pending-changesets.txt"
             fi
             echo "- Dependabot only updates main: add an entry with \`target-branch: $BRANCH\` to \`.github/dependabot.yml\` on main if this line should get action updates."
           } >> "$GITHUB_STEP_SUMMARY"
