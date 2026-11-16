@@ -52,6 +52,7 @@
     "@changesets/cli": "catalog:",
     "@coremedia/studio-client.eslint-config": "catalog:",
     "eslint": "catalog:",
+    "prettier": "catalog:",
     "rimraf": "catalog:",
     "typedoc": "catalog:",
     "typescript": "catalog:"
