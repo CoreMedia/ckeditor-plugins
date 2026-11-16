@@ -56,9 +56,9 @@ runs:
         TARGET_BRANCH: ${{ inputs.target-branch }}
       run: |
         BRANCH_MAJOR="${TARGET_BRANCH#maintenance/}"
-        VERSION_MAJOR=$(jq -r .version packages/ckeditor5-common/package.json | cut -d. -f1)
-        if [ "$VERSION_MAJOR" != "$BRANCH_MAJOR" ]; then
-          echo "::error::$TARGET_BRANCH holds version $VERSION_MAJOR.x.x; maintenance branches are named maintenance/<major>."
+        VERSION=$(jq -r .version packages/ckeditor5-common/package.json)
+        if [ "${VERSION%%.*}" != "$BRANCH_MAJOR" ]; then
+          echo "::error::$TARGET_BRANCH only releases $BRANCH_MAJOR.x.y, but the packages have version $VERSION. A maintenance branch accepts neither major bumps nor changes based on another major."
           exit 1
         fi
 

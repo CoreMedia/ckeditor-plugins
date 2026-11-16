@@ -82,9 +82,10 @@ failed release). `main` must then not release that major again: its
 "Version Packages" pull request and its release fail until a `major` changeset is
 pending.
 
-Only releases made with Changesets can be used as starting point. Releases of the
-old release process (up to `28.1.1`) and the legacy branches `maintenance/23.0`,
-`24.0` and `25.0` are not supported by this workflow.
+The branch can only be created from a release that already contains the workflow
+_Create Maintenance Branch_, i.e. a release made with Changesets after it was
+introduced. Releases of the old release process (up to `28.1.1`) and the legacy
+branches `maintenance/23.0`, `24.0` and `25.0` are not supported by this workflow.
 
 ## Update Process
 

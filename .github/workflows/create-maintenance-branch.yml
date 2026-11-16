@@ -89,10 +89,8 @@ jobs:
           jq --indent 2 --arg branch "$BRANCH" '.baseBranch = $branch' .changeset/config.json \
             > "$RUNNER_TEMP/config.json"
           mv "$RUNNER_TEMP/config.json" .changeset/config.json
-          # Changesets pending at the release tag belong to main's next release.
-          find .changeset -maxdepth 1 -name '*.md' ! -name 'README.md' -delete
 
-          git add -A .changeset
+          git add .changeset/config.json
           git commit -m "ci: Create $BRANCH from $TAG"
           git push origin "$BRANCH"
 

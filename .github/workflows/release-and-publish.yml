@@ -35,10 +35,15 @@ jobs:
           # "changeset version" consumed them are the packages ready to be published.
           COUNT=$(find .changeset -maxdepth 1 -name '*.md' ! -name 'README.md' | wc -l)
           echo "Pending changesets: $COUNT"
-          if [ "$COUNT" -eq 0 ]; then
-            echo "should-release=true" >> $GITHUB_OUTPUT
-          else
+          VERSION=$(jq -r .version packages/ckeditor5-common/package.json)
+          if [ "$COUNT" -ne 0 ]; then
             echo "should-release=false" >> $GITHUB_OUTPUT
+          # Nothing to publish without a new version, e.g. when maintenance/<major> is created.
+          elif git ls-remote --exit-code --tags origin "refs/tags/$VERSION" > /dev/null; then
+            echo "$VERSION is already released."
+            echo "should-release=false" >> $GITHUB_OUTPUT
+          else
+            echo "should-release=true" >> $GITHUB_OUTPUT
           fi
 
   release:
