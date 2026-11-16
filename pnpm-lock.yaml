@@ -30,6 +30,9 @@ catalogs:
     '@changesets/cli':
       specifier: ^3.0.3
       version: 3.0.3
+    '@changesets/read':
+      specifier: ^1.0.1
+      version: 1.0.1
     '@ckeditor/ckeditor5-inspector':
       specifier: ^5.0.3
       version: 5.0.3
@@ -120,6 +123,9 @@ catalogs:
     playwright-core:
       specifier: ^1.62.1
       version: 1.64.1
+    prettier:
+      specifier: ^3.9.6
+      version: 3.9.6
     rimraf:
       specifier: ^6.0.1
       version: 6.1.3
@@ -171,12 +177,18 @@ importers:
       '@changesets/cli':
         specifier: 'catalog:'
         version: 3.0.3
+      '@changesets/read':
+        specifier: 'catalog:'
+        version: 1.0.1
       '@coremedia/studio-client.eslint-config':
         specifier: 'catalog:'
         version: 2.0.0(@types/eslint@9.6.1)(@typescript-eslint/utils@8.67.0(eslint@10.9.1(jiti@1.21.6)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3))(eslint-import-resolver-node@0.3.9(supports-color@8.1.1))(eslint@10.9.1(jiti@1.21.6)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       eslint:
         specifier: 'catalog:'
         version: 10.9.1(jiti@1.21.6)(supports-color@8.1.1)
+      prettier:
+        specifier: 'catalog:'
+        version: 3.9.6
       rimraf:
         specifier: 'catalog:'
         version: 6.1.3
