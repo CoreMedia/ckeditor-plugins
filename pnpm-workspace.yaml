@@ -2,10 +2,12 @@ packages:
   - packages/*
   - tests/*
   - app
+
 allowBuilds:
   '@swc/core': true
   esbuild: true
   unrs-resolver: true
+
 catalog:
   '@bbob/core': 4.3.1
   '@bbob/html': 4.3.1
@@ -63,14 +65,16 @@ catalog:
   webpack: ^5.104.1
   webpack-cli: ^6.0.1
   xml-formatter: ^3.6.2
+
+# Prefer catalog: refs when running pnpm add/update, so deps stay wired to the
+# catalog instead of pnpm pinning a version directly in package.json.
+catalogMode: prefer
+
 minimumReleaseAge: 1440
 minimumReleaseAgeExclude:
   - '@coremedia/*'
   - '@coremedia-internal/*'
   - '@jangaroo/*'
-onlyBuiltDependencies:
-  - '@swc/core'
-  - esbuild
-  - unrs-resolver
+
 patchedDependencies:
   '@bbob/preset-html5': patches/@bbob__preset-html5.patch

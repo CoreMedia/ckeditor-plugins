@@ -81,10 +81,9 @@ for (const directory of directories) {
   } catch {
     continue;
   }
-  const { name } = JSON.parse(await readFile(path.join(packagesDir, directory, "package.json"), "utf8"));
   const notes = withoutDependencyUpdates(extractSection(changelog, version));
   if (notes) {
-    sections.push(`## ${name}\n\n${notes}`);
+    sections.push(notes);
   }
 }
 
