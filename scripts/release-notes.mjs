@@ -3,8 +3,8 @@
  * Assembles the notes of the single GitHub release `vX.Y.Z` from the `## X.Y.Z`
  * sections of all package changelogs written by Changesets.
  *
- * Packages whose section only lists dependency updates are skipped: in the fixed
- * versioning group every package is bumped, but most of them without own changes.
+ * Entries are grouped by change type and deduplicated by changeset hash because a
+ * changeset affecting multiple packages appears in each package's changelog.
  *
  * Usage: node scripts/release-notes.mjs <version> [packages-dir]
  */
@@ -37,35 +37,42 @@ const isDependencyUpdate = (entry) =>
   /^- Updated dependencies\b/.test(entry[0]) ||
   entry.filter((line) => line.trim() !== "").every((line) => /^\s*- \S+@\d\S*$/.test(line));
 
-/**
- * Removes dependency update entries (including their nested list) and drops `###`
- * subsections that end up empty.
- */
-const withoutDependencyUpdates = (section) => {
-  const subsections = [];
-  let current = { heading: undefined, entries: [] };
+const changeTypes = ["Major", "Minor", "Patch"];
+const entriesByChangeType = Object.fromEntries(changeTypes.map((type) => [type, []]));
+const seenChangesetHashes = new Set();
+
+const collectChangeEntries = (section) => {
+  let changeType;
+  let currentEntry;
+  const flushEntry = () => {
+    if (!currentEntry) {
+      return;
+    }
+    if (!isDependencyUpdate(currentEntry)) {
+      const hash = currentEntry[0].match(/^- ([a-f0-9]{7,40}):/i)?.[1].toLowerCase();
+      if (!hash || !seenChangesetHashes.has(hash)) {
+        entriesByChangeType[changeType].push(currentEntry.join("\n").trimEnd());
+        if (hash) {
+          seenChangesetHashes.add(hash);
+        }
+      }
+    }
+    currentEntry = undefined;
+  };
+
   for (const line of section.split("\n")) {
     if (/^###\s/.test(line)) {
-      subsections.push(current);
-      current = { heading: line, entries: [] };
-    } else if (/^- /.test(line)) {
-      current.entries.push([line]);
-    } else if (current.entries.length > 0) {
-      current.entries.at(-1).push(line);
+      flushEntry();
+      const heading = line.match(/^### (Major|Minor|Patch) Changes$/);
+      changeType = heading?.[1];
+    } else if (changeType && /^- /.test(line)) {
+      flushEntry();
+      currentEntry = [line];
+    } else if (currentEntry) {
+      currentEntry.push(line);
     }
   }
-  subsections.push(current);
-
-  return subsections
-    .map(({ heading, entries }) => ({
-      heading,
-      entries: entries
-        .filter((entry) => !isDependencyUpdate(entry))
-        .map((entry) => entry.join("\n").trimEnd()),
-    }))
-    .filter(({ entries }) => entries.length > 0)
-    .map(({ heading, entries }) => [heading, entries.join("\n\n")].filter(Boolean).join("\n\n"))
-    .join("\n\n");
+  flushEntry();
 };
 
 const directories = (await readdir(packagesDir, { withFileTypes: true }))
@@ -73,7 +80,6 @@ const directories = (await readdir(packagesDir, { withFileTypes: true }))
   .map((entry) => entry.name)
   .sort();
 
-const sections = [];
 for (const directory of directories) {
   let changelog;
   try {
@@ -81,12 +87,11 @@ for (const directory of directories) {
   } catch {
     continue;
   }
-  const notes = withoutDependencyUpdates(extractSection(changelog, version));
-  if (notes) {
-    sections.push(notes);
-  }
+  collectChangeEntries(extractSection(changelog, version));
 }
 
-process.stdout.write(
-  sections.length > 0 ? `${sections.join("\n\n")}\n` : "No changes besides dependency updates.\n",
-);
+const sections = changeTypes
+  .filter((type) => entriesByChangeType[type].length > 0)
+  .map((type) => `### ${type} Changes\n\n${entriesByChangeType[type].join("\n\n")}`);
+
+process.stdout.write(sections.length > 0 ? `${sections.join("\n\n")}\n` : "No changes besides dependency updates.\n");
