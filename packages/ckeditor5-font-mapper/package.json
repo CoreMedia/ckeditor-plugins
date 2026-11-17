@@ -30,7 +30,7 @@
       }
     }
   },
-  "version": "28.1.2",
+  "version": "29.0.0",
   "type": "module",
   "files": [
     "/src"
