@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-blocklist",
-  "version": "28.1.2",
+  "version": "28.1.3",
   "type": "module",
   "description": "Lets users add and remove words to a list in the editor and highlights them in the text.",
   "author": {

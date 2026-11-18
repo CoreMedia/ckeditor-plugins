@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-dataprocessor-support",
-  "version": "28.1.2",
+  "version": "28.1.3",
   "type": "module",
   "description": "Utilities for providing custom CKEditor 5 DataProcessors",
   "author": {

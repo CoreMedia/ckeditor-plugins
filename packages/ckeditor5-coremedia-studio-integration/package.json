@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-coremedia-studio-integration",
-  "version": "28.1.2",
+  "version": "28.1.3",
   "type": "module",
   "description": "CoreMedia Studio: Communication facade for Studio integration",
   "author": {

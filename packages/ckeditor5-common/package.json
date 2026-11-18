@@ -1,6 +1,6 @@
 {
   "name": "@coremedia/ckeditor5-common",
-  "version": "28.1.2",
+  "version": "28.1.3",
   "type": "module",
   "description": "Common Utilities, independent from CKEditor",
   "author": {
