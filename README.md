@@ -237,13 +237,13 @@ implements the described behavior.
 
 [badge:license:Apache2]: <https://img.shields.io/badge/license-Apache_2.0-informational?style=for-the-badge>
 
-[badge:engine:nodejs]: <https://img.shields.io/badge/Node.js-20-informational?style=for-the-badge&logo=node.js&logoColor=white>
+[badge:engine:nodejs]: <https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2FCoreMedia%2Fckeditor-plugins%2Fmain%2Fpackage.json&query=%24.engines.node&label=Node.js&color=informational&style=for-the-badge&logo=node.js&logoColor=white>
 
-[badge:engine:pnpm]: <https://img.shields.io/badge/pnpm-8.6.9-informational?style=for-the-badge&logo=pnpm&logoColor=white>
+[badge:engine:pnpm]: <https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2FCoreMedia%2Fckeditor-plugins%2Fmain%2Fpackage.json&query=%24.engines.pnpm&label=pnpm&color=informational&style=for-the-badge&logo=pnpm&logoColor=white>
 
-[badge:lang:typescript]: <https://img.shields.io/badge/TypeScript-5.3.3-informational?style=for-the-badge&logo=typescript&logoColor=white>
+[badge:lang:typescript]: <https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2FCoreMedia%2Fckeditor-plugins%2Fmain%2Fpnpm-workspace.yaml&query=%24.catalog.typescript&label=TypeScript&color=informational&style=for-the-badge&logo=typescript&logoColor=white>
 
-[badge:ckeditor]: <https://img.shields.io/badge/CKEditor-41.1.0-informational?style=for-the-badge&logo=ckeditor5&logoColor=white>
+[badge:ckeditor]: <https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2FCoreMedia%2Fckeditor-plugins%2Fmain%2Fpnpm-workspace.yaml&query=%24.catalog.ckeditor5&label=CKEditor&color=informational&style=for-the-badge&logo=ckeditor5&logoColor=white>
 
 [CKEditor 4]: <https://ckeditor.com/ckeditor-4/> "CKEditor 4 | Visual Text Editor for HTML"
 
