@@ -85,17 +85,19 @@ licenses.
 
 ## Open Questions
 
-- [ ] Check whether the parent project `Ckeditor Plugins` already exists in
-  Dependency-Track, and look up how `Component Foundation` stores its version
-  (`-` or none), so the parent version matches.
-- [ ] Decide whether a fresh `maintenance/<major>` branch needs an SBOM before
-  its first merged pull request (see D).
+- [x] Check whether the parent project `Ckeditor Plugins` already exists in
+  Dependency-Track. **Result (2026-11-19): it exists.**
+- [x] Look up the version of the parent project `Ckeditor Plugins` (`-` or
+  none), so `parentVersion` matches it. **Result (2026-11-19): `-`.**
+- [x] Decide whether a fresh `maintenance/<major>` branch needs an SBOM before
+  its first merged pull request (see D). **Decision (2026-11-19): no.** The
+  Jenkins job logs a warning for the missing artifact.
 
 ## A. Prerequisites
 
-- [ ] Create the parent project `Ckeditor Plugins` in Dependency-Track if it
-  doesn't exist, or let the Jenkins job create it as the Blueprint job does
-  (lookup, then `PUT /api/v1/project`).
+- [x] Create the parent project `Ckeditor Plugins` in Dependency-Track if it
+  doesn't exist. It already exists, so the Jenkins job doesn't need to create
+  it.
 - [ ] Check your rights on `venus-ci-01`: log in, open `/whoAmI/` for your
   user and groups, and check that you may build the job **Seed** (**Build with
   Parameters**). Without that right, the job is still created by the 21:00
@@ -165,7 +167,8 @@ licenses.
   - [ ] look up the artifact with
     `GET /repos/CoreMedia/ckeditor-plugins/actions/artifacts?name=sbom-<SHA>`.
     If none exists or all expired, log a warning and continue with the next
-    branch;
+    branch. A missing artifact is not a failure, e.g. for a fresh
+    `maintenance/<major>` branch (see D);
   - [ ] keep only artifacts whose run is `.github/workflows/qa-gate.yml` of
     `CoreMedia/ckeditor-plugins` and whose step "Push to base branch" (job
     "Integrate and Merge") succeeded. Don't require the whole job to succeed:
@@ -186,7 +189,8 @@ licenses.
       `parentVersion: '-'`, tags
       `workspace,team-venus,<version>,snapshot,internal,commit-<SHA>`
 - [ ] Fail the build if any branch failed, after all branches were processed,
-  so one broken branch doesn't block the others.
+  so one broken branch doesn't block the others. A missing artifact only logs a
+  warning and doesn't count as failed.
 - [ ] Clean up the workspace in `post { always { cmCleanup() } }`.
 - [ ] Test the job before the merge:
   - [ ] rebase the feature branch onto the current `venus-ci-01`, because Seed
@@ -212,11 +216,13 @@ licenses.
   [Create Maintenance Branch][create-maintenance-branch] workflow cuts
   `maintenance/<major>` from a release tag, and the QA gate runs for
   `maintenance/*` too. The Jenkins job picks up new branches by name.
-- [ ] Accept or close the gap: the first commit of a new branch
+- [x] Accept the gap (decided 2026-11-19): the first commit of a new branch
   ("ci: Create maintenance/<major> from <tag>") is pushed by that workflow, not
-  by the QA gate, so it has no artifact. The branch gets its first upload after
-  its first merged pull request. Option: also generate the artifact in
-  `create-maintenance-branch.yml`.
+  by the QA gate, so it has no artifact. No SBOM is generated for it; the
+  Jenkins job logs a warning, and the branch gets its first upload after its
+  first merged pull request. That's enough: the commit only changes
+  `.changeset/config.json`, and every release from the branch goes through the
+  QA gate first.
 - [ ] Note in [DEVELOPMENT.md][development]: a maintenance branch cut from a
   release made before this change (e.g. `maintenance/29` from `29.0.0`) needs
   this change cherry-picked to get SBOM artifacts.
