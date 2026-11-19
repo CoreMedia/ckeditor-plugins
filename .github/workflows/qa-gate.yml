@@ -161,6 +161,37 @@ jobs:
           base-ref: origin/${{ env.BASE_BRANCH }}
           target-branch: ${{ env.BASE_BRANCH }}
 
+      # Before the push: an SBOM that cannot be generated blocks the merge.
+      # Not "--lockfile-only": reading the installed packages adds their licenses to the SBOM.
+      # 1.6, not pnpm's 1.7 default: 1.6 is the spec version our Dependency-Track ingests.
+      - name: Generate SBOM
+        id: sbom
+        run: |
+          COMMIT=$(git rev-parse HEAD)
+          VERSION=$(jq -r .version packages/ckeditor5-common/package.json)
+
+          pnpm sbom \
+            --sbom-format cyclonedx \
+            --sbom-spec-version 1.6 \
+            --sbom-type application \
+            --out build/sbom/ckeditor-plugins-workspace.cdx.json
+
+          # Read by the nightly Dependency-Track upload, see DEVELOPMENT.md.
+          jq -n --arg branch "$BASE_BRANCH" --arg commit "$COMMIT" --arg version "$VERSION" \
+            '{branch: $branch, commit: $commit, version: $version}' \
+            > build/sbom/metadata.json
+
+          echo "commit=$COMMIT" >> "$GITHUB_OUTPUT"
+
+      # Named after the pushed commit, so the nightly upload finds the SBOM of a branch head.
+      - name: Upload SBOM
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: sbom-${{ steps.sbom.outputs.commit }}
+          path: build/sbom
+          if-no-files-found: error
+          retention-days: 90
+
       - name: Push to base branch
         env:
           PR_NUMBER: ${{ needs.check-queue.outputs.pr-number }}

@@ -26,11 +26,8 @@ the upload from GitHub:
 - A self-hosted runner in a public repository is not safe: a pull request from
   a fork can change a workflow so it runs on that runner.
 - Dependency-Track is **not reachable from GitHub-hosted runners**. Checked
-  2026-11-18: `apiserver.dependency-track.coremedia.io` doesn't exist in public
-  DNS (NXDOMAIN at Cloudflare and Google). On the corporate network it resolves
-  to `10.100.4.217` and `10.100.7.125` (private Route 53 zone, load balancer
-  `moebius-internal-services`, see `aws/prod/README.md` in
-  `CoreMedia/dependency-track-infra`).
+  2026-11-18: its API server is not in public DNS and is only reachable from
+  the internal network.
 
 Jenkins runs inside the network and reaches both GitHub and Dependency-Track.
 It already uploads SBOMs: `blueprint-sbom-upload.Jenkinsfile` in
@@ -38,7 +35,7 @@ It already uploads SBOMs: `blueprint-sbom-upload.Jenkinsfile` in
 `dependency-track-prod`. GitHub cannot trigger the internal Jenkins, so the job
 runs on a schedule.
 
-The team's Jenkins is `https://jenkins.venus-ci-01.coremedia.vm`. Its jobs are
+The team has its own internal Jenkins instance, `venus-ci-01`. Its jobs are
 Job DSL in the branch `venus-ci-01` of `CoreMedia/ci-jobs` (`ci/pipelines/`,
 `ci/jenkinsfiles/`); see `ci/pipelines/perso_testsystem.groovy` there for a
 nightly job. Nobody creates jobs in the Jenkins UI. The job **Seed** (defined
@@ -98,7 +95,7 @@ licenses.
 - [x] Create the parent project `Ckeditor Plugins` in Dependency-Track if it
   doesn't exist. It already exists, so the Jenkins job doesn't need to create
   it.
-- [ ] Check your rights on `venus-ci-01`: log in, open `/whoAmI/` for your
+- [x] Check your rights on `venus-ci-01`: log in, open `/whoAmI/` for your
   user and groups, and check that you may build the job **Seed** (**Build with
   Parameters**). Without that right, the job is still created by the 21:00
   Seed run, but you can't test a feature branch (see C).
@@ -117,9 +114,9 @@ licenses.
 
 ## B. Changes in ckeditor-plugins (Branch `venus/CKE-140-SBOM-upload`)
 
-- [ ] In the `integrate` job of the [QA gate][qa-gate], after the merge and
+- [x] In the `integrate` job of the [QA gate][qa-gate], after the merge and
   before the push, take the commit to be pushed: `git rev-parse HEAD`.
-- [ ] After "Checks" and before the push, generate the SBOM. A failure blocks
+- [x] After "Checks" and before the push, generate the SBOM. A failure blocks
   the merge.
 
   ```bash
@@ -130,17 +127,17 @@ licenses.
     --out build/sbom/ckeditor-plugins-workspace.cdx.json
   ```
 
-- [ ] Write `build/sbom/metadata.json` with:
-  - [ ] `branch`: the base branch (`main` or `maintenance/<major>`);
-  - [ ] `commit`: the SHA from the first step;
-  - [ ] `version`: the version from `packages/ckeditor5-common/package.json`.
-- [ ] Upload `build/sbom` as the artifact `sbom-<SHA>` with
+- [x] Write `build/sbom/metadata.json` with:
+  - [x] `branch`: the base branch (`main` or `maintenance/<major>`);
+  - [x] `commit`: the SHA from the first step;
+  - [x] `version`: the version from `packages/ckeditor5-common/package.json`.
+- [x] Upload `build/sbom` as the artifact `sbom-<SHA>` with
   `if-no-files-found: error` and `retention-days: 90` (the maximum for public
   repositories). `build/` is already git-ignored.
-- [ ] Document the SBOM artifact, the nightly Jenkins upload and where the job
+- [x] Document the SBOM artifact, the nightly Jenkins upload and where the job
   lives in [DEVELOPMENT.md][development], including that this is a temporary
   solution outside the shared workflow.
-- [ ] Add an empty changeset (`pnpm changeset add --empty`). The checks
+- [x] Add an empty changeset (`pnpm changeset add --empty`). The checks
   require a new changeset in every pull request, and changes to `.github/` and
   docs don't touch any package.
 - [ ] Remove this plan before the branch is integrated.
@@ -196,9 +193,8 @@ licenses.
   - [ ] rebase the feature branch onto the current `venus-ci-01`, because Seed
     deletes every job that is missing from the branch it reads;
   - [ ] start Seed by hand with `CI_JOBS_BRANCH=<feature branch>`;
-  - [ ] check that the job exists at
-    `https://jenkins.venus-ci-01.coremedia.vm/job/CKEditor-Plugins/job/nightly-sbom-upload/`
-    and that the team's other jobs are unchanged;
+  - [ ] check that the job `CKEditor-Plugins/nightly-sbom-upload` exists on
+    `venus-ci-01` and that the team's other jobs are unchanged;
   - [ ] run it with `DRY_RUN=true`;
   - [ ] expect the job to be deleted again by the next 21:00 Seed run, which
     reads `venus-ci-01`, until the pull request is merged.
@@ -223,7 +219,7 @@ licenses.
   first merged pull request. That's enough: the commit only changes
   `.changeset/config.json`, and every release from the branch goes through the
   QA gate first.
-- [ ] Note in [DEVELOPMENT.md][development]: a maintenance branch cut from a
+- [x] Note in [DEVELOPMENT.md][development]: a maintenance branch cut from a
   release made before this change (e.g. `maintenance/29` from `29.0.0`) needs
   this change cherry-picked to get SBOM artifacts.
 - [ ] Remove the test branch `maintenance/28` before the job runs, or it gets
