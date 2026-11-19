@@ -96,6 +96,31 @@ introduced. Releases of the old release process (up to `28.1.1`) and the legacy
 branches `maintenance/23.0`, `24.0` and `25.0` are not supported by this workflow.
 Major 28 becomes maintainable with its first release made with Changesets.
 
+## SBOM
+
+Before the QA gate pushes to `main` or a maintenance branch, it generates a
+CycloneDX SBOM (spec version 1.6) of the whole workspace with `pnpm sbom`. An SBOM
+that cannot be generated blocks the merge. The QA gate stores it together with a
+`metadata.json` (branch, commit, version) as the artifact `sbom-<commit SHA>`,
+named after the pushed commit and kept for 90 days.
+
+A nightly job on an internal Jenkins of CoreMedia uploads the SBOM of each branch
+head to Dependency-Track as the project `ckeditor-plugins-workspace`, version
+`main` or `maintenance-<major>`, below the parent project `Ckeditor Plugins`.
+Each upload replaces the previous one of that version, and it arrives up to a day
+after the merge. The job is defined in the internal repository
+`CoreMedia/ci-jobs`.
+
+This is a temporary solution. Other CoreMedia workspaces upload their SBOM from
+GitHub Actions through a shared workflow, but this repository is public: it can
+neither use that private workflow nor reach Dependency-Track, which is only
+available internally.
+
+A new maintenance branch has no SBOM until its first merged pull request, because
+its first commit is pushed by _Create Maintenance Branch_ and not by the QA gate;
+the nightly job only logs a warning for it. A maintenance branch created from a
+release without the SBOM step needs this step cherry-picked into its QA gate.
+
 ## Update Process
 
 All dependency versions are maintained centrally in the `catalog` of
