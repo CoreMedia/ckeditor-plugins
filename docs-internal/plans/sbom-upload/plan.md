@@ -77,8 +77,14 @@ licenses.
   `workspace,team-venus,<version of the branch>,snapshot,internal,commit-<SHA>`.
   The version comes from `packages/ckeditor5-common/package.json`; all
   published packages share one version.
-- [x] **Unchanged heads:** Jenkins skips a branch whose Dependency-Track project
-  already has the tag `commit-<SHA>` of the current head.
+- [x] **Unchanged heads:** no skip (decided 2026-11-19). Jenkins uploads the
+  artifact of each branch head every night; re-uploading the same SBOM is
+  harmless.
+- [x] **Upload mechanism:** the Jenkins plugin step `dependencyTrackPublisher`
+  of the Dependency-Track plugin, as the Blueprint job does (decided
+  2026-11-19, replacing an earlier decision for `curl`). The plugin takes the
+  Dependency-Track URL and API key from its global configuration on
+  `venus-ci-01`. The job still uses `curl` for the GitHub API.
 
 ## Open Questions
 
@@ -99,18 +105,29 @@ licenses.
   user and groups, and check that you may build the job **Seed** (**Build with
   Parameters**). Without that right, the job is still created by the 21:00
   Seed run, but you can't test a feature branch (see C).
+- [ ] Check on `venus-ci-01` whether the Dependency-Track plugin is installed
+  (**Manage Jenkins** > **Plugins** > **Installed plugins**) and configured
+  globally (**Manage Jenkins** > **System** > **Dependency-Track**: API server
+  URL and API key credential).
 - [ ] Check on `venus-ci-01` under `/credentials/` whether these credentials
   exist:
-  - [ ] a Dependency-Track API key (e.g. `dependency-track-prod`, which the
-    Blueprint job uses on the cms Jenkins);
+  - [ ] a Dependency-Track API key as secret text (e.g.
+    `dependency-track-prod`, which the Blueprint job uses on the cms Jenkins),
+    selected in the plugin's global configuration;
   - [ ] a GitHub token (e.g. `github`) that can read the Actions artifacts of
-    `CoreMedia/ckeditor-plugins`.
-- [ ] Request missing credentials by email to support@coremedia.com, using the
-  template in the `CoreMedia/ci-configuration` README (secret ID
+    `CoreMedia/ckeditor-plugins`. The job uses `github` (username/password); it
+    exists on `venus-ci-01`, since the team's AI test-system job already reads
+    Actions artifacts with it.
+- [ ] Request what is missing (plugin, its global configuration, credentials)
+  by a ticket or email to support@coremedia.com, using the template in the
+  `CoreMedia/ci-configuration` README for credentials (secret ID
   `venus-ci-01/<credential-id>`, or `jenkins-global/<credential-id>` if it
   already exists for other instances).
 - [ ] Make sure the Dependency-Track API key has `BOM_UPLOAD`,
-  `PROJECT_CREATION_UPLOAD` and `VIEW_PORTFOLIO` (for the tag lookup).
+  `PROJECT_CREATION_UPLOAD`, `VIEW_PORTFOLIO` and `PORTFOLIO_MANAGEMENT`.
+  After the upload, the plugin looks up the project (`VIEW_PORTFOLIO`) and sets
+  its tags with a project update (`PORTFOLIO_MANAGEMENT`); without these, the
+  upload step fails.
 
 ## B. Changes in ckeditor-plugins (Branch `venus/CKE-140-SBOM-upload`)
 
@@ -144,51 +161,59 @@ licenses.
 
 ## C. Jenkins Job in `CoreMedia/ci-jobs` (Branch `venus-ci-01`)
 
-- [ ] Add `ci/pipelines/ckeditor_plugins_sbom.groovy` with a folder (e.g.
+Implemented on the branch `ckeditor-plugins-sbom-upload` of `ci-jobs`, not
+committed yet. Tested locally against GitHub: branch listing, missing artifact,
+run and push checks (on a real QA-gate run), the checks of `metadata.json` and
+the SBOM, and the dry run. Groovy syntax checked.
+
+- [x] Add `ci/pipelines/ckeditor_plugins_sbom.groovy` with a folder (e.g.
   `CKEditor-Plugins`) and a `pipelineJob` (e.g. `nightly-sbom-upload`) with:
-  - [ ] a nightly trigger, e.g. `cron('H 2 * * *')`;
-  - [ ] the parameters `BRANCH` (default: all release branches) and `DRY_RUN`
+  - [x] a nightly trigger, e.g. `cron('H 2 * * *')`;
+  - [x] the parameters `BRANCH` (default: all release branches) and `DRY_RUN`
     (only log what would be uploaded);
-  - [ ] the Jenkinsfile through
+  - [x] the Jenkinsfile through
     `readFileFromWorkspace('ci/jenkinsfiles/ckeditorPluginsSbomUpload.Jenkinsfile')`
     with `sandbox()`, as the perso jobs do.
-- [ ] Add `ci/jenkinsfiles/ckeditorPluginsSbomUpload.Jenkinsfile`.
-- [ ] In the Jenkinsfile, list the branches of `CoreMedia/ckeditor-plugins`
+- [x] Add `ci/jenkinsfiles/ckeditorPluginsSbomUpload.Jenkinsfile`.
+- [x] In the Jenkinsfile, list the branches of `CoreMedia/ckeditor-plugins`
   through the GitHub API and keep those matching
   `^(main|maintenance/[1-9][0-9]*)$`. This leaves out `maintenance/23.0`–`25.0`.
-- [ ] For each branch:
-  - [ ] read the head SHA;
-  - [ ] derive the project version (`main` or `maintenance-<major>`);
-  - [ ] skip the branch if the Dependency-Track project already has the tag
-    `commit-<SHA>`;
-  - [ ] look up the artifact with
+- [x] For each branch:
+  - [x] read the head SHA;
+  - [x] derive the project version (`main` or `maintenance-<major>`);
+  - [x] look up the artifact with
     `GET /repos/CoreMedia/ckeditor-plugins/actions/artifacts?name=sbom-<SHA>`.
     If none exists or all expired, log a warning and continue with the next
     branch. A missing artifact is not a failure, e.g. for a fresh
     `maintenance/<major>` branch (see D);
-  - [ ] keep only artifacts whose run is `.github/workflows/qa-gate.yml` of
+  - [x] keep only artifacts whose run is `.github/workflows/qa-gate.yml` of
     `CoreMedia/ckeditor-plugins` and whose step "Push to base branch" (job
     "Integrate and Merge") succeeded. Don't require the whole job to succeed:
     "Deploy Storybook" runs after the push and may fail although the commit was
     pushed;
-  - [ ] if several artifacts remain (a retried QA gate after a fast-forward
+  - [x] if several artifacts remain (a retried QA gate after a fast-forward
     merge pushes the same SHA again), take the newest unexpired one;
-  - [ ] download and unzip the artifact;
-  - [ ] check that `metadata.json` names this branch and this SHA, and that the
+  - [x] download and unzip the artifact;
+  - [x] check that `metadata.json` names this branch and this SHA, and that the
     SBOM is CycloneDX 1.6 with the root component
     `pkg:npm/%40coremedia/ckeditor5@…`;
-  - [ ] upload it with `dependencyTrackPublisher`, as the Blueprint job does:
-    - [ ] `projectName: 'ckeditor-plugins-workspace'`
-    - [ ] `projectVersion`: `main` or `maintenance-<major>`
-    - [ ] `artifact`: `ckeditor-plugins-workspace.cdx.json`
-    - [ ] `autoCreateProjects: true`
-    - [ ] `projectProperties`: `parentName: 'Ckeditor Plugins'`,
+  - [x] upload it with `dependencyTrackPublisher`, as the Blueprint job does:
+    - [x] `projectName: 'ckeditor-plugins-workspace'`
+    - [x] `projectVersion`: `main` or `maintenance-<major>`
+    - [x] `artifact`: `sbom/<project version>/ckeditor-plugins-workspace.cdx.json`
+    - [x] `autoCreateProjects: true`, `synchronous: false`
+    - [x] `projectProperties`: `parentName: 'Ckeditor Plugins'`,
       `parentVersion: '-'`, tags
       `workspace,team-venus,<version>,snapshot,internal,commit-<SHA>`
-- [ ] Fail the build if any branch failed, after all branches were processed,
+  - [x] count a failed upload (the plugin throws `AbortException`) as a failed
+    branch and continue with the next one.
+- [x] Fail the build if any branch failed, after all branches were processed,
   so one broken branch doesn't block the others. A missing artifact only logs a
   warning and doesn't count as failed.
-- [ ] Clean up the workspace in `post { always { cmCleanup() } }`.
+- [x] Delete the workspace in `post { cleanup { deleteDir() } }`. Not
+  `cmCleanup()`: it also stops and removes all Docker containers on the node.
+- [x] A dry run doesn't call the plugin, so it works before the plugin and the
+  Dependency-Track key are available on `venus-ci-01`.
 - [ ] Test the job before the merge:
   - [ ] rebase the feature branch onto the current `venus-ci-01`, because Seed
     deletes every job that is missing from the branch it reads;
@@ -202,8 +227,9 @@ licenses.
 - [ ] After the merge, wait for the 21:00 Seed run or start Seed by hand without
   `CI_JOBS_BRANCH`, and check that the job exists. Its first nightly run
   follows at about 02:00.
-- [ ] Check that the sandbox allows everything the Jenkinsfile needs (e.g.
-  JSON parsing, `dependencyTrackPublisher`); request script approvals on
+- [ ] Check that the sandbox and the agent allow everything the Jenkinsfile
+  needs (`curl`, `jq` and `unzip` on the agent; `tokenize`, `join` and the
+  step `dependencyTrackPublisher` in the sandbox); request script approvals on
   `venus-ci-01` if not.
 
 ## D. Maintenance Branches
@@ -237,7 +263,8 @@ licenses.
 - [ ] Run it without `DRY_RUN` and check that Dependency-Track shows
   `ckeditor-plugins-workspace` / `main` below `Ckeditor Plugins`, with about
   925 components and the expected tags.
-- [ ] Run it again and check that `main` is skipped as unchanged.
+- [ ] Run it again and check that `main` is uploaded again without errors and
+  the tags follow the upload (see the permission in A).
 - [ ] After the first merge to a new `maintenance/<major>` branch, check that
   the next nightly run creates `ckeditor-plugins-workspace` /
   `maintenance-<major>`.
@@ -252,9 +279,9 @@ licenses.
 
 - **Delay:** an upload arrives up to a day after the merge.
 - **Expired artifacts:** a branch head older than 90 days has no artifact left.
-  That's harmless once it was uploaded (the job skips it by the commit tag),
-  but a head that was never uploaded within 90 days stays missing until the
-  next merge.
+  Dependency-Track keeps the last upload, and the job logs a warning for that
+  branch every night until the next merge. A head that was never uploaded
+  within 90 days stays missing until the next merge.
 - **Trust in the artifact:** with the `pull_request` trigger, the PR's own
   version of the QA gate runs, so anyone with write access could produce a
   different SBOM. That's the same trust level as the push itself. The job's
